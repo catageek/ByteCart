@@ -1,3 +1,51 @@
 name: ByteCart
 main: com.github.catageek.ByteCart.ByteCart
 version: 0.1
+permissions:
+    bytecart.*:
+        description: give access to all blocks
+        children:
+            bytecart.BC9000: true
+            bytecart.BC9001: true
+            bytecart.BC9002: true
+            bytecart.BC9004: true
+            bytecart.BC9008: true
+            bytecart.BC9016: true
+            bytecart.BC9032: true
+
+    bytecart.helper:
+        description: give acces to small subnets and station blocks
+        children:
+            bytecart.BC9000: false
+            bytecart.BC9001: true
+            bytecart.BC9002: true
+            bytecart.BC9004: true
+            bytecart.BC9008: false
+            bytecart.BC9016: false
+            bytecart.BC9032: false
+
+    bytecart.subnetwork:
+        description: give acces to all subnets and station blocks
+        children:
+            bytecart.BC9000: false
+            bytecart.BC9001: true
+            bytecart.BC9002: true
+            bytecart.BC9004: true
+            bytecart.BC9008: true
+            bytecart.BC9016: true
+            bytecart.BC9032: true
+
+    bytecart.BC9000:
+        default: false
+    bytecart.BC9001:
+        default: false
+    bytecart.BC9002:
+        default: false
+    bytecart.BC9004:
+        default: false
+    bytecart.BC9008:
+        default: false
+    bytecart.BC9016:
+        default: false
+    bytecart.BC9032:
+        default: false

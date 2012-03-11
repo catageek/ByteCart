@@ -10,7 +10,12 @@ abstract public class AbstractIC implements IC {
 	
 	final private Block Block;
 	
-	protected String Permission = "";
+	protected String Name = "";
+	protected String FriendlyName = "";
+	protected String Permission = "bytecart.";
+	
+	protected int Buildtax = 0 ;
+	protected int Triggertax = 0;
 	
 	private RegistryInput[] input = new RegistryInput[6];
 	private int input_args = 0;
@@ -34,14 +39,6 @@ abstract public class AbstractIC implements IC {
 			ByteCart.log.info("ByteCart : added 1 output registry");
 	}
 
-	public void create() {
-		
-	}
-
-	public void delete() {
-		
-	}
-	
 	public RegistryInput getInput(int index) {
 		return input[index];
 	}
@@ -74,6 +71,7 @@ abstract public class AbstractIC implements IC {
 		
 	}
 	
+	
 	public BlockFace getCardinal() {
 		try {
 			return ((org.bukkit.material.Sign) this.getBlock().getState().getData()).getFacing().getOppositeFace();
@@ -90,6 +88,22 @@ abstract public class AbstractIC implements IC {
 	
 	public String getBuildPermission() {
 		return this.Permission;
+	}
+
+	public String getName() {
+		return Name;
+	}
+
+	public String getFriendlyName() {
+		return FriendlyName;
+	}
+
+	public int getTriggertax() {
+		return Triggertax;
+	}
+
+	public int getBuildtax() {
+		return Buildtax;
 	}
 
 }

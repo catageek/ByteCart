@@ -1,22 +1,26 @@
 package com.github.catageek.ByteCart;
 
-public class Station extends AbstractIC implements TriggeredIC {
+public class BC9001 extends AbstractIC implements TriggeredIC {
 
 	protected final org.bukkit.inventory.Inventory Inventory;
 	protected int netmask;
 
-	public Station(org.bukkit.block.Block block, org.bukkit.inventory.Inventory inv) {
+	public BC9001(org.bukkit.block.Block block, org.bukkit.inventory.Inventory inv) {
 		super(block);
 		this.Inventory = inv;
 		this.netmask = 6;
+		this.Name = "BC9001";
+		this.FriendlyName = "Station";
+		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
+		this.Permission = this.Permission + this.Name;
 	}
 
 	@Override
 	public void trigger() {
 		try {
-			// Input[0] = destination region taken from Inventory, slot #2			
+			// Input[0] = destination region taken from Inventory, slot #0			
 
-			RegistryInput slot2 = new InventorySlot(this.Inventory, 2);
+			RegistryInput slot2 = new InventorySlot(this.Inventory, 0);
 			
 			// only 5 most significant bits are taken into account
 			
@@ -34,39 +38,47 @@ public class Station extends AbstractIC implements TriggeredIC {
 
 			this.addInputRegistry(slot1);
 
-			// Input[2] = destination station taken from cart, slot #0, 6 bits
+			// Input[2] = destination station taken from cart, slot #2, 6 bits
 
-			RegistryInput slot0 = new InventorySlot(this.Inventory, 0);
+			RegistryInput slot0 = new InventorySlot(this.Inventory, 2);
 			
 			// We keep only the X most significant bits (netmask)
 
 			slot0 = applyNetmask(slot0);
 			
 			this.addInputRegistry(slot0);
+			
+			
+			// Address is on a sign, line #3
+			
+			AddressSign address = new AddressSign(this.getBlock(),3);
 
 			// Input[3] = region from sign, line #2, 6 bits registry
 
-			RegistryInput region = new SignRegistry(this.getBlock(), 2, 6);
+//			RegistryInput region = new SignRegistry(this.getBlock(), 2, 6);
+			RegistryInput region = address.getRegion();
 
 			// only 5 most significant bits are taken into account
 
-			region = new SubRegistry(region, 5, 0);
+//			region = new SubRegistry(region, 5, 0);
 
 			this.addInputRegistry(region);
 			
 			// Input[4] = station track from sign, line #3, 6 bits registry
 
-			RegistryInput track = new SignRegistry(this.getBlock(), 3, 6);
+//			RegistryInput track = new SignRegistry(this.getBlock(), 3, 6);
+			RegistryInput track = address.getTrack();
 
 			// only 5 most significant bits are taken into account
 
-			track = new SubRegistry(track, 5, 0);
+			//track = new SubRegistry(track, 5, 0);
 
 			this.addInputRegistry(track);
 
 			// Input[5] = station number from sign, line #0, 6 bits registry
 
-			RegistryInput station = new SignRegistry(this.getBlock(), 0, 6);
+			//RegistryInput station = new SignRegistry(this.getBlock(), 0, 6);
+			RegistryInput station = address.getStation();
 
 			// We keep only the X most significant bits (netmask)
 

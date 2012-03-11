@@ -13,8 +13,11 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 	
 	public BC9000(Block block, Inventory inv) {
 		super(block);
-		this.Inventory = inv;	
-		this.Permission = "bytecart.BC9000";
+		this.Inventory = inv;
+		this.Name = "BC9000";
+		this.FriendlyName = "L1 router";
+		this.Triggertax = ByteCart.myPlugin.getConfig().getInt("usetax." + this.Name);
+		this.Permission = this.Permission + this.Name;
 
 	}
 
@@ -34,9 +37,9 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 
 		
 		try {
-			// Input[0] = destination region taken from Inventory, slot #2			
+			// Input[0] = destination region taken from Inventory, slot #0			
 
-			RegistryInput slot0 = new InventorySlot(this.Inventory, 2);
+			RegistryInput slot0 = new InventorySlot(this.Inventory, 0);
 			
 			// only 5 most significant bits are taken into account
 			
@@ -54,13 +57,18 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 
 			this.addInputRegistry(slot1);
 
-			// Input[2] = router region from sign, line #2, 6 bits registry
+			// Address is on a sign, line #3
+			
+			AddressSign address = new AddressSign(this.getBlock(),3);
 
-			RegistryInput region = new SignRegistry(this.getBlock(), 2, 6);
+			// Input[3] = region from sign, line #3
+
+//			RegistryInput region = new SignRegistry(this.getBlock(), 2, 6);
+			RegistryInput region = address.getRegion();
 
 			// only 5 most significant bits are taken into account
 
-			region = new SubRegistry(region, 5, 0);
+			//region = new SubRegistry(region, 5, 0);
 
 			this.addInputRegistry(region);
 			

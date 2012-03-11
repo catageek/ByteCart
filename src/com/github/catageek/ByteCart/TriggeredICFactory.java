@@ -71,18 +71,18 @@ final public class TriggeredICFactory {
 		
 				case 9000:
 					return new BC9000(block, TriggeredICFactory.inv);
-				case 1001:
-					return new Station(block, TriggeredICFactory.inv);
-				case 1002:
-					return new Subnet2(block, TriggeredICFactory.inv);
-				case 1004:
-					return new Subnet4(block, TriggeredICFactory.inv);
-				case 1008:
-					return new Subnet8(block, TriggeredICFactory.inv);
-				case 1016:
-					return new Subnet16(block, TriggeredICFactory.inv);
-				case 1032:
-					return new Subnet32(block, TriggeredICFactory.inv);
+				case 9001:
+					return new BC9001(block, TriggeredICFactory.inv);
+				case 9002:
+					return new BC9002(block, TriggeredICFactory.inv);
+				case 9004:
+					return new BC9004(block, TriggeredICFactory.inv);
+				case 9008:
+					return new BC9008(block, TriggeredICFactory.inv);
+				case 9016:
+					return new BC9016(block, TriggeredICFactory.inv);
+				case 9032:
+					return new BC9032(block, TriggeredICFactory.inv);
 			}
 		}
 		catch (Exception e) {

@@ -6,5 +6,4 @@ public interface TriggeredIC extends IC {
 	public void addInputRegistry(RegistryInput reg);
 	public void addOutputRegistry(RegistryOutput reg);
 	public void trigger();
-	public String getBuildPermission();
 }

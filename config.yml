@@ -1,3 +1,10 @@
 # config file for ByteCart bukkit plugin.
 
 debug: true
+usetax.BC9000: 1
+buildtax.BC9001: 300
+buildtax.BC9002: 300
+buildtax.BC9004: 300
+buildtax.BC9008: 0
+buildtax.BC9016: 0
+buildtax.BC9032: 0
