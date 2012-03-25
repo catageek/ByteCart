@@ -8,7 +8,7 @@ public class BC9001 extends AbstractIC implements TriggeredIC {
 	public BC9001(org.bukkit.block.Block block, org.bukkit.inventory.Inventory inv) {
 		super(block);
 		this.Inventory = inv;
-		this.netmask = 6;
+		this.netmask = 4;
 		this.Name = "BC9001";
 		this.FriendlyName = "Station";
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
@@ -24,7 +24,7 @@ public class BC9001 extends AbstractIC implements TriggeredIC {
 			
 			// only 5 most significant bits are taken into account
 			
-			slot2 = new SubRegistry(slot2, 5, 0);
+			//slot2 = new SubRegistry(slot2, 5, 0);
 
 			this.addInputRegistry(slot2);
 
@@ -34,13 +34,16 @@ public class BC9001 extends AbstractIC implements TriggeredIC {
 			
 			// only 5 most significant bits are taken into account
 			
-			slot1 = new SubRegistry(slot1, 5, 0);		
+			//slot1 = new SubRegistry(slot1, 5, 0);		
 
 			this.addInputRegistry(slot1);
 
 			// Input[2] = destination station taken from cart, slot #2, 6 bits
 
 			RegistryInput slot0 = new InventorySlot(this.Inventory, 2);
+			
+			// Only the 4 LSB are kept
+			slot0 = new SubRegistry(slot0, 4, 2);
 			
 			// We keep only the X most significant bits (netmask)
 
@@ -133,10 +136,10 @@ public class BC9001 extends AbstractIC implements TriggeredIC {
 		}
 	}
 
-	protected RegistryInput applyNetmask(RegistryInput address) {
-		if (this.netmask < address.length())
-			return new SubRegistry(address, this.netmask, 0);
-		return address;
+	protected RegistryInput applyNetmask(RegistryInput station) {
+		if (this.netmask < station.length())
+			return new SubRegistry(station, this.netmask, 0);
+		return station;
 	}
 
 

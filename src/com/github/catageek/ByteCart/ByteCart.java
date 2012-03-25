@@ -16,11 +16,13 @@ public class ByteCart extends JavaPlugin {
     public void onEnable(){
     	log.info("ByteCart plugin has been enabled.");
     	
+    	this.saveDefaultConfig();
+    	
     	myPlugin = this;
     	
     	debug = this.getConfig().getBoolean("debug");
-    	this.getConfig().set("debug", debug);
-    	this.saveConfig();
+//    	this.getConfig().set("debug", debug);
+//    	this.saveConfig();
     	
     	if(debug){
     		log.info("ByteCart : debug mode is on.");

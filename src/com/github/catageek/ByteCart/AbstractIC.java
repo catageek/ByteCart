@@ -29,15 +29,15 @@ abstract public class AbstractIC implements IC {
 
 	public void addInputRegistry(RegistryInput reg) {
 		this.input[this.input_args++] = reg;
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : added 1 input registry");
-	}
+*/	}
 	
 	public void addOutputRegistry(RegistryOutput reg) {
 		this.output[this.output_args++] = reg;
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : added 1 output registry");
-	}
+*/	}
 
 	public RegistryInput getInput(int index) {
 		return input[index];
@@ -62,8 +62,6 @@ abstract public class AbstractIC implements IC {
 	static public boolean checkEligibility(String s){
 		
 		if(! (s.matches("\\[BC[0-9]{4,4}\\]"))) {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : this is not a BC : " + s);
 			return false;
 		}
 		

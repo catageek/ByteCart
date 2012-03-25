@@ -2,19 +2,19 @@ package com.github.catageek.ByteCart;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
 
-public class BC9000 extends AbstractIC implements TriggeredIC {
+public class BC8010 extends AbstractIC implements TriggeredIC {
 	
 	final private Inventory Inventory;
 
 	
-	public BC9000(Block block, Inventory inv) {
+	public BC8010(Block block, Inventory inv) {
 		super(block);
 		this.Inventory = inv;
-		this.Name = "BC9000";
+		this.Name = "BC8010";
 		this.FriendlyName = "L1 router";
 		this.Triggertax = ByteCart.myPlugin.getConfig().getInt("usetax." + this.Name);
 		this.Permission = this.Permission + this.Name;
@@ -24,17 +24,17 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 	@Override
 	public void trigger() {
 
-		VirtualRegistry virtual1 = new VirtualRegistry(5); // 5 bits registry
+		VirtualRegistry virtual1 = new VirtualRegistry(6); // 6 bits registry
 		VirtualRegistry virtual2 = new VirtualRegistry(6); // 6 bits registry
 
 		TriggeredIC bc2001, bc2002;
 		
 		// Centre de l'aiguillage
-		Block center = this.getBlock().getRelative(this.getCardinal(), 4).getRelative(MathUtil.clockwise(this.getCardinal()));
-
+		Block center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
+/*
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : center at "+center.getLocation().toString());
-
+*/
 		
 		try {
 			// Input[0] = destination region taken from Inventory, slot #0			
@@ -43,7 +43,7 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 			
 			// only 5 most significant bits are taken into account
 			
-			slot0 = new SubRegistry(slot0, 5, 0);
+			//slot0 = new SubRegistry(slot0, 5, 0);
 
 			this.addInputRegistry(slot0);
 
@@ -53,7 +53,7 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 			
 			// only 5 most significant bits are taken into account
 			
-			slot1 = new SubRegistry(slot1, 5, 0);		
+			//slot1 = new SubRegistry(slot1, 5, 0);		
 
 			this.addInputRegistry(slot1);
 
@@ -73,18 +73,18 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 			this.addInputRegistry(region);
 			
 
-			// Output[0] = virtual registry #1 (used as input of BC1001), 5 bits
+			// Output[0] = virtual registry #1 (used as input of BC1001), 6 bits
 			this.addOutputRegistry(virtual1);
 
 
 			// BC2001 construction
 			
 			// routing table lookup IC, outputs direction on 2 bits
-			Inventory routingtable = ((Chest) center.getRelative(BlockFace.UP).getState()).getInventory();
+			Inventory routingtable = ((InventoryHolder) center.getRelative(BlockFace.UP, 4).getState()).getInventory();
 
-			bc2001 = new BC2001(center.getRelative(BlockFace.UP), routingtable);
+			bc2001 = new BC2001(center.getRelative(BlockFace.UP, 4), routingtable);
 
-			// bc2001.Input[0] = virtual registry #1, 5 bits
+			// bc2001.Input[0] = virtual registry #1, 6 bits
 			bc2001.addInputRegistry(virtual1);
 			
 			// bc2001.Output[0] = virtual registry #2, 6 bits
@@ -106,13 +106,13 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 			OutputPin[] sortie = new OutputPin[4];
 			
 			// East
-			sortie[0] = OutputPinFactory.getOutput(center.getRelative(BlockFace.WEST,3).getRelative(BlockFace.SOUTH));
+			sortie[3] = OutputPinFactory.getOutput(center.getRelative(BlockFace.WEST,3).getRelative(BlockFace.SOUTH));
 			// North
-			sortie[1] = OutputPinFactory.getOutput(center.getRelative(BlockFace.EAST,3).getRelative(BlockFace.NORTH));
+			sortie[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.EAST,3).getRelative(BlockFace.NORTH));
 			// West
-			sortie[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.SOUTH,3).getRelative(BlockFace.EAST));
+			sortie[1] = OutputPinFactory.getOutput(center.getRelative(BlockFace.SOUTH,3).getRelative(BlockFace.EAST));
 			// South
-			sortie[3] = OutputPinFactory.getOutput(center.getRelative(BlockFace.NORTH,3).getRelative(BlockFace.WEST));
+			sortie[0] = OutputPinFactory.getOutput(center.getRelative(BlockFace.NORTH,3).getRelative(BlockFace.WEST));
 
 			PinRegistry<OutputPin> last = new PinRegistry<OutputPin>(sortie);
 			
@@ -133,8 +133,7 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 			
 			// update of bc1002 output
 			bc2002.trigger();
-	
-
+			
 		}
 		catch (ClassCastException e) {
 			if(ByteCart.debug)
@@ -146,6 +145,8 @@ public class BC9000 extends AbstractIC implements TriggeredIC {
 		catch (NullPointerException e) {
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : "+ e.toString());
+			
+			e.printStackTrace();
 
 			// there was no inventory in the cart
 			return;

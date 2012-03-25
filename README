@@ -1,0 +1,39 @@
+   ___       _         ___           _   
+  / __\_   _| |_ ___  / __\__ _ _ __| |_ 
+ /__\// | | | __/ _ \/ /  / _` | '__| __|
+/ \/  \ |_| | ||  __/ /__| (_| | |  | |_ 
+\_____/\__, |\__\___\____/\__,_|_|   \__|
+       |___/                             
+
+
+Overview
+=================================
+ByteCart is a bukkit plugin that allows to create a railed network using principle of Internet.
+
+ByteCart provides a set of blocks to create routers and stations according to a predefined network topology.
+It allows the connection of 45000 stations in 53 regions.
+
+Routing tables are stored ingame using a innovative information storage technology using chests. There is no database.
+
+For the moment, routing tables configuration is manual, but future evolution of the plugin will allow automatic
+filling of routing tables.
+
+
+Installation
+=================================
+Drop ByteCart.jar into the bukkit plugin directory. It will create its own configuration file with
+default configuration options.
+
+
+Configuration
+=================================
+Check configuration file ByteCart/config.yml to see available configuration parameters.
+
+
+Documentation
+=================================
+TODO. An example of the network can be visited on r0x server (r0x.fr:25565).
+
+Credits
+=================================
+Written by Catageek (catageek@free.fr) for r0x

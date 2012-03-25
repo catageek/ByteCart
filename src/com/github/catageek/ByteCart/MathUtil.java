@@ -11,8 +11,24 @@ public class MathUtil {
         return rt > d ? rt - 1 : rt;
     }
 
+    public static final int offsetfloor(double d) {
+    	double e = d - 0.5;
+        int rt = (int) e;
+        return rt > e ? rt - 1 : rt;
+    }
+
     public static final boolean isSameBlock(Location from, Location to) {
+
         return floor(from.getX()) == floor(to.getX()) && floor(from.getZ()) == floor(to.getZ());
+    }
+    
+    public static final boolean isMiddleBlock(Location from, Location to) {
+		if(ByteCart.debug && offsetfloor(from.getZ()) <= 168 && offsetfloor(from.getZ()) >= 166) {
+			ByteCart.log.info("ByteCart : isMiddleblock " + from.getZ() + " " + to.getZ());
+			ByteCart.log.info("ByteCart : isMiddleblock offset" + offsetfloor(from.getZ()) + " " + offsetfloor(to.getZ()));
+		}
+    	return offsetfloor(from.getX()) == offsetfloor(to.getX()) && offsetfloor(from.getZ()) == offsetfloor(to.getZ());
+    	
     }
 
     public static final double abs(double d) {

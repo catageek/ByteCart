@@ -10,9 +10,9 @@ public class PinRegistry<T> implements RegistryInput, RegistryOutput {
 	
 	public PinRegistry(T[] pins) {
 		this.PinArray = Arrays.asList(pins);
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : creating PinRegistry with" + this.length() + "pin(s)");
-
+*/
 	}
 	
 	public int length() {
@@ -21,8 +21,24 @@ public class PinRegistry<T> implements RegistryInput, RegistryOutput {
 
 	@Override
 	public int getAmount() {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int amount = 0;
+		int i = 1;
+		
+		for (ListIterator<T> it = this.PinArray.listIterator(this.length()); it.hasPrevious(); i = i << 1)
+		{
+			if(it.previous() != null) {
+				
+				it.next();
+								
+				if (((InputPin) it.previous()).read()) {
+					amount += i;
+					
+				}
+			
+			}
+		}
+		return amount;
 	}
 
 	@Override
@@ -33,17 +49,25 @@ public class PinRegistry<T> implements RegistryInput, RegistryOutput {
 	@Override
 	public void setAmount(int amount) {
 		int i = amount;
+		
+			
 		for (ListIterator<T> it = this.PinArray.listIterator(this.length()); it.hasPrevious(); i = i >> 1)
 		{
-			if ( (i & 1) !=0 ) {
-				((OutputPin) it.previous()).write(true);
+			if(it.previous() != null) {
+				
+				it.next();
+			
+				if ( (i & 1) !=0 ) {
+					((OutputPin) it.previous()).write(true);
 
-			}
-			else {
-				((OutputPin) it.previous()).write(false);
+				}
+				else {
+					((OutputPin) it.previous()).write(false);
 
+				}
 			}
 		}
+		
 		
 	}
 

@@ -11,10 +11,10 @@ final public class SignRegistry extends AbstractComponent implements RegistryInp
 		super(block.getLocation());
 		if (block.getState() instanceof org.bukkit.block.Sign) {
 			this.Sign = (org.bukkit.block.Sign) block.getState();
-
+/*
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: creating SignRegistry line #" + ligne + " with length " + length + " at " + block.getLocation().toString());
-		}
+	*/	}
 		else {
 			ByteCart.log.info("ByteCart: SignRegistry cannot be built");
 			this.Sign = null;
@@ -53,12 +53,13 @@ final public class SignRegistry extends AbstractComponent implements RegistryInp
 		String[] st = this.Sign.getLine(this.Ligne).split(":");
 		return st[ st.length - 1 ].trim();
 	}
-	
+
+	/*
 	private String getPrefix() {
 		String[] st = this.Sign.getLine(this.Ligne).split(":");
 		return st[0].trim();
 	}
-
+*/
 
 
 }

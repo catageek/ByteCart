@@ -7,10 +7,11 @@ public class VirtualRegistry implements Registry, RegistryInput, RegistryOutput 
 	
 	public VirtualRegistry(int length) {
 		this.Length = length;
-		
+
+		/*
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : creating VirtualRegistry of " + this.length() + " bit(s).");
-
+*/
 	}
 
 	@Override

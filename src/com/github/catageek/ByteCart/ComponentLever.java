@@ -8,9 +8,9 @@ public class ComponentLever extends AbstractComponent implements OutputPin {
 
 	protected ComponentLever(Block block) {
 		super(block.getLocation());
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : adding Lever at " + block.getLocation().toString());
-
+*/
 	}
 
 	@Override
@@ -19,10 +19,10 @@ public class ComponentLever extends AbstractComponent implements OutputPin {
 			Lever lever = new Lever(Material.LEVER, this.getLocation().getBlock().getData());
 			lever.setPowered(bit);
 			this.getLocation().getBlock().setData(lever.getData(), true);
-			
+/*			
 			if(ByteCart.debug)
 				ByteCart.log.info("Lever at (" + this.getLocation().toString() + ") : " + bit);
-
+*/
 			
 			MathUtil.forceUpdate(this.getLocation().getBlock().getRelative(lever.getAttachedFace()));
 		}

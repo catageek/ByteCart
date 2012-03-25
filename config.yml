@@ -1,10 +1,22 @@
 # config file for ByteCart bukkit plugin.
 
-debug: true
+# set true if you want a lot debug messages on the console
+debug: false
+
+# this is the tax taken from the player when triggering the block
+# with a cart passing on it you can create any usetax you wish using the parameter:
+# usetax.BCxxxx: n
+######## currently not implemented ########
 usetax.BC9000: 1
+
+# this is the tax taken from
+# the player when building the sign
+######### currently not implemented ############
 buildtax.BC9001: 300
 buildtax.BC9002: 300
 buildtax.BC9004: 300
 buildtax.BC9008: 0
 buildtax.BC9016: 0
-buildtax.BC9032: 0
+
+# initial speed of minecarts
+BC7001.startvelocity: 2

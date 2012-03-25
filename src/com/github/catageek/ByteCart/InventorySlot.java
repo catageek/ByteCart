@@ -34,8 +34,20 @@ public class InventorySlot implements RegistryInput, RegistryOutput {
 
 	@Override
 	public int getAmount() {
-		// we get value modulo 64, so stack of 64 equals 0
-		return this.Inventory.getItem(this.Index).getAmount() % ( 1 << this.length());
+/*		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : Inventoryslot.getAmount() : Inventory " + this.Inventory.toString());
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : Inventoryslot.getAmount() : Index " + this.Index);
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : Inventoryslot.getAmount() : item " + this.Inventory.getItem(this.Index));
+*/		
+		ItemStack stack = this.Inventory.getItem(this.Index);
+		
+		if (stack != null) // if slot is not not empty
+			// we get value modulo 64, so stack of 64 equals 0
+			return stack.getAmount() % ( 1 << this.length());
+		else
+			return 0;
 	}
 
 	@Override
