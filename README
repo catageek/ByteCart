@@ -18,6 +18,28 @@ Routing tables are stored ingame using a innovative information storage technolo
 For the moment, routing tables configuration is manual, but future evolution of the plugin will allow automatic
 filling of routing tables.
 
+Bukkit version
+=================================
+This version of ByteCart runs on Minecraft v1.2.3 and later. Since Bukkit API changed for version 1.2, there is no
+compatibility with versions of Minecraft prior to 1.2. 
+
+Features
+=================================
+* Minimum CPU and memory usage, even with a huge network.
+ByteCart is fully scalable, meaning that whatever the size of your network, the same amount of resources are used
+to take a cart from one point to another.
+
+* Well-known pathfinding algorithm
+ByteCart implements Djikstra algorithm as used in Internet routing protocol, with the success we know. All paths
+are precomputed and stored in routing tables. finding the best path is only a read operation on routing tables.
+
+* Support Permissions API. Check plugin.yml for available permissions.
+
+* WorldEdit compatibility
+Since there is no external data storage, all world editing tools are compatible with Bytecart, but, in case of copy/paste
+operation, you need to manually update network address on signs.
+
+* Falsebook and Minecart revolution compatibility
 
 Installation
 =================================
