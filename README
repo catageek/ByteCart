@@ -10,6 +10,9 @@ Overview
 =================================
 ByteCart is a bukkit plugin that allows to create a railed network using principle of Internet.
 
+A cart with a player, or a storage cart, with a destination address recorded in inventory, will be
+routed through the network to the destination station matching the address.
+
 ByteCart provides a set of blocks to create routers and stations according to a predefined network topology.
 It allows the connection of 45000 stations in 53 regions.
 
