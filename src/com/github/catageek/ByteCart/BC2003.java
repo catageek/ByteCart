@@ -10,18 +10,15 @@ import org.bukkit.entity.Vehicle;
 // this IC is used in conjunction with BC800x blocks
 // it gives a token to a cart and powers the 4 "busy" buttons
 
-public class BC2003 extends AbstractIC implements TriggeredIC {
+public class BC2003 extends AbstractTriggeredIC implements TriggeredIC {
 	
-	final static private ConcurrentHashMap<org.bukkit.block.Block,Vehicle> BusyMap = new ConcurrentHashMap<org.bukkit.block.Block,Vehicle>();
+	final static private ConcurrentHashMap<org.bukkit.block.Block,Integer> BusyMap = new ConcurrentHashMap<org.bukkit.block.Block,Integer>();
 
-	final private Vehicle vehicle;
-	
 	final private Block center;
 
 	public BC2003(Block block, Vehicle vehicle) {
-		super(block);
+		super(block, vehicle);
 		
-		this.vehicle = vehicle;
 		
 		// Centre de l'aiguillage
 		this.center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
@@ -34,7 +31,7 @@ public class BC2003 extends AbstractIC implements TriggeredIC {
 		OutputPin[] sortie = new OutputPin[4];
 
 		if ( ! BC2003.BusyMap.containsKey(center) )
-			BC2003.BusyMap.put(center, vehicle);
+			BC2003.BusyMap.put(center, this.getVehicle().getEntityId());
 		else
 			return;
 
@@ -110,8 +107,9 @@ public class BC2003 extends AbstractIC implements TriggeredIC {
 	}
 	
 	public boolean hasToken(Vehicle v) {
-		if (BC2003.BusyMap.containsKey(center) && BC2003.BusyMap.get(center) == v)
+		if (BC2003.BusyMap.containsKey(center) && v != null && BC2003.BusyMap.get(center) == v.getEntityId()) {
 			return true;
+		}
 		return false;
 	}
 	

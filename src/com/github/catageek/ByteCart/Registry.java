@@ -1,9 +1,7 @@
 package com.github.catageek.ByteCart;
 
-public interface Registry {
-	public int length();
+public interface Registry extends RegistryInput, RegistryOutput {
 	
-	public int getAmount();
 
 
 

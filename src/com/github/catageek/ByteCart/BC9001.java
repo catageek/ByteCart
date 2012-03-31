@@ -1,13 +1,11 @@
 package com.github.catageek.ByteCart;
 
-public class BC9001 extends AbstractIC implements TriggeredIC {
+public class BC9001 extends AbstractTriggeredIC implements TriggeredIC {
 
-	protected final org.bukkit.inventory.Inventory Inventory;
 	protected int netmask;
 
-	public BC9001(org.bukkit.block.Block block, org.bukkit.inventory.Inventory inv) {
-		super(block);
-		this.Inventory = inv;
+	public BC9001(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
+		super(block, vehicle);
 		this.netmask = 4;
 		this.Name = "BC9001";
 		this.FriendlyName = "Station";
@@ -20,30 +18,25 @@ public class BC9001 extends AbstractIC implements TriggeredIC {
 		try {
 			// Input[0] = destination region taken from Inventory, slot #0			
 
-			RegistryInput slot2 = new InventorySlot(this.Inventory, 0);
 			
-			// only 5 most significant bits are taken into account
+			Address IPaddress = AddressFactory.getAddress(this.getInventory());
 			
-			//slot2 = new SubRegistry(slot2, 5, 0);
+			Registry slot2 = IPaddress.getRegion();
+			
 
 			this.addInputRegistry(slot2);
 
 			// Input[1] = destination track taken from cart, slot #1
 
-			RegistryInput slot1 = new InventorySlot(this.Inventory, 1);
+			RegistryInput slot1 = IPaddress.getTrack();
 			
-			// only 5 most significant bits are taken into account
-			
-			//slot1 = new SubRegistry(slot1, 5, 0);		
 
 			this.addInputRegistry(slot1);
 
 			// Input[2] = destination station taken from cart, slot #2, 6 bits
 
-			RegistryInput slot0 = new InventorySlot(this.Inventory, 2);
+			RegistryInput slot0 = IPaddress.getStation();
 			
-			// Only the 4 LSB are kept
-			slot0 = new SubRegistry(slot0, 4, 2);
 			
 			// We keep only the X most significant bits (netmask)
 
@@ -54,23 +47,16 @@ public class BC9001 extends AbstractIC implements TriggeredIC {
 			
 			// Address is on a sign, line #3
 			
-			AddressSign address = new AddressSign(this.getBlock(),3);
+			Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
-			// Input[3] = region from sign, line #2, 6 bits registry
-
-//			RegistryInput region = new SignRegistry(this.getBlock(), 2, 6);
-			RegistryInput region = address.getRegion();
-
-			// only 5 most significant bits are taken into account
-
-//			region = new SubRegistry(region, 5, 0);
+			RegistryInput region = sign.getRegion();
 
 			this.addInputRegistry(region);
 			
 			// Input[4] = station track from sign, line #3, 6 bits registry
 
 //			RegistryInput track = new SignRegistry(this.getBlock(), 3, 6);
-			RegistryInput track = address.getTrack();
+			RegistryInput track = sign.getTrack();
 
 			// only 5 most significant bits are taken into account
 
@@ -81,7 +67,7 @@ public class BC9001 extends AbstractIC implements TriggeredIC {
 			// Input[5] = station number from sign, line #0, 6 bits registry
 
 			//RegistryInput station = new SignRegistry(this.getBlock(), 0, 6);
-			RegistryInput station = address.getStation();
+			RegistryInput station = sign.getStation();
 
 			// We keep only the X most significant bits (netmask)
 
@@ -138,7 +124,7 @@ public class BC9001 extends AbstractIC implements TriggeredIC {
 
 	protected RegistryInput applyNetmask(RegistryInput station) {
 		if (this.netmask < station.length())
-			return new SubRegistry(station, this.netmask, 0);
+			return new SubRegistry((Registry) station, this.netmask, 0);
 		return station;
 	}
 

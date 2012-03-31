@@ -1,6 +1,6 @@
 package com.github.catageek.ByteCart;
 
-public class SubRegistry implements Registry,RegistryInput,RegistryOutput {
+public class SubRegistry implements Registry {
 	
 	private final Registry Registry;
 	private final int Length;

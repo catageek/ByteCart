@@ -19,14 +19,12 @@ import org.bukkit.util.Vector;
 // lever off = block occupied and not powered
 // lever on = block free OR powered
 
-public class BC7001 extends AbstractIC implements TriggeredIC, PoweredIC {
+public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredIC {
 	
-	private Vehicle Vehicle = null;
-	
-	final private BC7001 bc7001 = this;
+// Constructor : !! vehicle can be null !!
 
-	public BC7001(org.bukkit.block.Block block) {
-		super(block);
+	public BC7001(org.bukkit.block.Block block, Vehicle vehicle) {
+		super(block, vehicle);
 		this.Name = "BC7001";
 		this.FriendlyName = "Stop/Start";
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
@@ -61,7 +59,7 @@ public class BC7001 extends AbstractIC implements TriggeredIC, PoweredIC {
 		// here starts the action
 		
 		// is there a minecart above ?
-		if (this.Vehicle != null) {
+		if (this.getVehicle() != null) {
 
 			
 			// if the wire is on
@@ -71,9 +69,9 @@ public class BC7001 extends AbstractIC implements TriggeredIC, PoweredIC {
 				this.getOutput(0).setAmount(1);
 
 				// if the cart is stopped, start it
-				if (this.Vehicle.getVelocity().equals(new Vector(0,0,0))) {
+				if (this.getVehicle().getVelocity().equals(new Vector(0,0,0))) {
 
-					this.Vehicle.setVelocity((new Vector(this.getCardinal().getModX(), this.getCardinal().getModY(), this.getCardinal().getModZ())).multiply(ByteCart.myPlugin.getConfig().getDouble("BC7001.startvelocity")));
+					this.getVehicle().setVelocity((new Vector(this.getCardinal().getModX(), this.getCardinal().getModY(), this.getCardinal().getModZ())).multiply(ByteCart.myPlugin.getConfig().getDouble("BC7001.startvelocity")));
 				}
 			}
 			
@@ -84,7 +82,7 @@ public class BC7001 extends AbstractIC implements TriggeredIC, PoweredIC {
 				this.getOutput(0).setAmount(0);
 
 				// stop the cart
-				bc7001.Vehicle.setVelocity(new Vector(0,0,0));
+				this.getVehicle().setVelocity(new Vector(0,0,0));
 /*
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: BC7001 : cart on stop at " + this.Vehicle.getLocation().toString());
@@ -101,14 +99,11 @@ public class BC7001 extends AbstractIC implements TriggeredIC, PoweredIC {
 
 	}
 	
-	public BC7001 AddVehicle(Vehicle v) {
-		this.Vehicle = v;
-		return this;
-	}
-
 	@Override
 	public void power() {
-		// power update (TO VERIFY)
+		// power update
+		
+		BC7001 bc7001 = this;
 		
 		// We need to find if a cart is stopped and set the member variable Vehicle
 		Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();
@@ -130,7 +125,9 @@ public class BC7001 extends AbstractIC implements TriggeredIC, PoweredIC {
 				
 				if ( MathUtil.isSameBlock(((Minecart) it.next()).getLocation(), loc)) {
 					it.previous();
-					this.AddVehicle((Vehicle) it.next());
+					
+					// found ! we instantiate a new IC with the vehicle we found
+					bc7001 = new BC7001(this.getBlock(), (Vehicle) it.next());
 /*
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart: BC7001 : cart on stop");
@@ -141,7 +138,7 @@ public class BC7001 extends AbstractIC implements TriggeredIC, PoweredIC {
 			}
 		}
 
-		this.trigger();
+		bc7001.trigger();
 		
 		
 	}

@@ -6,14 +6,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 
-public class BC8010 extends AbstractIC implements TriggeredIC {
+public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 	
-	final private Inventory Inventory;
 
-	
-	public BC8010(Block block, Inventory inv) {
-		super(block);
-		this.Inventory = inv;
+	public BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {
+		super(block, vehicle);
 		this.Name = "BC8010";
 		this.FriendlyName = "L1 router";
 		this.Triggertax = ByteCart.myPlugin.getConfig().getInt("usetax." + this.Name);
@@ -39,36 +36,26 @@ public class BC8010 extends AbstractIC implements TriggeredIC {
 		try {
 			// Input[0] = destination region taken from Inventory, slot #0			
 
-			RegistryInput slot0 = new InventorySlot(this.Inventory, 0);
 			
-			// only 5 most significant bits are taken into account
+			Address IPaddress = AddressFactory.getAddress(this.getInventory());
 			
-			//slot0 = new SubRegistry(slot0, 5, 0);
+			Registry slot2 = IPaddress.getRegion();
+			
 
-			this.addInputRegistry(slot0);
+			this.addInputRegistry(slot2);
 
 			// Input[1] = destination track taken from cart, slot #1
 
-			RegistryInput slot1 = new InventorySlot(this.Inventory, 1);
+			RegistryInput slot1 = IPaddress.getTrack();
 			
-			// only 5 most significant bits are taken into account
-			
-			//slot1 = new SubRegistry(slot1, 5, 0);		
 
 			this.addInputRegistry(slot1);
 
-			// Address is on a sign, line #3
+			// Input[2] = Region on the router sign, line #3
 			
-			AddressSign address = new AddressSign(this.getBlock(),3);
+			Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
-			// Input[3] = region from sign, line #3
-
-//			RegistryInput region = new SignRegistry(this.getBlock(), 2, 6);
-			RegistryInput region = address.getRegion();
-
-			// only 5 most significant bits are taken into account
-
-			//region = new SubRegistry(region, 5, 0);
+			RegistryInput region = sign.getRegion();
 
 			this.addInputRegistry(region);
 			

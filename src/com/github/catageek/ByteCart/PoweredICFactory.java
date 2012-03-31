@@ -40,7 +40,7 @@ public class PoweredICFactory {
 			
 				case 7001:
 				{
-					return (PoweredIC)(new BC7001(block));
+					return (PoweredIC)(new BC7001(block, null));
 				}
 		
 			}

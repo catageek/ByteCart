@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class InventorySlot implements RegistryInput, RegistryOutput {
+public class InventorySlot implements Registry {
 	
 	private Inventory Inventory;
 	private int Index;

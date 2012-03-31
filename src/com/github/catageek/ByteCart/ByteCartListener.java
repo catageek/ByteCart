@@ -16,12 +16,10 @@ import org.bukkit.util.Vector;
 
 public class ByteCartListener implements Listener {
 	
-	private TriggeredICFactory MyTriggeredICFactory;
 	private PoweredICFactory MyPoweredICFactory;
 
 
 	ByteCartListener() {
-		this.MyTriggeredICFactory = new TriggeredICFactory();
 		this.MyPoweredICFactory = new PoweredICFactory();
 	}
 	
@@ -43,7 +41,7 @@ public class ByteCartListener implements Listener {
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
 			
-			TriggeredIC myIC = this.MyTriggeredICFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),event.getVehicle());
+			TriggeredIC myIC = TriggeredICFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),event.getVehicle());
 						
 			if (myIC != null) {
 
@@ -86,7 +84,7 @@ public class ByteCartListener implements Listener {
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
 			
-			TriggeredIC myIC = this.MyTriggeredICFactory.getTriggeredIC(event.getVehicle().getLocation().getBlock().getRelative(BlockFace.DOWN, 2),event.getVehicle());
+			TriggeredIC myIC = TriggeredICFactory.getTriggeredIC(event.getVehicle().getLocation().getBlock().getRelative(BlockFace.DOWN, 2),event.getVehicle());
 						
 			if (myIC != null) {
 				myIC.trigger();
@@ -113,13 +111,10 @@ public class ByteCartListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
 		
-		if (event.isCancelled())
-			return;
-		
 		if (! AbstractIC.checkEligibility(event.getLine(1)))
 			return;
 
-		TriggeredIC myIC = this.MyTriggeredICFactory.getTriggeredIC(event.getBlock(), event.getLine(1));
+		TriggeredIC myIC = TriggeredICFactory.getTriggeredIC(event.getBlock(), event.getLine(1), null);
 		
 		if (myIC != null) {
 			if (! event.getPlayer().hasPermission(myIC.getBuildPermission())) {

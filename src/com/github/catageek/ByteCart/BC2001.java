@@ -26,7 +26,7 @@ public final class BC2001 extends AbstractIC implements TriggeredIC {
 			this.getOutput(0).setAmount(slot.getAmount());
 			
 			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : BC2001 : slot #"+ this.getInput(0).getAmount() + " contains " + this.getOutput(0).getAmount());
+				ByteCart.log.info("ByteCart : BC2001 : slot #"+ this.getInput(0).getAmount() + " contains " + slot.getAmount());
 
 		}
 		catch (NullPointerException e) {

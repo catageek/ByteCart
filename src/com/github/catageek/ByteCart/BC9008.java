@@ -2,8 +2,8 @@ package com.github.catageek.ByteCart;
 
 public class BC9008 extends BC9001 implements TriggeredIC {
 
-	public BC9008(org.bukkit.block.Block block, org.bukkit.inventory.Inventory inv) {
-		super(block, inv);
+	public BC9008(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
+		super(block, vehicle);
 		this.netmask = 1;
 		this.Name = "BC9008";
 		this.FriendlyName = "8-station subnet";
