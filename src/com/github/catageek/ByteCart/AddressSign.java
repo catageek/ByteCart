@@ -24,16 +24,24 @@ public class AddressSign extends AbstractComponent implements Address {
 		}
 	}
 	
+	@Override
 	public VirtualRegistry getRegion() {
 		return Address.getRegion();
 	}
 
+	@Override
 	public VirtualRegistry getTrack() {
 		return Address.getTrack();
 	}
 
+	@Override
 	public VirtualRegistry getStation() {
 		return Address.getStation();
+	}
+
+	@Override
+	public Registry getService() {
+		return Address.getService();
 	}
 
 }

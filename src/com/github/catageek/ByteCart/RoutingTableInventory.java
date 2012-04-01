@@ -10,14 +10,14 @@ public final class RoutingTableInventory implements RoutingTable {
 
 	@Override
 	public Registry getDirection(int entry) {
-		// TODO Auto-generated method stub
-		return null;
+		Registry reg = new InventorySlot(this.Inventory, entry);
+		return new SubRegistry(reg, 2, 0);
 	}
 
 	@Override
 	public Registry getDistance(int entry) {
-		// TODO Auto-generated method stub
-		return null;
+		Registry reg = new InventorySlot(this.Inventory, entry);
+		return new SubRegistry(reg, 4, 2);
 	}
 
 	/**

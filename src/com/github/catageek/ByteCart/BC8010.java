@@ -21,10 +21,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 	@Override
 	public void trigger() {
 
-		VirtualRegistry virtual1 = new VirtualRegistry(6); // 6 bits registry
-		VirtualRegistry virtual2 = new VirtualRegistry(6); // 6 bits registry
-
-		TriggeredIC bc2001, bc2002;
+		TriggeredIC bc2002;
 		
 		// Centre de l'aiguillage
 		Block center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
@@ -39,54 +36,28 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			
 			Address IPaddress = AddressFactory.getAddress(this.getInventory());
 			
-			Registry slot2 = IPaddress.getRegion();
-			
-
-			this.addInputRegistry(slot2);
-
-			// Input[1] = destination track taken from cart, slot #1
-
-			RegistryInput slot1 = IPaddress.getTrack();
-			
-
-			this.addInputRegistry(slot1);
-
-			// Input[2] = Region on the router sign, line #3
-			
 			Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
-			RegistryInput region = sign.getRegion();
-
-			this.addInputRegistry(region);
+			Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 4).getState()).getInventory();
 			
+			RoutingTable RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
 
-			// Output[0] = virtual registry #1 (used as input of BC1001), 6 bits
-			this.addOutputRegistry(virtual1);
+			// Here begins the triggered action
+			Registry direction;
+	
+			// If not in same region, then we lookup track 0
+			if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount())
+				direction = RoutingTable.getDirection(0);
+			else
+				// same region : lookup destination track
+				direction = RoutingTable.getDirection(IPaddress.getTrack().getAmount());
 
-
-			// BC2001 construction
-			
-			// routing table lookup IC, outputs direction on 2 bits
-			Inventory routingtable = ((InventoryHolder) center.getRelative(BlockFace.UP, 4).getState()).getInventory();
-
-			bc2001 = new BC2001(center.getRelative(BlockFace.UP, 4), routingtable);
-
-			// bc2001.Input[0] = virtual registry #1, 6 bits
-			bc2001.addInputRegistry(virtual1);
-			
-			// bc2001.Output[0] = virtual registry #2, 6 bits
-			bc2001.addOutputRegistry(virtual2);
-
-			
 			// BC2002 Construction
 			
 			// Switch selector IC, from 2 bits value to 4 lines
 			
 			bc2002 = new BC2002(center);
-			
-			// bc2002.Input[0] = 2 most significant bits of virtual #2
-			RegistryInput direction = new SubRegistry(virtual2,2,0);
-			
+
 			bc2002.addInputRegistry(direction);
 			
 			// BC2002 Output[0] : levers to command track switch
@@ -105,18 +76,8 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			
 			bc2002.addOutputRegistry(last);
 
-			
-			// Here begins the triggered action
-	
-			// If not in same region, then we lookup track 0
-			if (this.getInput(0).getAmount() != this.getInput(2).getAmount())
-				this.getOutput(0).setAmount(0);
-			else
-				// same region : lookup destination track
-				this.getOutput(0).setAmount(this.getInput(1).getAmount());
-			
 			// update of bc1001 output
-			bc2001.trigger();
+//			bc2001.trigger();
 			
 			// update of bc1002 output
 			bc2002.trigger();

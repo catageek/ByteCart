@@ -12,7 +12,8 @@ public final class AddressInventory implements Address {
 		// #slot, length (default : 6), pos (default : 0)
 		REGION((byte) 0),
 		TRACK((byte) 1),
-		STATION((byte) 2, (byte) 4, (byte) 2);
+		STATION((byte) 2, (byte) 4, (byte) 2),
+		SERVICE((byte) 2, (byte) 2, (byte) 0);
 
 		private final byte Slot, Length, Offset;
 
@@ -79,6 +80,11 @@ public final class AddressInventory implements Address {
 	 */
 	private org.bukkit.inventory.Inventory getInventory() {
 		return Inventory;
+	}
+
+	@Override
+	public Registry getService() {
+		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.SERVICE.getSlot()), Slots.SERVICE.getLength(), Slots.SERVICE.getOffset());
 	}
 
 }

@@ -57,4 +57,12 @@ public class AddressString implements Address {
 		return Integer.parseInt(st[ index ].trim());
 	}
 
+	@Override
+	public Registry getService() {
+		VirtualRegistry ret = new VirtualRegistry(4);
+		ret.setAmount( this.getField(2) >> 4);
+	
+		return ret;
+	}
+
 }
