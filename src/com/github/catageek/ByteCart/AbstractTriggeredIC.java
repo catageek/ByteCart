@@ -8,7 +8,7 @@ import org.bukkit.entity.StorageMinecart;
 public abstract class AbstractTriggeredIC extends AbstractIC {
 	
 	private final org.bukkit.entity.Vehicle Vehicle;
-	private final org.bukkit.inventory.Inventory Inventory;
+	private org.bukkit.inventory.Inventory Inventory;
 
 	public AbstractTriggeredIC(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block);
@@ -49,6 +49,10 @@ public abstract class AbstractTriggeredIC extends AbstractIC {
 	 */
 	public org.bukkit.inventory.Inventory getInventory() {
 		return Inventory;
+	}
+	
+	protected void setInventory(org.bukkit.inventory.Inventory inv) {
+		this.Inventory = inv;
 	}
 
 }

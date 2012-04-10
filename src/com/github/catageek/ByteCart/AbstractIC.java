@@ -93,6 +93,8 @@ abstract public class AbstractIC implements IC {
 	}
 
 	public String getFriendlyName() {
+		if (this.getBlock().getState() instanceof org.bukkit.block.Sign)
+			return ((Sign) this.getBlock().getState()).getLine(2);
 		return FriendlyName;
 	}
 

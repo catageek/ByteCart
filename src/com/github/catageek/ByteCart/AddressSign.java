@@ -4,13 +4,13 @@ import org.bukkit.block.Block;
 
 public class AddressSign extends AbstractComponent implements Address {
 	
-	private AddressString Address = null;;
+	private AddressString Address;
 
 	public AddressSign(Block block, int ligne) {
 		
 		super(block.getLocation());
 		
-		org.bukkit.block.Sign sign = null;
+		org.bukkit.block.Sign sign;
 
 		if (block.getState() instanceof org.bukkit.block.Sign) {
 			sign = (org.bukkit.block.Sign) block.getState();
@@ -21,21 +21,22 @@ public class AddressSign extends AbstractComponent implements Address {
 	*/	}
 		else {
 			ByteCart.log.info("ByteCart: AddressSign cannot be built");
+			throw new IllegalArgumentException();
 		}
 	}
 	
 	@Override
-	public VirtualRegistry getRegion() {
+	public Registry getRegion() {
 		return Address.getRegion();
 	}
 
 	@Override
-	public VirtualRegistry getTrack() {
+	public Registry getTrack() {
 		return Address.getTrack();
 	}
 
 	@Override
-	public VirtualRegistry getStation() {
+	public Registry getStation() {
 		return Address.getStation();
 	}
 
@@ -43,5 +44,29 @@ public class AddressSign extends AbstractComponent implements Address {
 	public Registry getService() {
 		return Address.getService();
 	}
+
+	@Override
+	public com.github.catageek.ByteCart.Address setRegion(int region) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public com.github.catageek.ByteCart.Address setTrack(int track) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public com.github.catageek.ByteCart.Address setStation(int station) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAddress() {
+		return this.Address.getAddress();
+	}
+
 
 }

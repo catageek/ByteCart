@@ -7,11 +7,12 @@ debug: false
 # with a cart passing on it you can create any usetax you wish using the parameter:
 # usetax.BCxxxx: n
 ######## currently not implemented ########
-usetax.BC9000: 1
+usetax.BC8010: 1
 
 # this is the tax taken from
 # the player when building the sign
 ######### currently not implemented ############
+buildtax.BC7010: 100
 buildtax.BC9001: 300
 buildtax.BC9002: 300
 buildtax.BC9004: 300
@@ -20,3 +21,26 @@ buildtax.BC9016: 0
 
 # initial speed of minecarts
 BC7001.startvelocity: 2
+
+# error messages
+# Error : too few/many items in inventory
+Error.SetAddress: Erreur - Pas assez/trop d'elements dans l'inventaire
+
+#Info messages
+
+# New destination address
+Info.SetAddress: Nouvelle destination
+
+# don't touch your inventory
+# take a cart and have a nice trip !
+Info.SetAddress2: Ne touchez pas a votre inventaire
+                  Prenez un cart et bonne route !
+
+#On the way to region
+Info.BC8010_region: En route pour la region
+
+#You are entering track
+Info.BC8010_track: Vous entrez sur la voie
+
+#You have arrived at
+Info.Destination: Vous etes arrive a

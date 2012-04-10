@@ -65,4 +65,27 @@ public class AddressString implements Address {
 		return ret;
 	}
 
+	@Override
+	public Address setRegion(int region) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Address setTrack(int track) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Address setStation(int station) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public java.lang.String getAddress() {
+		return this.String;
+	}
+
 }

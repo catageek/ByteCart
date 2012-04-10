@@ -48,6 +48,10 @@ final public class TriggeredICFactory {
 				{
 					return (new BC7001(block, vehicle));
 				}
+				case 7010:
+					return new BC7010(block, vehicle);
+				case 7011:
+					return new BC7011(block, vehicle);
 		
 				case 8010:
 				{

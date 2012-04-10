@@ -7,8 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.util.Vector;
@@ -62,7 +64,7 @@ public class ByteCartListener implements Listener {
 					tax = myIC.getTriggertax();
 					
 					if (tax != 0)
-						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "1 aiguillage traversé (tarif: " + myIC.getTriggertax() + " eur0x");	
+						player.sendMessage(ChatColor.DARK_GRAY+"[Bytecart] " + "Echangeur (tarif: " + myIC.getTriggertax() + " eur0x)");	
 				}
 			
 			}
@@ -125,16 +127,14 @@ public class ByteCartListener implements Listener {
 			{
 				event.getPlayer().sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + myIC.getFriendlyName() + " block created.");
 				event.getPlayer().sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Tarif : " +myIC.getBuildtax() + " eur0x.");	
-				event.setLine(2, myIC.getFriendlyName());
+				if (event.getLine(2).compareTo("") == 0)
+					event.setLine(2, myIC.getFriendlyName());
 			}
 		}
 	}
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-		
-		if (event.isCancelled())
-			return;
 		
 		if (! AbstractIC.checkEligibility(event.getBlock().getRelative(BlockFace.DOWN)))
 			return;
@@ -151,4 +151,20 @@ public class ByteCartListener implements Listener {
 		}
 
 	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0 || !AbstractIC.checkEligibility(event.getClickedBlock()))
+			return;
+		ClickedIC myIC = ClickedICFactory.getClickedIC(event.getClickedBlock(), event.getPlayer());
+		
+		if (myIC != null) {
+
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart: " + myIC.getName() + ".click()");
+
+			myIC.click();
+		}
+	}
+	
 }

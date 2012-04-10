@@ -1,5 +1,8 @@
 package com.github.catageek.ByteCart;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 public class BC9001 extends AbstractTriggeredIC implements TriggeredIC {
 
 	protected int netmask;
@@ -90,20 +93,23 @@ public class BC9001 extends AbstractTriggeredIC implements TriggeredIC {
 			
 			// here is the triggered action
 			
-			if(ByteCart.debug) {
+/*			if(ByteCart.debug) {
 				for (int i=0; i<6; i++)
 					ByteCart.log.info("ByteCart : BC1003 input(" + i + ") = " + this.getInput(i).getAmount());
 			}
-			
+*/			
 			
 			// test if every destination field matches sign field
 			if (this.getInput(2).getAmount() == this.getInput(5).getAmount()
 				&& this.getInput(1).getAmount() == this.getInput(4).getAmount()
-				&& this.getInput(0).getAmount() == this.getInput(3).getAmount())
+				&& this.getInput(0).getAmount() == this.getInput(3).getAmount()) {
 				
 					this.getOutput(0).setAmount(3); // power buttons if matching
-			
-
+					
+					if(this.getName().equals("BC9001")) {
+						((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.Destination") + " " + this.getFriendlyName() + " (" + sign.getAddress() + ")");
+						}
+			}
 			
 		}
 		catch (ClassCastException e) {

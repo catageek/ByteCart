@@ -5,4 +5,8 @@ public interface Address {
 	public Registry getTrack();
 	public Registry getStation();
 	public Registry getService();
+	public Address setRegion(int region);
+	public Address setTrack(int track);
+	public Address setStation(int station);
+	public String getAddress();
 }
