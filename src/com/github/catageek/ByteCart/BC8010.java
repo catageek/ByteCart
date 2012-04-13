@@ -1,9 +1,7 @@
 package com.github.catageek.ByteCart;
 
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
@@ -40,7 +38,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 
 			Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
-			Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 4).getState()).getInventory();
+			Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 5).getState()).getInventory();
 
 			RoutingTable RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
 
