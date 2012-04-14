@@ -34,7 +34,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			// Input[0] = destination region taken from Inventory, slot #0			
 
 
-			Address IPaddress = AddressFactory.getAddress(this.getInventory());
+			AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
 
 			Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
@@ -44,9 +44,14 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 
 			// Here begins the triggered action
 			Registry direction;
+			
+			if (IPaddress.getTTL().getAmount() != 0)
+			{
+				IPaddress.updateTTL(IPaddress.getTTL().getAmount()-1);
+			}
 
 			// If not in same region, then we lookup track 0
-			if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount()) {
+			if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL().getAmount() == 0) {
 				direction = RoutingTable.getDirection(0);
 				
 /*			if (this.getInventory().getHolder() instanceof Player) {

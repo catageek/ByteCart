@@ -35,7 +35,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 
 		Address SignAddress = AddressFactory.getAddress(this.getBlock(), 3);
 
-		Address IPaddress = AddressFactory.getAddress(this.getInventory());
+		AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
 
 		IPaddress.setRegion(SignAddress.getRegion().getAmount());
 		IPaddress.setTrack(SignAddress.getTrack().getAmount());
@@ -52,6 +52,9 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 			}
 
 		}
+		else
+			IPaddress.initializeTTL();
+
 	}
 
 	final protected boolean isHolderAllowed() {

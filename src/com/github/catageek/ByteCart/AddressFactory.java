@@ -5,10 +5,11 @@ import org.bukkit.inventory.Inventory;
 
 public final class AddressFactory {
 	
-	public static Address getAddress(Inventory inv){
-		return new AddressInventory(inv);
+	@SuppressWarnings("unchecked")
+	public static <T extends Address> T getAddress(Inventory inv){
+		return (T) new AddressInventory(inv);
 	}
-
+	
 	public static Address getAddress(Block b, int line){
 		return new AddressSign(b, line);
 	}

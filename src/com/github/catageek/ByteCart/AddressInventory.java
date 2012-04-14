@@ -6,27 +6,28 @@ import org.bukkit.entity.Player;
 /* 
  * This class represents an address stored in an inventory
  */
-public final class AddressInventory implements Address {
+public final class AddressInventory implements AddressRouted {
 
 	private final org.bukkit.inventory.Inventory Inventory;
 	private InventoryWriter InventoryWriter;
 
 	private enum Slots {
 		// #slot, length (default : 6), pos (default : 0)
-		REGION((byte) 0),
-		TRACK((byte) 1),
-		STATION((byte) 2, (byte) 4, (byte) 2),
-		SERVICE((byte) 2, (byte) 2, (byte) 0);
+		REGION(0),
+		TRACK(1),
+		STATION(2, 4, 2),
+		SERVICE(2, 2, 0),
+		TTL(3);
 
-		private final byte Slot, Length, Offset;
+		private final int Slot, Length, Offset;
 
-		private Slots(byte slot) {
+		private Slots(int slot) {
 			Slot = slot;
 			Length = 6;
 			Offset = 0;
 		}
 
-		private Slots(byte slot, byte length, byte offset) {
+		private Slots(int slot, int length, int offset) {
 			Slot = slot;
 			Length = length;
 			Offset = offset;			
@@ -36,7 +37,7 @@ public final class AddressInventory implements Address {
 		/**
 		 * @return the slot
 		 */
-		public byte getSlot() {
+		public int getSlot() {
 			return Slot;
 		}
 
@@ -44,7 +45,7 @@ public final class AddressInventory implements Address {
 		/**
 		 * @return the length
 		 */
-		public byte getLength() {
+		public int getLength() {
 			return Length;
 		}
 
@@ -52,7 +53,7 @@ public final class AddressInventory implements Address {
 		/**
 		 * @return the offset
 		 */
-		public byte getOffset() {
+		public int getOffset() {
 			return Offset;
 		}
 
@@ -130,6 +131,35 @@ public final class AddressInventory implements Address {
 	@Override
 	public String getAddress() {
 		return "" + this.getRegion().getAmount() + "." + this.getTrack().getAmount() + "." + (this.getStation().getAmount() + this.getService().getAmount());
+	}
+
+	@Override
+	public Registry getTTL() {
+		if (this.getInventory().getHolder() instanceof Player) {
+			Registry v = new VirtualRegistry(6);
+			v.setAmount(ByteCart.myPlugin.getConfig().getInt("TTL.value"));
+			return v;
+		}
+		else
+			return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TTL.getSlot()), Slots.TTL.getLength(), Slots.TTL.getOffset());
+	}
+
+	@Override
+	public Address initializeTTL() {
+		if (! (this.getInventory().getHolder() instanceof Player)) {
+			this.InventoryWriter.Write(ByteCart.myPlugin.getConfig().getInt("TTL.value"), Slots.TTL.getSlot());
+			this.UpdateInventory(this.InventoryWriter.getInventory());
+		}
+		return this;
+	}
+
+	@Override
+	public void updateTTL(int i) {
+		if (! (this.getInventory().getHolder() instanceof Player)) {
+			this.InventoryWriter.setWritten(Slots.REGION.getSlot()).setWritten(Slots.TRACK.getSlot()).setWritten(Slots.STATION.getSlot());
+			this.InventoryWriter.Write(i, Slots.TTL.getSlot());
+			this.UpdateInventory(this.InventoryWriter.getInventory());
+		}
 	}
 
 

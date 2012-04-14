@@ -19,6 +19,12 @@ buildtax.BC9004: 300
 buildtax.BC9008: 0
 buildtax.BC9016: 0
 
+# initial value of time-to-live stack (slot #4)
+# number of routers that a storagecart may use
+# before going to recycling center.
+# this is to prevent loops.
+TTL.value: 63
+
 # initial speed of minecarts
 BC7001.startvelocity: 2
 

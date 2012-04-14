@@ -125,6 +125,11 @@ public final class InventoryWriter {
 	private void setOriginalInventory(Inventory originalInventory) {
 		OriginalInventory = originalInventory;
 	}
+	
+	public InventoryWriter setWritten(int pos) {
+		this.Written.add(pos);
+		return this;
+	}
 
 	private final void swap(Inventory inv, int pos1, int pos2) {
 		ItemStack temp = inv.getItem(pos1);
