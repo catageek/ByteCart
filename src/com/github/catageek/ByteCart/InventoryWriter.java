@@ -102,7 +102,7 @@ public final class InventoryWriter {
 		}
 
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: stack build at pos " + this.getInventory().first(target));
+			ByteCart.log.info("ByteCart: stack build at pos " + Inventory.first(target));
 
 		swap(Inventory, pos, Inventory.first(target));
 		

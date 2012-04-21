@@ -4,7 +4,7 @@ package com.github.catageek.ByteCart;
 // This class represents a canonical address like xx.xx.xx
 public class AddressString implements Address {
 	
-	final private String String; // address as displayed
+	private String String; // address as displayed
 	
 	public AddressString(String s) {
 		if (AddressString.isAddress(s))
@@ -86,6 +86,12 @@ public class AddressString implements Address {
 	@Override
 	public java.lang.String getAddress() {
 		return this.String;
+	}
+
+	@Override
+	public Address setAddress(java.lang.String s) {
+		this.String = s;
+		return this;
 	}
 
 }

@@ -68,5 +68,11 @@ public class AddressSign extends AbstractComponent implements Address {
 		return this.Address.getAddress();
 	}
 
+	@Override
+	public com.github.catageek.ByteCart.Address setAddress(String s) {
+		this.Address.setAddress(s);
+		return this;
+	}
+
 
 }

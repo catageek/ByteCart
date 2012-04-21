@@ -9,4 +9,5 @@ public interface Address {
 	public Address setTrack(int track);
 	public Address setStation(int station);
 	public String getAddress();
+	public Address setAddress(String s);
 }

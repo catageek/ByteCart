@@ -162,5 +162,22 @@ public final class AddressInventory implements AddressRouted {
 		}
 	}
 
+	@Override
+	public Address setAddress(String s) {
+		Address src = AddressFactory.getAddress(s);
+		this.InventoryWriter.setWritten(Slots.TTL.getSlot());
+		this.InventoryWriter.Write(src.getRegion().getAmount(), Slots.REGION.getSlot());
+		this.InventoryWriter.Write(src.getTrack().getAmount(), Slots.TRACK.getSlot());
+		this.InventoryWriter.Write(src.getStation().getAmount(), Slots.STATION.getSlot());
+		this.UpdateInventory(this.InventoryWriter.getInventory());
+		return this;
+	}
+	
+	@Override
+	public String toString() {
+		return this.getAddress();
+		
+	}
+
 
 }
