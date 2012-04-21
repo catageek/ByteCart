@@ -19,7 +19,7 @@ public final class InventoryWriter {
 	private final Set<Integer> Written = new HashSet<Integer>();
 	private Inventory OriginalInventory;
 	private boolean success = true;
-	
+
 	private final Map<Integer, Integer> typemap = new HashMap<Integer, Integer>();
 
 	public InventoryWriter(Inventory inv) {
@@ -43,35 +43,38 @@ public final class InventoryWriter {
 		ItemStack[] Stacks = Inventory.getContents().clone();
 
 		Set<ItemStack> stackset;
-		
+
 		Map<Integer, Set<ItemStack>> Map = new TreeMap<Integer, Set<ItemStack>>(new InventoryWriterComparator<Integer>(value, typemap));
 
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: Writing value " + value + " to slot #" + pos);
 
-
-		
 		for (int i = 0; i < Stacks.length; i++) {
 			ItemStack stack = Stacks[i];
 
-/*			if(ByteCart.debug && stack != null)
+			if(ByteCart.debug && stack != null) {
 				ByteCart.log.info("ByteCart: stack = " + stack + "********************");
-*/			
-			if(stack != null && ! typemap.containsKey(stack.getTypeId()) && ! this.Written(stack)) {
+				ByteCart.log.info("typemap contains key ? "+typemap.containsKey(stack.getTypeId()));
+				ByteCart.log.info("Written ? "+this.Written(i));
+
+			}
+
+
+			if(stack != null && ! typemap.containsKey(stack.getTypeId()) && ! this.Written(i)) {
 				stackset = new TreeSet<ItemStack>(new ItemStackComparator<ItemStack>());
 				stackset.add(stack);
 				typemap.put(stack.getTypeId(), stack.getAmount());
-				
-/*				if(ByteCart.debug)
+
+				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: map put = " + stack.getTypeId() + ":" + typemap.get(stack.getTypeId()));
-*/
+
 				for(int j = i + 1; j < Stacks.length; j++) {
 					ItemStack otherstack = Stacks[j];
-					if (otherstack != null && stack.getTypeId() == otherstack.getTypeId() && !this.Written(otherstack)) {
+					if (otherstack != null && stack.getTypeId() == otherstack.getTypeId() && !this.Written(j)) {
 						stackset.add(otherstack);
-/*						if(ByteCart.debug)
+						if(ByteCart.debug)
 							ByteCart.log.info("ByteCart: map put = " + stack.getTypeId() + ":" + (typemap.get(stack.getTypeId()) + otherstack.getAmount()));
-*/						typemap.put(stack.getTypeId(),typemap.get(stack.getTypeId()) + otherstack.getAmount());
+						typemap.put(stack.getTypeId(),typemap.get(stack.getTypeId()) + otherstack.getAmount());
 					}
 				}
 
@@ -80,36 +83,36 @@ public final class InventoryWriter {
 
 		}
 
-/*		if(ByteCart.debug)
+		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: map length = " + Map.size());
-*/
+
 		ArrayList<Set<ItemStack>> mylist = new ArrayList<Set<ItemStack>>(Map.values());
 
-		ItemStack target = null;
-		
-		for (ListIterator<Set<ItemStack>> it = mylist.listIterator(); (target == null) && it.hasNext();) {
-/*			if(ByteCart.debug)
+		int target = -1;
+
+		for (ListIterator<Set<ItemStack>> it = mylist.listIterator(); (target == -1) && it.hasNext();) {
+			/*			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: index = " + it.nextIndex());
-*/			
+			 */			
 			target = this.reorganize(Inventory, it.next(), value);
 		}
-		
+
 		typemap.clear();
-		
-		if (target == null) {
+
+		if (target == -1) {
 			this.setSuccess(false);
 			return;
 		}
 
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: stack build at pos " + Inventory.first(target));
+			ByteCart.log.info("ByteCart: stack build at pos " + target);
 
-		swap(Inventory, pos, Inventory.first(target));
-		
+		swap(Inventory, pos, target);
+
 		this.setOriginalInventory(Inventory);
-		
+
 		this.Written.add(pos);
-		
+
 	}
 
 	/**
@@ -125,9 +128,11 @@ public final class InventoryWriter {
 	private void setOriginalInventory(Inventory originalInventory) {
 		OriginalInventory = originalInventory;
 	}
-	
+
 	public InventoryWriter setWritten(int pos) {
 		this.Written.add(pos);
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart: 	Declaring as Written slot #" +  pos);
 		return this;
 	}
 
@@ -149,12 +154,25 @@ public final class InventoryWriter {
 		int sum = this.getTotal(set);
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: 	isEligible Set = " + this.getType(set) + ":" + this.getTotal(set) + " : " + (sum >= value && this.getMaxSize(set) >= value));
-		return (sum >= value && this.getMaxSize(set) >= value && ! this.Written(set));
+		return (sum >= value && this.getMaxSize(set) >= value);
 	}
 
 	private void remove(Inventory inv, Set<ItemStack> set) {
-		for (ListIterator<ItemStack> jt = (new ArrayList<ItemStack>(set)).listIterator(); jt.hasNext();) {
+		/*		for (ListIterator<ItemStack> jt = (new ArrayList<ItemStack>(set)).listIterator(); jt.hasNext();) {
 			inv.remove(jt.next());
+		}
+		 */		
+		int settype = this.getType(set);
+		for (ListIterator<ItemStack> it = inv.iterator(); it.hasNext();) {
+			int index = it.nextIndex();
+			ItemStack stack = it.next();
+
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart: 	remove() #" + index + " ?");
+
+			if (! this.Written(index) && stack !=null && stack.getTypeId() == settype) {
+				inv.clear(index);
+			}
 		}
 	}
 
@@ -165,13 +183,13 @@ public final class InventoryWriter {
 		return 0;
 	}
 
-	private ItemStack reorganize(Inventory inv, Set<ItemStack> set, int value) {
+	private int reorganize(Inventory inv, Set<ItemStack> set, int value) {
 
-/*		if(ByteCart.debug)
+		/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: reorganize Set = " + this.getType(set) + ":" + this.getTotal(set));
-*/
+		 */
 		if ( ! this.isEligible(set, value ))
-			return null;
+			return -1;
 		else {
 			int sum = this.getTotal(set);
 			int type = this.getType(set);
@@ -181,9 +199,16 @@ public final class InventoryWriter {
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: 	RemoveItem = " + type + ":" + sum );
 
-			inv.setItem(inv.firstEmpty(),new ItemStack(type,value));
+			int retour = inv.firstEmpty();
+
+			if (retour == -1)
+				return -1;
+
+			inv.setItem(retour,new ItemStack(type,value));
+
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: 	SetItem = " + type + ":" + value );
+			
 			sum -= value;
 			while (sum >0) {
 				if (sum <= maxsize) {
@@ -199,7 +224,7 @@ public final class InventoryWriter {
 					sum -= maxsize;
 				}
 			}
-			return new ItemStack(type, value);
+			return retour;
 		}
 	}
 
@@ -209,36 +234,12 @@ public final class InventoryWriter {
 			return jt.next().getMaxStackSize();
 		return 0;
 	}
-	
-	private boolean Written(Set<ItemStack> set) {
-/*		Integer[] slots = this.Written.toArray(new Integer[0]);
-		boolean ret = true;
-		for (int i = 0; i < slots.length; i++) {
 
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: Written ? slot = " + slots[i] );
-
-			ret &= (this.getInventory().getItem(slots[i]).getTypeId() != this.getType(set));
-		}
-		return ! ret;
-*/		return false;
-		}
-	
-	private boolean Written(ItemStack s) {
-		Map<Integer,? extends ItemStack> map = this.getInventory().all(s);
-		Integer[] slots = this.Written.toArray(new Integer[0]);
-		boolean ret = true;
-
-		for (int i = 0; i < slots.length; i++) {
-
-/*			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: Written ? slot2 = " + s + " "+ map.containsKey(slots[i]));
-*/
-			ret &= ! map.containsKey(slots[i]);
-		}
-		return ! ret;
-
+	private boolean Written(int slot) {
+		return this.Written.contains(slot);
 	}
+
+
 
 	/**
 	 * @return the success

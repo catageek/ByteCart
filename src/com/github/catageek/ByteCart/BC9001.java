@@ -106,7 +106,7 @@ public class BC9001 extends AbstractTriggeredIC implements TriggeredIC {
 				
 					this.getOutput(0).setAmount(3); // power buttons if matching
 					
-					if(this.getName().equals("BC9001")) {
+					if(this.getName().equals("BC9001") && this.getInventory().getHolder() instanceof Player) {
 						((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.Destination") + " " + this.getFriendlyName() + " (" + sign.getAddress() + ")");
 						}
 			}

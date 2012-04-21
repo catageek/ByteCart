@@ -23,7 +23,7 @@ buildtax.BC9016: 0
 # number of routers that a storagecart may use
 # before going to recycling center.
 # this is to prevent loops.
-TTL.value: 63
+TTL.value: 64
 
 # initial speed of minecarts
 BC7001.startvelocity: 2

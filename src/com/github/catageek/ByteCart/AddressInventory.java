@@ -95,6 +95,10 @@ public final class AddressInventory implements AddressRouted {
 	private void UpdateInventory(org.bukkit.inventory.Inventory inventory) {
 		if (this.InventoryWriter.isSuccess())
 			this.Inventory.setContents(inventory.getContents());
+		else {
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart : UpdateInventory is not success");
+		}
 		if (this.getInventory().getHolder() instanceof Player)
 			((Player) this.getInventory().getHolder()).updateInventory();
 	}

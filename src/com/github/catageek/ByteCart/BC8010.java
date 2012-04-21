@@ -44,28 +44,39 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 
 			// Here begins the triggered action
 			Registry direction;
-			
-			if (IPaddress.getTTL().getAmount() != 0)
-			{
-				IPaddress.updateTTL(IPaddress.getTTL().getAmount()-1);
+
+			int ttl = IPaddress.getTTL().getAmount();
+
+			if (ttl != 1) {
+
+				if (ttl != 0)
+				{
+					IPaddress.updateTTL(ttl-1);
+				}
+				else {
+					IPaddress.updateTTL(ByteCart.myPlugin.getConfig().getInt("TTL.value"));
+				}
 			}
 
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL().getAmount());
+
 			// If not in same region, then we lookup track 0
-			if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL().getAmount() == 0) {
+			if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL().getAmount() == 1) {
 				direction = RoutingTable.getDirection(0);
-				
-/*			if (this.getInventory().getHolder() instanceof Player) {
+
+				/*			if (this.getInventory().getHolder() instanceof Player) {
 					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.BC8010_region") + " " + IPaddress.getRegion());
 				}
-*/
+				 */
 			} else
 			{	// same region : lookup destination track
 				direction = RoutingTable.getDirection(IPaddress.getTrack().getAmount());
-				
-/*				if (this.getInventory().getHolder() instanceof Player) {
+
+				/*				if (this.getInventory().getHolder() instanceof Player) {
 					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.BC8010_track") + " " + IPaddress.getTrack());
 				}
-*/			}
+				 */			}
 			// BC2002 Construction
 
 			// Switch selector IC, from 2 bits value to 4 lines
