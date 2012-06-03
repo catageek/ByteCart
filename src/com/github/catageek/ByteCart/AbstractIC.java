@@ -50,8 +50,11 @@ abstract public class AbstractIC implements IC {
 	
 	// This function checks if we have a ByteCart sign at this location
 	static public boolean checkEligibility(Block b){
-				
-		if(b.getTypeId() != Material.SIGN_POST.getId()) {
+
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : checkEligibility typeId : " + b.getTypeId());
+		
+		if(b.getTypeId() != Material.SIGN_POST.getId() && b.getTypeId() != Material.WALL_SIGN.getId()) {
 			return false;
 		}
 		

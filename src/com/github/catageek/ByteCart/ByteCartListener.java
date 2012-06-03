@@ -154,6 +154,12 @@ public class ByteCartListener implements Listener {
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		
+		if(ByteCart.debug) {
+				ByteCart.log.info("ByteCart : bloc clicked " + event.getClickedBlock().getLocation());
+				ByteCart.log.info("ByteCart : !AbstractIC.checkEligibility :" + !AbstractIC.checkEligibility(event.getClickedBlock()));
+		}
+		
 		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0 || !AbstractIC.checkEligibility(event.getClickedBlock()))
 			return;
 		ClickedIC myIC = ClickedICFactory.getClickedIC(event.getClickedBlock(), event.getPlayer());
