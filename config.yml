@@ -7,15 +7,15 @@ debug: false
 # with a cart passing on it you can create any usetax you wish using the parameter:
 # usetax.BCxxxx: n
 ######## currently not implemented ########
-usetax.BC8010: 1
+usetax.BC8010: 0
 
 # this is the tax taken from
 # the player when building the sign
 ######### currently not implemented ############
-buildtax.BC7010: 100
-buildtax.BC9001: 300
-buildtax.BC9002: 300
-buildtax.BC9004: 300
+buildtax.BC7010: 0
+buildtax.BC9001: 0
+buildtax.BC9002: 0
+buildtax.BC9004: 0
 buildtax.BC9008: 0
 buildtax.BC9016: 0
 
