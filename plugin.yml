@@ -1,6 +1,6 @@
 name: ByteCart
 main: com.github.catageek.ByteCart.ByteCart
-version: 0.3
+version: 0.4
 permissions:
     bytecart.*:
         description: give access to all blocks
@@ -9,6 +9,7 @@ permissions:
             bytecart.BC7010: true
             bytecart.BC7011: true
             bytecart.BC8010: true
+            bytecart.BC8020: true
             bytecart.BC9001: true
             bytecart.BC9002: true
             bytecart.BC9004: true
@@ -22,6 +23,7 @@ permissions:
             bytecart.BC7010: true
             bytecart.BC7011: false
             bytecart.BC8010: false
+            bytecart.BC8020: false
             bytecart.BC9001: true
             bytecart.BC9002: true
             bytecart.BC9004: true
@@ -35,6 +37,7 @@ permissions:
             bytecart.BC7010: true
             bytecart.BC7011: false
             bytecart.BC8010: false
+            bytecart.BC8020: false
             bytecart.BC9001: true
             bytecart.BC9002: true
             bytecart.BC9004: true
@@ -47,6 +50,8 @@ permissions:
     bytecart.BC7011:
         default: false
     bytecart.BC8010:
+        default: false
+    bytecart.BC8020:
         default: false
     bytecart.BC9001:
         default: false

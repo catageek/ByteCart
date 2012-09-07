@@ -69,6 +69,24 @@ final public class TriggeredICFactory {
 					else // or we die
 						return null;
 				}
+				
+				case 8020:
+				{
+					// first we power the busy bit and requests the token
+					BC2003 bc2003 = new BC2003(block, vehicle);
+					try {
+						bc2003.trigger();
+					}
+					catch (NullPointerException e) {
+						
+					}
+					// if we have the token, we trigger it
+					if (bc2003.hasToken(vehicle))
+						return new BC8020(block, vehicle);
+					else // or we die
+						return null;
+				}
+				
 				case 9001:
 					return new BC9001(block, vehicle);
 				case 9002:

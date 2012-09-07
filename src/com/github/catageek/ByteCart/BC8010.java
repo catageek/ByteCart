@@ -34,21 +34,30 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			// Input[0] = destination region taken from Inventory, slot #0			
 
 
+			// reading destination address of the cart
 			AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
 
+			// reading address written on BC8010 sign
 			Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
+			// Loading inventory of chest above router
 			Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 5).getState()).getInventory();
 
+			// Converting inventory in routing table
 			RoutingTable RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
 
 			// Here begins the triggered action
 			Registry direction;
 
+			// Time-to-live management
+			
+			//loading TTl of cart
 			int ttl = IPaddress.getTTL().getAmount();
 
+			// if ttl did not reach end of life ( = 1)
 			if (ttl != 1) {
-
+				
+				// we update it
 				if (ttl != 0)
 				{
 					IPaddress.updateTTL(ttl-1);
@@ -61,7 +70,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL().getAmount());
 
-			// If not in same region, then we lookup track 0
+			// If not in same region, or if TTL reached end of life, then we lookup track 0
 			if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL().getAmount() == 1) {
 				direction = RoutingTable.getDirection(0);
 
@@ -79,7 +88,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 				 */			}
 			// BC2002 Construction
 
-			// Switch selector IC, from 2 bits value to 4 lines
+			// Switch selector IC, from 2 bits value to 4 physical switches
 
 			bc2002 = new BC2002(center);
 
