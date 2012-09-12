@@ -9,9 +9,9 @@ public final class RoutingTableInventory implements RoutingTable {
 	}
 
 	@Override
-	public Registry getDirection(int entry) {
+	public DirectionRegistry getDirection(int entry) {
 		Registry reg = new InventorySlot(this.Inventory, entry);
-		return new SubRegistry(reg, 2, 0);
+		return new DirectionRegistry(1 << (reg.getAmount() >> 4));
 	}
 
 	@Override

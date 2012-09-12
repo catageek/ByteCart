@@ -35,6 +35,20 @@ public final class DirectionRegistry {
 		}
 
 	}
+	
+	public final BlockFace getCardinal() {
+		switch(this.getAmount()) {
+		case 1:
+			return BlockFace.SOUTH;
+		case 2:
+			return BlockFace.WEST;
+		case 4:
+			return BlockFace.NORTH;
+		case 8:
+			return BlockFace.EAST;
+		}
+		return BlockFace.SELF;
+	}
 
 	public final void setAmount(int value) {
 		this.registry.setAmount(value);
@@ -42,6 +56,12 @@ public final class DirectionRegistry {
 	
 	public final Integer getAmount() {
 		return this.registry.getAmount();
+	}
+	
+	public final Registry getRegistry() {
+		Registry reg = new VirtualRegistry(4);
+		reg.setAmount(this.getAmount());
+		return reg;
 	}
 
 }

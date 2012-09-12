@@ -87,7 +87,7 @@ public class BC2003 extends AbstractTriggeredIC implements TriggeredIC {
 
 			}
 		}
-		, 4);
+		, 6);
 
 
 	}

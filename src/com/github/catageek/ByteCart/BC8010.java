@@ -21,8 +21,6 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 	@Override
 	public void trigger() {
 
-		TriggeredIC bc2002;
-
 		// Centre de l'aiguillage
 		Block center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
 		/*
@@ -47,16 +45,15 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			RoutingTable RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
 
 			// Here begins the triggered action
-			Registry direction;
 
 			// Time-to-live management
-			
+
 			//loading TTl of cart
 			int ttl = IPaddress.getTTL().getAmount();
 
 			// if ttl did not reach end of life ( = 1)
 			if (ttl != 1) {
-				
+
 				// we update it
 				if (ttl != 0)
 				{
@@ -70,51 +67,25 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL().getAmount());
 
-			// If not in same region, or if TTL reached end of life, then we lookup track 0
-			if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL().getAmount() == 1) {
-				direction = RoutingTable.getDirection(0);
-
-				/*			if (this.getInventory().getHolder() instanceof Player) {
-					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.BC8010_region") + " " + IPaddress.getRegion());
-				}
-				 */
-			} else
-			{	// same region : lookup destination track
-				direction = RoutingTable.getDirection(IPaddress.getTrack().getAmount());
-
-				/*				if (this.getInventory().getHolder() instanceof Player) {
-					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.BC8010_track") + " " + IPaddress.getTrack());
-				}
-				 */			}
-			// BC2002 Construction
-
-			// Switch selector IC, from 2 bits value to 4 physical switches
-
-			bc2002 = new BC2002(center);
-
-			bc2002.addInputRegistry(direction);
-
-			// BC2002 Output[0] : levers to command track switch
+			
+			DirectionRegistry direction = this.SelectRoute(IPaddress, sign, RoutingTable);
+			
 			OutputPin[] sortie = new OutputPin[4];
 
-			// East
-			sortie[3] = OutputPinFactory.getOutput(center.getRelative(BlockFace.WEST,3).getRelative(BlockFace.SOUTH));
-			// North
-			sortie[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.EAST,3).getRelative(BlockFace.NORTH));
-			// West
-			sortie[1] = OutputPinFactory.getOutput(center.getRelative(BlockFace.SOUTH,3).getRelative(BlockFace.EAST));
 			// South
+			sortie[3] = OutputPinFactory.getOutput(center.getRelative(BlockFace.WEST,3).getRelative(BlockFace.SOUTH));
+			// West
+			sortie[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.EAST,3).getRelative(BlockFace.NORTH));
+			// North
+			sortie[1] = OutputPinFactory.getOutput(center.getRelative(BlockFace.SOUTH,3).getRelative(BlockFace.EAST));
+			// East
 			sortie[0] = OutputPinFactory.getOutput(center.getRelative(BlockFace.NORTH,3).getRelative(BlockFace.WEST));
 
 			PinRegistry<OutputPin> last = new PinRegistry<OutputPin>(sortie);
 
-			bc2002.addOutputRegistry(last);
+			this.addOutputRegistry(last);
 
-			// update of bc1001 output
-			//			bc2001.trigger();
-
-			// update of bc1002 output
-			bc2002.trigger();
+			this.getOutput(0).setAmount(direction.getAmount());
 
 		}
 		catch (ClassCastException e) {
@@ -139,7 +110,17 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 
 
 	}
-
+	
+	protected DirectionRegistry SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
+		// If not in same region, or if TTL reached end of life, then we lookup track 0
+		if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL().getAmount() == 1) {
+			return RoutingTable.getDirection(0);
+		} else
+		{	// same region : lookup destination track
+			return RoutingTable.getDirection(IPaddress.getTrack().getAmount());
+		}
+		
+	}
 
 
 
