@@ -13,9 +13,9 @@ public class InventorySlot implements Registry {
 		this.Inventory = inv;
 		this.Index = index;
 		
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : adding Inventory slot #" + index);
-
+*/
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class InventorySlot implements Registry {
 
 	@Override
 	public boolean getBit(int index) {
-		int temp = this.getAmount() >> index;
+		int temp = this.getAmount() >> (length() - index - 1);
 		
 		if ((temp & 1) == 0)
 			return false;
@@ -61,9 +61,9 @@ public class InventorySlot implements Registry {
 		
 		// compute final value
 		if(value)
-			dest |= 1 << index;
+			dest |= 1 << (length() - index - 1);
 		else
-			dest &= ~(1 << index);
+			dest &= ~(1 << (length() - index - 1));
 		
 		// copy value to stack object
 		stack.setAmount(dest);

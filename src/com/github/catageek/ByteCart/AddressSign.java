@@ -41,11 +41,6 @@ public class AddressSign extends AbstractComponent implements Address {
 	}
 
 	@Override
-	public Registry getService() {
-		return Address.getService();
-	}
-
-	@Override
 	public com.github.catageek.ByteCart.Address setRegion(int region) {
 		// TODO Auto-generated method stub
 		return null;
@@ -64,6 +59,12 @@ public class AddressSign extends AbstractComponent implements Address {
 	}
 
 	@Override
+	public com.github.catageek.ByteCart.Address setIsTrain(boolean isTrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public String getAddress() {
 		return this.Address.getAddress();
 	}
@@ -73,6 +74,12 @@ public class AddressSign extends AbstractComponent implements Address {
 		this.Address.setAddress(s);
 		return this;
 	}
+
+	@Override
+	public boolean isTrain() {
+		return this.Address.isTrain();
+	}
+
 
 
 }

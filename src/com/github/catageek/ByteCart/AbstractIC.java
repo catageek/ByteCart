@@ -5,10 +5,13 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 
+
 // All ICs must inherit from this class
 abstract public class AbstractIC implements IC {
 	
 	final private Block Block;
+	final static private BlockMap DelayedThread = new BlockMap();
+	final static private BlockMap State = new BlockMap();
 	
 	protected String Name = "";
 	protected String FriendlyName = "";
@@ -51,9 +54,6 @@ abstract public class AbstractIC implements IC {
 	// This function checks if we have a ByteCart sign at this location
 	static public boolean checkEligibility(Block b){
 
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : checkEligibility typeId : " + b.getTypeId());
-		
 		if(b.getTypeId() != Material.SIGN_POST.getId() && b.getTypeId() != Material.WALL_SIGN.getId()) {
 			return false;
 		}
@@ -71,7 +71,30 @@ abstract public class AbstractIC implements IC {
 		return true;
 		
 	}
+
+	/*
+	 * create a release task
+	 */
+	protected final void createReleaseTask(Block block, int duration, Runnable ReleaseTask) {
+		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, ReleaseTask
+		, duration);
+		
+		// the id of the thread is stored in a static map
+		AbstractIC.DelayedThread.createEntry(block, id);
+	}
+
 	
+	/*
+	 * Renew the timer of release task
+	 */
+	protected final void renew(Block block, int duration, Runnable ReleaseTask) {
+		// we cancel the release task
+		ByteCart.myPlugin.getServer().getScheduler().cancelTask(AbstractIC.DelayedThread.getValue(block));
+		// we schedule a new one
+		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, ReleaseTask, duration);
+		// we update the hashmap
+		AbstractIC.DelayedThread.updateValue(block, id);
+	}
 	
 	public BlockFace getCardinal() {
 		try {
@@ -107,6 +130,19 @@ abstract public class AbstractIC implements IC {
 
 	public int getBuildtax() {
 		return Buildtax;
+	}
+	
+	protected int getState(Block block) {
+		return AbstractIC.State.getValue(block);
+	}
+	
+	protected void setState(Block block, int state) {
+		AbstractIC.State.createEntry(Block, state);
+	}
+	
+	protected void free(Block block) {
+		AbstractIC.State.deleteEntry(block);
+		AbstractIC.DelayedThread.deleteEntry(block);
 	}
 
 }

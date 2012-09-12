@@ -16,7 +16,8 @@ public final class AddressInventory implements AddressRouted {
 		REGION(0),
 		TRACK(1),
 		STATION(2, 4, 2),
-		SERVICE(2, 2, 0),
+		ISTRAIN(2, 1, 0),
+		UNUSED(2, 1, 1),
 		TTL(3);
 
 		private final int Slot, Length, Offset;
@@ -80,6 +81,10 @@ public final class AddressInventory implements AddressRouted {
 		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.STATION.getSlot()), Slots.STATION.getLength(), Slots.STATION.getOffset());
 	}
 
+	@Override
+	public boolean isTrain() {
+		return (new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.ISTRAIN.getSlot()), Slots.ISTRAIN.getLength(), Slots.ISTRAIN.getOffset())).getBit(0);
+	}
 
 	/**
 	 * @return the inventory
@@ -101,11 +106,6 @@ public final class AddressInventory implements AddressRouted {
 		}
 		if (this.getInventory().getHolder() instanceof Player)
 			((Player) this.getInventory().getHolder()).updateInventory();
-	}
-
-	@Override
-	public Registry getService() {
-		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.SERVICE.getSlot()), Slots.SERVICE.getLength(), Slots.SERVICE.getOffset());
 	}
 
 	@Override
@@ -133,8 +133,21 @@ public final class AddressInventory implements AddressRouted {
 	}
 
 	@Override
+	public Address setIsTrain(boolean isTrain) {
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : setIsTrain() : Station slot : " + new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.STATION.getSlot()), Slots.STATION.getLength(), Slots.STATION.getOffset()).getAmount());
+
+		Registry tmp = new SuperRegistry(new VirtualRegistry(2), this.getStation());
+		tmp.setBit(0, isTrain);
+		this.InventoryWriter.Write(tmp.getAmount(), Slots.STATION.getSlot());
+		this.UpdateInventory(this.InventoryWriter.getInventory());
+
+		return this;
+	}
+
+	@Override
 	public String getAddress() {
-		return "" + this.getRegion().getAmount() + "." + this.getTrack().getAmount() + "." + (this.getStation().getAmount() + this.getService().getAmount());
+		return "" + this.getRegion().getAmount() + "." + this.getTrack().getAmount() + "." + (this.getStation().getAmount());
 	}
 
 	@Override
@@ -176,12 +189,13 @@ public final class AddressInventory implements AddressRouted {
 		this.UpdateInventory(this.InventoryWriter.getInventory());
 		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getAddress();
-		
+
 	}
+
 
 
 }

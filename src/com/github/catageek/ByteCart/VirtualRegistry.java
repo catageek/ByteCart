@@ -18,14 +18,14 @@ public class VirtualRegistry implements Registry, RegistryInput, RegistryOutput 
 	public void setBit(int index, boolean value) {
 
 		if(value)
-			this.Virtual |= 1 << index;
+			this.Virtual |= 1 << (length() - index - 1);
 		else
-			this.Virtual &= ~(1 << index);					
+			this.Virtual &= ~(1 << (length() - index - 1));					
 	}
 
 	@Override
 	public boolean getBit(int index) {
-		if (((this.Virtual >> index) & 1) == 0)
+		if (((this.Virtual >> (length() - index - 1)) & 1) == 0)
 			return false;
 		return true;
 	}

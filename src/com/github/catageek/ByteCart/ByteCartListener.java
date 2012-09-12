@@ -47,9 +47,9 @@ public class ByteCartListener implements Listener {
 						
 			if (myIC != null) {
 
-				if(ByteCart.debug)
+/*				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: " + myIC.getName() + ".trigger()");
-
+*/
 				myIC.trigger();
 				
 				if (myIC instanceof BC8010) {
@@ -144,9 +144,9 @@ public class ByteCartListener implements Listener {
 	
 		if (myIC != null) {
 
-			if(ByteCart.debug)
+/*			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: " + myIC.getName() + ".power()");
-
+*/
 			myIC.power();
 		}
 
@@ -155,11 +155,11 @@ public class ByteCartListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		
-		if(ByteCart.debug) {
+/*		if(ByteCart.debug) {
 				ByteCart.log.info("ByteCart : bloc clicked " + event.getClickedBlock().getLocation());
 				ByteCart.log.info("ByteCart : !AbstractIC.checkEligibility :" + !AbstractIC.checkEligibility(event.getClickedBlock()));
 		}
-		
+*/		
 		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0 || !AbstractIC.checkEligibility(event.getClickedBlock()))
 			return;
 		ClickedIC myIC = ClickedICFactory.getClickedIC(event.getClickedBlock(), event.getPlayer());

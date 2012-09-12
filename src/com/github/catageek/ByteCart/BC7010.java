@@ -33,6 +33,12 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		if (! this.isHolderAllowed())
 			return;
 
+		// if this is a cart in a train
+		if (this.getState(this.getBlock()) != 0) {
+			this.renew(getBlock(), 40, new ReleaseTask(this));
+			return;
+		}
+		
 		Address SignAddress = AddressFactory.getAddress(this.getBlock(), 3);
 
 		AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
@@ -40,6 +46,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		IPaddress.setRegion(SignAddress.getRegion().getAmount());
 		IPaddress.setTrack(SignAddress.getTrack().getAmount());
 		IPaddress.setStation(SignAddress.getStation().getAmount());
+		IPaddress.setIsTrain(SignAddress.isTrain());
 
 		if (this.getInventory().getHolder() instanceof Player) {
 			if (! IPaddress.getAddress().equals(SignAddress.getAddress())) {
@@ -54,6 +61,14 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		}
 		else
 			IPaddress.initializeTTL();
+		
+		// if this is the first car of a train
+		// we save the state during 2 s
+		if (SignAddress.isTrain()) {
+			this.setState(this.getBlock(), 1);
+			this.createReleaseTask(getBlock(), 40, new ReleaseTask(this));
+		}
+
 
 	}
 
@@ -70,6 +85,29 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 	@Override
 	public void click() {
 		this.trigger();
+
+	}
+
+	private class ReleaseTask implements Runnable {
+
+		AbstractIC bc;
+
+		ReleaseTask(AbstractIC bc) {
+			this.bc = bc;
+		}
+
+		@Override
+		public void run() {
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart: BC7010 : running delayed thread (set busy line OFF)");
+
+			// we get back to normal state
+
+			bc.free(bc.getBlock());
+
+
+		}
+
 
 	}
 

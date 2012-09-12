@@ -10,8 +10,8 @@ public class SubRegistry implements Registry {
 		this.Registry = reg;
 		this.Length = length;
 		this.First = first;
-/*		
-		if(ByteCart.debug)
+		
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : creating SubRegistry " + reg.length() + " -> " + length + " bits beginning at index "+ first);
 */
 	}

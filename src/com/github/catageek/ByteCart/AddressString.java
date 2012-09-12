@@ -51,18 +51,16 @@ public class AddressString implements Address {
 		return ret;
 	}
 
+	public boolean isTrain() {
+		VirtualRegistry tmp = new VirtualRegistry(6);
+		tmp.setAmount(this.getField(2));
+		return tmp.getBit(0);
+	}
+
 
 	private int getField(int index) {
 		String[] st = this.String.split("\\.");
 		return Integer.parseInt(st[ index ].trim());
-	}
-
-	@Override
-	public Registry getService() {
-		VirtualRegistry ret = new VirtualRegistry(4);
-		ret.setAmount( this.getField(2) >> 4);
-	
-		return ret;
 	}
 
 	@Override
@@ -84,6 +82,12 @@ public class AddressString implements Address {
 	}
 
 	@Override
+	public Address setIsTrain(boolean isTrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public java.lang.String getAddress() {
 		return this.String;
 	}
@@ -93,5 +97,7 @@ public class AddressString implements Address {
 		this.String = s;
 		return this;
 	}
+
+
 
 }

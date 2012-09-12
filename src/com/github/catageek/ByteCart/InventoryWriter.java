@@ -52,29 +52,29 @@ public final class InventoryWriter {
 		for (int i = 0; i < Stacks.length; i++) {
 			ItemStack stack = Stacks[i];
 
-			if(ByteCart.debug && stack != null) {
+/*			if(ByteCart.debug && stack != null) {
 				ByteCart.log.info("ByteCart: stack = " + stack + "********************");
 				ByteCart.log.info("typemap contains key ? "+typemap.containsKey(stack.getTypeId()));
 				ByteCart.log.info("Written ? "+this.Written(i));
 
 			}
-
+*/
 
 			if(stack != null && ! typemap.containsKey(stack.getTypeId()) && ! this.Written(i)) {
 				stackset = new TreeSet<ItemStack>(new ItemStackComparator<ItemStack>());
 				stackset.add(stack);
 				typemap.put(stack.getTypeId(), stack.getAmount());
 
-				if(ByteCart.debug)
+/*				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: map put = " + stack.getTypeId() + ":" + typemap.get(stack.getTypeId()));
-
+*/
 				for(int j = i + 1; j < Stacks.length; j++) {
 					ItemStack otherstack = Stacks[j];
 					if (otherstack != null && stack.getTypeId() == otherstack.getTypeId() && !this.Written(j)) {
 						stackset.add(otherstack);
-						if(ByteCart.debug)
+/*						if(ByteCart.debug)
 							ByteCart.log.info("ByteCart: map put = " + stack.getTypeId() + ":" + (typemap.get(stack.getTypeId()) + otherstack.getAmount()));
-						typemap.put(stack.getTypeId(),typemap.get(stack.getTypeId()) + otherstack.getAmount());
+*/						typemap.put(stack.getTypeId(),typemap.get(stack.getTypeId()) + otherstack.getAmount());
 					}
 				}
 
@@ -83,9 +83,9 @@ public final class InventoryWriter {
 
 		}
 
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: map length = " + Map.size());
-
+*/
 		ArrayList<Set<ItemStack>> mylist = new ArrayList<Set<ItemStack>>(Map.values());
 
 		int target = -1;
@@ -104,9 +104,9 @@ public final class InventoryWriter {
 			return;
 		}
 
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: stack build at pos " + target);
-
+*/
 		swap(Inventory, pos, target);
 
 		this.setOriginalInventory(Inventory);
@@ -131,18 +131,18 @@ public final class InventoryWriter {
 
 	public InventoryWriter setWritten(int pos) {
 		this.Written.add(pos);
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: 	Declaring as Written slot #" +  pos);
-		return this;
+*/		return this;
 	}
 
 	private final void swap(Inventory inv, int pos1, int pos2) {
 		ItemStack temp = inv.getItem(pos1);
 		inv.setItem(pos1, inv.getItem(pos2));
 		inv.setItem(pos2, temp);
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: 	swapping slots #" +  pos1 + " <=>  #" + pos2);
-
+*/
 	}
 
 	private int getTotal(Set<ItemStack> set) {
@@ -152,9 +152,9 @@ public final class InventoryWriter {
 
 	private boolean isEligible(Set<ItemStack> set, int value) {
 		int sum = this.getTotal(set);
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: 	isEligible Set = " + this.getType(set) + ":" + this.getTotal(set) + " : " + (sum >= value && this.getMaxSize(set) >= value));
-		return (sum >= value && this.getMaxSize(set) >= value);
+*/		return (sum >= value && this.getMaxSize(set) >= value);
 	}
 
 	private void remove(Inventory inv, Set<ItemStack> set) {
@@ -167,9 +167,9 @@ public final class InventoryWriter {
 			int index = it.nextIndex();
 			ItemStack stack = it.next();
 
-			if(ByteCart.debug)
+/*			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: 	remove() #" + index + " ?");
-
+*/
 			if (! this.Written(index) && stack !=null && stack.getTypeId() == settype) {
 				inv.clear(index);
 			}
@@ -196,32 +196,32 @@ public final class InventoryWriter {
 			int maxsize = this.getMaxSize(set);
 			this.remove(inv, set);
 
-			if(ByteCart.debug)
+/*			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: 	RemoveItem = " + type + ":" + sum );
-
+*/
 			int retour = inv.firstEmpty();
 
 			if (retour == -1)
 				return -1;
 
 			inv.setItem(retour,new ItemStack(type,value));
-
+/*
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: 	SetItem = " + type + ":" + value );
-			
+*/			
 			sum -= value;
 			while (sum >0) {
 				if (sum <= maxsize) {
 					inv.setItem(inv.firstEmpty(),new ItemStack(type, sum));
-					if(ByteCart.debug)
+/*					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart: 	SetItem = " + type + ":" + sum );
-					sum = 0;
+*/					sum = 0;
 				}
 				else {
 					inv.setItem(inv.firstEmpty(),new ItemStack(type, maxsize));
-					if(ByteCart.debug)
+/*					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart: 	SetItem = " + type + ":" + maxsize );
-					sum -= maxsize;
+*/					sum -= maxsize;
 				}
 			}
 			return retour;

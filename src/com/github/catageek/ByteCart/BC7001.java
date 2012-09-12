@@ -20,8 +20,8 @@ import org.bukkit.util.Vector;
 // lever on = block free OR powered
 
 public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredIC {
-	
-// Constructor : !! vehicle can be null !!
+
+	// Constructor : !! vehicle can be null !!
 
 	public BC7001(org.bukkit.block.Block block, Vehicle vehicle) {
 		super(block, vehicle);
@@ -33,11 +33,11 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 
 	@Override
 	public void trigger() {
-		
+
 		// add input command = redstone
-		
+
 		InputPin[] wire = new InputPin[2];
-		
+
 		// Right
 		wire[0] = InputPinFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.clockwise(getCardinal())));
 		// left
@@ -45,102 +45,117 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 
 		// InputRegistry[0] = start/stop command
 		this.addInputRegistry(new PinRegistry<InputPin>(wire));
-		
+
 		// add output occupied line = lever
-		
+
 		OutputPin[] lever = new OutputPin[1];
-		
+
 		// Right
 		lever[0] = OutputPinFactory.getOutput(this.getBlock().getRelative(getCardinal().getOppositeFace()));
 
 		// OutputRegistry[0] = occupied signal
 		this.addOutputRegistry(new PinRegistry<OutputPin>(lever));
-		
+
 		// here starts the action
-		
+
 		// is there a minecart above ?
 		if (this.getVehicle() != null) {
 
-			
+
 			// if the wire is on
 			if(this.getInput(0).getAmount() > 0) {
-				
+
 				// the lever is on too
-				this.getOutput(0).setAmount(1);
+				//this.getOutput(0).setAmount(1);
+				final BC7001 myBC7001 = this;
 
-				// if the cart is stopped, start it
-				if (this.getVehicle().getVelocity().equals(new Vector(0,0,0))) {
+				ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new Runnable() {
+					public void run() {
 
-					this.getVehicle().setVelocity((new Vector(this.getCardinal().getModX(), this.getCardinal().getModY(), this.getCardinal().getModZ())).multiply(ByteCart.myPlugin.getConfig().getDouble("BC7001.startvelocity")));
+						// we set busy
+						myBC7001.getOutput(0).setAmount(1);
+
+/*						if(ByteCart.debug)
+							ByteCart.log.info("ByteCart: BC7001 : running delayed thread (set switch ON)");
+*/
+					}
 				}
-			}
+				, 4);
 			
-			// if the wire is off
-			else {
-				
-				// the lever is off
-				this.getOutput(0).setAmount(0);
 
-				// stop the cart
-				this.getVehicle().setVelocity(new Vector(0,0,0));
-/*
+			// if the cart is stopped, start it
+			if (this.getVehicle().getVelocity().equals(new Vector(0,0,0))) {
+
+				this.getVehicle().setVelocity((new Vector(this.getCardinal().getModX(), this.getCardinal().getModY(), this.getCardinal().getModZ())).multiply(ByteCart.myPlugin.getConfig().getDouble("BC7001.startvelocity")));
+			}
+		}
+
+		// if the wire is off
+		else {
+
+			// the lever is off
+			this.getOutput(0).setAmount(0);
+
+			// stop the cart
+			this.getVehicle().setVelocity(new Vector(0,0,0));
+			/*
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: BC7001 : cart on stop at " + this.Vehicle.getLocation().toString());
-*/
-			}
-				
-		}
-		
-		// there is no minecart above
-		else {
-			// the lever is on
-			this.getOutput(0).setAmount(1);
+			 */
 		}
 
 	}
-	
-	@Override
-	public void power() {
-		// power update
-		
-		BC7001 bc7001 = this;
-		
-		// We need to find if a cart is stopped and set the member variable Vehicle
-		Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();
-		
-		List<Entity> ent = Arrays.asList(this.getBlock().getChunk().getEntities());
-/*
+
+	// there is no minecart above
+	else {
+		// the lever is on
+		this.getOutput(0).setAmount(1);
+	}
+
+}
+
+@Override
+public void power() {
+	// power update
+
+	BC7001 bc7001 = this;
+
+	// We need to find if a cart is stopped and set the member variable Vehicle
+	Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();
+
+	List<Entity> ent = Arrays.asList(this.getBlock().getChunk().getEntities());
+	/*
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: BC7001 : loading " + ent.size() + " entities.");
-*/
-		for (ListIterator<Entity> it = ent.listIterator(); it.hasNext();) {
-/*			
+	 */
+	for (ListIterator<Entity> it = ent.listIterator(); it.hasNext();) {
+		/*			
 			if(ByteCart.debug) {
 				ByteCart.log.info("ByteCart: BC7001 : examining entity at " + it.next().getLocation().toString());
 				it.previous();
 			}
-*/
-			if (it.next() instanceof Minecart) {
+		 */
+		if (it.next() instanceof Minecart) {
+			it.previous();
+
+			if ( MathUtil.isSameBlock(((Minecart) it.next()).getLocation(), loc)) {
 				it.previous();
-				
-				if ( MathUtil.isSameBlock(((Minecart) it.next()).getLocation(), loc)) {
-					it.previous();
-					
-					// found ! we instantiate a new IC with the vehicle we found
-					bc7001 = new BC7001(this.getBlock(), (Vehicle) it.next());
-/*
+
+				// found ! we instantiate a new IC with the vehicle we found
+				bc7001 = new BC7001(this.getBlock(), (Vehicle) it.next());
+				/*
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart: BC7001 : cart on stop");
-*/					
-					break;
-					
-				}
+				 */					
+				break;
+
 			}
 		}
-
-		bc7001.trigger();
-		
-		
 	}
+
+	bc7001.trigger();
+
+
+}
 
 }

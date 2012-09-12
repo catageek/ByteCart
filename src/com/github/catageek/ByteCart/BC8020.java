@@ -6,13 +6,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 
-public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
+public class BC8020 extends AbstractTriggeredIC implements TriggeredIC {
 
 
-	public BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {
+	public BC8020(Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC8010";
-		this.FriendlyName = "L1 router";
+		this.Name = "BC8020";
+		this.FriendlyName = "L2 router";
 		this.Triggertax = ByteCart.myPlugin.getConfig().getInt("usetax." + this.Name);
 		this.Permission = this.Permission + this.Name;
 
@@ -31,14 +31,11 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 		 */
 
 		try {
-			// Input[0] = destination region taken from Inventory, slot #0			
-
-
 			// reading destination address of the cart
 			AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
 
-			// reading address written on BC8010 sign
-			Address sign = AddressFactory.getAddress(this.getBlock(),3);
+			// reading address written on BC8020 sign
+			//Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
 			// Loading inventory of chest above router
 			Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 5).getState()).getInventory();
@@ -70,20 +67,15 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL().getAmount());
 
-			// If not in same region, or if TTL reached end of life, then we lookup track 0
-			if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL().getAmount() == 1) {
+			// if TTL reached end of life, then we lookup region 0
+			if (IPaddress.getTTL().getAmount() == 1) {
 				direction = RoutingTable.getDirection(0);
-
-				/*			if (this.getInventory().getHolder() instanceof Player) {
-					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.BC8010_region") + " " + IPaddress.getRegion());
-				}
-				 */
 			} else
-			{	// same region : lookup destination track
-				direction = RoutingTable.getDirection(IPaddress.getTrack().getAmount());
+			{	// lookup destination region
+				direction = RoutingTable.getDirection(IPaddress.getRegion().getAmount());
 
 				/*				if (this.getInventory().getHolder() instanceof Player) {
-					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.BC8010_track") + " " + IPaddress.getTrack());
+					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.BC8010_track") + " " + IPaddress.getRegion());
 				}
 				 */			}
 			// BC2002 Construction
@@ -120,7 +112,6 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 		catch (ClassCastException e) {
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : " + e.toString());
-			e.printStackTrace();
 
 			// Not the good blocks to build the signs
 			return;

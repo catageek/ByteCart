@@ -26,10 +26,10 @@ public abstract class AbstractTriggeredIC extends AbstractIC {
 	}
 
 	final private org.bukkit.inventory.Inventory extractInventory() {
-		
+
 		org.bukkit.inventory.Inventory newInv = Bukkit.createInventory(null, 27);
 
-		
+
 		// we load inventory of cart or player
 		if (this.Vehicle != null) {
 
@@ -82,6 +82,11 @@ public abstract class AbstractTriggeredIC extends AbstractIC {
 
 	protected void setInventory(org.bukkit.inventory.Inventory inv) {
 		this.Inventory = inv;
+	}
+
+	public final boolean isTrain() {
+		Address IPaddress = AddressFactory.getAddress(this.getInventory());
+		return IPaddress.isTrain();
 	}
 
 }

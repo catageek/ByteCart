@@ -18,7 +18,8 @@ public class SuperRegistry implements Registry, RegistryInput, RegistryOutput {
 	public void setBit(int index, boolean value) {
 		if (index < this.Registry1.length())
 			((RegistryOutput) this.Registry1).setBit(index, value);
-		((RegistryOutput) this.Registry2).setBit(index-this.Registry1.length(), value);
+		else
+			((RegistryOutput) this.Registry2).setBit(index-this.Registry1.length(), value);
 		
 	}
 
@@ -37,7 +38,7 @@ public class SuperRegistry implements Registry, RegistryInput, RegistryOutput {
 
 	@Override
 	public int getAmount() {
-		return (this.Registry1.getAmount() << this.Registry1.length()) + this.Registry2.getAmount();
+		return (this.Registry1.getAmount() << this.Registry2.length()) + this.Registry2.getAmount();
 	}
 
 	@Override
