@@ -1,6 +1,6 @@
 package com.github.catageek.ByteCart;
 
-public class BC9004 extends BC9001 implements TriggeredIC {
+public class BC9004 extends BC9016 implements TriggeredIC {
 
 	public BC9004(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

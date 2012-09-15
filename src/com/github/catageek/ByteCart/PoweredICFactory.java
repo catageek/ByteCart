@@ -39,9 +39,10 @@ public class PoweredICFactory {
 			switch (ICnumber) {
 			
 				case 7001:
-				{
 					return (PoweredIC)(new BC7001(block, null));
-				}
+				case 9001:
+					return (PoweredIC)(new BC9001(block, null));
+				
 		
 			}
 		}

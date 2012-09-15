@@ -36,7 +36,7 @@ public final class DirectionRegistry {
 
 	}
 	
-	public final BlockFace getCardinal() {
+	public final BlockFace ToString() {
 		switch(this.getAmount()) {
 		case 1:
 			return BlockFace.SOUTH;
@@ -46,6 +46,20 @@ public final class DirectionRegistry {
 			return BlockFace.NORTH;
 		case 8:
 			return BlockFace.EAST;
+		}
+		return BlockFace.SELF;
+	}
+
+	public final BlockFace getBlockFace() {
+		switch(this.getAmount()) {
+		case 1:
+			return BlockFace.EAST;
+		case 2:
+			return BlockFace.SOUTH;
+		case 4:
+			return BlockFace.WEST;
+		case 8:
+			return BlockFace.NORTH;
 		}
 		return BlockFace.SELF;
 	}

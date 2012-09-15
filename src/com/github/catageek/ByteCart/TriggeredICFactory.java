@@ -48,6 +48,8 @@ final public class TriggeredICFactory {
 			{
 				return (new BC7001(block, vehicle));
 			}
+			case 7002:
+				return (new BC7002(block, vehicle));
 			case 7010:
 				return new BC7010(block, vehicle);
 			case 7011:
@@ -122,6 +124,7 @@ final public class TriggeredICFactory {
 		catch (Exception e) {
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : "+ e.toString());
+			e.printStackTrace();
 
 			// there was no inventory in the cart
 			return null;

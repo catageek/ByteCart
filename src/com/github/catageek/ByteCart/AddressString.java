@@ -7,6 +7,7 @@ public class AddressString implements Address {
 	private String String; // address as displayed
 	
 	public AddressString(String s) {
+
 		if (AddressString.isAddress(s))
 			this.String = s;
 		else

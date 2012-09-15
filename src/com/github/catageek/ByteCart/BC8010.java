@@ -70,6 +70,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			
 			DirectionRegistry direction = this.SelectRoute(IPaddress, sign, RoutingTable);
 			
+			// Main output
 			OutputPin[] sortie = new OutputPin[4];
 
 			// South
@@ -84,7 +85,31 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			PinRegistry<OutputPin> last = new PinRegistry<OutputPin>(sortie);
 
 			this.addOutputRegistry(last);
+			
+			// Secondary output to make U-turn
+			OutputPin[] secondary = new OutputPin[4];
+			
+			//South
+			secondary[3] = OutputPinFactory.getOutput(center.getRelative(BlockFace.WEST, 4).getRelative(BlockFace.NORTH, 2));
+			//West
+			secondary[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.NORTH, 4).getRelative(BlockFace.EAST, 2));
+			//North
+			secondary[1] = OutputPinFactory.getOutput(center.getRelative(BlockFace.EAST, 4).getRelative(BlockFace.SOUTH, 2));
+			//East
+			secondary[0] = OutputPinFactory.getOutput(center.getRelative(BlockFace.SOUTH, 4).getRelative(BlockFace.WEST, 2));
+			
+			PinRegistry<OutputPin> other = new PinRegistry<OutputPin>(secondary);
 
+			this.addOutputRegistry(other);
+
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart : coming from " + this.getCardinal() + " going to " + direction.getBlockFace());
+
+			if (this.getCardinal() == direction.getBlockFace()) {
+				this.getOutput(1).setAmount(direction.getAmount());
+				return;
+			}
+			this.getOutput(1).setAmount(0);
 			this.getOutput(0).setAmount(direction.getAmount());
 
 		}

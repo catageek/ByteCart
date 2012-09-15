@@ -82,6 +82,10 @@ abstract public class AbstractIC implements IC {
 		// the id of the thread is stored in a static map
 		AbstractIC.DelayedThread.createEntry(block, id);
 	}
+	
+	protected final boolean hasReleaseTask(Block block) {
+		return AbstractIC.DelayedThread.hasEntry(block);
+	}
 
 	
 	/*
@@ -142,6 +146,10 @@ abstract public class AbstractIC implements IC {
 	
 	protected void free(Block block) {
 		AbstractIC.State.deleteEntry(block);
+		AbstractIC.DelayedThread.deleteEntry(block);
+	}
+	
+	protected void freeThread(Block block) {
 		AbstractIC.DelayedThread.deleteEntry(block);
 	}
 

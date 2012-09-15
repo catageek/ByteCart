@@ -126,8 +126,6 @@ public class BC2003 extends AbstractTriggeredIC implements TriggeredIC {
 		
 		@Override
 		public void run() {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: BC2003 : running delayed thread (set busy line OFF)");
 
 			// we set not busy
 
