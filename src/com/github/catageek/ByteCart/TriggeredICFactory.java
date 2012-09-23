@@ -46,14 +46,16 @@ final public class TriggeredICFactory {
 
 			case 7001:
 			{
-				return (new BC7001(block, vehicle));
+				return (TriggeredIC)(new BC7001(block, vehicle));
 			}
 			case 7002:
-				return (new BC7002(block, vehicle));
+				return (TriggeredIC)(new BC7002(block, vehicle));
+			case 7003:
+				return (TriggeredIC)(new BC7003(block));
 			case 7010:
-				return new BC7010(block, vehicle);
+				return (TriggeredIC)(new BC7010(block, vehicle));
 			case 7011:
-				return new BC7011(block, vehicle);
+				return (TriggeredIC)(new BC7011(block, vehicle));
 
 			case 8010:
 			{
@@ -86,7 +88,7 @@ final public class TriggeredICFactory {
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart : BC8010 cart routed");
 
-					return new BC8010(block, vehicle);
+					return (TriggeredIC)(new BC8010(block, vehicle));
 				}
 				else // or we die
 					return null;
@@ -104,21 +106,23 @@ final public class TriggeredICFactory {
 				}
 				// if we have the token, we trigger it
 				if (bc2003.hasToken(vehicle))
-					return new BC8020(block, vehicle);
+					return (TriggeredIC)(new BC8020(block, vehicle));
 				else // or we die
 					return null;
 			}
 
+			case 9000:
+				return (TriggeredIC)(new BC9000(block, vehicle));
 			case 9001:
-				return new BC9001(block, vehicle);
+				return (TriggeredIC)(new BC9001(block, vehicle));
 			case 9002:
-				return new BC9002(block, vehicle);
+				return (TriggeredIC)(new BC9002(block, vehicle));
 			case 9004:
-				return new BC9004(block, vehicle);
+				return (TriggeredIC)(new BC9004(block, vehicle));
 			case 9008:
-				return new BC9008(block, vehicle);
+				return (TriggeredIC)(new BC9008(block, vehicle));
 			case 9016:
-				return new BC9016(block, vehicle);
+				return (TriggeredIC)(new BC9016(block, vehicle));
 			}
 		}
 		catch (Exception e) {

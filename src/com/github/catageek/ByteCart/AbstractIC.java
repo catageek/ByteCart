@@ -10,8 +10,7 @@ import org.bukkit.block.Sign;
 abstract public class AbstractIC implements IC {
 	
 	final private Block Block;
-	final static private BlockMap DelayedThread = new BlockMap();
-	final static private BlockMap State = new BlockMap();
+	final static private BlockMap<Integer> State = new BlockMap<Integer>();
 	
 	protected String Name = "";
 	protected String FriendlyName = "";
@@ -20,7 +19,7 @@ abstract public class AbstractIC implements IC {
 	protected int Buildtax = 0 ;
 	protected int Triggertax = 0;
 	
-	private RegistryInput[] input = new RegistryInput[6];
+	private RegistryInput[] input = new RegistryInput[7];
 	private int input_args = 0;
 	
 	private RegistryOutput[] output = new RegistryOutput[6];
@@ -72,33 +71,6 @@ abstract public class AbstractIC implements IC {
 		
 	}
 
-	/*
-	 * create a release task
-	 */
-	protected final void createReleaseTask(Block block, int duration, Runnable ReleaseTask) {
-		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, ReleaseTask
-		, duration);
-		
-		// the id of the thread is stored in a static map
-		AbstractIC.DelayedThread.createEntry(block, id);
-	}
-	
-	protected final boolean hasReleaseTask(Block block) {
-		return AbstractIC.DelayedThread.hasEntry(block);
-	}
-
-	
-	/*
-	 * Renew the timer of release task
-	 */
-	protected final void renew(Block block, int duration, Runnable ReleaseTask) {
-		// we cancel the release task
-		ByteCart.myPlugin.getServer().getScheduler().cancelTask(AbstractIC.DelayedThread.getValue(block));
-		// we schedule a new one
-		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, ReleaseTask, duration);
-		// we update the hashmap
-		AbstractIC.DelayedThread.updateValue(block, id);
-	}
 	
 	public BlockFace getCardinal() {
 		try {
@@ -137,7 +109,7 @@ abstract public class AbstractIC implements IC {
 	}
 	
 	protected int getState(Block block) {
-		return AbstractIC.State.getValue(block);
+		return (Integer) AbstractIC.State.getValue(block);
 	}
 	
 	protected void setState(Block block, int state) {
@@ -146,11 +118,6 @@ abstract public class AbstractIC implements IC {
 	
 	protected void free(Block block) {
 		AbstractIC.State.deleteEntry(block);
-		AbstractIC.DelayedThread.deleteEntry(block);
 	}
 	
-	protected void freeThread(Block block) {
-		AbstractIC.DelayedThread.deleteEntry(block);
-	}
-
 }

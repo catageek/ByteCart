@@ -40,6 +40,8 @@ public class PoweredICFactory {
 			
 				case 7001:
 					return (PoweredIC)(new BC7001(block, null));
+				case 7003:
+					return (PoweredIC)(new BC7003(block));
 				case 9001:
 					return (PoweredIC)(new BC9001(block, null));
 				

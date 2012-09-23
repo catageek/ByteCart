@@ -35,7 +35,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 
 		// if this is a cart in a train
 		if (this.getState(this.getBlock()) != 0) {
-			this.renew(getBlock(), 40, new ReleaseTask(this));
+			ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock(), 40, new ReleaseTask(this));
 			return;
 		}
 		
@@ -66,7 +66,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		// we save the state during 2 s
 		if (SignAddress.isTrain()) {
 			this.setState(this.getBlock(), 1);
-			this.createReleaseTask(getBlock(), 40, new ReleaseTask(this));
+			ByteCart.myPlugin.getDelayedThreadManager().createReleaseTask(getBlock(), 40, new ReleaseTask(this));
 		}
 
 

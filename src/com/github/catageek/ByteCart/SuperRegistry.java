@@ -3,6 +3,8 @@ package com.github.catageek.ByteCart;
 // This class represents 2 registries merged
 public class SuperRegistry implements Registry, RegistryInput, RegistryOutput {
 
+	// Registry1 est le registre de poids fort
+	
 	private final Registry Registry1, Registry2;
 	
 	public SuperRegistry(Registry reg1, Registry reg2) {

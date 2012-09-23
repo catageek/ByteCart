@@ -10,7 +10,7 @@ import org.bukkit.entity.Vehicle;
 
 public class BC2003 extends AbstractTriggeredIC implements TriggeredIC {
 
-	final static private BlockMap TokenManager = new BlockMap();
+	final static private BlockMap<Integer> TokenManager = new BlockMap<Integer>();
 //	final static private BlockMap DelayedThread = new BlockMap();
 //	final static private BlockMap State = new BlockMap();
 
@@ -78,12 +78,12 @@ public class BC2003 extends AbstractTriggeredIC implements TriggeredIC {
 				// we set busy
 				myBC2003.getOutput(0).setAmount(s);
 
-				if(ByteCart.debug)
+/*				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: BC2003 : running delayed thread (set busy line ON)");
-
+*/
 
 				// we set unbusy 2 sec after
-				myBC2003.createReleaseTask(center, 40, new ReleaseTokenTask(myBC2003));
+				ByteCart.myPlugin.getDelayedThreadManager().createReleaseTask(center, 40, new ReleaseTokenTask(myBC2003));
 
 			}
 		}
@@ -93,7 +93,7 @@ public class BC2003 extends AbstractTriggeredIC implements TriggeredIC {
 	}
 
 	public final boolean hasToken(Vehicle v) {
-		if (BC2003.TokenManager.hasEntry(center) && v != null && BC2003.TokenManager.getValue(center) == v.getEntityId()) {
+		if (BC2003.TokenManager.hasEntry(center) && v != null && (Integer) BC2003.TokenManager.getValue(center) == v.getEntityId()) {
 			return true;
 		}
 		return false;
@@ -107,14 +107,8 @@ public class BC2003 extends AbstractTriggeredIC implements TriggeredIC {
 		// we push the busy buttons
 		this.getOutput(0).setAmount(this.getState(center));
 		
-		this.renew(center, 40, new ReleaseTokenTask(this));
-/*		// we cancel the release token task
-		ByteCart.myPlugin.getServer().getScheduler().cancelTask(BC2003.DelayedThread.getValue(center));
-		// we schedule a new one
-		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new ReleaseTokenTask(), 40);
-		// we update the hashmap
-		BC2003.DelayedThread.updateValue(center, id);
-*/	}
+		ByteCart.myPlugin.getDelayedThreadManager().renew(center, 40, new ReleaseTokenTask(this));
+	}
 
 	private class ReleaseTokenTask implements Runnable {
 		
@@ -141,6 +135,17 @@ public class BC2003 extends AbstractTriggeredIC implements TriggeredIC {
 	public final int getState() {
 		return this.getState(center);
 	}
+	
+	/*
+	 * tells if there is a token with keypair (block, vehicle)
+	 */
+	public final boolean hasEntry(Block block, Vehicle v) {
+		if (BC2003.TokenManager.hasEntry(block) && v != null && BC2003.TokenManager.getValue(block) == v.getEntityId()) {
+			return true;
+		}
+		return false;
+	}
+
 
 	
 }

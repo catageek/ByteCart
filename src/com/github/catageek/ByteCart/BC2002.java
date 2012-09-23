@@ -24,4 +24,15 @@ public final class BC2002 extends AbstractIC implements TriggeredIC {
 
 	}
 
+	@Override
+	public boolean isTrain() {
+		return false;
+	}
+
+	@Override
+	public boolean wasTrain(org.bukkit.block.Block block) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

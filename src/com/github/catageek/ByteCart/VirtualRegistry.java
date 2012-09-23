@@ -2,6 +2,8 @@ package com.github.catageek.ByteCart;
 
 public class VirtualRegistry implements Registry, RegistryInput, RegistryOutput {
 	
+	// bit index 0 est le bit de poids fort
+	
 	private int Virtual = 0;
 	private final int Length;
 	
