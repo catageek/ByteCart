@@ -10,10 +10,9 @@ import org.bukkit.block.Sign;
 abstract public class AbstractIC implements IC {
 	
 	final private Block Block;
-	final static private BlockMap<Integer> State = new BlockMap<Integer>();
 	
 	protected String Name = "";
-	protected String FriendlyName = "";
+	protected String FriendlyName;
 	protected String Permission = "bytecart.";
 	
 	protected int Buildtax = 0 ;
@@ -95,9 +94,7 @@ abstract public class AbstractIC implements IC {
 	}
 
 	public String getFriendlyName() {
-		if (this.getBlock().getState() instanceof org.bukkit.block.Sign)
-			return ((Sign) this.getBlock().getState()).getLine(2);
-		return FriendlyName;
+		return this.FriendlyName;
 	}
 
 	public int getTriggertax() {
@@ -108,16 +105,5 @@ abstract public class AbstractIC implements IC {
 		return Buildtax;
 	}
 	
-	protected int getState(Block block) {
-		return (Integer) AbstractIC.State.getValue(block);
-	}
-	
-	protected void setState(Block block, int state) {
-		AbstractIC.State.createEntry(Block, state);
-	}
-	
-	protected void free(Block block) {
-		AbstractIC.State.deleteEntry(block);
-	}
 	
 }

@@ -2,6 +2,7 @@ package com.github.catageek.ByteCart;
 
 import org.bukkit.block.BlockFace;
 
+
 public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
 	final static private BlockMap<Integer> wavecount = new BlockMap<Integer>();
@@ -13,7 +14,7 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
 		this.Permission = "bytecart." + this.Name;
 	}
-	
+
 	public BC7003(org.bukkit.block.Block block, RegistryOutput io) {
 		this(block);
 		// forcing output[0] to be the one in parameter
@@ -28,7 +29,20 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 		this.AddOutputIO();
 
 		// We treat the counter
-		ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.UP), 4, new UpdateCount(this));
+		try {
+
+
+			if (!this.decrementWaveCount()) {
+
+				ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.DOWN), ByteCart.myPlugin.Lockduration + 6, new RemoveCount(this));
+			}
+		}
+		catch (Exception e) {
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart : "+ e.toString());
+
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -67,30 +81,41 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 	}
 
 	final private void incrementWaveCount() {
-		if (!wavecount.hasEntry(this.getBlock()))
-			wavecount.createEntry(getBlock(), 1);
-		else
-			wavecount.updateValue(getBlock(), wavecount.getValue(getBlock()) + 1);
+		synchronized(wavecount) {
+			if (!wavecount.hasEntry(this.getBlock())) {
+				wavecount.createEntry(getBlock(), 1);
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart." + getName() + ": count = " + wavecount.getValue(getBlock()) + " init");
+			}
+			else {
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()) + " before");
+				wavecount.updateValue(getBlock(), wavecount.getValue(getBlock()) + 1);
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()) + " after");
+			}
+		}
 
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()));
 
 	}
 
 	final private boolean decrementWaveCount() {
-		if (wavecount.hasEntry(getBlock()) && wavecount.getValue(getBlock()) > 1)
-			wavecount.updateValue(getBlock(), wavecount.getValue(getBlock()) - 1);
+		synchronized(wavecount) {
+			if (wavecount.hasEntry(getBlock()) && wavecount.getValue(getBlock()) > 1)
+				wavecount.updateValue(getBlock(), wavecount.getValue(getBlock()) - 1);
 
-		else {
-			wavecount.deleteEntry(getBlock());
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart." + getName() + ": --count = 0");
-			return false;
-		}
+			else {
+				wavecount.deleteEntry(getBlock());
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart." + getName() + ": --count = 0");
+				return false;
+			}
+		
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart." + getName() + ": --count = " + wavecount.getValue(getBlock()));
 
 		return true;
+		}
 	}
 
 	final private void deleteWaveCount() {
@@ -109,34 +134,6 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 		this.addOutputRegistry(new PinRegistry<OutputPin>(lever));
 	}
 
-	final private class UpdateCount implements Runnable {
-
-		BC7003 bc;
-
-		UpdateCount(BC7003 bc) {
-			this.bc = bc;
-		}
-
-		@Override
-		public void run() {
-			// decrement count. if count reaches 0, signal is green ( = on)
-			try {
-
-
-				if (!this.bc.decrementWaveCount()) {
-
-					ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.DOWN), 80, new RemoveCount(bc));
-				}
-			}
-			catch (Exception e) {
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : "+ e.toString());
-
-				e.printStackTrace();
-			}
-		}
-
-	}
 
 	final private class RemoveCount implements Runnable {
 

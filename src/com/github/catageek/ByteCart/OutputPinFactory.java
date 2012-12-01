@@ -9,7 +9,7 @@ final public class OutputPinFactory {
 		if(block.getType().equals(Material.LEVER))
 			return new ComponentLever(block);
 
-		if(block.getType().equals(Material.STONE_BUTTON))
+		if(block.getType().equals(Material.STONE_BUTTON) || block.getType().equals(Material.WOOD_BUTTON))
 			return new ComponentButton(block);
 
 		return null;

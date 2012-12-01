@@ -17,6 +17,7 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.util.Vector;
 
 
+
 public class ByteCartListener implements Listener {
 
 	private PoweredICFactory MyPoweredICFactory;
@@ -144,6 +145,9 @@ public class ByteCartListener implements Listener {
 		if (event.getChangedType() != Material.REDSTONE_WIRE || ! AbstractIC.checkEligibility(event.getBlock().getRelative(BlockFace.DOWN)))
 			return;
 
+/*		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart: event " + event.getBlock().toString());
+*/
 		PoweredIC myIC = this.MyPoweredICFactory.getIC(event.getBlock().getRelative(BlockFace.DOWN));
 
 

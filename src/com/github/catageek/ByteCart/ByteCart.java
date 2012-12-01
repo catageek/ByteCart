@@ -16,6 +16,10 @@ public class ByteCart extends JavaPlugin {
 	
 	private CollisionAvoiderManager cam;
 	
+	private IsTrainManager it;
+	
+	public int Lockduration;
+	
 
     public void onEnable(){
     	log.info("ByteCart plugin has been enabled.");
@@ -28,14 +32,19 @@ public class ByteCart extends JavaPlugin {
 //    	this.getConfig().set("debug", debug);
 //    	this.saveConfig();
     	
+    	Lockduration = this.getConfig().getInt("Lockduration", 44);
+    	
     	if(debug){
     		log.info("ByteCart : debug mode is on.");
     	}
     	
     	this.setDtm(new DelayedThreadManager());
     	this.setCam(new CollisionAvoiderManager());
+    	this.setIt(new IsTrainManager());
     	
     	getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
+    	
+    	getCommand("mego").setExecutor(new BytecartCommandExecutor());
     }
      
     public void onDisable(){ 
@@ -73,6 +82,20 @@ public class ByteCart extends JavaPlugin {
 	 */
 	public void setCam(CollisionAvoiderManager cam) {
 		this.cam = cam;
+	}
+
+	/**
+	 * @return the it
+	 */
+	public IsTrainManager getIsTrainManager() {
+		return it;
+	}
+
+	/**
+	 * @param it the it to set
+	 */
+	public void setIt(IsTrainManager it) {
+		this.it = it;
 	}
     
    

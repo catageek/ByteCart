@@ -1,6 +1,5 @@
 package com.github.catageek.ByteCart;
 
-import com.github.catageek.ByteCart.SimpleCollisionAvoider.Side;
 
 abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 
@@ -22,8 +21,8 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 
 			// if this is a cart in a train
 			if (this.wasTrain(this.getBlock())) {
-				ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock(), 40, new ReleaseTask(this));
-				ByteCart.myPlugin.getCollisionAvoiderManager().getCollisionAvoider(builder).Ping();
+				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock());
+				ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder).Ping();
 				return;
 			}
 
@@ -31,12 +30,13 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 			// we keep it during 2 s
 			if (this.isTrain()) {
 				this.setWasTrain(this.getBlock(), true);
-				ByteCart.myPlugin.getDelayedThreadManager().createReleaseTask(getBlock(), 40, new ReleaseTask(this));
 			}
-			
-			ByteCart.myPlugin.getCollisionAvoiderManager().getCollisionAvoider(builder).WishToGo(this.route(), this.isTrain());
 
+			SimpleCollisionAvoider intersection = ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder);
 
+			synchronized(intersection) {
+				intersection.WishToGo(this.route(), this.isTrain());
+			}
 		}
 		catch (ClassCastException e) {
 			if(ByteCart.debug)
@@ -55,13 +55,13 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 		}
 
 	}
-	
-	protected Side route() {
+
+	protected SimpleCollisionAvoider.Side route() {
 		if (this.isAddressMatching())
-			return Side.RIGHT;
-		return Side.LEFT;
+			return SimpleCollisionAvoider.Side.RIGHT;
+		return SimpleCollisionAvoider.Side.LEFT;
 	}
-	
+
 	protected final RegistryInput applyNetmask(RegistryInput station) {
 		if (this.netmask < station.length())
 			return new SubRegistry((Registry) station, this.netmask, 0);
@@ -78,7 +78,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 	protected void addIO() {
 		Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
-		
+
 		// Output[0] = 2 bits registry representing levers on the left and on the right of the sign
 		OutputPin[] lever2 = new OutputPin[2];
 
@@ -148,24 +148,6 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 		station = applyNetmask(station);
 
 		this.addInputRegistry(station);
-
-	}
-
-	protected final class ReleaseTask implements Runnable {
-
-		AbstractTriggeredIC bc;
-
-		ReleaseTask(AbstractTriggeredIC bc) {
-			this.bc = bc;
-		}
-
-		@Override
-		public void run() {
-
-			// we get back to normal state
-
-			bc.freeWasTrain(bc.getBlock());
-		}
 
 	}
 }

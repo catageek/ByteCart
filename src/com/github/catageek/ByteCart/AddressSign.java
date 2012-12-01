@@ -2,6 +2,7 @@ package com.github.catageek.ByteCart;
 
 import org.bukkit.block.Block;
 
+
 public class AddressSign extends AbstractComponent implements Address {
 	
 	private AddressString Address;

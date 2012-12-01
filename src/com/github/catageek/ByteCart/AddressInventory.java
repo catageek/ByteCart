@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart;
 import org.bukkit.entity.Player;
 
 
+
 /* 
  * This class represents an address stored in an inventory
  */

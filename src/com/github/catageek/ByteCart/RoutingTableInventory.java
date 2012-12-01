@@ -1,5 +1,6 @@
 package com.github.catageek.ByteCart;
 
+
 public final class RoutingTableInventory implements RoutingTable {
 	
 	private final org.bukkit.inventory.Inventory Inventory;

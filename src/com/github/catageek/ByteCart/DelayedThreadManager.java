@@ -9,13 +9,22 @@ public final class DelayedThreadManager {
 	/*
 	 * create a release task
 	 */
-	protected final void createReleaseTask(Block block, int duration, Runnable ReleaseTask) {
+	private synchronized final void createReleaseTask(Block block, int duration, Runnable ReleaseTask) {
 		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new Execute(this, ReleaseTask, block)
 				, duration);
 
 		// the id of the thread is stored in a static map
 		this.DelayedThread.createEntry(block, id);
 	}
+
+	protected synchronized final void createUnsynchronizedReleaseTask(Block block, int duration, Runnable ReleaseTask) {
+		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleAsyncDelayedTask(ByteCart.myPlugin, new Execute(this, ReleaseTask, block)
+				, duration);
+
+		// the id of the thread is stored in a static map
+		this.DelayedThread.createEntry(block, id);
+	}
+
 
 	protected final boolean hasReleaseTask(Block block) {
 		return this.DelayedThread.hasEntry(block);
@@ -25,7 +34,7 @@ public final class DelayedThreadManager {
 	/*
 	 * Renew the timer of release task
 	 */
-	protected final void renew(Block block, int duration, Runnable ReleaseTask) {
+	protected synchronized final void renew(Block block, int duration, Runnable ReleaseTask) {
 		if(this.hasReleaseTask(block)) {
 			// we cancel the release task
 			ByteCart.myPlugin.getServer().getScheduler().cancelTask((Integer) this.DelayedThread.getValue(block));
@@ -36,6 +45,20 @@ public final class DelayedThreadManager {
 		}
 		else {
 			this.createReleaseTask(block, duration, ReleaseTask);
+		}
+	}
+
+	protected synchronized final void renewAsync(Block block, int duration, Runnable ReleaseTask) {
+		if(this.hasReleaseTask(block)) {
+			// we cancel the release task
+			ByteCart.myPlugin.getServer().getScheduler().cancelTask((Integer) this.DelayedThread.getValue(block));
+			// we schedule a new one
+			int id = ByteCart.myPlugin.getServer().getScheduler().scheduleAsyncDelayedTask(ByteCart.myPlugin, new Execute(this, ReleaseTask, block), duration);
+			// we update the hashmap
+			this.DelayedThread.updateValue(block, id);
+		}
+		else {
+			this.createUnsynchronizedReleaseTask(block, duration, ReleaseTask);
 		}
 	}
 

@@ -4,6 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
+
 // This class contains the method to instantiate any IC
 final public class ClickedICFactory {
 	

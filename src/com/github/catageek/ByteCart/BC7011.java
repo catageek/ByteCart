@@ -1,5 +1,6 @@
 package com.github.catageek.ByteCart;
 
+
 public final class BC7011 extends BC7010 implements TriggeredIC {
 
 	public BC7011(org.bukkit.block.Block block,

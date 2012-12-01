@@ -1,6 +1,5 @@
 package com.github.catageek.ByteCart;
 
-import com.github.catageek.ByteCart.SimpleCollisionAvoider.Side;
 
 public class BC9000 extends AbstractBC9000 implements TriggeredIC {
 
@@ -12,8 +11,8 @@ public class BC9000 extends AbstractBC9000 implements TriggeredIC {
 	}
 
 	@Override
-	protected Side route() {
-		return Side.RIGHT;
+	protected SimpleCollisionAvoider.Side route() {
+		return SimpleCollisionAvoider.Side.RIGHT;
 	}
 	
 	@Override

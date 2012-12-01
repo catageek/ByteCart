@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-public class PinRegistry<T> implements RegistryInput, RegistryOutput {
+public class PinRegistry<T> implements RegistryInput, RegistryOutput, Registry {
 
 	final protected List<T> PinArray;
 	

@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.material.Lever;
 
-public class ComponentLever extends AbstractComponent implements OutputPin {
+public class ComponentLever extends AbstractComponent implements OutputPin, InputPin {
 
 	protected ComponentLever(Block block) {
 		super(block.getLocation());
@@ -26,6 +26,16 @@ public class ComponentLever extends AbstractComponent implements OutputPin {
 			
 			MathUtil.forceUpdate(this.getLocation().getBlock().getRelative(lever.getAttachedFace()));
 		}
+	}
+
+	@Override
+	public boolean read() {
+		if(this.getLocation().getBlock().getState().getData() instanceof Lever) {
+			final Lever lever = new Lever(Material.LEVER, this.getLocation().getBlock().getData());
+			return lever.isPowered();
+				
+		}
+		return false;
 	}
 
 	

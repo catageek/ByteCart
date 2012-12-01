@@ -4,6 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Vehicle;
 
+
 // This class contains the method to instantiate any IC
 final public class TriggeredICFactory {
 
@@ -44,10 +45,10 @@ final public class TriggeredICFactory {
 			// then we instantiate accordingly
 			switch (ICnumber) {
 
+			case 7000:
+				return (TriggeredIC)(new BC7000(block, vehicle));
 			case 7001:
-			{
 				return (TriggeredIC)(new BC7001(block, vehicle));
-			}
 			case 7002:
 				return (TriggeredIC)(new BC7002(block, vehicle));
 			case 7003:
@@ -58,58 +59,10 @@ final public class TriggeredICFactory {
 				return (TriggeredIC)(new BC7011(block, vehicle));
 
 			case 8010:
-			{
-				// first we request the token and power the busy line
-				BC2003 bc2003 = new BC2003(block, vehicle);
-				try {
-					if (bc2003.requestToken()) {
-						if(ByteCart.debug)
-							ByteCart.log.info("ByteCart : BC8010 token given");
-						bc2003.trigger();
-					}
-					else
-					{
-						// token is already given ?
-						// this may be a train (state != 15)
-						if (bc2003.getState() != 15) {
-							if(ByteCart.debug)
-								ByteCart.log.info("ByteCart : BC8010 token renewed");
-
-							bc2003.renewToken();
-							return null;
-						}
-					}
-				}
-				catch (NullPointerException e) {
-
-				}
-				// if we have the token, we trigger BC8010
-				if (bc2003.hasToken(vehicle)) {
-					if(ByteCart.debug)
-						ByteCart.log.info("ByteCart : BC8010 cart routed");
-
-					return (TriggeredIC)(new BC8010(block, vehicle));
-				}
-				else // or we die
-					return null;
-			}
+				return (TriggeredIC)(new BC8010(block, vehicle));
 
 			case 8020:
-			{
-				// first we power the busy bit and requests the token
-				BC2003 bc2003 = new BC2003(block, vehicle);
-				try {
-					bc2003.trigger();
-				}
-				catch (NullPointerException e) {
-
-				}
-				// if we have the token, we trigger it
-				if (bc2003.hasToken(vehicle))
-					return (TriggeredIC)(new BC8020(block, vehicle));
-				else // or we die
-					return null;
-			}
+				return (TriggeredIC)(new BC8020(block, vehicle));
 
 			case 9000:
 				return (TriggeredIC)(new BC9000(block, vehicle));

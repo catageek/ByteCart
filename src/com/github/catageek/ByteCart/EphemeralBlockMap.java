@@ -2,6 +2,10 @@ package com.github.catageek.ByteCart;
 
 import org.bukkit.block.Block;
 
+/*
+ * HashMap that keeps entries during "duration" ticks
+ */
+
 public final class EphemeralBlockMap<T> extends BlockMap<T> {
 	
 	private int Duration;
@@ -13,9 +17,8 @@ public final class EphemeralBlockMap<T> extends BlockMap<T> {
 	
 	@Override
 	public boolean createEntry(Block block, T id) {
-		if ( ! this.getMap().containsKey(block) ) {
-			this.getMap().put(block, id);
-			ByteCart.myPlugin.getDelayedThreadManager().createReleaseTask(block, this.Duration, new Suppress(this, block));
+		if ( this.getMap().put(block, id) == null ) {
+			ByteCart.myPlugin.getDelayedThreadManager().createUnsynchronizedReleaseTask(block, this.Duration, new Suppress(this, block));
 			return true;
 		}
 		return false;
@@ -25,9 +28,16 @@ public final class EphemeralBlockMap<T> extends BlockMap<T> {
 	 * update the value associated with key 'block' and reset timer 
 	 */
 	@Override
-	public final void updateValue(Block block, T id) {
-		this.getMap().replace(block, id);
-		ByteCart.myPlugin.getDelayedThreadManager().renew(block, this.Duration, new Suppress(this, block));
+	public final boolean updateValue(Block block, T id) {
+		ping(block);
+		return this.getMap().put(block, id) == null;
+	}
+
+	/*
+	 * reset timer
+	 */
+	public final void ping(Block block) {
+		ByteCart.myPlugin.getDelayedThreadManager().renewAsync(block, this.Duration, new Suppress(this, block));
 	}
 
 	private final class Suppress implements Runnable {

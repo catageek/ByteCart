@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
+
 public class PoweredICFactory {
 	
 	// instantiates the BCXXXX member at specified location.
@@ -37,7 +38,9 @@ public class PoweredICFactory {
 
 			// then we instantiate accordingly
 			switch (ICnumber) {
-			
+
+				case 7000:
+					return (PoweredIC)(new BC7000(block, null));
 				case 7001:
 					return (PoweredIC)(new BC7001(block, null));
 				case 7003:

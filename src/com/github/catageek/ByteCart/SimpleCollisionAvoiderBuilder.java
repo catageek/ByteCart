@@ -2,35 +2,21 @@ package com.github.catageek.ByteCart;
 
 import org.bukkit.block.Block;
 
-public class SimpleCollisionAvoiderBuilder implements CollisionAvoiderBuilder {
-
-	private final TriggeredIC ic;
-
-	private final Block block;
-
-
+public class SimpleCollisionAvoiderBuilder extends AbstractCollisionAvoiderBuilder implements CollisionAvoiderBuilder {
 
 	public SimpleCollisionAvoiderBuilder(TriggeredIC ic, Block block) {
-		this.ic = ic;
-		this.block = block;
+		super(ic, block);
 	}
 
 
 
-	public CollisionAvoider getCollisionAvoider() {
+	@SuppressWarnings("unchecked")
+	public <T extends CollisionAvoider> T getCollisionAvoider() {
 
-		return new SimpleCollisionAvoider (this.ic, this.block);
+		return (T) new SimpleCollisionAvoider (this.ic, this.block);
 	}
 
 
 
-	@Override
-	public Block getblock() {
-		return this.block;
-	}
-
-	public TriggeredIC getIc() {
-		return ic;
-	}
 
 }

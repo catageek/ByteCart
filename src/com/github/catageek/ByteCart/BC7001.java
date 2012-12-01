@@ -11,6 +11,7 @@ import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.util.Vector;
 
+
 // this IC represents a stop/start block
 // it is commanded by a wire (like FB 'station' block)
 // wire on => start or no velocity change
@@ -20,6 +21,7 @@ import org.bukkit.util.Vector;
 // lever on = block free OR powered
 
 public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredIC {
+
 
 	// Constructor : !! vehicle can be null !!
 
@@ -75,87 +77,88 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 						// we set busy
 						myBC7001.getOutput(0).setAmount(1);
 
-/*						if(ByteCart.debug)
+						/*						if(ByteCart.debug)
 							ByteCart.log.info("ByteCart: BC7001 : running delayed thread (set switch ON)");
-*/
+						 */
 					}
 				}
-				, 4);
-			
+				, 6);
 
-			// if the cart is stopped, start it
-			if (this.getVehicle().getVelocity().equals(new Vector(0,0,0))) {
 
-				this.getVehicle().setVelocity((new Vector(this.getCardinal().getModX(), this.getCardinal().getModY(), this.getCardinal().getModZ())).multiply(ByteCart.myPlugin.getConfig().getDouble("BC7001.startvelocity")));
+				// if the cart is stopped, start it
+				if (this.getVehicle().getVelocity().equals(new Vector(0,0,0))) {
+
+					this.getVehicle().setVelocity((new Vector(this.getCardinal().getModX(), this.getCardinal().getModY(), this.getCardinal().getModZ())).multiply(ByteCart.myPlugin.getConfig().getDouble("BC7001.startvelocity")));
+				}
 			}
-		}
 
-		// if the wire is off
-		else {
+			// if the wire is off
+			else {
 
-			// the lever is off
-			this.getOutput(0).setAmount(0);
+				// the lever is off
+				this.getOutput(0).setAmount(0);
 
-			// stop the cart
-			this.getVehicle().setVelocity(new Vector(0,0,0));
-			/*
+				// stop the cart
+				this.getVehicle().setVelocity(new Vector(0,0,0));
+				/*
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: BC7001 : cart on stop at " + this.Vehicle.getLocation().toString());
-			 */
+				 */
+			}
+
+		}
+
+		// there is no minecart above
+		else {
+			// the lever is on
+			this.getOutput(0).setAmount(1);
 		}
 
 	}
 
-	// there is no minecart above
-	else {
-		// the lever is on
-		this.getOutput(0).setAmount(1);
-	}
+	@Override
+	public void power() {
+		// power update
 
-}
+		TriggeredIC bc = this;
 
-@Override
-public void power() {
-	// power update
+		// We need to find if a cart is stopped and set the member variable Vehicle
+		Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();
 
-	BC7001 bc7001 = this;
-
-	// We need to find if a cart is stopped and set the member variable Vehicle
-	Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();
-
-	List<Entity> ent = Arrays.asList(this.getBlock().getChunk().getEntities());
-	/*
+		List<Entity> ent = Arrays.asList(this.getBlock().getChunk().getEntities());
+		/*
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: BC7001 : loading " + ent.size() + " entities.");
-	 */
-	for (ListIterator<Entity> it = ent.listIterator(); it.hasNext();) {
-		/*			
+		 */
+		for (ListIterator<Entity> it = ent.listIterator(); it.hasNext();) {
+			/*			
 			if(ByteCart.debug) {
 				ByteCart.log.info("ByteCart: BC7001 : examining entity at " + it.next().getLocation().toString());
 				it.previous();
 			}
-		 */
-		if (it.next() instanceof Minecart) {
-			it.previous();
-
-			if ( MathUtil.isSameBlock(((Minecart) it.next()).getLocation(), loc)) {
+			 */
+			if (it.next() instanceof Minecart) {
 				it.previous();
 
-				// found ! we instantiate a new IC with the vehicle we found
-				bc7001 = new BC7001(this.getBlock(), (Vehicle) it.next());
-				/*
+				if ( MathUtil.isSameBlock(((Minecart) it.next()).getLocation(), loc)) {
+					it.previous();
+
+					// found ! we instantiate a new IC with the vehicle we found
+					//bc7001 = new BC7001(this.getBlock(), (Vehicle) it.next());
+					bc = TriggeredICFactory.getTriggeredIC(this.getBlock(), (Vehicle) it.next());
+					/*
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart: BC7001 : cart on stop");
-				 */					
-				break;
+					 */					
+					break;
 
+				}
 			}
 		}
+
+		bc.trigger();
+
+
 	}
-
-	bc7001.trigger();
-
-
-}
 
 }

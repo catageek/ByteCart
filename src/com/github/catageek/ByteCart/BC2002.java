@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart;
 import org.bukkit.block.Block;
 
 
+
 // powers the lever in function of the direction selected
 public final class BC2002 extends AbstractIC implements TriggeredIC {
 

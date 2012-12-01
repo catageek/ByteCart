@@ -4,7 +4,7 @@ import org.bukkit.block.Block;
 
 public final class CollisionAvoiderManager {
 
-	private final BlockMap<CollisionAvoider> manager = new BlockMap<CollisionAvoider>();
+	private final BlockMap<CollisionAvoider> manager = new EphemeralBlockMap<CollisionAvoider>(80);
 
 	/**
 	 * @return the manager
@@ -13,18 +13,23 @@ public final class CollisionAvoiderManager {
 		return manager;
 	}
 
-	public final CollisionAvoider getCollisionAvoider(CollisionAvoiderBuilder builder) {
+	@SuppressWarnings("unchecked")
+	public final synchronized <T extends CollisionAvoider> T getCollisionAvoider(CollisionAvoiderBuilder builder) {
 		Block block = builder.getblock();
-		CollisionAvoider cm;
-		if (this.getManager().hasEntry(block)) {
-			cm = this.getManager().getValue(block);
+		T cm;
+
+		if(	(cm = (T) this.getManager().getValue(block)) != null)
 			cm.Add(builder.getIc());
-		} else
+		else
 		{
-			cm = builder.getCollisionAvoider();
+			cm = builder.<T>getCollisionAvoider();
 			this.getManager().createEntry(block, cm);
 		}
 		return cm;
+	}
+	
+	public final void setCollisionAvoider(Block block, CollisionAvoider ca) {
+		this.getManager().updateValue(block, ca);
 	}
 
 

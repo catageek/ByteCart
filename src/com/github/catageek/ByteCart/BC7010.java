@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.inventory.InventoryHolder;
 
+
 public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedIC {
 
 	protected boolean PlayerAllowed = true;
@@ -34,20 +35,32 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 			return;
 
 		// if this is a cart in a train
-		if (this.getState(this.getBlock()) != 0) {
-			ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock(), 40, new ReleaseTask(this));
+		if (this.wasTrain(this.getBlock())) {
+			ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock());
 			return;
 		}
 		
 		Address SignAddress = AddressFactory.getAddress(this.getBlock(), 3);
 
+		this.setAddress(SignAddress);
+		
+		// if this is the first car of a train
+		// we save the state during 2 s
+		if (SignAddress.isTrain()) {
+			this.setWasTrain(this.getBlock(), true);
+		}
+
+
+	}
+	
+	final protected void setAddress(Address SignAddress){
 		AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
 
 		IPaddress.setRegion(SignAddress.getRegion().getAmount());
 		IPaddress.setTrack(SignAddress.getTrack().getAmount());
 		IPaddress.setStation(SignAddress.getStation().getAmount());
 		IPaddress.setIsTrain(SignAddress.isTrain());
-
+		
 		if (this.getInventory().getHolder() instanceof Player) {
 			if (! IPaddress.getAddress().equals(SignAddress.getAddress())) {
 				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
@@ -61,15 +74,6 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		}
 		else
 			IPaddress.initializeTTL();
-		
-		// if this is the first car of a train
-		// we save the state during 2 s
-		if (SignAddress.isTrain()) {
-			this.setState(this.getBlock(), 1);
-			ByteCart.myPlugin.getDelayedThreadManager().createReleaseTask(getBlock(), 40, new ReleaseTask(this));
-		}
-
-
 	}
 
 	final protected boolean isHolderAllowed() {
@@ -87,7 +91,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		this.trigger();
 
 	}
-
+/*
 	private class ReleaseTask implements Runnable {
 
 		AbstractIC bc;
@@ -110,5 +114,5 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 
 
 	}
-
+*/
 }
