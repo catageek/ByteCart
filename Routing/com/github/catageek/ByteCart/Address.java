@@ -12,4 +12,5 @@ public interface Address {
 	public Address setIsTrain(boolean isTrain);
 	public String getAddress();
 	public Address setAddress(String s);
+	public boolean copy(Address a);
 }

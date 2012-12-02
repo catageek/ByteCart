@@ -81,6 +81,12 @@ public class AddressSign extends AbstractComponent implements Address {
 		return this.Address.isTrain();
 	}
 
+	@Override
+	public boolean copy(com.github.catageek.ByteCart.Address a) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 
 }

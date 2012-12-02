@@ -39,11 +39,11 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 			ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock());
 			return;
 		}
-		
+
 		Address SignAddress = AddressFactory.getAddress(this.getBlock(), 3);
 
 		this.setAddress(SignAddress);
-		
+
 		// if this is the first car of a train
 		// we save the state during 2 s
 		if (SignAddress.isTrain()) {
@@ -52,28 +52,24 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 
 
 	}
-	
-	final protected void setAddress(Address SignAddress){
+
+	final protected boolean setAddress(Address SignAddress){
 		AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
 
-		IPaddress.setRegion(SignAddress.getRegion().getAmount());
-		IPaddress.setTrack(SignAddress.getTrack().getAmount());
-		IPaddress.setStation(SignAddress.getStation().getAmount());
-		IPaddress.setIsTrain(SignAddress.isTrain());
-		
-		if (this.getInventory().getHolder() instanceof Player) {
-			if (! IPaddress.getAddress().equals(SignAddress.getAddress())) {
-				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
-			}
-			else {
-				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.RED+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + IPaddress.getAddress() + ")");
-				if (this.getVehicle() == null)
-					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.RED+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.SetAddress2") );
-			}
+		if (!IPaddress.copy(SignAddress)) {
 
+			if (this.getInventory().getHolder() instanceof Player) {
+					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
+			}
+			return false;
 		}
-		else
+		if (this.getInventory().getHolder() instanceof Player) {
+			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + IPaddress.getAddress() + ")");
+			if (this.getVehicle() == null)
+				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress2") );
+		} else
 			IPaddress.initializeTTL();
+		return true;
 	}
 
 	final protected boolean isHolderAllowed() {
@@ -91,7 +87,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		this.trigger();
 
 	}
-/*
+	/*
 	private class ReleaseTask implements Runnable {
 
 		AbstractIC bc;
@@ -114,5 +110,5 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 
 
 	}
-*/
+	 */
 }

@@ -3,7 +3,7 @@ package com.github.catageek.ByteCart;
 
 
 // This class represents a canonical address like xx.xx.xx
-public class AddressString implements Address {
+public class AddressString extends AbstractAddress implements Address {
 	
 	private String String; // address as displayed
 	

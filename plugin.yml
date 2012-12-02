@@ -1,6 +1,6 @@
 name: ByteCart
 main: com.github.catageek.ByteCart.ByteCart
-version: 0.7
+version: 0.8
 permissions:
     bytecart.*:
         description: give access to all blocks
@@ -85,10 +85,18 @@ permissions:
         default: false
     bytecart.mego:
         default: true
+    bytecart.followme:
+        default: true
 
 commands:
     mego:
-        description: set destination address in your inventory
-        usage: /<command> address, where address is formatted as nn.nn.nn
+        description: set <plugin name> destination address in your inventory
+        usage: "Usage : /<command> address, where address is formatted as a.b.c"
         permission: <plugin name>.mego
+        permission-message: You don't have permission <permission>
+        
+    followme:
+        description: set <plugin name> destination address in a storage cart inventory
+        usage: "Usage : /<command> address, where address is formatted as a.b.c"
+        permission: <plugin name>.followme
         permission-message: You don't have permission <permission>

@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 /* 
  * This class represents an address stored in an inventory
  */
-public final class AddressInventory implements AddressRouted {
+public final class AddressInventory extends AbstractAddress implements AddressRouted {
 
 	private final org.bukkit.inventory.Inventory Inventory;
 	private InventoryWriter InventoryWriter;
@@ -98,21 +98,24 @@ public final class AddressInventory implements AddressRouted {
 	 * @param inventory the inventory to set
 	 */
 	@SuppressWarnings("deprecation")
-	private void UpdateInventory(org.bukkit.inventory.Inventory inventory) {
-		if (this.InventoryWriter.isSuccess())
+	private boolean UpdateInventory(org.bukkit.inventory.Inventory inventory) {
+		if (this.InventoryWriter.isSuccess()) {
 			this.Inventory.setContents(inventory.getContents());
-		else {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : UpdateInventory is not success");
+			if (this.getInventory().getHolder() instanceof Player)
+				((Player) this.getInventory().getHolder()).updateInventory();
+			return true;
 		}
-		if (this.getInventory().getHolder() instanceof Player)
-			((Player) this.getInventory().getHolder()).updateInventory();
+
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : UpdateInventory is not success");
+		return false;
 	}
 
 	@Override
 	public Address setRegion(int region) {
 		this.InventoryWriter.Write(region, Slots.REGION.getSlot());
-		this.UpdateInventory(this.InventoryWriter.getInventory());
+		if(!this.UpdateInventory(this.InventoryWriter.getInventory()))
+			return null;
 
 		return this;
 	}
@@ -120,7 +123,8 @@ public final class AddressInventory implements AddressRouted {
 	@Override
 	public Address setTrack(int track) {
 		this.InventoryWriter.Write(track, Slots.TRACK.getSlot());
-		this.UpdateInventory(this.InventoryWriter.getInventory());
+		if(!this.UpdateInventory(this.InventoryWriter.getInventory()))
+			return null;
 
 		return this;
 	}
@@ -128,7 +132,8 @@ public final class AddressInventory implements AddressRouted {
 	@Override
 	public Address setStation(int station) {
 		this.InventoryWriter.Write(station, Slots.STATION.getSlot());
-		this.UpdateInventory(this.InventoryWriter.getInventory());
+		if(!this.UpdateInventory(this.InventoryWriter.getInventory()))
+			return null;
 
 		return this;
 	}
@@ -141,7 +146,8 @@ public final class AddressInventory implements AddressRouted {
 		Registry tmp = new SuperRegistry(new VirtualRegistry(2), this.getStation());
 		tmp.setBit(0, isTrain);
 		this.InventoryWriter.Write(tmp.getAmount(), Slots.STATION.getSlot());
-		this.UpdateInventory(this.InventoryWriter.getInventory());
+		if(!this.UpdateInventory(this.InventoryWriter.getInventory()))
+			return null;
 
 		return this;
 	}
@@ -190,6 +196,7 @@ public final class AddressInventory implements AddressRouted {
 		this.UpdateInventory(this.InventoryWriter.getInventory());
 		return this;
 	}
+
 
 	@Override
 	public String toString() {

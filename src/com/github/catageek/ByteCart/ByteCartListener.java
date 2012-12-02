@@ -145,9 +145,9 @@ public class ByteCartListener implements Listener {
 		if (event.getChangedType() != Material.REDSTONE_WIRE || ! AbstractIC.checkEligibility(event.getBlock().getRelative(BlockFace.DOWN)))
 			return;
 
-/*		if(ByteCart.debug)
+		/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: event " + event.getBlock().toString());
-*/
+		 */
 		PoweredIC myIC = this.MyPoweredICFactory.getIC(event.getBlock().getRelative(BlockFace.DOWN));
 
 
@@ -160,11 +160,6 @@ public class ByteCartListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
-		/*		if(ByteCart.debug) {
-				ByteCart.log.info("ByteCart : bloc clicked " + event.getClickedBlock().getLocation());
-				ByteCart.log.info("ByteCart : !AbstractIC.checkEligibility :" + !AbstractIC.checkEligibility(event.getClickedBlock()));
-		}
-		 */		
 		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0 || !AbstractIC.checkEligibility(event.getClickedBlock()))
 			return;
 		ClickedIC myIC = ClickedICFactory.getClickedIC(event.getClickedBlock(), event.getPlayer());
@@ -175,7 +170,9 @@ public class ByteCartListener implements Listener {
 				ByteCart.log.info("ByteCart: " + myIC.getName() + ".click()");
 
 			myIC.click();
+			event.setCancelled(true);
 		}
 	}
+
 
 }

@@ -47,6 +47,12 @@ Info.SetAddress: Nouvelle destination
 Info.SetAddress2: Ne touchez pas a votre inventaire
                   Prenez un cart et bonne route !
 
+# Left-click on a storage cart to set its destination address
+Info.RightClickCart: Clic droit sur un storage cart pour fixer son adresse de destination
+
+# Maximum # of used routers
+Info.GetTTL: "Nombre maximum d echangeurs traverses : "
+
 #On the way to region
 Info.BC8010_region: En route pour la region
 

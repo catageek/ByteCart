@@ -45,6 +45,7 @@ public class ByteCart extends JavaPlugin {
     	getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
     	
     	getCommand("mego").setExecutor(new BytecartCommandExecutor());
+       	getCommand("followme").setExecutor(new BytecartCommandExecutor());
     }
      
     public void onDisable(){ 
