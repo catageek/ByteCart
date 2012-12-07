@@ -60,15 +60,17 @@ public abstract class AbstractTriggeredIC extends AbstractIC {
 			{
 				String DefaultRoute = ByteCart.myPlugin.getConfig().getString("EmptyCartsDefaultRoute");
 				//construct address object
-				Address myAddress = AddressFactory.getAddress(newInv);
+				AddressRouted myAddress = AddressFactory.getAddress(newInv);
 				//fill empty inventory with stuff
 				ItemStack stack = new ItemStack(1);
 				stack.setAmount(stack.getMaxStackSize());
 				newInv.addItem(stack);
 				newInv.addItem(stack);
 				newInv.addItem(stack);
+				newInv.addItem(stack);
 				//write address
 				myAddress.setAddress(DefaultRoute);
+				myAddress.initializeTTL();
 			}
 
 		}

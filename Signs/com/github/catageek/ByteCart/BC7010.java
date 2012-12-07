@@ -64,7 +64,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 			return false;
 		}
 		if (this.getInventory().getHolder() instanceof Player) {
-			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + IPaddress.getAddress() + ")");
+			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + IPaddress + ")");
 			if (this.getVehicle() == null)
 				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress2") );
 		} else
@@ -87,28 +87,4 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		this.trigger();
 
 	}
-	/*
-	private class ReleaseTask implements Runnable {
-
-		AbstractIC bc;
-
-		ReleaseTask(AbstractIC bc) {
-			this.bc = bc;
-		}
-
-		@Override
-		public void run() {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: BC7010 : running delayed thread (set busy line OFF)");
-
-			// we get back to normal state
-
-			bc.free(bc.getBlock());
-
-
-		}
-
-
-	}
-	 */
 }

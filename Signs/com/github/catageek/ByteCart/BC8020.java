@@ -19,7 +19,7 @@ public class BC8020 extends BC8010 implements TriggeredIC {
 	@Override
 	protected DirectionRegistry SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
 		// if TTL reached end of life, then we lookup region 0
-		if (IPaddress.getTTL().getAmount() == 1) {
+		if (IPaddress.getTTL() == 0) {
 			return RoutingTable.getDirection(0);
 		} else
 		{	// lookup destination region

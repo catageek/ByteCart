@@ -110,69 +110,55 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 			ByteCart.log.info("ByteCart : UpdateInventory is not success");
 		return false;
 	}
+	
+	public boolean UpdateAddress() {
+		return this.UpdateInventory(this.InventoryWriter.getInventory());
+	}
+
 
 	@Override
-	public Address setRegion(int region) {
+	public void setRegion(int region) {
 		this.InventoryWriter.Write(region, Slots.REGION.getSlot());
-		if(!this.UpdateInventory(this.InventoryWriter.getInventory()))
-			return null;
-
-		return this;
 	}
 
 	@Override
-	public Address setTrack(int track) {
+	public void setTrack(int track) {
 		this.InventoryWriter.Write(track, Slots.TRACK.getSlot());
-		if(!this.UpdateInventory(this.InventoryWriter.getInventory()))
-			return null;
-
-		return this;
 	}
 
 	@Override
-	public Address setStation(int station) {
+	public void setStation(int station) {
 		this.InventoryWriter.Write(station, Slots.STATION.getSlot());
-		if(!this.UpdateInventory(this.InventoryWriter.getInventory()))
-			return null;
-
-		return this;
 	}
 
 	@Override
-	public Address setIsTrain(boolean isTrain) {
+	protected void setIsTrain(boolean isTrain) {
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : setIsTrain() : Station slot : " + new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.STATION.getSlot()), Slots.STATION.getLength(), Slots.STATION.getOffset()).getAmount());
-
-		Registry tmp = new SuperRegistry(new VirtualRegistry(2), this.getStation());
+			ByteCart.log.info("ByteCart : setIsTrain() : Station slot : " + new SubRegistry((Registry) new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Slots.STATION.getLength(), Slots.STATION.getOffset()).getAmount());
+		
+		boolean written = this.InventoryWriter.setUnwritten(Slots.STATION.getSlot());
+		Registry station = new SubRegistry((Registry) new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Slots.STATION.getLength(), Slots.STATION.getOffset());
+		Registry tmp = new SuperRegistry(new VirtualRegistry(2), station);
 		tmp.setBit(0, isTrain);
 		this.InventoryWriter.Write(tmp.getAmount(), Slots.STATION.getSlot());
-		if(!this.UpdateInventory(this.InventoryWriter.getInventory()))
-			return null;
-
-		return this;
+		if (written)
+			this.InventoryWriter.setWritten(Slots.STATION.getSlot());
 	}
 
 	@Override
-	public String getAddress() {
-		return "" + this.getRegion().getAmount() + "." + this.getTrack().getAmount() + "." + (this.getStation().getAmount());
-	}
-
-	@Override
-	public Registry getTTL() {
+	public int getTTL() {
 		if (this.getInventory().getHolder() instanceof Player) {
-			Registry v = new VirtualRegistry(6);
-			v.setAmount(ByteCart.myPlugin.getConfig().getInt("TTL.value"));
-			return v;
+			return ByteCart.myPlugin.getConfig().getInt("TTL.value");
 		}
 		else
-			return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TTL.getSlot()), Slots.TTL.getLength(), Slots.TTL.getOffset());
+			return (new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TTL.getSlot()), Slots.TTL.getLength(), Slots.TTL.getOffset())).getAmount();
 	}
 
 	@Override
 	public Address initializeTTL() {
 		if (! (this.getInventory().getHolder() instanceof Player)) {
-			this.InventoryWriter.Write(ByteCart.myPlugin.getConfig().getInt("TTL.value"), Slots.TTL.getSlot());
-			this.UpdateInventory(this.InventoryWriter.getInventory());
+			this.InventoryWriter.Write(ByteCart.myPlugin.getConfig().getInt("TTL.value"), Slots.TTL.getSlot(), false);
+			this.Inventory.setContents(this.InventoryWriter.getInventory().getContents());
 		}
 		return this;
 	}
@@ -185,25 +171,5 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 			this.UpdateInventory(this.InventoryWriter.getInventory());
 		}
 	}
-
-	@Override
-	public Address setAddress(String s) {
-		Address src = AddressFactory.getAddress(s);
-		this.InventoryWriter.setWritten(Slots.TTL.getSlot());
-		this.InventoryWriter.Write(src.getRegion().getAmount(), Slots.REGION.getSlot());
-		this.InventoryWriter.Write(src.getTrack().getAmount(), Slots.TRACK.getSlot());
-		this.InventoryWriter.Write(src.getStation().getAmount(), Slots.STATION.getSlot());
-		this.UpdateInventory(this.InventoryWriter.getInventory());
-		return this;
-	}
-
-
-	@Override
-	public String toString() {
-		return this.getAddress();
-
-	}
-
-
 
 }

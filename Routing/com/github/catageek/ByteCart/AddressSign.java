@@ -41,39 +41,11 @@ public class AddressSign extends AbstractComponent implements Address {
 		return Address.getStation();
 	}
 
-	@Override
-	public com.github.catageek.ByteCart.Address setRegion(int region) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public com.github.catageek.ByteCart.Address setTrack(int track) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public com.github.catageek.ByteCart.Address setStation(int station) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public com.github.catageek.ByteCart.Address setIsTrain(boolean isTrain) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getAddress() {
-		return this.Address.getAddress();
-	}
-
-	@Override
-	public com.github.catageek.ByteCart.Address setAddress(String s) {
+	public boolean setAddress(String s) {
 		this.Address.setAddress(s);
-		return this;
+		return true;
 	}
 
 	@Override

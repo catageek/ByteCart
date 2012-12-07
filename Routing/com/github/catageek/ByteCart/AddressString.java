@@ -66,38 +66,44 @@ public class AddressString extends AbstractAddress implements Address {
 	}
 
 	@Override
-	public Address setRegion(int region) {
+	public void setRegion(int region) {
 		// TODO Auto-generated method stub
-		return null;
+		return;
 	}
 
 	@Override
-	public Address setTrack(int track) {
+	public void setTrack(int track) {
 		// TODO Auto-generated method stub
-		return null;
+		return;
 	}
 
 	@Override
-	public Address setStation(int station) {
+	public void setStation(int station) {
 		// TODO Auto-generated method stub
-		return null;
+		return;
 	}
 
 	@Override
-	public Address setIsTrain(boolean isTrain) {
+	public void setIsTrain(boolean isTrain) {
 		// TODO Auto-generated method stub
-		return null;
+		return;
 	}
 
 	@Override
-	public java.lang.String getAddress() {
+	public java.lang.String toString() {
 		return this.String;
 	}
 
 	@Override
-	public Address setAddress(java.lang.String s) {
+	public boolean setAddress(java.lang.String s) {
 		this.String = s;
-		return this;
+		return true;
+	}
+
+	@Override
+	public boolean UpdateAddress() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 

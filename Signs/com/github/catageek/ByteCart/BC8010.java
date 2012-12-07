@@ -44,7 +44,9 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			// Here begins the triggered action
 			// if this is a cart in a train
 			if (this.wasTrain(this.getBlock())) {
+				// leave a message to next cart that it is a train
 				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock());
+				// tell to router not to change position
 				ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder).Ping();
 				return;
 			}
@@ -52,23 +54,16 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			// Time-to-live management
 
 			//loading TTl of cart
-			int ttl = IPaddress.getTTL().getAmount();
+			int ttl = IPaddress.getTTL();
 
-			// if ttl did not reach end of life ( = 1)
-			if (ttl != 1) {
+			// if ttl did not reach end of life ( = 0)
+			if (ttl != 0) {
 
-				// we update it
-				if (ttl != 0)
-				{
 					IPaddress.updateTTL(ttl-1);
-				}
-				else {
-					IPaddress.updateTTL(ByteCart.myPlugin.getConfig().getInt("TTL.value"));
-				}
 			}
 
 			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL().getAmount());
+				ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL());
 
 
 			DirectionRegistry direction = this.SelectRoute(IPaddress, sign, RoutingTable);
@@ -126,8 +121,8 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 	}
 
 	protected DirectionRegistry SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
-		// If not in same region, or if TTL reached end of life, then we lookup track 0
-		if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL().getAmount() == 1) {
+		// If not in same region, or if TTL is 1 or 0, then we lookup track 0
+		if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL() == 0) {
 			return RoutingTable.getDirection(0);
 		} else
 		{	// same region : lookup destination track

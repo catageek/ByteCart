@@ -23,7 +23,7 @@ buildtax.BC9016: 0
 # number of routers that a storagecart may use
 # before going to recycling center.
 # this is to prevent loops.
-TTL.value: 63
+TTL.value: 64
 
 # initial speed of minecarts
 BC7001.startvelocity: 2
@@ -48,10 +48,11 @@ Info.SetAddress2: Ne touchez pas a votre inventaire
                   Prenez un cart et bonne route !
 
 # Left-click on a storage cart to set its destination address
-Info.RightClickCart: Clic droit sur un storage cart pour fixer son adresse de destination
+Info.RightClickCart: Clic droit sur un storage cart
+                     pour fixer son adresse de destination
 
 # Maximum # of used routers
-Info.GetTTL: "Nombre maximum d echangeurs traverses : "
+Info.GetTTL: "nb max de routeurs : "
 
 #On the way to region
 Info.BC8010_region: En route pour la region
