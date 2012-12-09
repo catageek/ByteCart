@@ -13,28 +13,19 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 	private InventoryWriter InventoryWriter;
 
 	private enum Slots {
-		// #slot, length (default : 6), pos (default : 0)
+		// #slot
 		REGION(0),
 		TRACK(1),
-		STATION(2, 4, 2),
-		ISTRAIN(2, 1, 0),
-		UNUSED(2, 1, 1),
+		STATION(2),
+		ISTRAIN(2),
+		UNUSED(2),
 		TTL(3);
 
-		private final int Slot, Length, Offset;
+		private final int Slot;
 
 		private Slots(int slot) {
 			Slot = slot;
-			Length = 6;
-			Offset = 0;
 		}
-
-		private Slots(int slot, int length, int offset) {
-			Slot = slot;
-			Length = length;
-			Offset = offset;			
-		}
-
 
 		/**
 		 * @return the slot
@@ -42,24 +33,6 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 		public int getSlot() {
 			return Slot;
 		}
-
-
-		/**
-		 * @return the length
-		 */
-		public int getLength() {
-			return Length;
-		}
-
-
-		/**
-		 * @return the offset
-		 */
-		public int getOffset() {
-			return Offset;
-		}
-
-
 	}
 
 	public AddressInventory(org.bukkit.inventory.Inventory inv) {
@@ -69,22 +42,22 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 
 	@Override
 	public Registry getRegion() {
-		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.REGION.getSlot()), Slots.REGION.getLength(), Slots.REGION.getOffset());
+		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.REGION.getSlot()), Offsets.REGION.getLength(), Offsets.REGION.getOffset());
 	}
 
 	@Override
 	public Registry getTrack() {
-		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TRACK.getSlot()), Slots.TRACK.getLength(), Slots.TRACK.getOffset());
+		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TRACK.getSlot()), Offsets.TRACK.getLength(), Offsets.TRACK.getOffset());
 	}
 
 	@Override
 	public Registry getStation() {
-		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.STATION.getSlot()), Slots.STATION.getLength(), Slots.STATION.getOffset());
+		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset());
 	}
 
 	@Override
 	public boolean isTrain() {
-		return (new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.ISTRAIN.getSlot()), Slots.ISTRAIN.getLength(), Slots.ISTRAIN.getOffset())).getBit(0);
+		return (new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.ISTRAIN.getSlot()), Offsets.ISTRAIN.getLength(), Offsets.ISTRAIN.getOffset())).getBit(0);
 	}
 
 	/**
@@ -134,10 +107,10 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 	@Override
 	protected void setIsTrain(boolean isTrain) {
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : setIsTrain() : Station slot : " + new SubRegistry((Registry) new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Slots.STATION.getLength(), Slots.STATION.getOffset()).getAmount());
+			ByteCart.log.info("ByteCart : setIsTrain() : Station slot : " + new SubRegistry((Registry) new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset()).getAmount());
 		
 		boolean written = this.InventoryWriter.setUnwritten(Slots.STATION.getSlot());
-		Registry station = new SubRegistry((Registry) new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Slots.STATION.getLength(), Slots.STATION.getOffset());
+		Registry station = new SubRegistry((Registry) new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset());
 		Registry tmp = new SuperRegistry(new VirtualRegistry(2), station);
 		tmp.setBit(0, isTrain);
 		this.InventoryWriter.Write(tmp.getAmount(), Slots.STATION.getSlot());
@@ -151,7 +124,7 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 			return ByteCart.myPlugin.getConfig().getInt("TTL.value");
 		}
 		else
-			return (new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TTL.getSlot()), Slots.TTL.getLength(), Slots.TTL.getOffset())).getAmount();
+			return (new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TTL.getSlot()), Offsets.TTL.getLength(), Offsets.TTL.getOffset())).getAmount();
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import org.bukkit.block.BlockFace;
 
 public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
-	final static private BlockMap<Integer> wavecount = new BlockMap<Integer>();
+	final static private BlockMap<org.bukkit.block.Block, Integer> wavecount = new BlockMap<org.bukkit.block.Block, Integer>();
 
 	public BC7003(org.bukkit.block.Block block) {
 		super(block);

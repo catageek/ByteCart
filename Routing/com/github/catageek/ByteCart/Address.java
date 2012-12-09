@@ -7,5 +7,6 @@ public interface Address {
 	public Registry getStation();
 	public boolean isTrain();
 	public boolean setAddress(String s);
-	public boolean copy(Address a);
+	public boolean setAddress(Address a);
+	public boolean setTrain(boolean istrain);
 }

@@ -29,26 +29,24 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	}
 
 	public void WishToGo(BlockFace from, BlockFace to, boolean isTrain) {
-		Side sfrom = getSide(from);
+//		Side sfrom = getSide(from);
 		Side sto = getSide(to);
 
 
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : coming from " + from + " going to " + to);
+			ByteCart.log.info("ByteCart : Router : coming from " + from + " going to " + to);
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : coming from " + sfrom + " going to " + sto);
+			ByteCart.log.info("ByteCart : Router : going to " + sto);
 
 		Router ca = this;
-
-		if(ByteCart.debug)
+/*
+		if(ByteCart.debug) {
 			ByteCart.log.info("ByteCart : position found  " + ca.getClass().toString());
-		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : Recently used ? " + recentlyUsed);
-		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : hasTrain ? " + hasTrain );
-		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : isTrain ? " + isTrain );
-
+		}
+*/
 		Side s = getSide(from, to);
 
 		if (this.getPosmask() != 255 || (!recentlyUsed && !hasTrain)) {
@@ -78,7 +76,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 			}
 
 			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : position changed to " + ca.getClass().toString());
+				ByteCart.log.info("ByteCart : Router : position changed to " + ca.getClass().toString());
 			// save router in collision avoider map
 			ByteCart.myPlugin.getCollisionAvoiderManager().setCollisionAvoider(getBlock(), ca);
 
@@ -161,14 +159,14 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 		BlockFace g = MathUtil.clockwise(from);
 		// Main output
 		OutputPin[] sortie = new OutputPin[4];
-		// South
-		sortie[3] = OutputPinFactory.getOutput(center.getRelative(BlockFace.WEST,3).getRelative(BlockFace.SOUTH));
-		// West
-		sortie[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.EAST,3).getRelative(BlockFace.NORTH));
-		// North
-		sortie[1] = OutputPinFactory.getOutput(center.getRelative(BlockFace.SOUTH,3).getRelative(BlockFace.EAST));
 		// East
-		sortie[0] = OutputPinFactory.getOutput(center.getRelative(BlockFace.NORTH,3).getRelative(BlockFace.WEST));
+		sortie[0] = OutputPinFactory.getOutput(center.getRelative(BlockFace.WEST,3).getRelative(BlockFace.SOUTH));
+		// North
+		sortie[1] = OutputPinFactory.getOutput(center.getRelative(BlockFace.EAST,3).getRelative(BlockFace.NORTH));
+		// South
+		sortie[3] = OutputPinFactory.getOutput(center.getRelative(BlockFace.SOUTH,3).getRelative(BlockFace.EAST));
+		// West
+		sortie[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.NORTH,3).getRelative(BlockFace.WEST));
 
 		Registry main = new PinRegistry<OutputPin>(sortie);
 
@@ -178,8 +176,6 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 
 		// Secondary output to make U-turn
 		OutputPin[] secondary = new OutputPin[8];
-		// third output to go left
-		//OutputPin[] third = new OutputPin[4];
 
 		for (int i=0; i<7; i++) {
 			// the first is Back

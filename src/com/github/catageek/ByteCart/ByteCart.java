@@ -12,11 +12,13 @@ public class ByteCart extends JavaPlugin {
 
 	public static boolean debug;
 	
-	private DelayedThreadManager dtm;
+	private DelayedThreadManager<Object> dtm;
 	
 	private CollisionAvoiderManager cam;
 	
 	private IsTrainManager it;
+	
+	private UpdaterManager um;
 	
 	public int Lockduration;
 	
@@ -38,14 +40,16 @@ public class ByteCart extends JavaPlugin {
     		log.info("ByteCart : debug mode is on.");
     	}
     	
-    	this.setDtm(new DelayedThreadManager());
+    	this.setDtm(new DelayedThreadManager<Object>());
     	this.setCam(new CollisionAvoiderManager());
     	this.setIt(new IsTrainManager());
+    	this.setUm(new UpdaterManager());
     	
     	getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
     	
     	getCommand("mego").setExecutor(new BytecartCommandExecutor());
-       	getCommand("followme").setExecutor(new BytecartCommandExecutor());
+       	getCommand("sendto").setExecutor(new BytecartCommandExecutor());
+       	getCommand("bcupdater").setExecutor(new BytecartCommandExecutor());
     }
      
     public void onDisable(){ 
@@ -60,14 +64,14 @@ public class ByteCart extends JavaPlugin {
 	/**
 	 * @return the dtm
 	 */
-	public DelayedThreadManager getDelayedThreadManager() {
+	public DelayedThreadManager<Object> getDelayedThreadManager() {
 		return dtm;
 	}
 
 	/**
 	 * @param dtm the dtm to set
 	 */
-	private void setDtm(DelayedThreadManager dtm) {
+	private void setDtm(DelayedThreadManager<Object> dtm) {
 		this.dtm = dtm;
 	}
 
@@ -97,6 +101,20 @@ public class ByteCart extends JavaPlugin {
 	 */
 	public void setIt(IsTrainManager it) {
 		this.it = it;
+	}
+
+	/**
+	 * @return the um
+	 */
+	public UpdaterManager getUm() {
+		return um;
+	}
+
+	/**
+	 * @param um the um to set
+	 */
+	public void setUm(UpdaterManager um) {
+		this.um = um;
 	}
     
    

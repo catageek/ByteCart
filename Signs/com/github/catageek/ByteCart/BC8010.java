@@ -1,5 +1,7 @@
 package com.github.catageek.ByteCart;
 
+import java.util.Random;
+
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
@@ -59,18 +61,12 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			// if ttl did not reach end of life ( = 0)
 			if (ttl != 0) {
 
-					IPaddress.updateTTL(ttl-1);
+				IPaddress.updateTTL(ttl-1);
 			}
 
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL());
 
-
-			DirectionRegistry direction = this.SelectRoute(IPaddress, sign, RoutingTable);
-			/*			
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : coming from " + this.getCardinal() + " going to " + direction.getBlockFace());
-			 */
 
 			// if this is the first car of a train
 			// we keep it during 2 s
@@ -78,8 +74,21 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 				this.setWasTrain(this.getBlock(), true);
 			}
 
+			DirectionRegistry direction;
+
+			DirectionRegistry from = new DirectionRegistry(this.getCardinal().getOppositeFace());
+			
+			int track = sign.getTrack().getAmount();
+
+			if(ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId()))
+				direction = this.Updater(RoutingTable, from, track);
+			else
+				direction = this.SelectRoute(IPaddress, sign, RoutingTable);
+			/*			
 			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : Direction is " + direction.getAmount());
+				ByteCart.log.info("ByteCart : coming from " + this.getCardinal() + " going to " + direction.getBlockFace());
+			 */
+
 
 			Router router = ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder);
 
@@ -129,6 +138,41 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			return RoutingTable.getDirection(IPaddress.getTrack().getAmount());
 		}
 
+	}
+
+	protected DirectionRegistry Updater(RoutingTable RoutingTable, DirectionRegistry from, int ring) {
+		
+		// Storing the route from where we arrive
+		
+		RoutingTable.setEntry(ring, MathUtil.binlog(from.getAmount()) << 4, 0);
+
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : Updater : storing ring " + ring + " direction " + from.ToString());
+
+		// loading received routes in router
+		RoutingTableExchange routes = ByteCart.myPlugin.getUm().getMap().getValue(this.getVehicle().getEntityId());
+		if (routes != null)
+			RoutingTable.Update(routes, from);
+
+		// selecting a random destination
+		boolean zerodistance = RoutingTable.getDistance(0) == 0;
+		int zerodirection = RoutingTable.getDirection(0).getAmount();
+		
+		DirectionRegistry direction;
+		do {
+			direction = new DirectionRegistry(1 << (new Random()).nextInt(4));
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart : Updater : direction selected " + direction.ToString());
+		}
+		while (direction.getAmount() == from.getAmount() || (zerodistance && (zerodirection == direction.getAmount())));
+		
+		// preparing the routes to send
+		routes = new RoutingTableExchange(RoutingTable, direction);
+		
+		// storing the route in the map
+		ByteCart.myPlugin.getUm().getMap().updateValue(this.getVehicle().getEntityId(), routes);
+		
+		return direction;
 	}
 
 

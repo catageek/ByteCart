@@ -77,11 +77,10 @@ public class InventorySlot implements Registry {
 	public void setAmount(int amount) {
 
 		ItemStack stack = this.Inventory.getItem(this.Index);
-		int dest = stack.getAmount();
 		
 		// if stack is empty, use cobble
-		if(dest == 0)
-			stack.setType(Material.COBBLESTONE);
+		if(stack == null)
+			stack = new ItemStack(Material.COBBLESTONE);
 		
 		// copy value to stack object. empty stack not permitted
 		if (amount % (1 << this.length()) == 0)  // if amount modulo 64 = 0

@@ -24,18 +24,17 @@ public final class DirectionRegistry {
 
 	public final void setCardinal(BlockFace face, boolean value) {
 		
-		// here we correct the bukkit API error on BlockFace values
 		switch(face) {
-		case SOUTH:
+		case EAST:
 			this.registry.setBit(0, value);
 			break;
-		case EAST:
+		case NORTH:
 			this.registry.setBit(1, value);
 			break;
-		case NORTH:
+		case WEST:
 			this.registry.setBit(2, value);
 			break;
-		case WEST:
+		case SOUTH:
 			this.registry.setBit(3, value);
 		}
 
@@ -58,13 +57,13 @@ public final class DirectionRegistry {
 	public final BlockFace getBlockFace() {
 		switch(this.getAmount()) {
 		case 1:
-			return BlockFace.WEST;
-		case 2:
-			return BlockFace.NORTH;
-		case 4:
-			return BlockFace.EAST;
-		case 8:
 			return BlockFace.SOUTH;
+		case 2:
+			return BlockFace.WEST;
+		case 4:
+			return BlockFace.NORTH;
+		case 8:
+			return BlockFace.EAST;
 		}
 		return BlockFace.SELF;
 	}

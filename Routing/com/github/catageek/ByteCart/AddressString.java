@@ -64,7 +64,7 @@ public class AddressString extends AbstractAddress implements Address {
 		String[] st = this.String.split("\\.");
 		return Integer.parseInt(st[ index ].trim());
 	}
-
+	
 	@Override
 	public void setRegion(int region) {
 		// TODO Auto-generated method stub
@@ -85,7 +85,10 @@ public class AddressString extends AbstractAddress implements Address {
 
 	@Override
 	public void setIsTrain(boolean isTrain) {
-		// TODO Auto-generated method stub
+		Registry tmp = new VirtualRegistry(6);
+		tmp.setAmount(this.getField(2));
+		tmp.setBit(Offsets.ISTRAIN.getOffset(), isTrain);
+		this.String = this.getField(0) + "." + this.getField(1) + "." + tmp.getAmount();
 		return;
 	}
 

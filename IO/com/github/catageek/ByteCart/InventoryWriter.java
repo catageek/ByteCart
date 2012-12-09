@@ -57,7 +57,7 @@ public final class InventoryWriter {
 		 * Map storing (type, Set<ItemStack>) ordered
 		 * by ascending distance to Value
 		 */
-		Map<Integer, Set<ItemStack>> Map = new TreeMap<Integer, Set<ItemStack>>(new InventoryWriterComparator<Integer>(value, typemap));
+		Map<Integer, Set<ItemStack>> MapStackSet = new TreeMap<Integer, Set<ItemStack>>(new InventoryWriterComparator<Integer>(value, typemap));
 
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: Writing value " + value + " to slot #" + pos);
@@ -100,7 +100,7 @@ public final class InventoryWriter {
 				}
 				if(! strict || this.getTotal(stackset) >= value) {
 					// 	we record the set in the map
-					Map.put(stack.getTypeId(), stackset);
+					MapStackSet.put(stack.getTypeId(), stackset);
 				}
 				
 			}
@@ -112,22 +112,16 @@ public final class InventoryWriter {
 		 */
 		/*
 		 * now we have built Map and typemap
-		 * we convert Map in ArrayList (??)
-		 * TODO
-		 */
-		ArrayList<Set<ItemStack>> mylist = new ArrayList<Set<ItemStack>>(Map.values());
-
+		*/
+		
 		int target = -1;
 
-		for (ListIterator<Set<ItemStack>> it = mylist.listIterator(); (target == -1) && it.hasNext();) {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: index = " + it.nextIndex());
-
-			// we try to use each type until find a good one
-			target = this.reorganize(Inventory, it.next(), value, strict);
-			// target is the slot where the value is now written, or -1
+		for (Map.Entry<Integer, Set<ItemStack>> entry : MapStackSet.entrySet()) {
+			target = this.reorganize(Inventory, entry.getValue(), value, strict);
+			if (target != -1)
+				break;
 		}
-
+		
 		typemap.clear();
 
 		if (target == -1) {

@@ -1,12 +1,10 @@
 package com.github.catageek.ByteCart;
 
-import org.bukkit.block.Block;
-
 /*
  * HashMap that keeps entries during "duration" ticks
  */
 
-public final class EphemeralBlockMap<T> extends BlockMap<T> {
+public final class EphemeralBlockMap<K, T> extends BlockMap<K, T> {
 	
 	private int Duration;
 
@@ -16,7 +14,7 @@ public final class EphemeralBlockMap<T> extends BlockMap<T> {
 	}
 	
 	@Override
-	public boolean createEntry(Block block, T id) {
+	public boolean createEntry(K block, T id) {
 		if ( this.getMap().put(block, id) == null ) {
 			ByteCart.myPlugin.getDelayedThreadManager().createUnsynchronizedReleaseTask(block, this.Duration, new Suppress(this, block));
 			return true;
@@ -28,7 +26,7 @@ public final class EphemeralBlockMap<T> extends BlockMap<T> {
 	 * update the value associated with key 'block' and reset timer 
 	 */
 	@Override
-	public final boolean updateValue(Block block, T id) {
+	public final boolean updateValue(K block, T id) {
 		ping(block);
 		return this.getMap().put(block, id) == null;
 	}
@@ -36,16 +34,16 @@ public final class EphemeralBlockMap<T> extends BlockMap<T> {
 	/*
 	 * reset timer
 	 */
-	public final void ping(Block block) {
+	public final void ping(K block) {
 		ByteCart.myPlugin.getDelayedThreadManager().renewAsync(block, this.Duration, new Suppress(this, block));
 	}
 
 	private final class Suppress implements Runnable {
 		
-		private final Block block;
-		private final BlockMap<T> map;
+		private final K block;
+		private final BlockMap<K, T> map;
 		
-		public Suppress(EphemeralBlockMap<T> map, Block block) {
+		public Suppress(EphemeralBlockMap<K, T> map, K block) {
 			this.block = block;
 			this.map = map;
 		}

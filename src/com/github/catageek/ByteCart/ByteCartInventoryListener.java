@@ -1,6 +1,5 @@
 package com.github.catageek.ByteCart;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.EventHandler;
@@ -11,12 +10,12 @@ import org.bukkit.inventory.Inventory;
 
 public class ByteCartInventoryListener implements Listener {
 
-	private final Address Address;
 	private final Player Player;
+	private final ModifiableRunnable<Inventory> Execute;
 
-	ByteCartInventoryListener(ByteCart plugin, Player player, Address address) {
-		this.Address = address;
+	ByteCartInventoryListener(ByteCart plugin, Player player, ModifiableRunnable<Inventory> execute) {
 		this.Player = player;
+		this.Execute = execute;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
@@ -28,15 +27,8 @@ public class ByteCartInventoryListener implements Listener {
 			return;
 		}
 
-		Inventory inventory = event.getInventory();
-		
-		if ((new BC7011(event.getPlayer().getLocation().getBlock(), ((StorageMinecart) inventory.getHolder()))).setAddress(Address)) {
-			Player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress"));
-			Player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.GetTTL") + AddressFactory.<AddressRouted>getAddress(inventory).getTTL());
-		}
-		else
-			Player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
-
+		this.Execute.SetParam(event.getInventory());
+		this.Execute.run();
 
 		event.setCancelled(true);
 

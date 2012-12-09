@@ -4,12 +4,12 @@ import org.bukkit.block.Block;
 
 public final class CollisionAvoiderManager {
 
-	private final BlockMap<CollisionAvoider> manager = new EphemeralBlockMap<CollisionAvoider>(80);
+	private final BlockMap<Block, CollisionAvoider> manager = new EphemeralBlockMap<Block, CollisionAvoider>(80);
 
 	/**
 	 * @return the manager
 	 */
-	private BlockMap<CollisionAvoider> getManager() {
+	private BlockMap<Block, CollisionAvoider> getManager() {
 		return manager;
 	}
 

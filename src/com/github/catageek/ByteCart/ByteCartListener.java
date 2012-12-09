@@ -124,6 +124,7 @@ public class ByteCartListener implements Listener {
 			if (myIC != null) {
 				if (! event.getPlayer().hasPermission(myIC.getBuildPermission())) {
 					event.getPlayer().sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED +"You are not authorized to place " + myIC.getFriendlyName() + " block.");
+					event.getPlayer().sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED +"You must have " + myIC.getBuildPermission());
 					event.setLine(1, "");
 				}
 				else

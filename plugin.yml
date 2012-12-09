@@ -19,6 +19,7 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
+            bytecart.bcupdater: true
 
     bytecart.helper:
         description: give acces to small subnets and station blocks
@@ -29,7 +30,7 @@ permissions:
             bytecart.BC7003: true
             bytecart.BC7010: true
             bytecart.BC7011: false
-            bytecart.BC8010: false
+            bytecart.BC8010: true
             bytecart.BC8020: false
             bytecart.BC9000: true
             bytecart.BC9001: true
@@ -47,7 +48,7 @@ permissions:
             bytecart.BC7003: true
             bytecart.BC7010: true
             bytecart.BC7011: false
-            bytecart.BC8010: false
+            bytecart.BC8010: true
             bytecart.BC8020: false
             bytecart.BC9000: true
             bytecart.BC9001: true
@@ -68,7 +69,7 @@ permissions:
     bytecart.BC7011:
         default: false
     bytecart.BC8010:
-        default: false
+        default: true
     bytecart.BC8020:
         default: false
     bytecart.BC9000:
@@ -85,18 +86,26 @@ permissions:
         default: false
     bytecart.mego:
         default: true
-    bytecart.followme:
+    bytecart.sendto:
         default: true
+    bytecart.bcupdater:
+        default: false
 
 commands:
     mego:
         description: set <plugin name> destination address in your inventory
-        usage: "Usage : /<command> address, where address is formatted as a.b.c"
+        usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
         permission: <plugin name>.mego
         permission-message: You don't have permission <permission>
         
-    followme:
+    sendto:
         description: set <plugin name> destination address in a storage cart inventory
-        usage: "Usage : /<command> address, where address is formatted as a.b.c"
-        permission: <plugin name>.followme
+        usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
+        permission: <plugin name>.sendto
+        permission-message: You don't have permission <permission>
+
+    bcupdater:
+        description: set a cart as Updater for <plugin name>
+        usage: "Usage : /<command>"
+        permission: <plugin name>.bcupdater
         permission-message: You don't have permission <permission>

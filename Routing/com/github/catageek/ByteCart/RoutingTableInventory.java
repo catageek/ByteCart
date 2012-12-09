@@ -1,7 +1,7 @@
 package com.github.catageek.ByteCart;
 
 
-public final class RoutingTableInventory implements RoutingTable {
+public final class RoutingTableInventory extends AbstractRoutingTable implements RoutingTable {
 	
 	private final org.bukkit.inventory.Inventory Inventory;
 	
@@ -16,9 +16,9 @@ public final class RoutingTableInventory implements RoutingTable {
 	}
 
 	@Override
-	public Registry getDistance(int entry) {
+	public int getDistance(int entry) {
 		Registry reg = new InventorySlot(this.Inventory, entry);
-		return new SubRegistry(reg, 4, 2);
+		return new SubRegistry(reg, 4, 2).getAmount();
 	}
 
 	/**
@@ -26,6 +26,22 @@ public final class RoutingTableInventory implements RoutingTable {
 	 */
 	public org.bukkit.inventory.Inventory getInventory() {
 		return Inventory;
+	}
+
+	@Override
+	public int getSize() {
+		return Inventory.getSize();
+	}
+
+	@Override
+	public void setEntry(int entry, int direction, int distance) {
+		Registry reg = new InventorySlot(this.Inventory, entry);
+		reg.setAmount(direction+distance);
+	}
+
+	@Override
+	public boolean isEmpty(int entry) {
+		return (Inventory.getItem(entry) == null);
 	}
 
 }

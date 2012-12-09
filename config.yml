@@ -51,6 +51,9 @@ Info.SetAddress2: Ne touchez pas a votre inventaire
 Info.RightClickCart: Clic droit sur un storage cart
                      pour fixer son adresse de destination
 
+#Updater
+Info.SetUpdater: "This cart is now an Updater !"
+
 # Maximum # of used routers
 Info.GetTTL: "nb max de routeurs : "
 

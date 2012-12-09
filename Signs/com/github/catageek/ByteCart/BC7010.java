@@ -56,7 +56,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 	final protected boolean setAddress(Address SignAddress){
 		AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
 
-		if (!IPaddress.copy(SignAddress)) {
+		if (!IPaddress.setAddress(SignAddress)) {
 
 			if (this.getInventory().getHolder() instanceof Player) {
 					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );

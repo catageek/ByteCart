@@ -3,36 +3,24 @@ package com.github.catageek.ByteCart;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.util.NumberConversions;
 
 public class MathUtil {
 
-    public static final int floor(double d) {
-        int rt = (int) d;
-        return rt > d ? rt - 1 : rt;
-    }
-
-    public static final int offsetfloor(double d) {
-    	double e = d - 0.5;
-        int rt = (int) e;
-        return rt > e ? rt - 1 : rt;
-    }
-
     public static final boolean isSameBlock(Location from, Location to) {
 
-        return floor(from.getX()) == floor(to.getX()) && floor(from.getZ()) == floor(to.getZ());
+        return NumberConversions.floor(from.getX()) == NumberConversions.floor(to.getX())
+        		&& NumberConversions.floor(from.getZ()) == NumberConversions.floor(to.getZ());
     }
     
-    public static final boolean isMiddleBlock(Location from, Location to) {
-		if(ByteCart.debug && offsetfloor(from.getZ()) <= 168 && offsetfloor(from.getZ()) >= 166) {
-			ByteCart.log.info("ByteCart : isMiddleblock " + from.getZ() + " " + to.getZ());
-			ByteCart.log.info("ByteCart : isMiddleblock offset" + offsetfloor(from.getZ()) + " " + offsetfloor(to.getZ()));
-		}
-    	return offsetfloor(from.getX()) == offsetfloor(to.getX()) && offsetfloor(from.getZ()) == offsetfloor(to.getZ());
-    	
-    }
-
-    public static final double abs(double d) {
-        return d < 0 ? -d : d;
+    public static int binlog( int bits ) // returns 0 for bits=0
+    {
+        int log = 0;
+//        if( ( bits & 0xffff0000 ) != 0 ) { bits >>>= 16; log = 16; }
+//        if( bits >= 256 ) { bits >>>= 8; log += 8; }
+//        if( bits >= 16  ) { bits >>>= 4; log += 4; }
+        if( bits >= 4   ) { bits >>>= 2; log += 2; }
+        return log + ( bits >>> 1 );
     }
     
     public static final BlockFace clockwise(BlockFace b) {
