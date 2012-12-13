@@ -28,31 +28,31 @@ abstract public class AbstractIC implements IC {
 		this.Block = block;
 	}
 
-	public void addInputRegistry(RegistryInput reg) {
+	public final void addInputRegistry(RegistryInput reg) {
 		this.input[this.input_args++] = reg;
 /*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : added 1 input registry");
 */	}
 	
-	public void addOutputRegistry(RegistryOutput reg) {
+	public final void addOutputRegistry(RegistryOutput reg) {
 		this.output[this.output_args++] = reg;
 /*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : added 1 output registry");
 */	}
 
-	public RegistryInput getInput(int index) {
+	public final RegistryInput getInput(int index) {
 		return input[index];
 	}
 
-	public RegistryOutput getOutput(int index) {
+	public final RegistryOutput getOutput(int index) {
 		return output[index];
 	}
 
 	
 	// This function checks if we have a ByteCart sign at this location
-	static public boolean checkEligibility(Block b){
+	static public final boolean checkEligibility(Block b){
 
-		if(b.getTypeId() != Material.SIGN_POST.getId() && b.getTypeId() != Material.WALL_SIGN.getId()) {
+		if(b.getType() != Material.SIGN_POST && b.getType() != Material.WALL_SIGN) {
 			return false;
 		}
 		
@@ -60,7 +60,7 @@ abstract public class AbstractIC implements IC {
 		
 	}
 
-	static public boolean checkEligibility(String s){
+	static public final boolean checkEligibility(String s){
 		
 		if(! (s.matches("\\[BC[0-9]{4,4}\\]"))) {
 			return false;
@@ -71,7 +71,7 @@ abstract public class AbstractIC implements IC {
 	}
 
 	
-	public BlockFace getCardinal() {
+	public final BlockFace getCardinal() {
 		try {
 			return ((org.bukkit.material.Sign) this.getBlock().getState().getData()).getFacing().getOppositeFace();
 		}
@@ -81,27 +81,27 @@ abstract public class AbstractIC implements IC {
 		}
 	}
 
-	public Block getBlock() {
+	public final Block getBlock() {
 		return Block;
 	}
 	
-	public String getBuildPermission() {
+	public final String getBuildPermission() {
 		return this.Permission;
 	}
 
-	public String getName() {
+	public final String getName() {
 		return Name;
 	}
 
-	public String getFriendlyName() {
+	public final String getFriendlyName() {
 		return this.FriendlyName;
 	}
 
-	public int getTriggertax() {
+	public final int getTriggertax() {
 		return Triggertax;
 	}
 
-	public int getBuildtax() {
+	public final int getBuildtax() {
 		return Buildtax;
 	}
 	

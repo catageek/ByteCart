@@ -139,8 +139,10 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 			 */
 			if (it.next() instanceof Minecart) {
 				it.previous();
+				
+				Location cartloc = ((Minecart) it.next()).getLocation();
 
-				if ( MathUtil.isSameBlock(((Minecart) it.next()).getLocation(), loc)) {
+				if ( cartloc.getBlockX() == loc.getBlockX() && cartloc.getBlockZ() == loc.getBlockZ()) {
 					it.previous();
 
 					// found ! we instantiate a new IC with the vehicle we found

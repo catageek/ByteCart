@@ -1,12 +1,16 @@
 package com.github.catageek.ByteCart;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -14,6 +18,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.util.Vector;
 
 
@@ -21,31 +26,81 @@ import org.bukkit.util.Vector;
 public class ByteCartListener implements Listener {
 
 	private PoweredICFactory MyPoweredICFactory;
+	private final Vector NullVector = new Vector(0,0,0);
 
 
 	ByteCartListener() {
 		this.MyPoweredICFactory = new PoweredICFactory();
 	}
+	/*
+	@EventHandler(ignoreCancelled = true)
+	public void onVehicleUpdate(VehicleUpdateEvent event) {
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart: onVehiculeUpdate vehicule at " + event.getVehicle().getLocation());
+
+	}
+	 */
 
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleMove(VehicleMoveEvent event) {
 
+		Location loc = event.getFrom();
+		Integer from_x = loc.getBlockX();
+		Integer from_z = loc.getBlockZ();
+		loc = event.getTo();
+		int to_x = loc.getBlockX();
+		int to_z = loc.getBlockZ();
 
-		Vehicle vehicle = event.getVehicle();
-		Player player;
-		int tax;
 
 		// Check if the vehicle crosses a cube boundary
-		if(MathUtil.isSameBlock(event.getFrom(),event.getTo()))
+		if(from_x == to_x && from_z == to_z)
 			return;	// no boundary crossed, resumed
 
-		if(vehicle instanceof Minecart) // we care only of minecart
+		if(event.getVehicle() instanceof Minecart) // we care only of minecart
 		{
+			Minecart vehicle = (Minecart) event.getVehicle();
+			
+			// preload and postload chunks
+			
+			from_x >>= 4;
+			from_z >>= 4;
+			to_x >>= 4;
+			to_z >>= 4;
+
+			int a = from_x.compareTo(to_x);
+
+			if(a != 0) {
+				// we enter a new chunk
+				if (a > 0)
+					MathUtil.unloadChunkXAxis(loc.getWorld(), from_x + 2, from_z);
+				else
+					MathUtil.unloadChunkXAxis(loc.getWorld(), from_x - 2, from_z);
+
+				MathUtil.loadChunkAround(loc.getWorld(), to_x, to_z);				
+			}
+			else {
+
+				a = from_z.compareTo(to_z);
+
+				if(a != 0){
+					// we enter a new chunk
+					if (a > 0)
+						MathUtil.unloadChunkZAxis(loc.getWorld(), from_x, from_z + 2);
+					else
+						MathUtil.unloadChunkZAxis(loc.getWorld(), from_x, from_z - 2);
+
+					MathUtil.loadChunkAround(loc.getWorld(), to_x, to_z);				
+				}
+			}
+
 
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
 
-			TriggeredIC myIC = TriggeredICFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),event.getVehicle());
+			TriggeredIC myIC = TriggeredICFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
+
+			Player player;
+			int tax;
 
 			if (myIC != null) {
 
@@ -54,13 +109,8 @@ public class ByteCartListener implements Listener {
 				 */
 				myIC.trigger();
 
-				if (myIC instanceof BC8010) {
-					vehicle.setVelocity((new Vector(((AbstractIC) myIC).getCardinal().getModX(), ((AbstractIC) myIC).getCardinal().getModY(), ((AbstractIC) myIC).getCardinal().getModZ())).multiply(1.5));
-					/*			ByteCart.myPlugin.getServer().broadcastMessage(myIC.getName() + " Velocity : " + (float) vehicle.getVelocity().length());
-					 */		}
-
 				if ((! vehicle.isEmpty())
-						&& ((Minecart) vehicle).getPassenger() instanceof Player) {
+						&& vehicle.getPassenger() instanceof Player) {
 
 					player = (Player) vehicle.getPassenger();
 					tax = myIC.getTriggertax();
@@ -78,17 +128,17 @@ public class ByteCartListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleCreate(VehicleCreateEvent event) {
 
-		Vehicle vehicle = event.getVehicle();
 		Player player;
 		int tax;
 
-		if(vehicle instanceof Minecart) // we care only of minecart
+		if(event.getVehicle() instanceof Minecart) // we care only of minecart
 		{
 
+			Minecart vehicle = (Minecart) event.getVehicle();
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
 
-			TriggeredIC myIC = TriggeredICFactory.getTriggeredIC(event.getVehicle().getLocation().getBlock().getRelative(BlockFace.DOWN, 2),event.getVehicle());
+			TriggeredIC myIC = TriggeredICFactory.getTriggeredIC(vehicle.getLocation().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
 
 			if (myIC != null) {
 				myIC.trigger();
@@ -96,7 +146,7 @@ public class ByteCartListener implements Listener {
 
 
 				if ((! vehicle.isEmpty())
-						&& ((Minecart) vehicle).getPassenger() instanceof Player) {
+						&& vehicle.getPassenger() instanceof Player) {
 
 					player = (Player) vehicle.getPassenger();
 					tax = myIC.getTriggertax();
@@ -175,5 +225,41 @@ public class ByteCartListener implements Listener {
 		}
 	}
 
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onChunkUnload(ChunkUnloadEvent event) {
 
+		Entity[] entities = event.getChunk().getEntities();
+		int i = entities.length -1;
+
+		/*		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart: Chunk requested to be unloaded at " + event.getChunk());
+		 */
+		for (; i >=0; --i) {
+			if (entities[i] instanceof StorageMinecart && !((StorageMinecart)entities[i]).getVelocity().equals(NullVector)) {
+
+				event.setCancelled(true);
+
+				ByteCart.myPlugin.getServer().getScheduler().runTaskLaterAsynchronously(ByteCart.myPlugin, new LoadChunks(event.getChunk()), 1);
+
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
+				return;
+			}
+		}
+	}
+
+	private static final class LoadChunks implements Runnable {
+
+		private final Chunk Chunk;
+
+		LoadChunks(Chunk chunk) {
+			Chunk = chunk;
+		}
+
+		@Override
+		public void run() {
+			MathUtil.loadChunkAround(Chunk.getWorld(), Chunk.getX(), Chunk.getZ());
+		}
+
+	}
 }
