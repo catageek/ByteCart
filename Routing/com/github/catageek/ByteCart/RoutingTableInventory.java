@@ -1,5 +1,10 @@
 package com.github.catageek.ByteCart;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
 
 public final class RoutingTableInventory extends AbstractRoutingTable implements RoutingTable {
 	
@@ -43,5 +48,16 @@ public final class RoutingTableInventory extends AbstractRoutingTable implements
 	public boolean isEmpty(int entry) {
 		return (Inventory.getItem(entry) == null);
 	}
+	
+	public Set<Entry<Integer,Integer>> getRoutesTo(DirectionRegistry direction) {
+		Map<Integer, Integer> tablemap = new HashMap<Integer, Integer>();
+		
+		for(int i = 0; i< this.getSize(); i++) {
+			if(! this.isEmpty(i) && this.getDirection(i) == direction)
+				tablemap.put(i, this.getDistance(i));
+		}
+		return tablemap.entrySet();
+	}
+
 
 }

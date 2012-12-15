@@ -3,6 +3,9 @@
  */
 package com.github.catageek.ByteCart;
 
+import java.util.Set;
+import java.util.Map.Entry;
+
 
 // A route in routing table
 public interface RoutingTable {
@@ -12,4 +15,5 @@ public interface RoutingTable {
 	public void Update(RoutingTableExchange neighbour, DirectionRegistry from);
 	public boolean isEmpty(int entry);
 	public int getSize();
+	public Set<Entry<Integer,Integer>> getRoutesTo(DirectionRegistry direction);
 }
