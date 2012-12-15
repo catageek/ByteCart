@@ -239,7 +239,7 @@ public class ByteCartListener implements Listener {
 
 				event.setCancelled(true);
 
-				ByteCart.myPlugin.getServer().getScheduler().runTaskLaterAsynchronously(ByteCart.myPlugin, new LoadChunks(event.getChunk()), 1);
+				ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new LoadChunks(event.getChunk()), 1);
 
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
