@@ -16,7 +16,7 @@ public final class EphemeralBlockMap<K, T> extends BlockMap<K, T> {
 	@Override
 	public boolean createEntry(K block, T id) {
 		if ( this.getMap().put(block, id) == null ) {
-			ByteCart.myPlugin.getDelayedThreadManager().createUnsynchronizedReleaseTask(block, this.Duration, new Suppress(this, block));
+			ByteCart.myPlugin.getDelayedThreadManager().renewAsync(block, this.Duration, new Suppress(this, block));
 			return true;
 		}
 		return false;

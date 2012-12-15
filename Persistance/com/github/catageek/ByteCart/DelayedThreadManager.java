@@ -4,26 +4,37 @@ import org.bukkit.scheduler.BukkitTask;
 
 public final class DelayedThreadManager<K> {
 
-	final private BlockMap<K, Integer> DelayedThread = new BlockMap<K, Integer>();
+	final private class IdRunnable {
+		public final int id;
+		public final Runnable task;
+		
+		public IdRunnable(int id, Runnable task) {
+			this.id = id;
+			this.task = task;
+		}
+	}
+	
+	final private BlockMap<K, IdRunnable> DelayedThread = new BlockMap<K, IdRunnable>();
 
 	/*
 	 * create a release task
 	 */
 	private synchronized final void createReleaseTask(K block, int duration, Runnable ReleaseTask) {
-		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new Execute(this, ReleaseTask, block)
+		
+		Runnable task = new Execute(this, ReleaseTask, block);
+		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, task
 				, duration);
 
-		// the id of the thread is stored in a static map
-		this.DelayedThread.createEntry(block, id);
+		// the id of the thread and the task are stored in a static map
+		this.DelayedThread.createEntry(block, new IdRunnable(id, task));
 	}
 
-	protected synchronized final void createUnsynchronizedReleaseTask(K block, int duration, Runnable ReleaseTask) {
-//		int id = ByteCart.myPlugin.getServer().getScheduler().scheduleAsyncDelayedTask(ByteCart.myPlugin, new Execute(this, ReleaseTask, block)
-//				, duration);
-		BukkitTask bt = ByteCart.myPlugin.getServer().getScheduler().runTaskLaterAsynchronously(ByteCart.myPlugin, new Execute(this, ReleaseTask, block), duration);
+	private synchronized final void createUnsynchronizedReleaseTask(K block, int duration, Runnable ReleaseTask) {
+		Runnable task = new Execute(this, ReleaseTask, block);
+		BukkitTask bt = ByteCart.myPlugin.getServer().getScheduler().runTaskLaterAsynchronously(ByteCart.myPlugin, task, duration);
 
 		// the id of the thread is stored in a static map
-		this.DelayedThread.createEntry(block, bt.getTaskId());
+		this.DelayedThread.createEntry(block, new IdRunnable(bt.getTaskId(), task));
 	}
 
 
@@ -38,11 +49,11 @@ public final class DelayedThreadManager<K> {
 	protected synchronized final void renew(K block, int duration, Runnable ReleaseTask) {
 		if(this.hasReleaseTask(block)) {
 			// we cancel the release task
-			ByteCart.myPlugin.getServer().getScheduler().cancelTask((Integer) this.DelayedThread.getValue(block));
+			ByteCart.myPlugin.getServer().getScheduler().cancelTask((Integer) this.DelayedThread.getValue(block).id);
 			// we schedule a new one
-			int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new Execute(this, ReleaseTask, block), duration);
+			int id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, this.DelayedThread.getValue(block).task, duration);
 			// we update the hashmap
-			this.DelayedThread.updateValue(block, id);
+			this.DelayedThread.updateValue(block, new IdRunnable(id, this.DelayedThread.getValue(block).task));
 		}
 		else {
 			this.createReleaseTask(block, duration, ReleaseTask);
@@ -52,12 +63,12 @@ public final class DelayedThreadManager<K> {
 	protected synchronized final void renewAsync(K block, int duration, Runnable ReleaseTask) {
 		if(this.hasReleaseTask(block)) {
 			// we cancel the release task
-			ByteCart.myPlugin.getServer().getScheduler().cancelTask((Integer) this.DelayedThread.getValue(block));
+			ByteCart.myPlugin.getServer().getScheduler().cancelTask((Integer) this.DelayedThread.getValue(block).id);
 			// we schedule a new one
 			//int id = ByteCart.myPlugin.getServer().getScheduler().scheduleAsyncDelayedTask(ByteCart.myPlugin, new Execute(this, ReleaseTask, block), duration);
-			BukkitTask bt = ByteCart.myPlugin.getServer().getScheduler().runTaskLaterAsynchronously(ByteCart.myPlugin, new Execute(this, ReleaseTask, block), duration);
+			BukkitTask bt = ByteCart.myPlugin.getServer().getScheduler().runTaskLaterAsynchronously(ByteCart.myPlugin, this.DelayedThread.getValue(block).task, duration);
 			// we update the hashmap
-			this.DelayedThread.updateValue(block, bt.getTaskId());
+			this.DelayedThread.updateValue(block, new IdRunnable(bt.getTaskId(), this.DelayedThread.getValue(block).task));
 		}
 		else {
 			this.createUnsynchronizedReleaseTask(block, duration, ReleaseTask);
