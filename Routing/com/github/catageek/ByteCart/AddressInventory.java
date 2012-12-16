@@ -124,7 +124,7 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 			return ByteCart.myPlugin.getConfig().getInt("TTL.value");
 		}
 		else
-			return (new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TTL.getSlot()), Offsets.TTL.getLength(), Offsets.TTL.getOffset())).getAmount();
+			return (new SubRegistry(new InventorySlot(this.getInventory(), Slots.TTL.getSlot(), Offsets.TTL.getLength()), Offsets.TTL.getLength(), Offsets.TTL.getOffset())).getAmount();
 	}
 
 	@Override

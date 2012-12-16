@@ -17,6 +17,10 @@ public class RoutingTableExchange {
 		return tablemap.size();
 	}
 	
+	public boolean hasRouteTo(int ring) {
+		return tablemap.containsKey(ring);
+	}
+	
 	public Set<Entry<Integer,Integer>> getEntrySet() {
 		return tablemap.entrySet();
 	}

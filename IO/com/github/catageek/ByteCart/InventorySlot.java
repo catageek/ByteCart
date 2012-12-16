@@ -4,23 +4,27 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class InventorySlot implements Registry {
+public final class InventorySlot implements Registry {
 	
-	private Inventory Inventory;
-	private int Index;
+	private final Inventory Inventory;
+	private final int Index;
+	private final int length;
 	
+	// default length is 6
 	public InventorySlot(Inventory inv, int index) {
+		this(inv, index, 6);
+	}
+
+	public InventorySlot(Inventory inv, int slot,
+			int length) {
 		this.Inventory = inv;
-		this.Index = index;
-		
-/*		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : adding Inventory slot #" + index);
-*/
+		this.Index = slot;
+		this.length = length;
 	}
 
 	@Override
 	public int length() {
-		return 6;
+		return length;
 	}
 
 	@Override

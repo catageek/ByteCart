@@ -9,7 +9,7 @@ public abstract class AbstractAddress implements Address {
 		STATION(4, 2),
 		ISTRAIN(1, 0),
 		UNUSED(1, 1),
-		TTL();
+		TTL(7, 0);
 
 		private final int Length, Offset;
 
