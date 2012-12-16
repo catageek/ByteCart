@@ -8,35 +8,35 @@ public class BlockMap<K, T> {
 	final private java.util.Map<K,T> Map = Collections.synchronizedMap(new HashMap<K,T>());
 
 	/*
-	 * creates a token with a pair of keys (block, id)
+	 * creates an entry with a pair (key, value)
 	 */
-	public boolean createEntry(K block, T id) {
-		return this.getMap().put(block, id) == null;
+	public boolean createEntry(K key, T value) {
+		return this.getMap().put(key, value) == null;
 	}
 
 	/*
-	 * delete the token associated with key 'block' 
+	 * delete the entry associated with key 'key' 
 	 */
-	public void deleteEntry(K block) {
-		this.getMap().remove(block);
+	public void deleteEntry(K key) {
+		this.getMap().remove(key);
 	}
 
 	/*
-	 * tells if there is a token with key 'block'
+	 * tells if there is a entry with key 'key'
 	 */
-	public final boolean hasEntry(K block) {
-		return this.getMap().containsKey(block);
+	public final boolean hasEntry(K key) {
+		return this.getMap().containsKey(key);
 	}
 
 	/*
-	 * returns the vehicle id associated with the block
+	 * returns the value associated with the key
 	 */
-	public final T getValue(K block) {
-		return this.getMap().get(block);
+	public final T getValue(K key) {
+		return this.getMap().get(key);
 	}
 	
-	public boolean updateValue(K block, T id) {
-		return this.createEntry(block, id);
+	public boolean updateValue(K key, T value) {
+		return this.createEntry(key, value);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package com.github.catageek.ByteCart;
 
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 
 public interface TriggeredIC extends IC {
 	public RegistryInput getInput(int index);
@@ -9,5 +9,5 @@ public interface TriggeredIC extends IC {
 	public void addOutputRegistry(RegistryOutput reg);
 	public void trigger();
 	public boolean isTrain();
-	public boolean wasTrain(Block block);
+	public boolean wasTrain(Location loc);
 }

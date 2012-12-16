@@ -10,6 +10,7 @@ import org.bukkit.block.Sign;
 abstract public class AbstractIC implements IC {
 	
 	final private Block Block;
+	final private org.bukkit.Location Location;
 	
 	protected String Name = "";
 	protected String FriendlyName;
@@ -26,6 +27,7 @@ abstract public class AbstractIC implements IC {
 	
 	public AbstractIC(Block block) {
 		this.Block = block;
+		this.Location = block.getLocation();
 	}
 
 	public final void addInputRegistry(RegistryInput reg) {
@@ -104,6 +106,16 @@ abstract public class AbstractIC implements IC {
 	public final int getBuildtax() {
 		return Buildtax;
 	}
+
+	public org.bukkit.Location getLocation() {
+		return Location;
+	}
 	
+	public boolean wasTrain(org.bukkit.Location loc) {
+		return false;
+	}
 	
+	public boolean isTrain() {
+		return false;
+	}
 }

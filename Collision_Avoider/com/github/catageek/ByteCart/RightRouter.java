@@ -13,7 +13,7 @@ public final class RightRouter extends AbstractRouter implements
 		FromTo.put(Side.STRAIGHT, Side.STRAIGHT);
 		FromTo.put(Side.RIGHT, Side.BACK);
 
-		secondpos = Integer.parseInt("00101001", 2);
+		setSecondpos(Integer.parseInt("00101001", 2));
 
 
 	}
@@ -23,6 +23,11 @@ public final class RightRouter extends AbstractRouter implements
 		// activate main levers
 		this.getOutput(0).setAmount((new DirectionRegistry(MathUtil.anticlockwise(from))).getAmount());
 
+	}
+
+	@Override
+	public BlockFace getTo() {
+		return MathUtil.anticlockwise(this.getFrom());
 	}
 
 }

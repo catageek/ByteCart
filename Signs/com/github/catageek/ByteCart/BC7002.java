@@ -27,7 +27,7 @@ public class BC7002 extends AbstractTriggeredIC implements TriggeredIC {
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : BC7002 count 1");
 
-		ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock(), 4, new Release(this));
+		ByteCart.myPlugin.getDelayedThreadManager().renew(getLocation(), 4, new Release(this));
 
 
 	}

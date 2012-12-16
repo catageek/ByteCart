@@ -12,7 +12,7 @@ public class StraightRouter extends AbstractRouter implements Router {
 		FromTo.put(Side.STRAIGHT, Side.RIGHT);
 		FromTo.put(Side.RIGHT, Side.BACK);
 
-		secondpos = Integer.parseInt("00100101", 2);
+		setSecondpos(Integer.parseInt("00100101", 2));
 
 
 	}
@@ -24,5 +24,8 @@ public class StraightRouter extends AbstractRouter implements Router {
 
 	}
 
-
+	@Override
+	public final BlockFace getTo() {
+		return this.getFrom().getOppositeFace();
+	}
 }

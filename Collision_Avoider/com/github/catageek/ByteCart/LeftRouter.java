@@ -21,9 +21,14 @@ public final class LeftRouter extends AbstractRouter implements
 		Set<Side> right = EnumSet.of(Side.LEFT, Side.BACK);
 		Possibility.put(Side.RIGHT, right);
 
-		secondpos = Integer.parseInt("01000000", 2);
-		posmask = Integer.parseInt("11100000", 2);
+		setSecondpos(Integer.parseInt("01000000", 2));
+		setPosmask(Integer.parseInt("11100000", 2));
 
+	}
+
+	@Override
+	public BlockFace getTo() {
+		return MathUtil.clockwise(this.getFrom());
 	}
 
 }

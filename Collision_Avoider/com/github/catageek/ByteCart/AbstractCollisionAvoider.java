@@ -73,16 +73,16 @@ public abstract class AbstractCollisionAvoider extends AbstractIC {
 	}
 
 	public void Ping() {
-		ByteCart.myPlugin.getDelayedThreadManager().renewAsync(getBlock(), 14, new SetTrainFalse(this));
+		ByteCart.myPlugin.getDelayedThreadManager().renewAsync(getLocation(), 14, new SetTrainFalse(this));
 	}
 
 	public void Book(boolean isTrain, int duration) {
 		setRecentlyUsed(true);
-		ByteCart.myPlugin.getDelayedThreadManager().renewAsync(getBlock().getRelative(BlockFace.DOWN), ByteCart.myPlugin.Lockduration + duration, new SetRecentFalse(this));
+		ByteCart.myPlugin.getDelayedThreadManager().renewAsync(getBlock().getRelative(BlockFace.DOWN).getLocation(), ByteCart.myPlugin.Lockduration + duration, new SetRecentFalse(this));
 
 		this.hasTrain |= isTrain;
 		if (this.hasTrain)
-			ByteCart.myPlugin.getDelayedThreadManager().renewAsync(getBlock(), 14, new SetTrainFalse(this));
+			ByteCart.myPlugin.getDelayedThreadManager().renewAsync(getLocation(), 14, new SetTrainFalse(this));
 	}
 
 	public void Book(boolean isTrain) {

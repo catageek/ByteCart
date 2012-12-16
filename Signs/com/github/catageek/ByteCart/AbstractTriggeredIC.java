@@ -1,7 +1,7 @@
 package com.github.catageek.ByteCart;
 
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.StorageMinecart;
@@ -93,15 +93,15 @@ public abstract class AbstractTriggeredIC extends AbstractIC {
 		return IPaddress.isTrain();
 	}
 
-	public final boolean wasTrain(Block block) {
-		if (ByteCart.myPlugin.getIsTrainManager().getMap().hasEntry(block))
-			return ByteCart.myPlugin.getIsTrainManager().getMap().getValue(block);
+	public final boolean wasTrain(Location loc) {
+		if (ByteCart.myPlugin.getIsTrainManager().getMap().hasEntry(loc))
+			return ByteCart.myPlugin.getIsTrainManager().getMap().getValue(loc);
 		return false;
 	}
 	
-	protected final void setWasTrain(Block block, boolean b) {
+	protected final void setWasTrain(Location loc, boolean b) {
 		if (b)
-			ByteCart.myPlugin.getIsTrainManager().getMap().createEntry(block, true);
+			ByteCart.myPlugin.getIsTrainManager().getMap().createEntry(loc, true);
 	}
 
 }

@@ -67,6 +67,7 @@ public class ByteCartListener implements Listener {
 			to_x >>= 4;
 			to_z >>= 4;
 
+
 			int a = from_x.compareTo(to_x);
 
 			if(a != 0) {

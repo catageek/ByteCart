@@ -45,9 +45,9 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 
 			// Here begins the triggered action
 			// if this is a cart in a train
-			if (this.wasTrain(this.getBlock())) {
+			if (this.wasTrain(this.getLocation())) {
 				// leave a message to next cart that it is a train
-				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock());
+				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getLocation());
 				// tell to router not to change position
 				ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder).Ping();
 				return;
@@ -71,40 +71,27 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			// if this is the first car of a train
 			// we keep it during 2 s
 			if (this.isTrain()) {
-				this.setWasTrain(this.getBlock(), true);
+				this.setWasTrain(this.getLocation(), true);
 			}
 
-			DirectionRegistry direction;
-
-			DirectionRegistry from = new DirectionRegistry(this.getCardinal().getOppositeFace());
-			
+			BlockFace direction, to, from = this.getCardinal().getOppositeFace();
+			int vid = this.getVehicle().getEntityId();
+			Router router = ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder);
 			int track = sign.getTrack().getAmount();
+			boolean isUpdater = ByteCart.myPlugin.getUm().isUpdater(vid);
 
-			if(ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId()))
-				direction = this.Updater(RoutingTable, from, track);
+			if(isUpdater)
+				direction = getRandomBlockFace(RoutingTable, from);
 			else
 				direction = this.SelectRoute(IPaddress, sign, RoutingTable);
-			/*			
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : coming from " + this.getCardinal() + " going to " + direction.getBlockFace());
-			 */
-
-
-			Router router = ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder);
 
 			synchronized(router) {
-				router.WishToGo(getCardinal().getOppositeFace(), direction.getBlockFace(), isTrain());
+				to = router.WishToGo(from, direction, isTrain());
 			}
 
+			if(isUpdater)
+				Updater(RoutingTable, new DirectionRegistry(from), new DirectionRegistry(to), track, vid);
 
-			/*			
-			if (this.getCardinal() == direction.getBlockFace()) {
-				this.getOutput(1).setAmount(direction.getAmount());
-				return;
-			}
-//			this.getOutput(1).setAmount(0);
-//			this.getOutput(0).setAmount(direction.getAmount());
-			 */
 		}
 		catch (ClassCastException e) {
 			if(ByteCart.debug)
@@ -129,54 +116,58 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 
 	}
 
-	protected DirectionRegistry SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
+	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
 		// If not in same region, or if TTL is 1 or 0, then we lookup track 0
 		if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL() == 0) {
-			return RoutingTable.getDirection(0);
+			return RoutingTable.getDirection(0).getBlockFace();
 		} else
 		{	// same region : lookup destination track
-			return RoutingTable.getDirection(IPaddress.getTrack().getAmount());
+			return RoutingTable.getDirection(IPaddress.getTrack().getAmount()).getBlockFace();
 		}
 
 	}
 
-	protected DirectionRegistry Updater(RoutingTable RoutingTable, DirectionRegistry from, int ring) {
-		
+	protected void Updater(RoutingTable RoutingTable, DirectionRegistry from, DirectionRegistry to, int fromring, int vehicleId) {
+
 		// Storing the route from where we arrive
-		
-		RoutingTable.setEntry(ring, MathUtil.binlog(from.getAmount()) << 4, 0);
+
+		RoutingTable.setEntry(fromring, MathUtil.binlog(from.getAmount()) << 4, 0);
 
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : Updater : storing ring " + ring + " direction " + from.ToString());
+			ByteCart.log.info("ByteCart : Updater : storing ring " + fromring + " direction " + from.ToString());
 
 		// loading received routes in router
-		RoutingTableExchange routes = ByteCart.myPlugin.getUm().getMap().getValue(this.getVehicle().getEntityId());
+		RoutingTableExchange routes = ByteCart.myPlugin.getUm().getMap().getValue(vehicleId);
 		if (routes != null)
 			RoutingTable.Update(routes, from);
 
-		// selecting a random destination
-		boolean zerodistance = RoutingTable.getDistance(0) == 0;
-		int zerodirection = RoutingTable.getDirection(0).getAmount();
-		
-		DirectionRegistry direction;
-		do {
-			direction = new DirectionRegistry(1 << (new Random()).nextInt(4));
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : Updater : direction selected " + direction.ToString());
-		}
-		while (direction.getAmount() == from.getAmount() || (zerodistance && (zerodirection == direction.getAmount())));
-		
+
 		// preparing the routes to send
-		routes = new RoutingTableExchange(RoutingTable, direction);
-		
+		routes = new RoutingTableExchange(RoutingTable, to);
+
 		// storing the route in the map
-		ByteCart.myPlugin.getUm().getMap().updateValue(this.getVehicle().getEntityId(), routes);
-		
-		return direction;
+		ByteCart.myPlugin.getUm().getMap().updateValue(vehicleId, routes);
+
 	}
 
 
+	private final static BlockFace getRandomBlockFace(RoutingTable RoutingTable, BlockFace from) {
 
+		// selecting a random destination avoiding ring 0 or where we come from
+		boolean zerodistance = RoutingTable.getDistance(0) == 0;
+		int zerodirection = RoutingTable.getDirection(0).getAmount();
+
+		DirectionRegistry direction = new DirectionRegistry(1 << (new Random()).nextInt(4));
+
+		while (direction.getBlockFace() == from || (zerodistance && (zerodirection == direction.getAmount()))) {
+			direction.setAmount(1 << (new Random()).nextInt(4));
+		}
+
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : Updater : direction selected " + direction.ToString());
+
+		return direction.getBlockFace();
+	}
 
 
 }

@@ -3,7 +3,7 @@ package com.github.catageek.ByteCart;
 import org.bukkit.block.BlockFace;
 
 public interface Router extends CollisionAvoider {
-	public void WishToGo(BlockFace from, BlockFace to, boolean isTrain);
+	public <T extends Router> BlockFace WishToGo(BlockFace from, BlockFace to, boolean isTrain);
 	public void Ping();
 	public void Book(boolean b);
 	public int getSecondpos() ;
@@ -13,4 +13,5 @@ public interface Router extends CollisionAvoider {
 	public BlockFace getFrom();
 	public void route(BlockFace from);
 	public RegistryOutput getOutput(int i);
+	public BlockFace getTo();
 }

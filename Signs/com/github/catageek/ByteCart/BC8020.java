@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart;
 
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 
 
@@ -17,13 +18,13 @@ public class BC8020 extends BC8010 implements TriggeredIC {
 	}
 
 	@Override
-	protected DirectionRegistry SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
+	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
 		// if TTL reached end of life, then we lookup region 0
 		if (IPaddress.getTTL() == 0) {
-			return RoutingTable.getDirection(0);
+			return RoutingTable.getDirection(0).getBlockFace();
 		} else
 		{	// lookup destination region
-			return RoutingTable.getDirection(IPaddress.getRegion().getAmount());
+			return RoutingTable.getDirection(IPaddress.getRegion().getAmount()).getBlockFace();
 
 		}
 

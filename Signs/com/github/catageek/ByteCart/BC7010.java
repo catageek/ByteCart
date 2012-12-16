@@ -35,8 +35,8 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 			return;
 
 		// if this is a cart in a train
-		if (this.wasTrain(this.getBlock())) {
-			ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock());
+		if (this.wasTrain(this.getLocation())) {
+			ByteCart.myPlugin.getIsTrainManager().getMap().ping(getLocation());
 			return;
 		}
 
@@ -47,7 +47,7 @@ public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedI
 		// if this is the first car of a train
 		// we save the state during 2 s
 		if (SignAddress.isTrain()) {
-			this.setWasTrain(this.getBlock(), true);
+			this.setWasTrain(this.getLocation(), true);
 		}
 
 

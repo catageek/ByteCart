@@ -20,8 +20,8 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 			this.addIO();
 
 			// if this is a cart in a train
-			if (this.wasTrain(this.getBlock())) {
-				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock());
+			if (this.wasTrain(this.getLocation())) {
+				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock().getLocation());
 				ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder).Ping();
 				return;
 			}
@@ -29,7 +29,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 			// if this is the first car of a train
 			// we keep it during 2 s
 			if (this.isTrain()) {
-				this.setWasTrain(this.getBlock(), true);
+				this.setWasTrain(this.getLocation(), true);
 			}
 
 			SimpleCollisionAvoider intersection = ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder);

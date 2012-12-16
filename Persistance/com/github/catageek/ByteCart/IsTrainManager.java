@@ -1,12 +1,12 @@
 package com.github.catageek.ByteCart;
 
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 
 public final class IsTrainManager {
 
-	private EphemeralBlockMap<Block, Boolean> IsTrain = new EphemeralBlockMap<Block, Boolean>(14);
+	private EphemeralBlockMap<Location, Boolean> IsTrain = new EphemeralBlockMap<Location, Boolean>(14);
 	
-	public EphemeralBlockMap<Block, Boolean> getMap() {
+	public EphemeralBlockMap<Location, Boolean> getMap() {
 		return IsTrain;
 	}
 	

@@ -14,14 +14,14 @@ public class BC7000 extends BC7001 implements TriggeredIC, PoweredIC {
 	public void trigger() {
 		// if this is a cart in a train
 		if (this.getVehicle() != null ) {
-			if (!this.isTrain() && this.wasTrain(this.getBlock())) {
-				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock());
+			if (!this.isTrain() && this.wasTrain(this.getLocation())) {
+				ByteCart.myPlugin.getIsTrainManager().getMap().ping(this.getLocation());
 
 				return;
 			}
 
 			if (this.isTrain()) {
-				this.setWasTrain(this.getBlock(), true);
+				this.setWasTrain(this.getLocation(), true);
 			}
 		}
 

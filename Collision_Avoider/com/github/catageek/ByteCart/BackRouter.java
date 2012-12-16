@@ -21,9 +21,14 @@ public final class BackRouter extends AbstractRouter implements
 		Set<Side> right = EnumSet.of(Side.STRAIGHT, Side.BACK, Side.RIGHT);
 		Possibility.put(Side.RIGHT, right);
 
-		secondpos = Integer.parseInt("10000000", 2);
-		posmask = Integer.parseInt("11000001", 2);
+		setSecondpos(Integer.parseInt("10000000", 2));
+		setPosmask(Integer.parseInt("11000001", 2));
 
+	}
+
+	@Override
+	public final BlockFace getTo() {
+		return this.getFrom();
 	}
 
 }

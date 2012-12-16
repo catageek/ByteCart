@@ -34,7 +34,7 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
 			if (!this.decrementWaveCount()) {
 
-				ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.DOWN), ByteCart.myPlugin.Lockduration + 6, new RemoveCount(this));
+				ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.DOWN).getLocation(), ByteCart.myPlugin.Lockduration + 6, new RemoveCount(this));
 			}
 		}
 		catch (Exception e) {
@@ -77,7 +77,7 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
 		}
 
-		ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.DOWN), 400, new RemoveCount(this));
+		ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.DOWN).getLocation(), 400, new RemoveCount(this));
 	}
 
 	final private void incrementWaveCount() {
@@ -162,19 +162,6 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 		}
 
 	}
-
-	@Override
-	public boolean isTrain() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean wasTrain(org.bukkit.block.Block block) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
 
 

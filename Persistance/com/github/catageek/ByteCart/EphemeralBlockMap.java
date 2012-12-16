@@ -14,43 +14,43 @@ public final class EphemeralBlockMap<K, T> extends BlockMap<K, T> {
 	}
 	
 	@Override
-	public boolean createEntry(K block, T id) {
-		if ( this.getMap().put(block, id) == null ) {
-			ByteCart.myPlugin.getDelayedThreadManager().renewAsync(block, this.Duration, new Suppress(this, block));
+	public boolean createEntry(K key, T value) {
+		if ( this.getMap().put(key, value) == null ) {
+			ByteCart.myPlugin.getDelayedThreadManager().renewAsync(key, this.Duration, new Suppress(this, key));
 			return true;
 		}
 		return false;
 	}
 
 	/*
-	 * update the value associated with key 'block' and reset timer 
+	 * update the value associated with key 'key' and reset timer 
 	 */
 	@Override
-	public final boolean updateValue(K block, T id) {
-		ping(block);
-		return this.getMap().put(block, id) == null;
+	public final boolean updateValue(K key, T value) {
+		ping(key);
+		return this.getMap().put(key, value) == null;
 	}
 
 	/*
 	 * reset timer
 	 */
-	public final void ping(K block) {
-		ByteCart.myPlugin.getDelayedThreadManager().renewAsync(block, this.Duration, new Suppress(this, block));
+	public final void ping(K key) {
+		ByteCart.myPlugin.getDelayedThreadManager().renewAsync(key, this.Duration, new Suppress(this, key));
 	}
 
 	private final class Suppress implements Runnable {
 		
-		private final K block;
+		private final K key;
 		private final BlockMap<K, T> map;
 		
-		public Suppress(EphemeralBlockMap<K, T> map, K block) {
-			this.block = block;
+		public Suppress(EphemeralBlockMap<K, T> map, K key) {
+			this.key = key;
 			this.map = map;
 		}
 
 		@Override
 		public void run() {
-			map.getMap().remove(block);
+			map.getMap().remove(key);
 		}
 		
 	}

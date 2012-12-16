@@ -6,15 +6,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.block.BlockFace;
 
-public abstract class AbstractRouter extends AbstractCollisionAvoider implements Router  {
+public abstract class AbstractRouter extends AbstractCollisionAvoider implements Router {
 
 	private BlockFace From;
 
 	protected Map<Side, Side> FromTo = new ConcurrentHashMap<Side, Side>();
 	protected Map<Side, Set<Side>> Possibility = new ConcurrentHashMap<Side, Set<Side>>();
 
-	protected int secondpos = 0;
-	protected int posmask = 255;
+	private int secondpos = 0;
+	private int posmask = 255;
 
 	public AbstractRouter(BlockFace from, org.bukkit.block.Block block) {
 		super(block);
@@ -28,7 +28,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 
 	}
 
-	public void WishToGo(BlockFace from, BlockFace to, boolean isTrain) {
+	public final BlockFace WishToGo(BlockFace from, BlockFace to, boolean isTrain) {
 //		Side sfrom = getSide(from);
 		Side sto = getSide(to);
 
@@ -77,6 +77,8 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : Router : position changed to " + ca.getClass().toString());
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart : Router : really going to " + ca.getTo());
 			// save router in collision avoider map
 			ByteCart.myPlugin.getCollisionAvoiderManager().setCollisionAvoider(getBlock(), ca);
 
@@ -87,31 +89,34 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 			ca.route(from);
 		}
 		ca.Book(isTrain);
+		
+		return ca.getTo();
 	}
 
 
 	public void route(BlockFace from) {
-		// TODO Auto-generated method stub
-		
+		return;
 	}
+	
+	public abstract BlockFace getTo();
 
 	/**
 	 * @return the from
 	 */
-	public BlockFace getFrom() {
+	public final BlockFace getFrom() {
 		return From;
 	}
 
-	private boolean ValidatePosition(Router ca) {
+	private final boolean ValidatePosition(Router ca) {
 		Side side = getSide(this.getFrom(), ca.getFrom());
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : pos value befor rotation : " + Integer.toBinaryString(getSecondpos()));
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : rotation of bits         : " + side.Value());
-		int value = this.leftRotate8(getSecondpos(), side.Value());
+		int value = AbstractRouter.leftRotate8(getSecondpos(), side.Value());
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : pos value after rotation : " + Integer.toBinaryString(value));
-		int mask = this.leftRotate8(getPosmask(), side.Value());
+		int mask = AbstractRouter.leftRotate8(getPosmask(), side.Value());
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : mask after rotation      : " + Integer.toBinaryString(mask));
 		ca.setSecondpos(value | ca.getSecondpos());
@@ -128,15 +133,15 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	/**
 	 * @param from the from to set
 	 */
-	private void setFrom(BlockFace from) {
+	private final void setFrom(BlockFace from) {
 		From = from;
 	}
 
-	private Side getSide(BlockFace to) {
+	private final Side getSide(BlockFace to) {
 		return getSide(getFrom(), to);
 	}
 
-	private Side getSide(BlockFace from, BlockFace to) {
+	private final static Side getSide(BlockFace from, BlockFace to) {
 		BlockFace t = to;
 		if (from == t)
 			return Side.BACK;
@@ -149,11 +154,11 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 		return Side.RIGHT;
 	}
 
-	private BlockFace turn(BlockFace b) {
+	private final static BlockFace turn(BlockFace b) {
 		return MathUtil.anticlockwise(b);
 	}
 
-	private void addIO(BlockFace from, org.bukkit.block.Block center) {
+	private final void addIO(BlockFace from, org.bukkit.block.Block center) {
 
 		BlockFace f = from;
 		BlockFace g = MathUtil.clockwise(from);
@@ -195,33 +200,33 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	/**
 	 * @return the secondpos
 	 */
-	public int getSecondpos() {
+	public final int getSecondpos() {
 		return secondpos;
 	}
 
 	/**
 	 * @return the posmask
 	 */
-	public int getPosmask() {
+	public final int getPosmask() {
 		return posmask;
 	}
 
 	/**
 	 * @param posmask the posmask to set
 	 */
-	public void setPosmask(int posmask) {
+	public final void setPosmask(int posmask) {
 		this.posmask = posmask;
 	}
 
 	/**
 	 * @param secondpos the secondpos to set
 	 */
-	public void setSecondpos(int secondpos) {
+	public final void setSecondpos(int secondpos) {
 		this.secondpos = secondpos;
 	}
 
 
-	private int leftRotate8(int value, int d) {
+	private final static int leftRotate8(int value, int d) {
 		int b = 8 - d;
 		return (value >> (b)) | ((value & ((1 << b) - 1)) << d);
 	}
