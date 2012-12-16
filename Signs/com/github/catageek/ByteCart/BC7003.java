@@ -84,15 +84,15 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 		synchronized(wavecount) {
 			if (!wavecount.hasEntry(this.getBlock())) {
 				wavecount.createEntry(getBlock(), 1);
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart." + getName() + ": count = " + wavecount.getValue(getBlock()) + " init");
+//				if(ByteCart.debug)
+//					ByteCart.log.info("ByteCart." + getName() + ": count = " + wavecount.getValue(getBlock()) + " init");
 			}
 			else {
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()) + " before");
+//				if(ByteCart.debug)
+//					ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()) + " before");
 				wavecount.updateValue(getBlock(), wavecount.getValue(getBlock()) + 1);
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()) + " after");
+//				if(ByteCart.debug)
+//					ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()) + " after");
 			}
 		}
 
@@ -106,13 +106,13 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
 			else {
 				wavecount.deleteEntry(getBlock());
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart." + getName() + ": --count = 0");
+//				if(ByteCart.debug)
+//					ByteCart.log.info("ByteCart." + getName() + ": --count = 0");
 				return false;
 			}
 		
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart." + getName() + ": --count = " + wavecount.getValue(getBlock()));
+//		if(ByteCart.debug)
+//			ByteCart.log.info("ByteCart." + getName() + ": --count = " + wavecount.getValue(getBlock()));
 
 		return true;
 		}

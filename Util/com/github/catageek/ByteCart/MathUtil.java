@@ -57,14 +57,14 @@ public final class MathUtil {
 		b.setData(oldData, true);
 	}
 
-	public static final void loadChunkAround(World world, int x, int z) {
-		int j, i = x-2, k = x+2, l = z+2;
+	public static final void loadChunkAround(World world, int x, int z, int radius) {
+		int j, i = x-radius, k = x+radius, l = z+radius;
 
 
 //		long start = System.nanoTime();
 
 		for (; i<=k; ++i) {
-			for (j=z-2;  j<=l ; ++j) {
+			for (j=z-radius;  j<=l ; ++j) {
 				world.loadChunk(i, j, false);
 /*				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: loading chunk (" + i + "," + j + ")");
@@ -76,6 +76,19 @@ public final class MathUtil {
 			ByteCart.log.info("ByteCart: time to load chunks (millis) : "  + (end - start));
 */
 
+	}
+
+	public static final boolean unloadChunkAround(World world, int x, int z) {
+		int j, i = x-9, k = x+9, l = z+9;
+		
+		boolean ret = true;
+
+		for (; i<=k; ++i) {
+			for (j=z-9;  j<=l ; ++j) {
+				ret &= world.unloadChunk(i, j, true, false);
+				}
+		}
+		return ret;
 	}
 
 	public static final void unloadChunkXAxis(World world, int x, Integer z) {

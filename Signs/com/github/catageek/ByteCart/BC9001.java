@@ -38,8 +38,6 @@ public class BC9001 extends AbstractBC9000 implements TriggeredIC, PoweredIC {
 
 			// if this is a cart in a train
 			if (this.wasTrain(this.getLocation())) {
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : BC9001 : wasTrain()");
 				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getLocation());
 //				this.getOutput(0).setAmount(3);	// push buttons
 				return;

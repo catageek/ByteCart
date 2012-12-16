@@ -16,10 +16,10 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	private int secondpos = 0;
 	private int posmask = 255;
 
-	public AbstractRouter(BlockFace from, org.bukkit.block.Block block) {
-		super(block);
+	public AbstractRouter(BlockFace from, org.bukkit.Location loc) {
+		super(loc);
 		this.setFrom(from);
-		this.addIO(from, block);
+		this.addIO(from, loc.getBlock());
 
 	}
 
@@ -53,23 +53,23 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 
 			switch(s) {
 			case STRAIGHT:
-				ca = new StraightRouter(from, getBlock());
+				ca = new StraightRouter(from, getLocation());
 				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
 					break;
 			case RIGHT:
-				ca = new RightRouter(from, getBlock());
+				ca = new RightRouter(from, getLocation());
 				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
 					break;
 			case LEFT:
-				ca = new LeftRouter(from, getBlock());
+				ca = new LeftRouter(from, getLocation());
 				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
 					break;
 			case BACK:
-				ca = new BackRouter(from, getBlock());
+				ca = new BackRouter(from, getLocation());
 				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
 					break;
 			default:
-				ca = new LeftRouter(from, getBlock());
+				ca = new LeftRouter(from, getLocation());
 				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
 					break;
 				ca = this;
@@ -80,7 +80,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : Router : really going to " + ca.getTo());
 			// save router in collision avoider map
-			ByteCart.myPlugin.getCollisionAvoiderManager().setCollisionAvoider(getBlock(), ca);
+			ByteCart.myPlugin.getCollisionAvoiderManager().setCollisionAvoider(this.getLocation(), ca);
 
 			// activate secondary levers
 			ca.getOutput(1).setAmount(ca.getSecondpos());

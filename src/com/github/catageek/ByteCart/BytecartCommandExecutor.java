@@ -18,15 +18,15 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				sender.sendMessage("This command can only be run by a player.");
 			} else {
 				Player player = (Player) sender;
-				
+
 				if(args.length == 0 || args.length >= 3 || !AddressString.isAddress(args[0]))
 					return false;
-				
+
 				Address address = new AddressString(args[0]);
 
 				if (args.length == 2 && args[1].equalsIgnoreCase("train"))
 					address.setTrain(true);
-				
+
 				(new BC7010(player.getLocation().getBlock(), player)).setAddress(address);
 			}
 			return true;
@@ -37,15 +37,15 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				sender.sendMessage("This command can only be run by a player.");
 			} else {
 				Player player = (Player) sender;
-				
+
 				if(args.length == 0 || args.length >= 3 || !AddressString.isAddress(args[0]))
 					return false;
-				
+
 				Address address = new AddressString(args[0]);
 
 				if (args.length == 2 && args[1].equalsIgnoreCase("train"))
 					address.setTrain(true);
-				
+
 				final class Execute implements ModifiableRunnable<Inventory> {
 
 					private final Player player;
@@ -81,7 +81,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 				}
 
-				
+
 				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
 				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, address));
 			}
@@ -93,7 +93,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				sender.sendMessage("This command can only be run by a player.");
 			} else {
 				Player player = (Player) sender;
-				
+
 				if(args.length != 0)
 					return false;
 
@@ -133,6 +133,36 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			return true;
 		}
 
+		if (cmd.getName().equalsIgnoreCase("unloadchunks")) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("This command can only be run by a player.");
+			} else {
+				Player player = (Player) sender;
+
+				if(args.length != 0)
+					return false;
+
+				boolean ret = MathUtil.unloadChunkAround(player.getWorld(), player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
+				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + "unloadchunks returned " + ret );				
+			}
+			return true;
+		}
+
+
+		if (cmd.getName().equalsIgnoreCase("loadchunks")) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("This command can only be run by a player.");
+			} else {
+				Player player = (Player) sender;
+
+				if(args.length != 0)
+					return false;
+
+				MathUtil.loadChunkAround(player.getWorld(), player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ(), 9);
+				//player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + "unloadchunks returned " + ret );				
+			}
+			return true;
+		}
 		return false;
 	}
 

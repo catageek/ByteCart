@@ -11,7 +11,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 		super(block, vehicle);
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
 		this.Permission = this.Permission + this.Name;
-		builder = new SimpleCollisionAvoiderBuilder((TriggeredIC) this, block.getRelative(this.getCardinal(), 3));
+		builder = new SimpleCollisionAvoiderBuilder((TriggeredIC) this, block.getRelative(this.getCardinal(), 3).getLocation());
 	}
 
 	public void trigger() {

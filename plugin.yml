@@ -109,3 +109,15 @@ commands:
         usage: "Usage : /<command>"
         permission: <plugin name>.bcupdater
         permission-message: You don't have permission <permission>
+
+    unloadchunks:
+        description: unload chunks around you
+        usage: "Usage : /<command>"
+        permission: <plugin name>.<command>
+        permission-message: You don't have permission <permission>
+        
+    loadchunks:
+        description: load chunks around you
+        usage: "Usage : /<command>"
+        permission: <plugin name>.<command>
+        permission-message: You don't have permission <permission>

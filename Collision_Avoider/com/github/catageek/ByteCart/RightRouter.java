@@ -5,8 +5,8 @@ import org.bukkit.block.BlockFace;
 public final class RightRouter extends AbstractRouter implements
 		Router {
 
-	public RightRouter(BlockFace from, org.bukkit.block.Block block) {
-		super(from, block);
+	public RightRouter(BlockFace from, org.bukkit.Location loc) {
+		super(from, loc);
 		
 		FromTo.put(Side.BACK, Side.RIGHT);
 		FromTo.put(Side.LEFT, Side.LEFT);

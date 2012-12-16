@@ -23,9 +23,8 @@ public abstract class AbstractCollisionAvoider extends AbstractIC {
 		}
 	}
 
-	public AbstractCollisionAvoider(org.bukkit.block.Block block) {
-		super(block);
-		// TODO Auto-generated constructor stub
+	public AbstractCollisionAvoider(org.bukkit.Location loc) {
+		super(loc.getBlock());
 	}
 
 	/**
@@ -88,6 +87,4 @@ public abstract class AbstractCollisionAvoider extends AbstractIC {
 	public void Book(boolean isTrain) {
 		this.Book(isTrain, 0);
 	}
-
-
 }

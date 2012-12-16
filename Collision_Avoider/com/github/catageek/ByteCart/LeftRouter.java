@@ -8,8 +8,8 @@ import org.bukkit.block.BlockFace;
 public final class LeftRouter extends AbstractRouter implements
 		Router {
 
-	public LeftRouter(BlockFace from, org.bukkit.block.Block block) {
-		super(from, block);
+	public LeftRouter(BlockFace from, org.bukkit.Location loc) {
+		super(from, loc);
 		FromTo.put(Side.BACK, Side.LEFT);
 		
 		Set<Side> left = EnumSet.of(Side.LEFT, Side.STRAIGHT, Side.RIGHT);

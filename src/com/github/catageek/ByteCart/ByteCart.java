@@ -50,6 +50,8 @@ public class ByteCart extends JavaPlugin {
     	getCommand("mego").setExecutor(new BytecartCommandExecutor());
        	getCommand("sendto").setExecutor(new BytecartCommandExecutor());
        	getCommand("bcupdater").setExecutor(new BytecartCommandExecutor());
+       	getCommand("unloadchunks").setExecutor(new BytecartCommandExecutor());
+       	getCommand("loadchunks").setExecutor(new BytecartCommandExecutor());
     }
      
     public void onDisable(){ 

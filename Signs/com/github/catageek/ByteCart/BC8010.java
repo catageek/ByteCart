@@ -27,7 +27,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 		// Centre de l'aiguillage
 		Block center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
 
-		CollisionAvoiderBuilder builder = new RouterCollisionAvoiderBuilder(this, center);
+		CollisionAvoiderBuilder builder = new RouterCollisionAvoiderBuilder(this, center.getLocation());
 
 		try {
 

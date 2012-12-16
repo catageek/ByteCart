@@ -20,8 +20,8 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		}
 	}
 
-	public SimpleCollisionAvoider(TriggeredIC ic, org.bukkit.block.Block block) {
-		super(block);
+	public SimpleCollisionAvoider(TriggeredIC ic, org.bukkit.Location loc) {
+		super(loc);
 		Lever1 = ic.getOutput(0);
 		Initialize();
 	}

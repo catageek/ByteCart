@@ -1,14 +1,13 @@
 package com.github.catageek.ByteCart;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -59,9 +58,9 @@ public class ByteCartListener implements Listener {
 		if(event.getVehicle() instanceof Minecart) // we care only of minecart
 		{
 			Minecart vehicle = (Minecart) event.getVehicle();
-			
+
 			// preload and postload chunks
-			
+
 			from_x >>= 4;
 			from_z >>= 4;
 			to_x >>= 4;
@@ -77,7 +76,7 @@ public class ByteCartListener implements Listener {
 				else
 					MathUtil.unloadChunkXAxis(loc.getWorld(), from_x - 2, from_z);
 
-				MathUtil.loadChunkAround(loc.getWorld(), to_x, to_z);				
+				MathUtil.loadChunkAround(loc.getWorld(), to_x, to_z, 2);				
 			}
 			else {
 
@@ -90,7 +89,7 @@ public class ByteCartListener implements Listener {
 					else
 						MathUtil.unloadChunkZAxis(loc.getWorld(), from_x, from_z - 2);
 
-					MathUtil.loadChunkAround(loc.getWorld(), to_x, to_z);				
+					MathUtil.loadChunkAround(loc.getWorld(), to_x, to_z, 2);				
 				}
 			}
 
@@ -225,7 +224,7 @@ public class ByteCartListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
-
+	/*
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onChunkUnload(ChunkUnloadEvent event) {
 
@@ -234,8 +233,8 @@ public class ByteCartListener implements Listener {
 
 		/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: Chunk requested to be unloaded at " + event.getChunk());
-		 */
-		for (; i >=0; --i) {
+	 */
+	/*		for (; i >=0; --i) {
 			if (entities[i] instanceof StorageMinecart && !((StorageMinecart)entities[i]).getVelocity().equals(NullVector)) {
 
 				event.setCancelled(true);
@@ -248,7 +247,37 @@ public class ByteCartListener implements Listener {
 			}
 		}
 	}
+	 */
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onChunkUnload(ChunkUnloadEvent event) {
 
+
+		int n, j, i = event.getChunk().getX()-2, k = i+4, l = event.getChunk().getZ()+2;
+		World world = event.getWorld();
+
+		Entity[] entities;
+
+		for (; i<=k; ++i) {
+			for (j=l-4;  j<=l ; ++j) {
+
+				entities = world.getChunkAt(i, j).getEntities();
+				
+
+				for (n = entities.length -1; n >=0; --n) {
+					if (entities[n] instanceof Minecart && !((Minecart)entities[n]).getVelocity().equals(NullVector)) {
+
+						event.setCancelled(true);
+
+						if(ByteCart.debug)
+							ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
+						return;
+					}
+				}
+			}
+		}
+
+	}
+/*
 	private static final class LoadChunks implements Runnable {
 
 		private final Chunk Chunk;
@@ -263,4 +292,5 @@ public class ByteCartListener implements Listener {
 		}
 
 	}
+	*/
 }

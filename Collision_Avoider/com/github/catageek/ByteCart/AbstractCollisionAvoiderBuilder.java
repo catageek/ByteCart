@@ -1,20 +1,20 @@
 package com.github.catageek.ByteCart;
 
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 
 public abstract class AbstractCollisionAvoiderBuilder {
 
 	protected final TriggeredIC ic;
 
-	protected final Block block;
+	protected final Location loc;
 
-	public AbstractCollisionAvoiderBuilder(TriggeredIC ic, Block block) {
+	public AbstractCollisionAvoiderBuilder(TriggeredIC ic, Location loc) {
 		this.ic = ic;
-		this.block = block;
+		this.loc = loc;
 	}
 
-	public Block getblock() {
-		return this.block;
+	public Location getLocation() {
+		return this.loc;
 	}
 
 	public TriggeredIC getIc() {

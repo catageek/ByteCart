@@ -24,8 +24,8 @@ public class BC7002 extends AbstractTriggeredIC implements TriggeredIC {
 		this.addOutputRegistry(new PinRegistry<OutputPin>(lever));
 
 		this.getOutput(0).setAmount(1);
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : BC7002 count 1");
+//		if(ByteCart.debug)
+//			ByteCart.log.info("ByteCart : BC7002 count 1");
 
 		ByteCart.myPlugin.getDelayedThreadManager().renew(getLocation(), 4, new Release(this));
 
