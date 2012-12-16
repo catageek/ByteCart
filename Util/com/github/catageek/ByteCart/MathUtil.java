@@ -58,17 +58,17 @@ public final class MathUtil {
 	}
 
 	public static final void loadChunkAround(World world, int x, int z) {
-		int j = z-3, i = x-3, k = x+2, l = z+2, m = z-3;
-/*
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: loading chunk (" + x + "," + z + ")");
-*/
+		int j, i = x-2, k = x+2, l = z+2;
+
+
 //		long start = System.nanoTime();
 
 		for (; i<=k; ++i) {
-			for (j = m;  j<=l ; ++j) {
+			for (j=z-2;  j<=l ; ++j) {
 				world.loadChunk(i, j, false);
-			}
+/*				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart: loading chunk (" + i + "," + j + ")");
+*/			}
 		}
 
 /*		long end = System.nanoTime();
@@ -82,9 +82,7 @@ public final class MathUtil {
 		int j = z+2;
 		for(int i = z-2; i<= j; ++i) {
 			world.unloadChunkRequest(x, i);
-/*			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: unloading chunk (" + x + "," + i + ")");
-*/
+
 		}
 
 	}
@@ -93,9 +91,6 @@ public final class MathUtil {
 		int j = x+2;
 		for(int i = x-2; i<= j; ++i) {
 			world.unloadChunkRequest(i, z);
-/*			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: unloading chunk (" + i + "," + z + ")");
-*/
 		}
 	}
 
