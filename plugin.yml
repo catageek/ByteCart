@@ -5,7 +5,6 @@ permissions:
     bytecart.*:
         description: give access to all blocks
         children:
-            bytecart.BC7000: true
             bytecart.BC7001: true
             bytecart.BC7002: true
             bytecart.BC7003: true
@@ -24,7 +23,6 @@ permissions:
     bytecart.helper:
         description: give acces to small subnets and station blocks
         children:
-            bytecart.BC7000: true
             bytecart.BC7001: true
             bytecart.BC7002: true
             bytecart.BC7003: true
@@ -42,7 +40,6 @@ permissions:
     bytecart.subnetwork:
         description: give acces to all subnets and station blocks
         children:
-            bytecart.BC7000: true
             bytecart.BC7001: true
             bytecart.BC7002: true
             bytecart.BC7003: true
@@ -56,8 +53,6 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
-    bytecart.BC7000:
-        default: true
     bytecart.BC7001:
         default: true
     bytecart.BC7002:

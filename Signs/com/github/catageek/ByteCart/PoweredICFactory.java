@@ -39,8 +39,6 @@ public class PoweredICFactory {
 			// then we instantiate accordingly
 			switch (ICnumber) {
 
-				case 7000:
-					return (PoweredIC)(new BC7000(block, null));
 				case 7001:
 					return (PoweredIC)(new BC7001(block, null));
 				case 7003:

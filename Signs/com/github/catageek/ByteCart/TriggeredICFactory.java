@@ -45,8 +45,6 @@ final public class TriggeredICFactory {
 			// then we instantiate accordingly
 			switch (ICnumber) {
 
-			case 7000:
-				return (TriggeredIC)(new BC7000(block, vehicle));
 			case 7001:
 				return (TriggeredIC)(new BC7001(block, vehicle));
 			case 7002:
