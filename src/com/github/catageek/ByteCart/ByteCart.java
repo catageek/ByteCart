@@ -4,6 +4,11 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
+import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
+import com.github.catageek.ByteCart.Storage.IsTrainManager;
+import com.github.catageek.ByteCart.Storage.UpdaterManager;
+
 public class ByteCart extends JavaPlugin {
 	
 	public static Logger log = Logger.getLogger("Minecraft");
