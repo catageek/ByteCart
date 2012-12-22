@@ -42,22 +42,22 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 
 	@Override
 	public Registry getRegion() {
-		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.REGION.getSlot()), Offsets.REGION.getLength(), Offsets.REGION.getOffset());
+		return new SubRegistry( new InventorySlot(this.getInventory(), Slots.REGION.getSlot()), Offsets.REGION.getLength(), Offsets.REGION.getOffset());
 	}
 
 	@Override
 	public Registry getTrack() {
-		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.TRACK.getSlot()), Offsets.TRACK.getLength(), Offsets.TRACK.getOffset());
+		return new SubRegistry( new InventorySlot(this.getInventory(), Slots.TRACK.getSlot()), Offsets.TRACK.getLength(), Offsets.TRACK.getOffset());
 	}
 
 	@Override
 	public Registry getStation() {
-		return new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset());
+		return new SubRegistry( new InventorySlot(this.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset());
 	}
 
 	@Override
 	public boolean isTrain() {
-		return (new SubRegistry((Registry) new InventorySlot(this.getInventory(), Slots.ISTRAIN.getSlot()), Offsets.ISTRAIN.getLength(), Offsets.ISTRAIN.getOffset())).getBit(0);
+		return (new SubRegistry(new InventorySlot(this.getInventory(), Slots.ISTRAIN.getSlot()), Offsets.ISTRAIN.getLength(), Offsets.ISTRAIN.getOffset())).getBit(0);
 	}
 
 	/**
@@ -106,9 +106,6 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 
 	@Override
 	protected void setIsTrain(boolean isTrain) {
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : setIsTrain() : Station slot : " + new SubRegistry((Registry) new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset()).getAmount());
-		
 		boolean written = this.InventoryWriter.setUnwritten(Slots.STATION.getSlot());
 		Registry station = new SubRegistry((Registry) new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset());
 		Registry tmp = new SuperRegistry(new VirtualRegistry(2), station);

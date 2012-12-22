@@ -10,10 +10,6 @@ public class SuperRegistry implements Registry, RegistryInput, RegistryOutput {
 	public SuperRegistry(Registry reg1, Registry reg2) {
 		this.Registry1 = reg1;
 		this.Registry2 = reg2;
-		
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : creating SuperRegistry of length " + reg1.length() + " + " + reg2.length() + " bits");
-
 	}
 	
 	@Override

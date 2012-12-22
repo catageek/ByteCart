@@ -59,8 +59,8 @@ public final class InventoryWriter {
 		 */
 		Map<Integer, Set<ItemStack>> MapStackSet = new TreeMap<Integer, Set<ItemStack>>(new InventoryWriterComparator<Integer>(value, typemap));
 
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: Writing value " + value + " to slot #" + pos);
+//		if(ByteCart.debug)
+//			ByteCart.log.info("ByteCart: Writing value " + value + " to slot #" + pos);
 
 		for (int i = 0; i < Stacks.length; i++) {
 			ItemStack stack = Stacks[i];
