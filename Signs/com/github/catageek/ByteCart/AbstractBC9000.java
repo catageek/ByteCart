@@ -12,7 +12,9 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
 		this.Permission = this.Permission + this.Name;
 		builder = new SimpleCollisionAvoiderBuilder((TriggeredIC) this, block.getRelative(this.getCardinal(), 3).getLocation());
-	}
+/*		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : SimpleCollisionAvoiderBuilder(" + block.getRelative(this.getCardinal(), 3).getLocation()+")");
+*/	}
 
 	public void trigger() {
 		try {
@@ -21,8 +23,8 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 
 			// if this is a cart in a train
 			if (this.wasTrain(this.getLocation())) {
-				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getBlock().getLocation());
-				ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder).Ping();
+				ByteCart.myPlugin.getIsTrainManager().getMap().reset(getBlock().getLocation());
+				ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder).Book(this.isTrain());
 				return;
 			}
 

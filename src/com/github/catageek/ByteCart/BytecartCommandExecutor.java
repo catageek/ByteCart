@@ -109,7 +109,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 					public void run() {
 						int id = ((StorageMinecart) inventory.getHolder()).getEntityId();
-						ByteCart.myPlugin.getUm().getMap().createEntry(id, null);
+						ByteCart.myPlugin.getUm().getMap().put(id, null);
 						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Info.SetUpdater") );
 
 					}
@@ -144,6 +144,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 				boolean ret = MathUtil.unloadChunkAround(player.getWorld(), player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
 				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + "unloadchunks returned " + ret );				
+				MathUtil.loadChunkAround(player.getWorld(), player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ(), 9);
 			}
 			return true;
 		}

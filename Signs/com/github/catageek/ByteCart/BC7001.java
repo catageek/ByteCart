@@ -63,9 +63,16 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 		// is there a minecart above ?
 		if (this.getVehicle() != null) {
 
-
 			// if the wire is on
 			if(this.getInput(0).getAmount() > 0) {
+				if (this.wasTrain(this.getLocation()))
+					ByteCart.myPlugin.getIsTrainManager().getMap().reset(this.getLocation());
+/*				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : " + this.getVehicle() + " : isTrain() = " + this.isTrain());
+*/
+				if (this.isTrain()) {
+					this.setWasTrain(this.getLocation(), true);
+				}
 
 				// the lever is on too
 				//this.getOutput(0).setAmount(1);
@@ -95,17 +102,23 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 			// if the wire is off
 			else {
 
-				// the lever is off
-				this.getOutput(0).setAmount(0);
+				// stop the cart if this is not a train and tells to the previous block that we are stopped
+				if(!this.wasTrain(getLocation())) { 
+					// the lever is off
+					this.getOutput(0).setAmount(0);
+					this.getVehicle().setVelocity(new Vector(0,0,0));
+					ByteCart.myPlugin.getIsTrainManager().getMap().remove(getBlock().getRelative(getCardinal().getOppositeFace(), 2).getLocation());
+				}
+				else
+					ByteCart.myPlugin.getIsTrainManager().getMap().reset(this.getLocation());
 
-				// stop the cart
-				this.getVehicle().setVelocity(new Vector(0,0,0));
 				/*
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: BC7001 : cart on stop at " + this.Vehicle.getLocation().toString());
 				 */
 			}
-
+			// if this is the first car of a train
+			// we keep it during 2 s
 		}
 
 		// there is no minecart above
@@ -139,7 +152,7 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 			 */
 			if (it.next() instanceof Minecart) {
 				it.previous();
-				
+
 				Location cartloc = ((Minecart) it.next()).getLocation();
 
 				if ( cartloc.getBlockX() == loc.getBlockX() && cartloc.getBlockZ() == loc.getBlockZ()) {

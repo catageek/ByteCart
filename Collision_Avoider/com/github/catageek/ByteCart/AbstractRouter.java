@@ -4,15 +4,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 
 public abstract class AbstractRouter extends AbstractCollisionAvoider implements Router {
+
+	private static final ExpirableMap<Location, Boolean> recentlyUsedMap = new ExpirableMap<Location, Boolean>(40, false, "recentlyUsedRouter");
+	private static final ExpirableMap<Location, Boolean> hasTrainMap = new ExpirableMap<Location, Boolean>(14, false, "hasTrainRouter");
 
 	private BlockFace From;
 
 	protected Map<Side, Side> FromTo = new ConcurrentHashMap<Side, Side>();
 	protected Map<Side, Set<Side>> Possibility = new ConcurrentHashMap<Side, Set<Side>>();
-
 	private int secondpos = 0;
 	private int posmask = 255;
 
@@ -48,38 +51,40 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 		}
 */
 		Side s = getSide(from, to);
+		
+		boolean cond = !this.getRecentlyUsed() && !this.getHasTrain();
 
-		if (this.getPosmask() != 255 || (!recentlyUsed && !hasTrain)) {
+		if (this.getPosmask() != 255 || cond) {
 
 			switch(s) {
 			case STRAIGHT:
 				ca = new StraightRouter(from, getLocation());
-				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
+				if (  (cond) || this.ValidatePosition(ca))
 					break;
 			case RIGHT:
 				ca = new RightRouter(from, getLocation());
-				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
+				if (  (cond) || this.ValidatePosition(ca))
 					break;
 			case LEFT:
 				ca = new LeftRouter(from, getLocation());
-				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
+				if (  (cond) || this.ValidatePosition(ca))
 					break;
 			case BACK:
 				ca = new BackRouter(from, getLocation());
-				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
+				if (  (cond) || this.ValidatePosition(ca))
 					break;
 			default:
 				ca = new LeftRouter(from, getLocation());
-				if (  (!recentlyUsed && !hasTrain) || this.ValidatePosition(ca))
+				if (  (cond) || this.ValidatePosition(ca))
 					break;
 				ca = this;
 			}
-
+/*
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : Router : position changed to " + ca.getClass().toString());
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : Router : really going to " + ca.getTo());
-			// save router in collision avoider map
+*/			// save router in collision avoider map
 			ByteCart.myPlugin.getCollisionAvoiderManager().setCollisionAvoider(this.getLocation(), ca);
 
 			// activate secondary levers
@@ -229,6 +234,14 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	private final static int leftRotate8(int value, int d) {
 		int b = 8 - d;
 		return (value >> (b)) | ((value & ((1 << b) - 1)) << d);
+	}
+
+	protected ExpirableMap<Location, Boolean> getRecentlyUsedMap() {
+		return recentlyUsedMap;
+	}
+
+	protected ExpirableMap<Location, Boolean> getHasTrainMap() {
+		return hasTrainMap;
 	}
 
 

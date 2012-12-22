@@ -7,19 +7,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ByteCart extends JavaPlugin {
 	
 	public static Logger log = Logger.getLogger("Minecraft");
-
 	public static ByteCart myPlugin;
-
 	public static boolean debug;
-	
-	private DelayedThreadManager<Object> dtm;
-	
 	private CollisionAvoiderManager cam;
-	
 	private IsTrainManager it;
-	
 	private UpdaterManager um;
-	
 	public int Lockduration;
 	
 
@@ -40,7 +32,6 @@ public class ByteCart extends JavaPlugin {
     		log.info("ByteCart : debug mode is on.");
     	}
     	
-    	this.setDtm(new DelayedThreadManager<Object>());
     	this.setCam(new CollisionAvoiderManager());
     	this.setIt(new IsTrainManager());
     	this.setUm(new UpdaterManager());
@@ -62,20 +53,6 @@ public class ByteCart extends JavaPlugin {
      	
     }
    
-
-	/**
-	 * @return the dtm
-	 */
-	public DelayedThreadManager<Object> getDelayedThreadManager() {
-		return dtm;
-	}
-
-	/**
-	 * @param dtm the dtm to set
-	 */
-	private void setDtm(DelayedThreadManager<Object> dtm) {
-		this.dtm = dtm;
-	}
 
 	/**
 	 * @return the cam
@@ -118,6 +95,6 @@ public class ByteCart extends JavaPlugin {
 	public void setUm(UpdaterManager um) {
 		this.um = um;
 	}
-    
+
    
    }

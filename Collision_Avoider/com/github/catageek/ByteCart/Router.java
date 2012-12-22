@@ -4,7 +4,6 @@ import org.bukkit.block.BlockFace;
 
 public interface Router extends CollisionAvoider {
 	public <T extends Router> BlockFace WishToGo(BlockFace from, BlockFace to, boolean isTrain);
-	public void Ping();
 	public void Book(boolean b);
 	public int getSecondpos() ;
 	public int getPosmask() ;

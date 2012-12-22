@@ -46,10 +46,11 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			// Here begins the triggered action
 			// if this is a cart in a train
 			if (this.wasTrain(this.getLocation())) {
+
 				// leave a message to next cart that it is a train
-				ByteCart.myPlugin.getIsTrainManager().getMap().ping(getLocation());
+				ByteCart.myPlugin.getIsTrainManager().getMap().reset(getLocation());
 				// tell to router not to change position
-				ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder).Ping();
+				ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder).Book(this.isTrain());
 				return;
 			}
 
@@ -137,7 +138,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			ByteCart.log.info("ByteCart : Updater : storing ring " + fromring + " direction " + from.ToString());
 
 		// loading received routes in router
-		RoutingTableExchange routes = ByteCart.myPlugin.getUm().getMap().getValue(vehicleId);
+		RoutingTableExchange routes = ByteCart.myPlugin.getUm().getMap().get(vehicleId);
 		if (routes != null)
 			RoutingTable.Update(routes, from);
 
@@ -146,7 +147,7 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 		routes = new RoutingTableExchange(RoutingTable, to);
 
 		// storing the route in the map
-		ByteCart.myPlugin.getUm().getMap().updateValue(vehicleId, routes);
+		ByteCart.myPlugin.getUm().getMap().put(vehicleId, routes);
 
 	}
 

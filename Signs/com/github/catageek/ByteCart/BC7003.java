@@ -2,10 +2,9 @@ package com.github.catageek.ByteCart;
 
 import org.bukkit.block.BlockFace;
 
-
 public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
-	final static private BlockMap<org.bukkit.block.Block, Integer> wavecount = new BlockMap<org.bukkit.block.Block, Integer>();
+	final static private ExpirableMap<org.bukkit.Location, Integer> wavecount = new ExpirableMap<org.bukkit.Location, Integer>(400, false, "BC7003");
 
 	public BC7003(org.bukkit.block.Block block) {
 		super(block);
@@ -34,7 +33,7 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
 			if (!this.decrementWaveCount()) {
 
-				ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.DOWN).getLocation(), ByteCart.myPlugin.Lockduration + 6, new RemoveCount(this));
+				(new RemoveCount(ByteCart.myPlugin.Lockduration + 6, true, "Removecount")).reset(getLocation(), this.getOutput(0));
 			}
 		}
 		catch (Exception e) {
@@ -74,23 +73,23 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 			this.getOutput(0).setAmount(1);
 
 			this.incrementWaveCount();
-
+			(new RemoveCount(400, true, "Removecount")).reset(getLocation(), this.getOutput(0));
+			wavecount.reset(getLocation(), this.getOutput(0));
 		}
 
-		ByteCart.myPlugin.getDelayedThreadManager().renew(getBlock().getRelative(BlockFace.DOWN).getLocation(), 400, new RemoveCount(this));
 	}
 
 	final private void incrementWaveCount() {
 		synchronized(wavecount) {
-			if (!wavecount.hasEntry(this.getBlock())) {
-				wavecount.createEntry(getBlock(), 1);
+			if (!wavecount.contains(this.getLocation())) {
+				wavecount.put(getLocation(), 1);
 //				if(ByteCart.debug)
 //					ByteCart.log.info("ByteCart." + getName() + ": count = " + wavecount.getValue(getBlock()) + " init");
 			}
 			else {
 //				if(ByteCart.debug)
 //					ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()) + " before");
-				wavecount.updateValue(getBlock(), wavecount.getValue(getBlock()) + 1);
+				wavecount.put(getLocation(), wavecount.get(getLocation()) + 1);
 //				if(ByteCart.debug)
 //					ByteCart.log.info("ByteCart." + getName() + ": ++count = " + wavecount.getValue(getBlock()) + " after");
 			}
@@ -101,11 +100,11 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
 	final private boolean decrementWaveCount() {
 		synchronized(wavecount) {
-			if (wavecount.hasEntry(getBlock()) && wavecount.getValue(getBlock()) > 1)
-				wavecount.updateValue(getBlock(), wavecount.getValue(getBlock()) - 1);
+			if (wavecount.contains(getLocation()) && wavecount.get(getLocation()) > 1)
+				wavecount.put(getLocation(), wavecount.get(getLocation()) - 1);
 
 			else {
-				wavecount.deleteEntry(getBlock());
+				wavecount.remove(getLocation());
 //				if(ByteCart.debug)
 //					ByteCart.log.info("ByteCart." + getName() + ": --count = 0");
 				return false;
@@ -116,10 +115,6 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 
 		return true;
 		}
-	}
-
-	final private void deleteWaveCount() {
-		wavecount.deleteEntry(getBlock());
 	}
 
 	private final void AddOutputIO() {
@@ -135,31 +130,19 @@ public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
 	}
 
 
-	final private class RemoveCount implements Runnable {
+	final private class RemoveCount extends Expirable<org.bukkit.Location> {
 
-		BC7003 bc;
-		RegistryOutput output;
-
-		RemoveCount(BC7003 bc) {
-			this.bc = bc;
-			this.output = bc.getOutput(0);
+		public RemoveCount(long duration, boolean isSync, String name) {
+			super(duration, isSync, name);
 		}
 
 		@Override
-		public void run() {
-			// suppress counter
-			try {
-				this.bc.deleteWaveCount();
-				this.output.setAmount(0);
-
-			}
-			catch (NullPointerException e) {
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : "+ e.toString());
-
-				e.printStackTrace();
-			}
+		public void expire(Object... objects) {
+				((RegistryOutput) objects[0]).setAmount(0);
 		}
+
+
+
 
 	}
 }

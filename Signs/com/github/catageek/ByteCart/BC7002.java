@@ -1,5 +1,7 @@
 package com.github.catageek.ByteCart;
 
+import org.bukkit.scheduler.BukkitRunnable;
+
 
 
 public class BC7002 extends AbstractTriggeredIC implements TriggeredIC {
@@ -24,15 +26,15 @@ public class BC7002 extends AbstractTriggeredIC implements TriggeredIC {
 		this.addOutputRegistry(new PinRegistry<OutputPin>(lever));
 
 		this.getOutput(0).setAmount(1);
-//		if(ByteCart.debug)
-//			ByteCart.log.info("ByteCart : BC7002 count 1");
+		//		if(ByteCart.debug)
+		//			ByteCart.log.info("ByteCart : BC7002 count 1");
 
-		ByteCart.myPlugin.getDelayedThreadManager().renew(getLocation(), 4, new Release(this));
-
+//		ByteCart.myPlugin.getDelayedThreadManager().renew(getLocation(), 4, new Release(this));
+		(new Release(this)).runTaskLater(ByteCart.myPlugin, 4);
 
 	}
 
-	private final class Release implements Runnable {
+	private final class Release extends BukkitRunnable {
 
 		private final AbstractIC bc;
 
@@ -44,6 +46,7 @@ public class BC7002 extends AbstractTriggeredIC implements TriggeredIC {
 		public void run() {
 			this.bc.getOutput(0).setAmount(0);
 		}
+
 
 	}
 

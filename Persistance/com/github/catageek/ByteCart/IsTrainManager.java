@@ -4,9 +4,9 @@ import org.bukkit.Location;
 
 public final class IsTrainManager {
 
-	private EphemeralBlockMap<Location, Boolean> IsTrain = new EphemeralBlockMap<Location, Boolean>(14);
+	private ExpirableMap<Location, Boolean> IsTrain = new ExpirableMap<Location, Boolean>(14, false, "isTrain");
 	
-	public EphemeralBlockMap<Location, Boolean> getMap() {
+	public ExpirableMap<Location, Boolean> getMap() {
 		return IsTrain;
 	}
 	

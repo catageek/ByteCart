@@ -195,10 +195,11 @@ public class ByteCartListener implements Listener {
 
 		if (event.getChangedType() != Material.REDSTONE_WIRE || ! AbstractIC.checkEligibility(event.getBlock().getRelative(BlockFace.DOWN)))
 			return;
-
-		/*		if(ByteCart.debug)
+		
+/*				if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: event " + event.getBlock().toString());
-		 */
+*/
+		 
 		PoweredIC myIC = this.MyPoweredICFactory.getIC(event.getBlock().getRelative(BlockFace.DOWN));
 
 
@@ -268,8 +269,8 @@ public class ByteCartListener implements Listener {
 
 						event.setCancelled(true);
 
-						if(ByteCart.debug)
-							ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
+//						if(ByteCart.debug)
+//							ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
 						return;
 					}
 				}
