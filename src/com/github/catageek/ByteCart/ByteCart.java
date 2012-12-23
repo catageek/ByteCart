@@ -18,7 +18,6 @@ public class ByteCart extends JavaPlugin {
 	private IsTrainManager it;
 	private UpdaterManager um;
 	public int Lockduration;
-	
 
     public void onEnable(){
     	log.info("ByteCart plugin has been enabled.");
@@ -28,8 +27,6 @@ public class ByteCart extends JavaPlugin {
     	myPlugin = this;
     	
     	debug = this.getConfig().getBoolean("debug");
-//    	this.getConfig().set("debug", debug);
-//    	this.saveConfig();
     	
     	Lockduration = this.getConfig().getInt("Lockduration", 44);
     	
