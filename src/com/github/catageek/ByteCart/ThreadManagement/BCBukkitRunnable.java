@@ -1,5 +1,7 @@
 package com.github.catageek.ByteCart.ThreadManagement;
 
+import java.util.Map;
+
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -31,15 +33,15 @@ public final class BCBukkitRunnable<K> {
 			BukkitTask old = Expirable.getThreadMap().get(Key);
 			BukkitRunnable runnable = new Expire(Expirable, Key, objects);
 
-			old.cancel();
+//			old.cancel();
 
 			if (old.isSync())
 				task = runnable.runTaskLater(ByteCart.myPlugin, Expirable.getDuration());
 			else
 				task = runnable.runTaskLaterAsynchronously(ByteCart.myPlugin, Expirable.getDuration());
+//			old = null;
 		}
 
-		//		old = null;
 		Expirable.getThreadMap().put(Key, task);
 
 		return task;
@@ -64,20 +66,24 @@ public final class BCBukkitRunnable<K> {
 
 	private final class Expire extends BukkitRunnable {
 
-		private final Expirable<K> Expirable;
+		private final Expirable<K> expirable;
 		private final K key;
 		private final Object[] params;
 
 		public Expire(Expirable<K> expirable, K key, Object...objects) {
 			this.key = key;
-			this.Expirable = expirable;
+			this.expirable = expirable;
 			this.params = objects;
 		}
 
 		@Override
 		public void run() {
-			Expirable.getThreadMap().remove(key);
-			Expirable.expire(params);
+			Map<K,BukkitTask> map = this.expirable.getThreadMap();
+			if(map.containsKey(key) && map.get(key).getTaskId() == this.getTaskId()) {
+				this.expirable.getThreadMap().remove(key);
+				this.expirable.expire(params);
+			}
+
 		}
 
 	}
