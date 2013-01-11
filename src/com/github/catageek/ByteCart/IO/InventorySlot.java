@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.Registry;
 
 public final class InventorySlot implements Registry {
@@ -36,6 +37,14 @@ public final class InventorySlot implements Registry {
 		if ((temp & 1) == 0)
 			return false;
 		return true;
+	}
+	
+	public boolean isEmpty() {
+		return this.Inventory.getItem(this.Index) == null;
+	}
+	
+	public void empty() {
+		this.Inventory.clear(Index);
 	}
 
 	@Override
@@ -84,15 +93,15 @@ public final class InventorySlot implements Registry {
 
 		ItemStack stack = this.Inventory.getItem(this.Index);
 		
-		// if stack is empty, use cobble
+		// if stack is empty, use material id in configuration file
 		if(stack == null)
-			stack = new ItemStack(Material.COBBLESTONE);
+			stack = new ItemStack(ByteCart.myPlugin.getConfig().getInt("material.id"));
 		
 		// copy value to stack object. empty stack not permitted
-		if (amount % (1 << this.length()) == 0)  // if amount modulo 64 = 0
+		if (amount % (1 << this.length()) == 0)  // if amount modulo length = 0
 			stack.setAmount(1 << this.length()); // we put 64 items
 		else
-			stack.setAmount(amount % ( 1 << this.length())); // or amount modulo 64
+			stack.setAmount(amount % ( 1 << this.length())); // or amount modulo length
 		
 		// update inventory
 		this.Inventory.setItem(this.Index, stack);

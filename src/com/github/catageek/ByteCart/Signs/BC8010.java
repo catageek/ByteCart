@@ -1,7 +1,5 @@
 package com.github.catageek.ByteCart.Signs;
 
-import java.util.Random;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
@@ -13,13 +11,18 @@ import com.github.catageek.ByteCart.CollisionManagement.Router;
 import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.EventManagement.AbstractTriggeredIC;
 import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
+import com.github.catageek.ByteCart.Routing.AbstractUpdater;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
-import com.github.catageek.ByteCart.Routing.RoutingTableExchange;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
+import com.github.catageek.ByteCart.Routing.Updater;
+import com.github.catageek.ByteCart.Routing.Updater.Level;
+import com.github.catageek.ByteCart.Routing.UpdaterBackBone;
+import com.github.catageek.ByteCart.Routing.UpdaterLocal;
+import com.github.catageek.ByteCart.Routing.UpdaterRegion;
+import com.github.catageek.ByteCart.Storage.UpdaterManager;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
@@ -58,55 +61,77 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 			// Converting inventory in routing table
 			RoutingTable RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
 
-			// Here begins the triggered action
-			// if this is a cart in a train
-			if (this.wasTrain(this.getLocation())) {
+			BlockFace direction, to, from = this.getCardinal().getOppositeFace();
+			org.bukkit.entity.Vehicle vehicle = this.getVehicle();
+			Router router = ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder);
 
-				// leave a message to next cart that it is a train
-				ByteCart.myPlugin.getIsTrainManager().getMap().reset(getLocation());
-				// tell to router not to change position
-				ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder).Book(this.isTrain());
+			// Here begins the triggered action
+
+			// is this an updater ? no then routing normally
+			if(selectUpdater(vehicle.getEntityId())) {
+				UpdaterManager um = ByteCart.myPlugin.getUm();
+
+				if (! um.isUpdater(vehicle.getEntityId())) {
+					// if this is a cart in a train
+					if (this.wasTrain(this.getLocation())) {
+
+						// leave a message to next cart that it is a train
+						ByteCart.myPlugin.getIsTrainManager().getMap().reset(getLocation());
+						// tell to router not to change position
+						ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder).Book(this.isTrain());
+						return;
+					}
+
+					// Time-to-live management
+
+					//loading TTl of cart
+					int ttl = IPaddress.getTTL();
+
+					// if ttl did not reach end of life ( = 0)
+					if (ttl != 0) {
+
+						IPaddress.updateTTL(ttl-1);
+					}
+
+					if(ByteCart.debug)
+						ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL());
+
+
+					// if this is the first car of a train
+					// we keep it during 2 s
+					if (this.isTrain()) {
+						this.setWasTrain(this.getLocation(), true);
+					}
+
+
+					direction = this.SelectRoute(IPaddress, sign, RoutingTable);
+				}
+				else {
+					// is an updater (this code is executed only by BC8020)
+					int region = um.getMapRoutes().get(vehicle.getEntityId()).getRegion();
+					if(ByteCart.debug)
+						ByteCart.log.info("ByteCart : region " + region);
+					try {
+						direction = RoutingTable.getDirection(region).getBlockFace();
+					} catch (NullPointerException e) {
+						// this region does not exist
+						direction = from;
+						// remove the cart as updater
+						um.getMapRoutes().remove(vehicle.getEntityId());
+					}
+				}
+				router.WishToGo(from, direction, isTrain());
 				return;
 			}
 
-			// Time-to-live management
+			// it's an updater, so let it choosing direction
+			Updater updater = getUpdater(RoutingTable, vehicle, sign, from);
 
-			//loading TTl of cart
-			int ttl = IPaddress.getTTL();
+			// routing normally
+			to = router.WishToGo(from, updater.giveRouterDirection(), isTrain());
 
-			// if ttl did not reach end of life ( = 0)
-			if (ttl != 0) {
-
-				IPaddress.updateTTL(ttl-1);
-			}
-
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL());
-
-
-			// if this is the first car of a train
-			// we keep it during 2 s
-			if (this.isTrain()) {
-				this.setWasTrain(this.getLocation(), true);
-			}
-
-			BlockFace direction, to, from = this.getCardinal().getOppositeFace();
-			int vid = this.getVehicle().getEntityId();
-			Router router = ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder);
-			int track = sign.getTrack().getAmount();
-			boolean isUpdater = ByteCart.myPlugin.getUm().isUpdater(vid);
-
-			if(isUpdater)
-				direction = getRandomBlockFace(RoutingTable, from);
-			else
-				direction = this.SelectRoute(IPaddress, sign, RoutingTable);
-
-			synchronized(router) {
-				to = router.WishToGo(from, direction, isTrain());
-			}
-
-			if(isUpdater)
-				Updater(RoutingTable, new DirectionRegistry(from), new DirectionRegistry(to), track, vid);
+			// here we perform routes update
+			updater.Update(to);
 
 		}
 		catch (ClassCastException e) {
@@ -132,58 +157,52 @@ public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
 
 	}
 
+	protected boolean selectUpdater(int id) {
+		return ! ByteCart.myPlugin.getUm().isUpdater(id);
+	}
+
 	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
+		// same region : lookup destination track
+		try {
+			if (IPaddress.getRegion().getAmount() == sign.getRegion().getAmount() && IPaddress.getTTL() != 0) {
+				return RoutingTable.getDirection(IPaddress.getTrack().getAmount()).getBlockFace();
+			}
+		} catch (NullPointerException e) {
+		}
+
 		// If not in same region, or if TTL is 1 or 0, then we lookup track 0
-		if (IPaddress.getRegion().getAmount() != sign.getRegion().getAmount() || IPaddress.getTTL() == 0) {
+		try {
 			return RoutingTable.getDirection(0).getBlockFace();
-		} else
-		{	// same region : lookup destination track
-			return RoutingTable.getDirection(IPaddress.getTrack().getAmount()).getBlockFace();
+		} catch (NullPointerException e) {
 		}
 
-	}
+		return AbstractUpdater.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
 
-	protected void Updater(RoutingTable RoutingTable, DirectionRegistry from, DirectionRegistry to, int fromring, int vehicleId) {
-
-		// Storing the route from where we arrive
-
-		RoutingTable.setEntry(fromring, MathUtil.binlog(from.getAmount()) << 4, 0);
-
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : Updater : storing ring " + fromring + " direction " + from.ToString());
-
-		// loading received routes in router
-		RoutingTableExchange routes = ByteCart.myPlugin.getUm().getMap().get(vehicleId);
-		if (routes != null)
-			RoutingTable.Update(routes, from);
-
-
-		// preparing the routes to send
-		routes = new RoutingTableExchange(RoutingTable, to);
-
-		// storing the route in the map
-		ByteCart.myPlugin.getUm().getMap().put(vehicleId, routes);
 
 	}
 
-
-	private final static BlockFace getRandomBlockFace(RoutingTable RoutingTable, BlockFace from) {
-
-		// selecting a random destination avoiding ring 0 or where we come from
-		boolean zerodistance = RoutingTable.getDistance(0) == 0;
-		int zerodirection = RoutingTable.getDirection(0).getAmount();
-
-		DirectionRegistry direction = new DirectionRegistry(1 << (new Random()).nextInt(4));
-
-		while (direction.getBlockFace() == from || (zerodistance && (zerodirection == direction.getAmount()))) {
-			direction.setAmount(1 << (new Random()).nextInt(4));
-		}
-
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : Updater : direction selected " + direction.ToString());
-
-		return direction.getBlockFace();
+	protected Updater getUpdater(RoutingTable routingtable, org.bukkit.entity.Vehicle vehicle,
+			Address ringAddress, BlockFace from) {
+		return this.getNewUpdater(routingtable, vehicle, ringAddress, from, true, Level.REGION);
 	}
 
+	protected Updater getNewUpdater(RoutingTable routingtable, org.bukkit.entity.Vehicle vehicle,
+			Address ringAddress, BlockFace from, boolean isTrackNumberProvider, Level level) {
+		int id = vehicle.getEntityId();
+		UpdaterManager manager = ByteCart.myPlugin.getUm();
 
+		if (manager.isUpdater(id, Level.BACKBONE) || manager.isUpdater(id, Level.RESET_BACKBONE))
+			return new UpdaterBackBone(routingtable, vehicle, ringAddress, from, isTrackNumberProvider, level);
+		if (manager.isUpdater(id, Level.REGION) || manager.isUpdater(id, Level.RESET_REGION))
+			return new UpdaterRegion(routingtable, vehicle, ringAddress, from, isTrackNumberProvider, level);
+		if (manager.isUpdater(id, Level.LOCAL) || manager.isUpdater(id, Level.RESET_LOCAL))
+			return new UpdaterLocal(routingtable, vehicle, ringAddress, from, level);
+		return null;
+
+
+	}
+
+	protected Updater.Level getLevel() {
+		return Updater.Level.REGION;
+	}
 }

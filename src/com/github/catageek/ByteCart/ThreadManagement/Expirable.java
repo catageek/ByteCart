@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public abstract class Expirable<K> {
 
-	private volatile Map<K, BukkitTask> ThreadMap = Collections.synchronizedMap(new HashMap<K,BukkitTask>());
+	private Map<K, BukkitTask> ThreadMap = Collections.synchronizedMap(new HashMap<K,BukkitTask>());
 	private final long Duration;
 	private final String name;
 	private final boolean IsSync;

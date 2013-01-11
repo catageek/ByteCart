@@ -3,6 +3,10 @@
 # set true if you want a lot debug messages on the console
 debug: false
 
+# material id to use when the plugin needs to write
+# in an inventory for its internal needs
+material.id: 3
+
 # this is the tax taken from the player when triggering the block
 # with a cart passing on it you can create any usetax you wish using the parameter:
 # usetax.BCxxxx: n
@@ -47,9 +51,8 @@ Info.SetAddress: Nouvelle destination
 Info.SetAddress2: Ne touchez pas a votre inventaire
                   Prenez un cart et bonne route !
 
-# Left-click on a storage cart to set its destination address
-Info.RightClickCart: Clic droit sur un storage cart
-                     pour fixer son adresse de destination
+# Left-click on a storage cart
+Info.RightClickCart: Clic droit sur un storage cart pour le selectionner
 
 #Updater
 Info.SetUpdater: "This cart is now an Updater !"

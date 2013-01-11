@@ -24,32 +24,34 @@ public final class BCBukkitRunnable<K> {
 
 	public BukkitTask renewTaskLater(Object...objects) {
 		BukkitTask task;
-		if(! Expirable.getThreadMap().containsKey(Key)) {
-			task = (Expirable.isSync() ? this.runTaskLater(objects)
-					: this.runTaskLaterAsynchronously(objects));
+		Map<K,BukkitTask> map = Expirable.getThreadMap();
+		synchronized(map) {
+			if(! Expirable.getThreadMap().containsKey(Key)) {
+				task = (Expirable.isSync() ? this.runTaskLater(objects)
+						: this.runTaskLaterAsynchronously(objects));
 
+			}
+			else {
+				BukkitTask old = Expirable.getThreadMap().get(Key);
+				BukkitRunnable runnable = new Expire(Expirable, Key, objects);
+
+
+				if (old.isSync())
+					task = runnable.runTaskLater(ByteCart.myPlugin, Expirable.getDuration());
+				else
+					task = runnable.runTaskLaterAsynchronously(ByteCart.myPlugin, Expirable.getDuration());
+				old.cancel();
+			}
+
+			Expirable.getThreadMap().put(Key, task);
 		}
-		else {
-			BukkitTask old = Expirable.getThreadMap().get(Key);
-			BukkitRunnable runnable = new Expire(Expirable, Key, objects);
-
-//			old.cancel();
-
-			if (old.isSync())
-				task = runnable.runTaskLater(ByteCart.myPlugin, Expirable.getDuration());
-			else
-				task = runnable.runTaskLaterAsynchronously(ByteCart.myPlugin, Expirable.getDuration());
-//			old = null;
-		}
-
-		Expirable.getThreadMap().put(Key, task);
 
 		return task;
 	}
 
 	public void cancel() {
 		if(Expirable.getThreadMap().containsKey(Key))
-			Expirable.getThreadMap().remove(Key).cancel();
+			Expirable.getThreadMap().remove(Key);
 	}
 
 	public BukkitTask runTaskLater(Object...objects) {
@@ -79,12 +81,12 @@ public final class BCBukkitRunnable<K> {
 		@Override
 		public void run() {
 			Map<K,BukkitTask> map = this.expirable.getThreadMap();
-			if(map.containsKey(key) && map.get(key).getTaskId() == this.getTaskId()) {
-				this.expirable.getThreadMap().remove(key);
-				this.expirable.expire(params);
-			}
 
+			map.remove(key);
+			this.expirable.expire(params);
 		}
 
 	}
+
 }
+

@@ -37,20 +37,19 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	}
 
 	public void Add(TriggeredIC t) {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 
 	public final BlockFace WishToGo(BlockFace from, BlockFace to, boolean isTrain) {
 //		Side sfrom = getSide(from);
-		Side sto = getSide(to);
+//		Side sto = getSide(to);
 
 
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : Router : coming from " + from + " going to " + to);
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : Router : going to " + sto);
-
+*/
 		Router ca = this;
 /*
 		if(ByteCart.debug) {
@@ -152,6 +151,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 		From = from;
 	}
 
+	@SuppressWarnings("unused")
 	private final Side getSide(BlockFace to) {
 		return getSide(getFrom(), to);
 	}

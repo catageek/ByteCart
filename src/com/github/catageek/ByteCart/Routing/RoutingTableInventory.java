@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.bukkit.inventory.ItemStack;
+
 import com.github.catageek.ByteCart.HAL.Registry;
 import com.github.catageek.ByteCart.HAL.SubRegistry;
 import com.github.catageek.ByteCart.IO.InventorySlot;
@@ -12,17 +14,20 @@ import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
 
 public final class RoutingTableInventory extends AbstractRoutingTable implements RoutingTable {
-	
+
 	private final org.bukkit.inventory.Inventory Inventory;
-	
+
 	public RoutingTableInventory(org.bukkit.inventory.Inventory inv) {
 		this.Inventory = inv;
 	}
 
 	@Override
 	public DirectionRegistry getDirection(int entry) {
-		Registry reg = new InventorySlot(this.Inventory, entry);
-		return new DirectionRegistry(1 << (reg.getAmount() >> 4));
+		if (! this.isEmpty(entry)) {
+			Registry reg = new InventorySlot(this.Inventory, entry);
+			return new DirectionRegistry(1 << (reg.getAmount() >> 4));
+		}
+		return null;
 	}
 
 	@Override
@@ -53,16 +58,28 @@ public final class RoutingTableInventory extends AbstractRoutingTable implements
 	public boolean isEmpty(int entry) {
 		return (Inventory.getItem(entry) == null);
 	}
-	
+
 	public Set<Entry<Integer,Integer>> getRoutesTo(DirectionRegistry direction) {
 		Map<Integer, Integer> tablemap = new HashMap<Integer, Integer>();
-		
+
 		for(int i = 0; i< this.getSize(); i++) {
-			if(! this.isEmpty(i) && this.getDirection(i) == direction)
+			if( this.getDirection(i) != null && this.getDirection(i).getAmount() == direction.getAmount())
 				tablemap.put(i, this.getDistance(i));
 		}
 		return tablemap.entrySet();
 	}
 
+	@Override
+	public void clear() {
+		ItemStack zero = this.Inventory.getItem(0);
+		this.Inventory.clear();
+		this.Inventory.setItem(0, zero);
+	}
+
+	@Override
+	public void removeEntry(int entry) {
+		this.Inventory.clear(entry);
+
+	}
 
 }

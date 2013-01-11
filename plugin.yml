@@ -1,6 +1,6 @@
 name: ByteCart
 main: com.github.catageek.ByteCart.ByteCart
-version: 0.8
+version: 1.0beta
 permissions:
     bytecart.*:
         description: give access to all blocks
@@ -28,7 +28,7 @@ permissions:
             bytecart.BC7003: true
             bytecart.BC7010: true
             bytecart.BC7011: false
-            bytecart.BC8010: true
+            bytecart.BC8010: false
             bytecart.BC8020: false
             bytecart.BC9000: true
             bytecart.BC9001: true
@@ -45,7 +45,7 @@ permissions:
             bytecart.BC7003: true
             bytecart.BC7010: true
             bytecart.BC7011: false
-            bytecart.BC8010: true
+            bytecart.BC8010: false
             bytecart.BC8020: false
             bytecart.BC9000: true
             bytecart.BC9001: true
@@ -64,7 +64,7 @@ permissions:
     bytecart.BC7011:
         default: false
     bytecart.BC8010:
-        default: true
+        default: false
     bytecart.BC8020:
         default: false
     bytecart.BC9000:
@@ -88,31 +88,19 @@ permissions:
 
 commands:
     mego:
-        description: set <plugin name> destination address in your inventory
+        description: set ByteCart destination address in your inventory
         usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
-        permission: <plugin name>.mego
+        permission: bytecart.mego
         permission-message: You don't have permission <permission>
         
     sendto:
-        description: set <plugin name> destination address in a storage cart inventory
+        description: set ByteCart destination address in a storage cart inventory
         usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
-        permission: <plugin name>.sendto
+        permission: bytecart.sendto
         permission-message: You don't have permission <permission>
 
     bcupdater:
-        description: set a cart as Updater for <plugin name>
+        description: set a cart as Updater for ByteCart
         usage: "Usage : /<command>"
-        permission: <plugin name>.bcupdater
-        permission-message: You don't have permission <permission>
-
-    unloadchunks:
-        description: unload chunks around you
-        usage: "Usage : /<command>"
-        permission: <plugin name>.<command>
-        permission-message: You don't have permission <permission>
-        
-    loadchunks:
-        description: load chunks around you
-        usage: "Usage : /<command>"
-        permission: <plugin name>.<command>
+        permission: bytecart.bcupdater
         permission-message: You don't have permission <permission>

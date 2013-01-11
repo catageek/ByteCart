@@ -2,7 +2,6 @@ package com.github.catageek.ByteCart.CollisionManagement;
 
 import org.bukkit.Location;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
@@ -12,8 +11,9 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	private static final ExpirableMap<Location, Boolean> recentlyUsedMap = new ExpirableMap<Location, Boolean>(20, false, "recentlyUsed9000");
 	private static final ExpirableMap<Location, Boolean> hasTrainMap = new ExpirableMap<Location, Boolean>(14, false, "hastrain");
 	
-	private Side state = Side.RIGHT;
 	private RegistryOutput Lever1 = null, Lever2 = null;
+	
+	private Side state = Side.RIGHT;
 
 	public enum Side {
 		RIGHT (3),
@@ -32,13 +32,13 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 
 	public SimpleCollisionAvoider(TriggeredIC ic, org.bukkit.Location loc) {
 		super(loc);
-		if(ByteCart.debug)
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: new SimpleCollisionAvoider() at " + loc);
-		Lever1 = ic.getOutput(0);
+*/		Lever1 = ic.getOutput(0);
 		Initialize();
 	}
 
-	public void WishToGo(Side s, boolean isTrain) {
+	public Side WishToGo(Side s, boolean isTrain) {
 /*
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : WishToGo to side " + s + " and isTrain is " + isTrain);
@@ -49,10 +49,11 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : Lever1 is " + Lever1);
 */
-		if ( s != state && ( Lever2 == null || ( !this.getRecentlyUsed()) && !this.getHasTrain())) {
-			Permute();
+		if ( s != state && (Lever2 == null || ( !this.getRecentlyUsed()) && !this.getHasTrain())) {
+			Set(s);
 		}
 		this.setRecentlyUsed(true);
+		return state;
 
 	}
 
@@ -67,29 +68,16 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		this.Lever1.setAmount(s.Value());
 		if (this.Lever2 != null)
 			this.Lever2.setAmount(s.Value());
-		this.state = s;
+		state = s;
 	}
-
-	private void Permute() {
-		if (state == Side.LEFT) {
-			Set(Side.RIGHT);
-			state = Side.RIGHT;
-		}
-		else {
-			Set(Side.LEFT);
-			state = Side.LEFT;
-		}
-
-	}
-
+	
 	private void Initialize() {
-		Set(Side.LEFT);
+		Set(Side.RIGHT);
 	}
 
 	@Override
 	public int getSecondpos() {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException();
 	}
 
 	protected ExpirableMap<Location, Boolean> getRecentlyUsedMap() {

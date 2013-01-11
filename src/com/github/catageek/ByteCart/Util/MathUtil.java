@@ -27,6 +27,8 @@ public final class MathUtil {
 			return BlockFace.WEST;
 		case WEST:
 			return BlockFace.NORTH;
+		default:
+			break;
 		}
 		return b;
 
@@ -42,6 +44,8 @@ public final class MathUtil {
 			return BlockFace.EAST;
 		case WEST:
 			return BlockFace.SOUTH;
+		default:
+			break;
 		}
 		return b;
 

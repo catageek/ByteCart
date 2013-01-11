@@ -39,6 +39,8 @@ public final class DirectionRegistry {
 			break;
 		case SOUTH:
 			this.registry.setBit(3, value);
+		default:
+			break;
 		}
 
 	}

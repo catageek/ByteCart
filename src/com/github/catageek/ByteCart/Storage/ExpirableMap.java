@@ -20,11 +20,16 @@ public final class ExpirableMap<K, T> extends Expirable<K> {
 		((Map<K,?>)objects[1]).remove((K)objects[0]);
 	}
 
-	public boolean put(K key, T value) {
+	public boolean put(K key, T value, boolean reset) {
 //		if(ByteCart.debug)
 //			ByteCart.log.info("ByteCart: create ephemeral key (" + key +") in " + this.getName() + " for " + this.getDuration() + " ticks");
-		this.reset(key, key, Map);
+		if (reset)
+			this.reset(key, key, Map);
 		return (Map.put(key, value) == null);
+	}
+
+	public boolean put(K key, T value) {
+		return this.put(key, value, true);
 	}
 	
 	@Override

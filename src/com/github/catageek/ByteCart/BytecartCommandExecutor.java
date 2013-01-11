@@ -13,10 +13,9 @@ import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 import com.github.catageek.ByteCart.Routing.AddressString;
+import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
-import com.github.catageek.ByteCart.Util.MathUtil;
-import com.github.catageek.ByteCart.Util.ModifiableRunnable;
 
 public class BytecartCommandExecutor implements CommandExecutor {
 
@@ -104,22 +103,42 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			} else {
 				Player player = (Player) sender;
 
-				if(args.length != 0)
+				int region = 0;
+
+				if(args.length == 0 || args.length > 3 || !Updater.Level.isMember(args[0].toLowerCase()))
 					return false;
+
+				if (args.length == 1 && ! args[0].equalsIgnoreCase("backbone")
+						&& ! args[0].equalsIgnoreCase("reset_backbone"))
+					return false;
+
+				if (args[0].equalsIgnoreCase("region") || args[0].equalsIgnoreCase("local")
+						|| args[0].equalsIgnoreCase("reset_region")
+						|| args[0].equalsIgnoreCase("reset_local")) {
+					region = Integer.parseInt(args[1]);
+					if (region < 1 || region > 53)
+						return false;
+				}
+				else
+					return false;			
 
 				final class Execute implements ModifiableRunnable<Inventory> {
 
 					private final Player player;
+					private final Updater.Level level;
+					private final int region;
 					private Inventory inventory;
 
 
-					public Execute(Player player) {
+					public Execute(Player player, Updater.Level level, int region) {
 						this.player = player;
+						this.level = level;
+						this.region = region;
 					}
 
 					public void run() {
 						int id = ((StorageMinecart) inventory.getHolder()).getEntityId();
-						ByteCart.myPlugin.getUm().getMap().put(id, null);
+						ByteCart.myPlugin.getUm().addUpdater(id, level, region);
 						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Info.SetUpdater") );
 
 					}
@@ -138,42 +157,11 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				}
 
 				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
-				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player));
+				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, Updater.Level.valueOf(args[0].toUpperCase()), region));
 			}
 			return true;
 		}
 
-		if (cmd.getName().equalsIgnoreCase("unloadchunks")) {
-			if (!(sender instanceof Player)) {
-				sender.sendMessage("This command can only be run by a player.");
-			} else {
-				Player player = (Player) sender;
-
-				if(args.length != 0)
-					return false;
-
-				boolean ret = MathUtil.unloadChunkAround(player.getWorld(), player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
-				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + "unloadchunks returned " + ret );				
-				MathUtil.loadChunkAround(player.getWorld(), player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ(), 9);
-			}
-			return true;
-		}
-
-
-		if (cmd.getName().equalsIgnoreCase("loadchunks")) {
-			if (!(sender instanceof Player)) {
-				sender.sendMessage("This command can only be run by a player.");
-			} else {
-				Player player = (Player) sender;
-
-				if(args.length != 0)
-					return false;
-
-				MathUtil.loadChunkAround(player.getWorld(), player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ(), 9);
-				//player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + "unloadchunks returned " + ret );				
-			}
-			return true;
-		}
 		return false;
 	}
 

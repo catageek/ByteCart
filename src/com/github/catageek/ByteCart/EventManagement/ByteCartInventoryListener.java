@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.Util.ModifiableRunnable;
+import com.github.catageek.ByteCart.ModifiableRunnable;
 
 public class ByteCartInventoryListener implements Listener {
 

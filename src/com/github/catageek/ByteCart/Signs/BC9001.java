@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
+import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.EventManagement.PoweredIC;
 import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
@@ -13,6 +14,9 @@ import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.InputPinFactory;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
+import com.github.catageek.ByteCart.Routing.Updater;
+import com.github.catageek.ByteCart.Routing.UpdaterLocal;
+import com.github.catageek.ByteCart.Routing.Updater.Level;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
@@ -44,27 +48,44 @@ public class BC9001 extends AbstractBC9000 implements TriggeredIC, PoweredIC {
 
 			// InputRegistry[0] = start/stop command
 			this.addInputRegistry(new PinRegistry<InputPin>(wire));
-			
+
 			triggerBC7003();
 
-			// if this is a cart in a train
-			if (this.wasTrain(this.getLocation())) {
-				ByteCart.myPlugin.getIsTrainManager().getMap().reset(getLocation());
-//				this.getOutput(0).setAmount(3);	// push buttons
+			if (! ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId(), this.getLevel())
+					&& !ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId(), Level.RESET_LOCAL )) {
+
+				// if this is a cart in a train
+				if (this.wasTrain(this.getLocation())) {
+					ByteCart.myPlugin.getIsTrainManager().getMap().reset(getLocation());
+					//				this.getOutput(0).setAmount(3);	// push buttons
+					return;
+				}
+
+				// if this is the first car of a train
+				// we keep the state during 2 s
+				if (this.isTrain()) {
+					this.setWasTrain(this.getLocation(), true);
+				}
+
+				this.route();
+
+				if(this.isAddressMatching() && this.getName().equals("BC9001") && this.getInventory().getHolder() instanceof Player) {
+					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.Destination") + " " + this.getFriendlyName() + " (" + sign + ")");
+	
+				}
 				return;
 			}
+			
+			// it's an updater, so let it choosing direction
+			Updater updater = new UpdaterLocal(getVehicle(),
+					AddressFactory.getAddress(this.getBlock(),3), null, netmask, getLevel());
 
-			// if this is the first car of a train
-			// we keep the state during 2 s
-			if (this.isTrain()) {
-				this.setWasTrain(this.getLocation(), true);
-			}
+			// routing
+			this.getOutput(0).setAmount(0); // unpower levers
 
-			this.route();
+			// here we perform routes update
+			updater.Update(Side.LEFT);
 
-			if(this.isAddressMatching() && this.getName().equals("BC9001") && this.getInventory().getHolder() instanceof Player) {
-				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.GREEN + ByteCart.myPlugin.getConfig().getString("Info.Destination") + " " + this.getFriendlyName() + " (" + sign + ")");
-			}
 
 
 		}

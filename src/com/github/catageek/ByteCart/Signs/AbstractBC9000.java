@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart.Signs;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
+import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.EventManagement.AbstractTriggeredIC;
 import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
@@ -14,6 +15,9 @@ import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
+import com.github.catageek.ByteCart.Routing.Updater;
+import com.github.catageek.ByteCart.Routing.Updater.Level;
+import com.github.catageek.ByteCart.Routing.UpdaterLocal;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
@@ -28,33 +32,39 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
 		this.Permission = this.Permission + this.Name;
 		builder = new SimpleCollisionAvoiderBuilder((TriggeredIC) this, block.getRelative(this.getCardinal(), 3).getLocation());
-/*		if(ByteCart.debug)
+		/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : SimpleCollisionAvoiderBuilder(" + block.getRelative(this.getCardinal(), 3).getLocation()+")");
-*/	}
+		 */	}
 
 	public void trigger() {
 		try {
 
 			this.addIO();
 
-			// if this is a cart in a train
-			if (this.wasTrain(this.getLocation())) {
-				ByteCart.myPlugin.getIsTrainManager().getMap().reset(getBlock().getLocation());
-				ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder).Book(this.isTrain());
+			SimpleCollisionAvoider intersection = ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder);
+
+			if (! ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId(), this.getLevel())
+					&& !ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId(), Level.RESET_LOCAL )) {
+
+				// if this is a cart in a train
+				if (this.wasTrain(this.getLocation())) {
+					ByteCart.myPlugin.getIsTrainManager().getMap().reset(getBlock().getLocation());
+					ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder).Book(this.isTrain());
+					return;
+				}
+
+				// if this is the first car of a train
+				// we keep it during 2 s
+				if (this.isTrain()) {
+					this.setWasTrain(this.getLocation(), true);
+				}
+
+				intersection.WishToGo(this.route(), this.isTrain());
 				return;
 			}
 
-			// if this is the first car of a train
-			// we keep it during 2 s
-			if (this.isTrain()) {
-				this.setWasTrain(this.getLocation(), true);
-			}
+			manageUpdater(intersection);
 
-			SimpleCollisionAvoider intersection = ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder);
-
-			synchronized(intersection) {
-				intersection.WishToGo(this.route(), this.isTrain());
-			}
 		}
 		catch (ClassCastException e) {
 			if(ByteCart.debug)
@@ -72,6 +82,18 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 			return;
 		}
 
+	}
+
+	protected void manageUpdater(SimpleCollisionAvoider intersection) {
+		// it's an updater, so let it choosing direction
+		Updater updater = new UpdaterLocal(getVehicle(),
+				AddressFactory.getAddress(this.getBlock(),3), null, netmask, getLevel());
+
+		// routing
+		Side to = intersection.WishToGo(updater.giveSimpleDirection(), false);
+
+		// here we perform routes update
+		updater.Update(to);
 	}
 
 	protected SimpleCollisionAvoider.Side route() {
@@ -92,6 +114,10 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 				&& this.getInput(0).getAmount() == this.getInput(3).getAmount();
 	}
 
+
+	protected Updater.Level getLevel() {
+		return Updater.Level.LOCAL;
+	}
 
 	protected void addIO() {
 		Address sign = AddressFactory.getAddress(this.getBlock(),3);

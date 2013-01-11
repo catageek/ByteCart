@@ -11,11 +11,12 @@ public class AddressString extends AbstractAddress implements Address {
 	private String String; // address as displayed
 	
 	public AddressString(String s) {
-
 		if (AddressString.isAddress(s))
 			this.String = s;
-		else
-			throw new IllegalArgumentException();
+		else {
+			this.String = "0.0.0";
+			this.isValid = false;
+		}
 	}
 	
 	static public boolean isAddress(String s) {
@@ -70,20 +71,17 @@ public class AddressString extends AbstractAddress implements Address {
 	
 	@Override
 	public void setRegion(int region) {
-		// TODO Auto-generated method stub
-		return;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setTrack(int track) {
-		// TODO Auto-generated method stub
-		return;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setStation(int station) {
-		// TODO Auto-generated method stub
-		return;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -108,8 +106,13 @@ public class AddressString extends AbstractAddress implements Address {
 
 	@Override
 	public boolean UpdateAddress() {
-		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public void remove() {
+		this.String = "";
+		this.isValid = false;
 	}
 
 

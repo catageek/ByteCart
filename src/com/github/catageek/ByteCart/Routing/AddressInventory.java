@@ -150,4 +150,11 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 		}
 	}
 
+	@Override
+	public void remove() {
+		this.setRegion(0);
+		this.setTrack(0);
+		this.setStation(0);
+	}
+
 }

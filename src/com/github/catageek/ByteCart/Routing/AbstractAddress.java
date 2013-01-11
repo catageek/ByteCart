@@ -3,6 +3,12 @@ package com.github.catageek.ByteCart.Routing;
 
 public abstract class AbstractAddress implements Address {
 	
+	protected boolean isValid = true;
+	
+	public final boolean isValid() {
+		return isValid;
+	}
+	
 	protected enum Offsets {
 		// length (default : 6), pos (default : 0)
 		REGION(),
@@ -57,7 +63,7 @@ public abstract class AbstractAddress implements Address {
 		return setAddress(AddressFactory.getAddress(s));
 	}
 	
-	public boolean setTrain(boolean istrain) {
+	public final boolean setTrain(boolean istrain) {
 		this.setIsTrain(istrain);
 		return this.UpdateAddress();
 	}
@@ -67,7 +73,10 @@ public abstract class AbstractAddress implements Address {
 	}
 
 
-	abstract protected boolean UpdateAddress();
+	protected boolean UpdateAddress() {
+		return true;
+	}
+	
 	abstract protected void setRegion(int region);
 	abstract protected void setTrack(int track);
 	abstract protected void setStation(int station);

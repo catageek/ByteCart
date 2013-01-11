@@ -103,19 +103,19 @@ public abstract class AbstractTriggeredIC extends AbstractIC {
 		boolean ret;
 		if (ByteCart.myPlugin.getIsTrainManager().getMap().contains(loc)) {
 			ret = ByteCart.myPlugin.getIsTrainManager().getMap().get(loc);
-/*			if(ByteCart.debug  && ret)
+			/*			if(ByteCart.debug  && ret)
 				ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : " + this.getVehicle() + " is wagon !");
-*/			return ret;
+			 */			return ret;
 		}
-/*		if(ByteCart.debug)
+		/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : " + this.getVehicle() + " is not wagon !");
-*/		return false;
+		 */		return false;
 	}
-	
+
 	protected final void setWasTrain(Location loc, boolean b) {
 		if (b)
 			ByteCart.myPlugin.getIsTrainManager().getMap().put(loc, true);
-		
+
 	}
 
 }

@@ -11,4 +11,7 @@ public interface Address {
 	public boolean setAddress(String s);
 	public boolean setAddress(Address a);
 	public boolean setTrain(boolean istrain);
+	public boolean isValid();
+	public void remove();
+	public String toString();
 }

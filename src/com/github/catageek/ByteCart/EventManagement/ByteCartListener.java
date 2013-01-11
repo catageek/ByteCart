@@ -108,9 +108,9 @@ public class ByteCartListener implements Listener {
 
 			if (myIC != null) {
 
-				/*				if(ByteCart.debug)
+								if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: " + myIC.getName() + ".trigger()");
-				 */
+				 
 				myIC.trigger();
 
 				if ((! vehicle.isEmpty())
@@ -199,11 +199,11 @@ public class ByteCartListener implements Listener {
 
 		if (event.getChangedType() != Material.REDSTONE_WIRE || ! AbstractIC.checkEligibility(event.getBlock().getRelative(BlockFace.DOWN)))
 			return;
-		
-/*				if(ByteCart.debug)
+
+		/*				if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: event " + event.getBlock().toString());
-*/
-		 
+		 */
+
 		PoweredIC myIC = this.MyPoweredICFactory.getIC(event.getBlock().getRelative(BlockFace.DOWN));
 
 
@@ -265,24 +265,26 @@ public class ByteCartListener implements Listener {
 		for (; i<=k; ++i) {
 			for (j=l-4;  j<=l ; ++j) {
 
-				entities = world.getChunkAt(i, j).getEntities();
-				
+				if (world.isChunkLoaded(i, j)) {
+					entities = world.getChunkAt(i, j).getEntities();
 
-				for (n = entities.length -1; n >=0; --n) {
-					if (entities[n] instanceof Minecart && !((Minecart)entities[n]).getVelocity().equals(NullVector)) {
 
-						event.setCancelled(true);
+					for (n = entities.length -1; n >=0; --n) {
+						if (entities[n] instanceof Minecart && !((Minecart)entities[n]).getVelocity().equals(NullVector)) {
 
-//						if(ByteCart.debug)
-//							ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
-						return;
+							event.setCancelled(true);
+
+							//						if(ByteCart.debug)
+							//							ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
+							return;
+						}
 					}
 				}
 			}
 		}
 
 	}
-/*
+	/*
 	private static final class LoadChunks implements Runnable {
 
 		private final Chunk Chunk;
@@ -297,5 +299,5 @@ public class ByteCartListener implements Listener {
 		}
 
 	}
-	*/
+	 */
 }
