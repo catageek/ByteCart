@@ -18,13 +18,11 @@ It allows the connection of 45000 stations in 53 regions.
 
 Routing tables are stored ingame using a innovative information storage technology using chests. There is no database.
 
-For the moment, routing tables configuration is manual, but future evolution of the plugin will allow automatic
-filling of routing tables.
+A tool is provided to configure automatically the network if you do not have network skills.
 
 Bukkit version
 =================================
-This version of ByteCart runs on Minecraft v1.3.2. Since Bukkit API changed for version 1.2, there is no
-compatibility with versions of Minecraft prior to 1.2. 
+This version of ByteCart runs on Minecraft v1.4.5 R1.0 and later. 
 
 Features
 =================================
@@ -54,11 +52,6 @@ Configuration
 =================================
 Check configuration file ByteCart/config.yml to see available configuration parameters.
 
-
-Documentation
-=================================
-TODO. An example of the network can be visited on r0x server (r0x.fr:25565).
-
 Credits
 =================================
-Written by Catageek (catageek@free.fr) for r0x
+Developped by Catageek (catageek@free.fr)
