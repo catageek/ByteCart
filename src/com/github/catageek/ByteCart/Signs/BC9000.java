@@ -1,7 +1,6 @@
 package com.github.catageek.ByteCart.Signs;
 
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
@@ -10,7 +9,7 @@ import com.github.catageek.ByteCart.Routing.UpdaterLocal;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-public class BC9000 extends AbstractBC9000 implements TriggeredIC {
+public class BC9000 extends AbstractBC9000 implements TriggeredSign {
 
 	public BC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

@@ -1,20 +1,17 @@
-package com.github.catageek.ByteCart.EventManagement;
+package com.github.catageek.ByteCart.Signs;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
-import com.github.catageek.ByteCart.Signs.BC7001;
-import com.github.catageek.ByteCart.Signs.BC7003;
-import com.github.catageek.ByteCart.Signs.BC9001;
 
 
-public class PoweredICFactory {
+public class PoweredSignFactory {
 	
 	// instantiates the BCXXXX member at specified location.
 	// return null if no IC is present.
-	public PoweredIC getIC(Block block) {
+	public PoweredSign getIC(Block block) {
 		
 			
 		if(AbstractIC.checkEligibility(block)) {
@@ -32,7 +29,7 @@ public class PoweredICFactory {
 		
 	}
 
-	private PoweredIC getPoweredIC(Block block, String signString) {
+	private PoweredSign getPoweredIC(Block block, String signString) {
 
 		int ICnumber = Integer.parseInt(signString.substring(3, 7));
 /*		
@@ -46,11 +43,11 @@ public class PoweredICFactory {
 			switch (ICnumber) {
 
 				case 7001:
-					return (PoweredIC)(new BC7001(block, null));
+					return (PoweredSign)(new BC7001(block, null));
 				case 7003:
-					return (PoweredIC)(new BC7003(block));
+					return (PoweredSign)(new BC7003(block));
 				case 9001:
-					return (PoweredIC)(new BC9001(block, null));
+					return (PoweredSign)(new BC9001(block, null));
 				
 		
 			}

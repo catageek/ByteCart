@@ -2,8 +2,8 @@ package com.github.catageek.ByteCart.CollisionManagement;
 
 import org.bukkit.Location;
 
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.RegistryOutput;
+import com.github.catageek.ByteCart.Signs.TriggeredSign;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
 
 public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements CollisionAvoider {
@@ -30,7 +30,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		}
 	}
 
-	public SimpleCollisionAvoider(TriggeredIC ic, org.bukkit.Location loc) {
+	public SimpleCollisionAvoider(TriggeredSign ic, org.bukkit.Location loc) {
 		super(loc);
 /*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: new SimpleCollisionAvoider() at " + loc);
@@ -59,7 +59,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 
 
 	@Override
-	public void Add(TriggeredIC t) {
+	public void Add(TriggeredSign t) {
 		Lever2 = t.getOutput(0);
 		Lever2.setAmount(state.Value());
 	}

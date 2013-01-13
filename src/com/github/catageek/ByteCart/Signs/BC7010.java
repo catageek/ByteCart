@@ -7,15 +7,12 @@ import org.bukkit.entity.StorageMinecart;
 import org.bukkit.inventory.InventoryHolder;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.EventManagement.AbstractTriggeredIC;
-import com.github.catageek.ByteCart.EventManagement.ClickedIC;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 
 
-public class BC7010 extends AbstractTriggeredIC implements TriggeredIC, ClickedIC {
+public class BC7010 extends AbstractTriggeredSign implements TriggeredSign, ClickedSign {
 
 	protected boolean PlayerAllowed = true;
 	protected boolean StorageCartAllowed = false;

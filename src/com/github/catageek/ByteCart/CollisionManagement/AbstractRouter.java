@@ -8,12 +8,12 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.HAL.Registry;
 import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
+import com.github.catageek.ByteCart.Signs.TriggeredSign;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
@@ -36,7 +36,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 
 	}
 
-	public void Add(TriggeredIC t) {
+	public void Add(TriggeredSign t) {
 		return;
 	}
 

@@ -5,8 +5,6 @@ import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoiderBuilder;
-import com.github.catageek.ByteCart.EventManagement.AbstractTriggeredIC;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.HAL.Registry;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
@@ -21,7 +19,7 @@ import com.github.catageek.ByteCart.Routing.UpdaterLocal;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-abstract public class AbstractBC9000 extends AbstractTriggeredIC {
+abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 
 	protected int netmask;
 	protected CollisionAvoiderBuilder builder;
@@ -29,9 +27,9 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 	public AbstractBC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle, String name) {
 		super(block, vehicle);
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + name);
-		this.Permission = this.Permission + name;
-		builder = new SimpleCollisionAvoiderBuilder((TriggeredIC) this, block.getRelative(this.getCardinal(), 3).getLocation());
+		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
+		this.Permission = this.Permission + this.Name;
+		builder = new SimpleCollisionAvoiderBuilder((TriggeredSign) this, block.getRelative(this.getCardinal(), 3).getLocation());
 		/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : SimpleCollisionAvoiderBuilder(" + block.getRelative(this.getCardinal(), 3).getLocation()+")");
 		 */	}

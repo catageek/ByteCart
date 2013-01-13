@@ -2,15 +2,15 @@ package com.github.catageek.ByteCart.CollisionManagement;
 
 import org.bukkit.Location;
 
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
+import com.github.catageek.ByteCart.Signs.TriggeredSign;
 
 public abstract class AbstractCollisionAvoiderBuilder {
 
-	protected final TriggeredIC ic;
+	protected final TriggeredSign ic;
 
 	protected final Location loc;
 
-	public AbstractCollisionAvoiderBuilder(TriggeredIC ic, Location loc) {
+	public AbstractCollisionAvoiderBuilder(TriggeredSign ic, Location loc) {
 		this.ic = ic;
 		this.loc = loc;
 	}
@@ -19,7 +19,7 @@ public abstract class AbstractCollisionAvoiderBuilder {
 		return this.loc;
 	}
 
-	public TriggeredIC getIc() {
+	public TriggeredSign getIc() {
 		return ic;
 	}
 

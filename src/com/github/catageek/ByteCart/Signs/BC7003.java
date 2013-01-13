@@ -3,8 +3,6 @@ package com.github.catageek.ByteCart.Signs;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.EventManagement.PoweredIC;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.HAL.RegistryOutput;
@@ -16,7 +14,7 @@ import com.github.catageek.ByteCart.Storage.ExpirableMap;
 import com.github.catageek.ByteCart.ThreadManagement.Expirable;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
-public final class BC7003 extends AbstractIC implements TriggeredIC, PoweredIC {
+public final class BC7003 extends AbstractIC implements TriggeredSign, PoweredSign {
 
 	final static private ExpirableMap<org.bukkit.Location, Integer> wavecount = new ExpirableMap<org.bukkit.Location, Integer>(400, false, "BC7003");
 

@@ -9,8 +9,6 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.Router;
 import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBuilder;
-import com.github.catageek.ByteCart.EventManagement.AbstractTriggeredIC;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.Routing.AbstractUpdater;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
@@ -27,7 +25,7 @@ import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 
-public class BC8010 extends AbstractTriggeredIC implements TriggeredIC {
+public class BC8010 extends AbstractTriggeredSign implements TriggeredSign {
 
 
 	public BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {

@@ -3,8 +3,6 @@ package com.github.catageek.ByteCart.Signs;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.EventManagement.AbstractTriggeredIC;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.OutputPin;
@@ -12,7 +10,7 @@ import com.github.catageek.ByteCart.IO.OutputPinFactory;
 
 
 
-public class BC7002 extends AbstractTriggeredIC implements TriggeredIC {
+public class BC7002 extends AbstractTriggeredSign implements TriggeredSign {
 
 	public BC7002(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

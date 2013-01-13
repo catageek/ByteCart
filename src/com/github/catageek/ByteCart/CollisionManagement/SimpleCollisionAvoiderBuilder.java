@@ -2,11 +2,11 @@ package com.github.catageek.ByteCart.CollisionManagement;
 
 import org.bukkit.Location;
 
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
+import com.github.catageek.ByteCart.Signs.TriggeredSign;
 
 public class SimpleCollisionAvoiderBuilder extends AbstractCollisionAvoiderBuilder implements CollisionAvoiderBuilder {
 
-	public SimpleCollisionAvoiderBuilder(TriggeredIC ic, Location loc) {
+	public SimpleCollisionAvoiderBuilder(TriggeredSign ic, Location loc) {
 		super(ic, loc);
 	}
 

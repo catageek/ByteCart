@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.EventManagement.PoweredIC;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.InputPinFactory;
@@ -20,7 +18,7 @@ import com.github.catageek.ByteCart.Routing.Updater.Level;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-public class BC9001 extends AbstractBC9000 implements TriggeredIC, PoweredIC {
+public class BC9001 extends AbstractBC9000 implements TriggeredSign, PoweredSign {
 
 
 	public BC9001(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {

@@ -12,10 +12,6 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.util.Vector;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.EventManagement.AbstractTriggeredIC;
-import com.github.catageek.ByteCart.EventManagement.PoweredIC;
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
-import com.github.catageek.ByteCart.EventManagement.TriggeredICFactory;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.InputPinFactory;
@@ -32,7 +28,7 @@ import com.github.catageek.ByteCart.Util.MathUtil;
 // lever off = block occupied and not powered
 // lever on = block free OR powered
 
-public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredIC {
+public class BC7001 extends AbstractTriggeredSign implements TriggeredSign, PoweredSign {
 
 
 	// Constructor : !! vehicle can be null !!
@@ -145,7 +141,7 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 	public void power() {
 		// power update
 
-		TriggeredIC bc = this;
+		TriggeredSign bc = this;
 
 		// We need to find if a cart is stopped and set the member variable Vehicle
 		Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();
@@ -172,7 +168,7 @@ public class BC7001 extends AbstractTriggeredIC implements TriggeredIC, PoweredI
 
 					// found ! we instantiate a new IC with the vehicle we found
 					//bc7001 = new BC7001(this.getBlock(), (Vehicle) it.next());
-					bc = TriggeredICFactory.getTriggeredIC(this.getBlock(), (Vehicle) it.next());
+					bc = TriggeredSignFactory.getTriggeredIC(this.getBlock(), (Vehicle) it.next());
 					/*
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart: BC7001 : cart on stop");

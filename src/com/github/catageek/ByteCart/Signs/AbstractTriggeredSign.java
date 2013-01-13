@@ -1,4 +1,4 @@
-package com.github.catageek.ByteCart.EventManagement;
+package com.github.catageek.ByteCart.Signs;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,12 +14,12 @@ import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 
 
-public abstract class AbstractTriggeredIC extends AbstractIC {
+public abstract class AbstractTriggeredSign extends AbstractIC {
 
 	private final org.bukkit.entity.Vehicle Vehicle;
 	private org.bukkit.inventory.Inventory Inventory;
 
-	public AbstractTriggeredIC(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
+	public AbstractTriggeredSign(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block);
 		this.Vehicle = vehicle;
 

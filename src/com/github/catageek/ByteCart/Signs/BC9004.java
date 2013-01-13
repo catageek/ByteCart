@@ -1,9 +1,7 @@
 package com.github.catageek.ByteCart.Signs;
 
-import com.github.catageek.ByteCart.EventManagement.TriggeredIC;
 
-
-public class BC9004 extends AbstractBC9000 implements TriggeredIC {
+public class BC9004 extends AbstractBC9000 implements TriggeredSign {
 
 	public BC9004(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
