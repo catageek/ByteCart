@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.Routing;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.Set;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
-public class RoutingTableExchange {
+public final class RoutingTableExchange {
 
 	private Map<Integer, Integer> tablemap = new HashMap<Integer, Integer>();
 
@@ -16,6 +17,7 @@ public class RoutingTableExchange {
 
 	private final int Region;
 
+	//internal variable used by updaters
 	private int Current = -2;
 
 	public int getDistance(int entry) {
@@ -28,6 +30,29 @@ public class RoutingTableExchange {
 
 	public boolean hasRouteTo(int ring) {
 		return tablemap.containsKey(ring);
+	}
+	
+	protected void setRoute(int number, int distance) {
+		tablemap.put(number, distance);
+	}
+	
+	protected int getMinDistance() {
+		Iterator<Entry<Integer, Integer>> it = this.getEntrySet().iterator();
+
+		if (! it.hasNext())
+			return -1;
+		
+		Entry<Integer, Integer> tmp;
+		int min = 10000, ret = -1; // big value
+		
+		while (it.hasNext()) {
+			tmp = it.next();
+			if (tmp.getValue() < min) {
+				min = tmp.getValue();
+				ret = tmp.getKey();
+			}
+		}
+		return ret;
 	}
 
 	public Set<Entry<Integer,Integer>> getEntrySet() {

@@ -88,6 +88,14 @@ public final class UpdaterLocal implements Updater {
 		this.getStart().clear();
 		this.getEnd().clear();
 
+		// incrementing ring counter in the RoutingTableExchange map
+		int ring = this.getCounter().getCount(counterSlot.RING.slot);
+		if (this.getRoutes().hasRouteTo(ring))
+			this.getRoutes().setRoute(ring, this.getRoutes().getDistance(ring) + 1);
+		else
+			this.getRoutes().setRoute(ring, 1);
+
+		// updating region and counter data from sign
 		this.getCounter().setCount(counterSlot.REGION.slot, this.getSignAddress().getRegion().getAmount());
 		this.getCounter().setCount(counterSlot.RING.slot, this.getSignAddress().getTrack().getAmount());
 
@@ -174,7 +182,20 @@ public final class UpdaterLocal implements Updater {
 				this.getStart().clear();
 				this.getEnd().clear();
 				this.getStart().push(2);
-				return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+
+				// Selecting the route where we went the lesser
+				int preferredroute = this.getRoutes().getMinDistance();
+				
+				if (preferredroute == -1)
+					return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+				
+				try {
+					return RoutingTable.getDirection(preferredroute).getBlockFace();
+				} catch (NullPointerException e) {
+					// no route to ring
+					return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+				}
+
 			}
 			return this.getFrom();
 		}
