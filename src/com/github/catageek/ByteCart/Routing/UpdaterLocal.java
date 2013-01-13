@@ -105,7 +105,7 @@ public final class UpdaterLocal implements Updater {
 		// wrong level or cookie still there or we did not enter the subnet
 		if (this.getLevel().number != (this.getRoutes().getLevel().number & 7)
 				|| this.getStart().empty() ^ this.getEnd().empty()
-				|| to.Value() != Side.RIGHT.Value())
+				|| (to.Value() != Side.RIGHT.Value() && this.getNetmask() < 4))
 			return;
 		// reset cart
 		if (this.getRoutes().getLevel() == com.github.catageek.ByteCart.Routing.Updater.Level.RESET_LOCAL) {
