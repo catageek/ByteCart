@@ -50,4 +50,8 @@ public final class ExpirableMap<K, T> extends Expirable<K> {
 	public boolean contains(K key) {
 		return Map.containsKey(key);
 	}
+	
+	public void clear() {
+		Map.clear();
+	}
 }

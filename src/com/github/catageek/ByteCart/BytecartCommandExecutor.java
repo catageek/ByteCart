@@ -103,10 +103,16 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			} else {
 				Player player = (Player) sender;
 
+				if (args.length == 1 && args[0].equalsIgnoreCase("remove")) {
+					ByteCart.myPlugin.getUm().getMapRoutes().clear();
+					return true;
+				}
+
 				int region = 0;
 
 				if(args.length == 0 || args.length > 3 || !Updater.Level.isMember(args[0].toLowerCase()))
 					return false;
+				
 
 				if (args.length == 1 && ! args[0].equalsIgnoreCase("backbone")
 						&& ! args[0].equalsIgnoreCase("reset_backbone"))
