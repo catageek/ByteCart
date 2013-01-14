@@ -14,7 +14,7 @@ public class BC9000 extends AbstractBC9000 implements TriggeredIC {
 
 	public BC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
-		super(block, vehicle);
+		super(block, vehicle, "BC9000");
 		this.Name = "BC9000";
 		this.FriendlyName = "Collision avoider";
 	}
