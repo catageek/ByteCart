@@ -26,10 +26,11 @@ abstract public class AbstractBC9000 extends AbstractTriggeredIC {
 	protected int netmask;
 	protected CollisionAvoiderBuilder builder;
 
-	public AbstractBC9000(org.bukkit.block.Block block,
+	public AbstractBC9000(String name, org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
+		this.Name = name;
 		this.Permission = this.Permission + this.Name;
 		builder = new SimpleCollisionAvoiderBuilder((TriggeredIC) this, block.getRelative(this.getCardinal(), 3).getLocation());
 		/*		if(ByteCart.debug)
