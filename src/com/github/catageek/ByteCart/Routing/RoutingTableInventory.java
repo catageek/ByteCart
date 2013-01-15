@@ -81,5 +81,16 @@ public final class RoutingTableInventory extends AbstractRoutingTable implements
 		this.Inventory.clear(entry);
 
 	}
+	
+	@Override
+	public Set<Entry<Integer,Integer>> getEntrySet() {
+		Map<Integer, Integer> tablemap = new HashMap<Integer, Integer>();
+
+		for(int i = 0; i< this.getSize(); i++) {
+			if(this.getDirection(i) != null)
+				tablemap.put(i, this.getDistance(i));
+		}
+		return tablemap.entrySet();
+	}
 
 }

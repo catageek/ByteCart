@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.Routing;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.Set;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
-public class RoutingTableExchange {
+public final class RoutingTableExchange {
 
 	private Map<Integer, Integer> tablemap = new HashMap<Integer, Integer>();
 
@@ -16,6 +17,7 @@ public class RoutingTableExchange {
 
 	private final int Region;
 
+	//internal variable used by updaters
 	private int Current = -2;
 
 	public int getDistance(int entry) {
@@ -28,6 +30,46 @@ public class RoutingTableExchange {
 
 	public boolean hasRouteTo(int ring) {
 		return tablemap.containsKey(ring);
+	}
+
+	protected void setRoute(int number, int distance) {
+		tablemap.put(number, distance);
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : setting counter of ring " + number + " to " + distance);
+	}
+
+	protected int getMinDistance(RoutingTable routes, DirectionRegistry from) {
+		Iterator<Entry<Integer, Integer>> it = routes.getEntrySet().iterator();
+
+		if (! it.hasNext())
+			return -1;
+
+		// we skip route 0
+		it.next();
+
+		Entry<Integer, Integer> tmp;
+		int min = 10000, ret = -1; // big value
+
+		while (it.hasNext()) {
+			tmp = it.next();
+			if (routes.getDirection(tmp.getKey()).getAmount() != from.getAmount()) {
+				if (! this.hasRouteTo(tmp.getKey())) {
+					if(ByteCart.debug)
+						ByteCart.log.info("ByteCart : found ring " + tmp.getKey() + " was never visited");
+					return tmp.getKey();
+				}
+
+				else {
+					if (getDistance(tmp.getKey()) < min) {
+						min = getDistance(tmp.getKey());
+						ret = tmp.getKey();
+					}
+				}
+			}
+		}
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : minimum found ring " + ret + " with " + min);
+		return ret;
 	}
 
 	public Set<Entry<Integer,Integer>> getEntrySet() {
