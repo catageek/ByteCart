@@ -25,7 +25,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 	protected CollisionAvoiderBuilder builder;
 
 	public AbstractBC9000(org.bukkit.block.Block block,
-			org.bukkit.entity.Vehicle vehicle, String name) {
+			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
 		this.Permission = this.Permission + this.Name;

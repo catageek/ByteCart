@@ -48,7 +48,7 @@ public final class UpdaterLocal implements Updater {
 		Routes = ByteCart.myPlugin.getUm().getMapRoutes().get(getVehicle().getEntityId());
 		RoutingTable = null;
 
-		// set cookie to wait a router
+		// set cookie A to wait a router
 		if(this.getRoutes().getCurrent() == -2) {
 			this.getStart().push(1);
 			this.getRoutes().setCurrent(0);
@@ -70,31 +70,47 @@ public final class UpdaterLocal implements Updater {
 
 		int signring = this.SignAddress.getTrack().getAmount();
 		// the route where we went the lesser
-		int preferredroute = this.getRoutes().getMinDistance(RoutingTable, new DirectionRegistry(getFrom()));
+		int preferredroute = this.getRoutes().getMinDistance(RoutingTable, new DirectionRegistry(this.getFrom()));
 
 
-		// if we are not in the good region or on ring 0, or not in the ring where
-		// we went the lesser, skip update
+		// if we are not in the good region or on ring 0, skip update
 		if (this.SignAddress.getRegion().getAmount() != Routes.getRegion()
 				|| signring == 0
-				|| (preferredroute != -1 && signring != preferredroute)) {
+				) {
 			return;
 		}
 
+		// if this is cookie A, do nothing if this is not the route where we want to go
+		if (this.getEnd().empty() ^ this.getStart().empty()
+				&& this.getStart().peek() != 0) {
+			preferredroute = this.getStart().peek();
+			if (preferredroute != signring)
+				return;
+		}
+		
 		// mark all stations of subnets in stack as taken
 		while (! this.getEnd().empty())
 			this.leaveSubnet();
 
-		//if cookie is present, leave a new cookie and return
+		//if cookie B is present, leave cookie A and return
 		if (this.getEnd().empty() ^ this.getStart().empty())
-			if (this.getStart().pop() != 1) {
-				this.getStart().push(1);
+			if (this.getStart().pop() == 0) {
+				// Pushing the route where we want to go
+				this.getStart().push(preferredroute);
 				return;
 			}
 
-		// leave subnet, resetting start and end stacks (and removing cookie)
+		// leave subnet, resetting start and end stacks (and removing cookie A)
 		this.getStart().clear();
 		this.getEnd().clear();
+
+
+		// incrementing ring counter in the RoutingTableExchange map
+		int ring = this.getCounter().getCount(counterSlot.RING.slot);
+		if (this.getRoutes().hasRouteTo(ring))
+			this.getRoutes().setRoute(ring, this.getRoutes().getDistance(ring) + 1);
+		else
+			this.getRoutes().setRoute(ring, 1);
 
 		// updating region and counter data from sign
 		this.getCounter().setCount(counterSlot.REGION.slot, this.getSignAddress().getRegion().getAmount());
@@ -161,6 +177,7 @@ public final class UpdaterLocal implements Updater {
 
 	@Override
 	public Side giveSimpleDirection() {
+		// if 
 		if (this.getLevel().number == (this.getRoutes().getLevel().number & 7) && this.getNetmask() < 4
 				&& ! (this.getStart().empty() ^ this.getEnd().empty()))
 			return Side.RIGHT;
@@ -180,44 +197,52 @@ public final class UpdaterLocal implements Updater {
 			}
 		}
 
-		int signring = this.SignAddress.getTrack().getAmount();
+		// there is a cookie (so it is cookie A)
+		if (this.getStart().empty() ^ this.getEnd().empty()) {
+			int signring = this.SignAddress.getTrack().getAmount();
+			int preferredroute = this.getStart().peek();
 
-		// Selecting the route where we went the lesser
-		int preferredroute = this.getRoutes().getMinDistance(RoutingTable, new DirectionRegistry(getFrom()));
+			// if we are not arrived yet or in ring 0, we continue
+			if (signring == 0 || signring != preferredroute)
+				try {
+					if(ByteCart.debug)
+						ByteCart.log.info("not arrived, signaddress = " + signring);
+					return RoutingTable.getDirection(preferredroute).getBlockFace();
+				} catch (NullPointerException e) {
+					// no route to ring
+					return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+				}
+		}
+		else {
+			// no cookie
+			// check counter
+			if (this.getCounter().isAllFull(0, 15)) {
+				// we configured all stations
+				// incrementing ring counter in the RoutingTableExchange map
+				int ring = this.getCounter().getCount(counterSlot.RING.slot);
+				if (this.getRoutes().hasRouteTo(ring))
+					this.getRoutes().setRoute(ring, this.getRoutes().getDistance(ring) + 1);
+				else
+					this.getRoutes().setRoute(ring, 1);
 
-		// if we are not arrived yet or in ring 0, we continue
-		if (signring == 0 || signring != preferredroute)
-			try {
-				return RoutingTable.getDirection(preferredroute).getBlockFace();
-			} catch (NullPointerException e) {
-				// no route to ring
-				return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+				// reset counters
+				this.getCounter().resetAll();
+				//clear stacks and set cookie B
+				this.getStart().clear();
+				this.getEnd().clear();
+				this.getStart().push(0);
+
+				// the route where we went the lesser
+				int preferredroute = this.getRoutes().getMinDistance(RoutingTable, new DirectionRegistry(getFrom()));
+
+				try {
+					return RoutingTable.getDirection(preferredroute).getBlockFace();
+				} catch (NullPointerException e) {
+					// no route to ring
+					return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+				}
+
 			}
-
-		// check counter and cookie
-		if (this.getCounter().isAllFull(0, 15) && ! (this.getStart().empty() ^ this.getEnd().empty())) {
-			// we configured all stations
-			// incrementing ring counter in the RoutingTableExchange map
-			int ring = this.getCounter().getCount(counterSlot.RING.slot);
-			if (this.getRoutes().hasRouteTo(ring))
-				this.getRoutes().setRoute(ring, this.getRoutes().getDistance(ring) + 1);
-			else
-				this.getRoutes().setRoute(ring, 1);
-
-			// reset counters
-			this.getCounter().resetAll();
-			//clear stacks and set cookie
-			this.getStart().clear();
-			this.getEnd().clear();
-			this.getStart().push(2);
-
-			try {
-				return RoutingTable.getDirection(preferredroute).getBlockFace();
-			} catch (NullPointerException e) {
-				// no route to ring
-				return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
-			}
-
 		}
 		return this.getFrom();
 

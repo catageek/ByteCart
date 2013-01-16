@@ -13,7 +13,7 @@ public class BC9000 extends AbstractBC9000 implements TriggeredSign {
 
 	public BC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
-		super(block, vehicle, "BC9000");
+		super(block, vehicle);
 		this.Name = "BC9000";
 		this.FriendlyName = "Collision avoider";
 	}

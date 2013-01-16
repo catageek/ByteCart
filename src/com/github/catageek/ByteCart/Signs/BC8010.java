@@ -65,10 +65,11 @@ public class BC8010 extends AbstractTriggeredSign implements TriggeredSign {
 
 			// Here begins the triggered action
 
-			// is this an updater ? no then routing normally
+			// is this an updater who needs special routing ? no then routing normally
 			if(selectUpdater(vehicle.getEntityId())) {
 				UpdaterManager um = ByteCart.myPlugin.getUm();
 
+				// non updater carts case
 				if (! um.isUpdater(vehicle.getEntityId())) {
 					// if this is a cart in a train
 					if (this.wasTrain(this.getLocation())) {
@@ -155,7 +156,13 @@ public class BC8010 extends AbstractTriggeredSign implements TriggeredSign {
 
 	}
 
+	/**
+	 * Tells if this cart needs normal routing
+	 * @param id: id of the cart
+	 * @return: true if the cart needs normal routing
+	 */
 	protected boolean selectUpdater(int id) {
+		// everything that is not an updater must be routed
 		return ! ByteCart.myPlugin.getUm().isUpdater(id);
 	}
 

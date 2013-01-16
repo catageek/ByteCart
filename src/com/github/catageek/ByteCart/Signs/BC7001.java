@@ -6,6 +6,7 @@ import java.util.ListIterator;
 
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
@@ -43,6 +44,14 @@ public class BC7001 extends AbstractTriggeredSign implements TriggeredSign, Powe
 
 	@Override
 	public void trigger() {
+		
+		// TODO
+		// delete when finished
+		
+		if (((Sign) this.getBlock().getState()).getLine(1) == "[BC7000]") {
+			((Sign) this.getBlock().getState()).setLine(1, "[BC7001]");
+			((Sign) this.getBlock().getState()).update();
+		}
 
 		// add input command = redstone
 

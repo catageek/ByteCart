@@ -22,7 +22,7 @@ public class BC9001 extends AbstractBC9000 implements TriggeredSign, PoweredSign
 
 
 	public BC9001(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
-		super(block, vehicle, "BC9001");
+		super(block, vehicle);
 		this.netmask = 4;
 		this.Name = "BC9001";
 		this.FriendlyName = "Station";

@@ -26,6 +26,9 @@ public class BC8020 extends BC8010 implements TriggeredSign {
 
 	}
 
+	/**
+	 * Return true if it's a local updater or a normal cart to route normally
+	 */
 	@Override
 	protected boolean selectUpdater(int id) {
 		UpdaterManager um = ByteCart.myPlugin.getUm();

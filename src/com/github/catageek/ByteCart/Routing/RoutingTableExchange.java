@@ -31,6 +31,25 @@ public final class RoutingTableExchange {
 	public boolean hasRouteTo(int ring) {
 		return tablemap.containsKey(ring);
 	}
+	
+	protected int getMinDistance() {
+		Iterator<Entry<Integer, Integer>> it = this.getEntrySet().iterator();
+
+		if (! it.hasNext())
+			return -1;
+		
+		Entry<Integer, Integer> tmp;
+		int min = 10000, ret = -1; // big value
+		
+		while (it.hasNext()) {
+			tmp = it.next();
+			if (tmp.getValue() < min) {
+				min = tmp.getValue();
+				ret = tmp.getKey();
+			}
+		}
+		return ret;
+	}
 
 	protected void setRoute(int number, int distance) {
 		tablemap.put(number, distance);
