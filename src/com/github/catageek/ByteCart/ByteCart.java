@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
 import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
+import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.Storage.UpdaterManager;
 
@@ -39,6 +40,9 @@ public class ByteCart extends JavaPlugin {
     	this.setUm(new UpdaterManager());
     	
     	getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
+    	
+    	if(this.getConfig().getBoolean("loadchunks"))
+        	getServer().getPluginManager().registerEvents(new PreloadChunkListener(), this);
     	
     	getCommand("mego").setExecutor(new BytecartCommandExecutor());
        	getCommand("sendto").setExecutor(new BytecartCommandExecutor());

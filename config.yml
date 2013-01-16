@@ -3,6 +3,9 @@
 # set true if you want a lot debug messages on the console
 debug: false
 
+# set false if you don't want to load chunks automatically around a moving cart
+loadchunks: true
+
 # material id to use when the plugin needs to write
 # in an inventory for its internal needs
 material.id: 3

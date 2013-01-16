@@ -3,13 +3,10 @@ package com.github.catageek.ByteCart.EventManagement;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -17,9 +14,6 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.util.Vector;
-
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.Signs.ClickedSign;
@@ -28,27 +22,17 @@ import com.github.catageek.ByteCart.Signs.PoweredSign;
 import com.github.catageek.ByteCart.Signs.PoweredSignFactory;
 import com.github.catageek.ByteCart.Signs.TriggeredSign;
 import com.github.catageek.ByteCart.Signs.TriggeredSignFactory;
-import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 
 public class ByteCartListener implements Listener {
 
 	private PoweredSignFactory MyPoweredICFactory;
-	private final Vector NullVector = new Vector(0,0,0);
 
 
 	public ByteCartListener() {
 		this.MyPoweredICFactory = new PoweredSignFactory();
 	}
-	/*
-	@EventHandler(ignoreCancelled = true)
-	public void onVehicleUpdate(VehicleUpdateEvent event) {
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: onVehiculeUpdate vehicule at " + event.getVehicle().getLocation());
-
-	}
-	 */
 
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleMove(VehicleMoveEvent event) {
@@ -68,41 +52,6 @@ public class ByteCartListener implements Listener {
 		if(event.getVehicle() instanceof Minecart) // we care only of minecart
 		{
 			Minecart vehicle = (Minecart) event.getVehicle();
-
-			// preload and postload chunks
-
-			from_x >>= 4;
-			from_z >>= 4;
-			to_x >>= 4;
-			to_z >>= 4;
-
-
-			int a = from_x.compareTo(to_x);
-
-			if(a != 0) {
-				// we enter a new chunk
-				if (a > 0)
-					MathUtil.unloadChunkXAxis(loc.getWorld(), from_x + 2, from_z);
-				else
-					MathUtil.unloadChunkXAxis(loc.getWorld(), from_x - 2, from_z);
-
-				MathUtil.loadChunkAround(loc.getWorld(), to_x, to_z, 2);				
-			}
-			else {
-
-				a = from_z.compareTo(to_z);
-
-				if(a != 0){
-					// we enter a new chunk
-					if (a > 0)
-						MathUtil.unloadChunkZAxis(loc.getWorld(), from_x, from_z + 2);
-					else
-						MathUtil.unloadChunkZAxis(loc.getWorld(), from_x, from_z - 2);
-
-					MathUtil.loadChunkAround(loc.getWorld(), to_x, to_z, 2);				
-				}
-			}
-
 
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
@@ -235,75 +184,4 @@ public class ByteCartListener implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	/*
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onChunkUnload(ChunkUnloadEvent event) {
-
-		Entity[] entities = event.getChunk().getEntities();
-		int i = entities.length -1;
-
-		/*		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: Chunk requested to be unloaded at " + event.getChunk());
-	 */
-	/*		for (; i >=0; --i) {
-			if (entities[i] instanceof StorageMinecart && !((StorageMinecart)entities[i]).getVelocity().equals(NullVector)) {
-
-				event.setCancelled(true);
-
-				ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new LoadChunks(event.getChunk()), 1);
-
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
-				return;
-			}
-		}
-	}
-	 */
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onChunkUnload(ChunkUnloadEvent event) {
-
-
-		int n, j, i = event.getChunk().getX()-2, k = i+4, l = event.getChunk().getZ()+2;
-		World world = event.getWorld();
-
-		Entity[] entities;
-
-		for (; i<=k; ++i) {
-			for (j=l-4;  j<=l ; ++j) {
-
-				if (world.isChunkLoaded(i, j)) {
-					entities = world.getChunkAt(i, j).getEntities();
-
-
-					for (n = entities.length -1; n >=0; --n) {
-						if (entities[n] instanceof Minecart && !((Minecart)entities[n]).getVelocity().equals(NullVector)) {
-
-							event.setCancelled(true);
-
-							//						if(ByteCart.debug)
-							//							ByteCart.log.info("ByteCart: Chunk kept loaded " + event.getChunk());
-							return;
-						}
-					}
-				}
-			}
-		}
-
-	}
-	/*
-	private static final class LoadChunks implements Runnable {
-
-		private final Chunk Chunk;
-
-		LoadChunks(Chunk chunk) {
-			Chunk = chunk;
-		}
-
-		@Override
-		public void run() {
-			MathUtil.loadChunkAround(Chunk.getWorld(), Chunk.getX(), Chunk.getZ());
-		}
-
-	}
-	 */
 }
