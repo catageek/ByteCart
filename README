@@ -22,7 +22,7 @@ A tool is provided to configure automatically the network if you do not have net
 
 Bukkit version
 =================================
-This version of ByteCart runs on Minecraft v1.4.5 R1.0 and later. 
+The master branch of ByteCart runs currently on Minecraft v1.4.6-R0.3 to 1.4.7-R0.1. 
 
 Features
 =================================
@@ -30,15 +30,20 @@ Features
 ByteCart is fully scalable, meaning that whatever the size of your network, the same amount of resources are used
 to take a cart from one point to another.
 
+* Reliable anti-collision system on sensitive points. When a collision is about to occur, a specific algorithm takes
+path modification decisions to avoid collisions. 
+
 * Well-known pathfinding algorithm
 ByteCart implements Djikstra algorithm as used in Internet routing protocol, with the success we know. All paths
 are precomputed and stored in routing tables. finding the best path is only a read operation on routing tables.
 
+* Possibility to form logical trains with a unique destination. Only the head cart must be "byteCart" compliant.
+
 * Support Permissions API. Check plugin.yml for available permissions.
 
 * WorldEdit compatibility
-Since there is no external data storage, all world editing tools are compatible with Bytecart, but, in case of copy/paste
-operation, you need to manually update network address on signs.
+Since there is no external data storage, all world editing tools are compatible with Bytecart. You can duplicate
+a part of a network to expand it, at little cost of a new automatic configuration session.
 
 * Falsebook and Minecart revolution compatibility
 

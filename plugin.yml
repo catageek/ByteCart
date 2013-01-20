@@ -1,6 +1,6 @@
 name: ByteCart
 main: com.github.catageek.ByteCart.ByteCart
-version: 1.0beta
+version: 1.1.0
 permissions:
     bytecart.*:
         description: give access to all blocks
