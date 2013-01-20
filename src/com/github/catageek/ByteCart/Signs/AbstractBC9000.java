@@ -107,9 +107,14 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 	}
 
 	final protected boolean isAddressMatching() {
-		return this.getInput(2).getAmount() == this.getInput(5).getAmount()
-				&& this.getInput(1).getAmount() == this.getInput(4).getAmount()
-				&& this.getInput(0).getAmount() == this.getInput(3).getAmount();
+		try {
+			return this.getInput(2).getAmount() == this.getInput(5).getAmount()
+					&& this.getInput(1).getAmount() == this.getInput(4).getAmount()
+					&& this.getInput(0).getAmount() == this.getInput(3).getAmount();
+		} catch (NullPointerException e) {
+			// there is no address on sign
+		}
+		return false;
 	}
 
 
@@ -163,33 +168,34 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 
 
 		// Address is on a sign, line #3
+		if (sign.isValid()) {
 
+			RegistryInput region = sign.getRegion();
 
-		RegistryInput region = sign.getRegion();
+			this.addInputRegistry(region);
 
-		this.addInputRegistry(region);
+			// Input[4] = station track from sign, line #3, 6 bits registry
 
-		// Input[4] = station track from sign, line #3, 6 bits registry
+			//			RegistryInput track = new SignRegistry(this.getBlock(), 3, 6);
+			RegistryInput track = sign.getTrack();
 
-		//			RegistryInput track = new SignRegistry(this.getBlock(), 3, 6);
-		RegistryInput track = sign.getTrack();
+			// only 5 most significant bits are taken into account
 
-		// only 5 most significant bits are taken into account
+			//track = new SubRegistry(track, 5, 0);
 
-		//track = new SubRegistry(track, 5, 0);
+			this.addInputRegistry(track);
 
-		this.addInputRegistry(track);
+			// Input[5] = station number from sign, line #0, 6 bits registry
 
-		// Input[5] = station number from sign, line #0, 6 bits registry
+			//RegistryInput station = new SignRegistry(this.getBlock(), 0, 6);
+			RegistryInput station = sign.getStation();
 
-		//RegistryInput station = new SignRegistry(this.getBlock(), 0, 6);
-		RegistryInput station = sign.getStation();
+			// We keep only the X most significant bits (netmask)
 
-		// We keep only the X most significant bits (netmask)
+			station = applyNetmask(station);
 
-		station = applyNetmask(station);
-
-		this.addInputRegistry(station);
+			this.addInputRegistry(station);
+		}
 
 	}
 }

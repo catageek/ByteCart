@@ -56,7 +56,11 @@ public final class RoutingTableInventory extends AbstractRoutingTable implements
 
 	@Override
 	public boolean isEmpty(int entry) {
-		return (Inventory.getItem(entry) == null);
+		try {
+			return (Inventory.getItem(entry) == null);
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
+		return true;
 	}
 
 	public Set<Entry<Integer,Integer>> getRoutesTo(DirectionRegistry direction) {

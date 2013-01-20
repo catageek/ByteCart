@@ -38,6 +38,12 @@ public final class UpdaterBackBone extends AbstractUpdater implements Updater {
 	
 	@Override
 	public void Update(BlockFace To) {
+
+		if (isResetCart()) {
+			reset();
+			return;
+		}
+
 		if (getRoutes() != null) {
 
 			// current: track number we are on
@@ -61,10 +67,5 @@ public final class UpdaterBackBone extends AbstractUpdater implements Updater {
 			routeUpdates(To, current);
 
 		}
-		super.Update(To);
-
 	}
-
-
-
 }

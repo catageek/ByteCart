@@ -57,18 +57,18 @@ public abstract class AbstractUpdater {
 		return;
 	}
 
-	public void Update(BlockFace To) {
-
+	public void reset() {
 		// case of reset
-		if (Routes != null && Routes.getLevel().number == this.getLevel().number + 8) {
 			// erase address on sign
 			SignAddress.remove();
 			// clear routes except route to ring 0
 			RoutingTable.clear();
-			return;
-		}
-
 	}
+	
+	protected boolean isResetCart() {
+		return Routes != null && Routes.getLevel().number == this.getLevel().number + 8;
+	}
+	
 	protected void routeUpdates(BlockFace To, int current) {
 		if(isRouteConsumer()) {
 		List<Integer> connected = RoutingTable.getDirectlyConnected(getFrom());

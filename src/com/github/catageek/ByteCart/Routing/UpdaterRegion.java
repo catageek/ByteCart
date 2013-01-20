@@ -99,9 +99,15 @@ public final class UpdaterRegion extends AbstractUpdater implements Updater {
 		}
 		return AbstractUpdater.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
 	}
-	
+
 	@Override
 	public void Update(BlockFace To) {
+
+		if (isResetCart()) {
+			reset();
+			return;
+		}
+
 		if (getRoutes() != null) {
 
 			// current: track number we are on
@@ -134,13 +140,11 @@ public final class UpdaterRegion extends AbstractUpdater implements Updater {
 					this.getCounter().setCount(0, ++zero);
 				}
 			}
-			
+
 			routeUpdates(To, current);
 
-
 		}
-		
-		super.Update(To);
+
 	}
 
 }

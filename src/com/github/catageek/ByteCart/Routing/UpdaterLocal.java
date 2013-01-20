@@ -49,7 +49,7 @@ public final class UpdaterLocal implements Updater {
 		RoutingTable = null;
 
 		// set cookie A to wait a router
-		if(this.getRoutes().getCurrent() == -2) {
+		if(this.getRoutes().getCurrent() == -2 && ! isResetCart()) {
 			this.getStart().push(1);
 			this.getRoutes().setCurrent(0);
 		}
@@ -75,10 +75,9 @@ public final class UpdaterLocal implements Updater {
 
 		// if we are not in the good region or on ring 0, skip update
 		if (this.SignAddress.getRegion().getAmount() != Routes.getRegion()
-				|| signring == 0
-				) {
+				|| signring == 0 || isResetCart())
 			return;
-		}
+
 
 		// if this is cookie A, do nothing if this is not the route where we want to go
 		if (this.getEnd().empty() ^ this.getStart().empty()
@@ -87,7 +86,7 @@ public final class UpdaterLocal implements Updater {
 			if (preferredroute != signring)
 				return;
 		}
-		
+
 		// mark all stations of subnets in stack as taken
 		while (! this.getEnd().empty())
 			this.leaveSubnet();
@@ -127,18 +126,17 @@ public final class UpdaterLocal implements Updater {
 	@Override
 	public void Update(Side to) {
 
+		// reset cart
+		if (isResetCart()) {
+			this.getSignAddress().remove();
+			return;
+		}
 
 		// wrong level or cookie still there or we did not enter the subnet
 		if (this.getLevel().number != (this.getRoutes().getLevel().number & 7)
 				|| this.getStart().empty() ^ this.getEnd().empty()
 				|| (to.Value() != Side.RIGHT.Value() && this.getNetmask() < 4))
 			return;
-		// reset cart
-		if (this.getRoutes().getLevel() == com.github.catageek.ByteCart.Routing.Updater.Level.RESET_LOCAL) {
-			this.getSignAddress().remove();
-			return;
-		}
-
 
 		// if sign is not consistent, rewrite it
 		if (! getSignAddress().isValid() || this.needUpdate()) {
@@ -175,11 +173,18 @@ public final class UpdaterLocal implements Updater {
 		}
 	}
 
+
+	private boolean isResetCart() {
+		return this.getRoutes().getLevel().number == com.github.catageek.ByteCart.Routing.Updater.Level.RESET_LOCAL.number;
+	}
+
 	@Override
 	public Side giveSimpleDirection() {
-		// if 
-		if (this.getLevel().number == (this.getRoutes().getLevel().number & 7) && this.getNetmask() < 4
-				&& ! (this.getStart().empty() ^ this.getEnd().empty()))
+		// turn if it's not a station, and the ring is initialized or the address is invalid
+		if (this.getLevel().number == (this.getRoutes().getLevel().number & 7)
+				&& this.getNetmask() < 4
+				&& (! (this.getStart().empty() ^ this.getEnd().empty())
+						|| (isResetCart() && ! this.getSignAddress().isValid())))
 			return Side.RIGHT;
 		return Side.LEFT;
 	}
@@ -187,7 +192,8 @@ public final class UpdaterLocal implements Updater {
 	@Override
 	public BlockFace giveRouterDirection() {
 		// check if we are in the good region
-		if (this.SignAddress.getRegion().getAmount() != Routes.getRegion()) {
+		if (this.getSignAddress().isValid()
+				&& this.getSignAddress().getRegion().getAmount() != Routes.getRegion()) {
 			// case this is not the right region
 			try {
 				return RoutingTable.getDirection(0).getBlockFace();
@@ -196,8 +202,12 @@ public final class UpdaterLocal implements Updater {
 				return this.getFrom();
 			}
 		}
+		
+		if (isResetCart() && ! this.getSignAddress().isValid())
+			return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+			
 
-		// there is a cookie (so it is cookie A)
+		// there is a cookie (so it is cookie A) or it's a reset cart
 		if (this.getStart().empty() ^ this.getEnd().empty()) {
 			int signring = this.SignAddress.getTrack().getAmount();
 			int preferredroute = this.getStart().peek();
