@@ -112,21 +112,26 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 				if(args.length == 0 || args.length > 3 || !Updater.Level.isMember(args[0].toLowerCase()))
 					return false;
-				
+
 
 				if (args.length == 1 && ! args[0].equalsIgnoreCase("backbone")
 						&& ! args[0].equalsIgnoreCase("reset_backbone"))
 					return false;
 
-				if (args[0].equalsIgnoreCase("region") || args[0].equalsIgnoreCase("local")
-						|| args[0].equalsIgnoreCase("reset_region")
-						|| args[0].equalsIgnoreCase("reset_local")) {
+				if (args.length == 2){
+
+					if (! args[0].equalsIgnoreCase("region")
+							&& ! args[0].equalsIgnoreCase("local")
+							&& ! args[0].equalsIgnoreCase("reset_region")
+							&& ! args[0].equalsIgnoreCase("reset_local"))
+						return false;
+
 					region = Integer.parseInt(args[1]);
+
 					if (region < 1 || region > 53)
 						return false;
 				}
-				else
-					return false;			
+
 
 				final class Execute implements ModifiableRunnable<Inventory> {
 
