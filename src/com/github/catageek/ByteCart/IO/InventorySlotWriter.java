@@ -14,7 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public final class InventoryWriter {
+public final class InventorySlotWriter {
 
 	private final Set<Integer> Written = new HashSet<Integer>();
 	private Inventory OriginalInventory;
@@ -25,7 +25,7 @@ public final class InventoryWriter {
 	 */
 	private final Map<Integer, Integer> typemap = new HashMap<Integer, Integer>();
 
-	public InventoryWriter(Inventory inv) {
+	public InventorySlotWriter(Inventory inv) {
 		this.setOriginalInventory(inv);
 	}
 
@@ -57,7 +57,7 @@ public final class InventoryWriter {
 		 * Map storing (type, Set<ItemStack>) ordered
 		 * by ascending distance to Value
 		 */
-		Map<Integer, Set<ItemStack>> MapStackSet = new TreeMap<Integer, Set<ItemStack>>(new InventoryWriterComparator<Integer>(value, typemap));
+		Map<Integer, Set<ItemStack>> MapStackSet = new TreeMap<Integer, Set<ItemStack>>(new InventorySlotWriterComparator<Integer>(value, typemap));
 
 //		if(ByteCart.debug)
 //			ByteCart.log.info("ByteCart: Writing value " + value + " to slot #" + pos);
@@ -157,7 +157,7 @@ public final class InventoryWriter {
 		OriginalInventory = originalInventory;
 	}
 
-	public InventoryWriter setWritten(int pos) {
+	public InventorySlotWriter setWritten(int pos) {
 		this.Written.add(pos);
 		/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: 	Declaring as Written slot #" +  pos);

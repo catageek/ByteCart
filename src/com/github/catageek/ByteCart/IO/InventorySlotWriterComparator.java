@@ -10,12 +10,12 @@ import java.util.Map;
  * with them 
  */
 
-public final class InventoryWriterComparator<E> implements Comparator<E> {
+public final class InventorySlotWriterComparator<E> implements Comparator<E> {
 
 	final private int Value;
 	final private Map<Integer, Integer> Map; 
 	
-	public InventoryWriterComparator(int value, Map<Integer, Integer> map) {
+	public InventorySlotWriterComparator(int value, Map<Integer, Integer> map) {
 		Value = value;
 		Map = map;
 	}
