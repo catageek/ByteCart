@@ -63,9 +63,9 @@ public class ByteCartListener implements Listener {
 
 			if (myIC != null) {
 
-								if(ByteCart.debug)
+				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: " + myIC.getName() + ".trigger()");
-				 
+
 				myIC.trigger();
 
 				if ((! vehicle.isEmpty())
@@ -139,7 +139,9 @@ public class ByteCartListener implements Listener {
 				else
 				{
 					event.getPlayer().sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + myIC.getFriendlyName() + " block created.");
-					event.getPlayer().sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Tarif : " +myIC.getBuildtax() + " eur0x.");	
+					int tax = myIC.getBuildtax();
+					if (tax > 0)
+						event.getPlayer().sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Tarif : " +myIC.getBuildtax() + " eur0x.");	
 					if (event.getLine(2).compareTo("") == 0)
 						event.setLine(2, myIC.getFriendlyName());
 				}
