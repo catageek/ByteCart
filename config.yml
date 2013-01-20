@@ -6,6 +6,9 @@ debug: false
 # set false if you don't want to load chunks automatically around a moving cart
 loadchunks: true
 
+# set true if you want use books as destination address storage and more
+usebooks: true
+
 # material id to use when the plugin needs to write
 # in an inventory for its internal needs
 material.id: 3
@@ -38,7 +41,7 @@ BC7001.startvelocity: 2
 # Address where empty carts (not storage carts)
 # will be routed.
 # Default : 0.0.0
-#EmptyCartsDefaultRoute: 2.6.1
+EmptyCartsDefaultRoute: 0.0.0
 
 # error messages
 # Error : too few/many items in inventory

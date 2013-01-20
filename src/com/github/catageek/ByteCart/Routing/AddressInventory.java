@@ -8,7 +8,7 @@ import com.github.catageek.ByteCart.HAL.SubRegistry;
 import com.github.catageek.ByteCart.HAL.SuperRegistry;
 import com.github.catageek.ByteCart.HAL.VirtualRegistry;
 import com.github.catageek.ByteCart.IO.InventorySlot;
-import com.github.catageek.ByteCart.IO.InventoryWriter;
+import com.github.catageek.ByteCart.IO.InventorySlotWriter;
 
 
 
@@ -18,7 +18,7 @@ import com.github.catageek.ByteCart.IO.InventoryWriter;
 public final class AddressInventory extends AbstractAddress implements AddressRouted {
 
 	private final org.bukkit.inventory.Inventory Inventory;
-	private InventoryWriter InventoryWriter;
+	private InventorySlotWriter InventoryWriter;
 
 	private enum Slots {
 		// #slot
@@ -45,7 +45,7 @@ public final class AddressInventory extends AbstractAddress implements AddressRo
 
 	public AddressInventory(org.bukkit.inventory.Inventory inv) {
 		this.Inventory = inv;
-		this.InventoryWriter = new InventoryWriter(this.getInventory());
+		this.InventoryWriter = new InventorySlotWriter(this.getInventory());
 	}
 
 	@Override

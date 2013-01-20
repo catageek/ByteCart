@@ -14,7 +14,7 @@ public class ByteCart extends JavaPlugin {
 	
 	public static Logger log = Logger.getLogger("Minecraft");
 	public static ByteCart myPlugin;
-	public static boolean debug;
+	public static boolean debug, usebooks;
 	private CollisionAvoiderManager cam;
 	private IsTrainManager it;
 	private UpdaterManager um;
@@ -27,7 +27,9 @@ public class ByteCart extends JavaPlugin {
     	
     	myPlugin = this;
     	
-    	debug = this.getConfig().getBoolean("debug");
+    	debug = this.getConfig().getBoolean("debug", false);
+    	
+    	usebooks = this.getConfig().getBoolean("usebooks", true);
     	
     	Lockduration = this.getConfig().getInt("Lockduration", 44);
     	
@@ -54,7 +56,7 @@ public class ByteCart extends JavaPlugin {
     	
      	myPlugin = null;
      	log = null;
-     	
+    	
     }
    
 
