@@ -1,13 +1,13 @@
 package com.github.catageek.ByteCart.HAL;
 
 // This class represents 2 registries merged
-public class SuperRegistry implements Registry, RegistryInput, RegistryOutput {
+public class SuperRegistry<T extends Registry> implements RegistryBoth {
 
 	// Registry1 est le registre de poids fort
 	
 	private final Registry Registry1, Registry2;
 	
-	public SuperRegistry(Registry reg1, Registry reg2) {
+	public SuperRegistry(T reg1, T reg2) {
 		this.Registry1 = reg1;
 		this.Registry2 = reg2;
 	}
@@ -15,7 +15,7 @@ public class SuperRegistry implements Registry, RegistryInput, RegistryOutput {
 	@Override
 	public void setBit(int index, boolean value) {
 		if (index < this.Registry1.length())
-			((RegistryOutput) this.Registry1).setBit(index, value);
+			( (RegistryOutput) this.Registry1).setBit(index, value);
 		else
 			((RegistryOutput) this.Registry2).setBit(index-this.Registry1.length(), value);
 		

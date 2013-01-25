@@ -34,7 +34,7 @@ public class BC7010 extends AbstractTriggeredSign implements TriggeredSign, Clic
 	}
 
 	@Override
-	public void trigger() {
+	public final void trigger() {
 
 		if (! this.isHolderAllowed())
 			return;
@@ -45,17 +45,25 @@ public class BC7010 extends AbstractTriggeredSign implements TriggeredSign, Clic
 			return;
 		}
 
-		Address SignAddress = AddressFactory.getAddress(this.getBlock(), 3);
-
-		this.setAddress(SignAddress);
+		Address address = getAddressToWrite();
+		
+		if (address == null)
+			return;
+		
+		this.setAddress(address);
 
 		// if this is the first car of a train
 		// we save the state during 2 s
-		if (SignAddress.isTrain()) {
+		if (address.isTrain()) {
 			this.setWasTrain(this.getLocation(), true);
 		}
 
 
+	}
+
+	protected Address getAddressToWrite() {
+		Address Address = AddressFactory.getAddress(this.getBlock(), 3);
+		return Address;
 	}
 
 	public final boolean setAddress(Address SignAddress){

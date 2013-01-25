@@ -4,15 +4,13 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.material.Lever;
 
+import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
-public class ComponentLever extends AbstractComponent implements OutputPin, InputPin {
+public class ComponentLever extends AbstractComponent implements OutputPin, InputPin, RegistryInput {
 
 	public ComponentLever(Block block) {
 		super(block.getLocation());
-		/*		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : adding Lever at " + block.getLocation().toString());
-		 */
 	}
 
 	@Override
@@ -40,6 +38,21 @@ public class ComponentLever extends AbstractComponent implements OutputPin, Inpu
 
 		}
 		return false;
+	}
+
+	@Override
+	public boolean getBit(int index) {
+		return read();
+	}
+
+	@Override
+	public int getAmount() {
+		return (read() ? 15 : 0);
+	}
+
+	@Override
+	public int length() {
+		return 4;
 	}
 
 

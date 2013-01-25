@@ -3,7 +3,7 @@ package com.github.catageek.ByteCart.Routing;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.HAL.Registry;
+import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.IO.BookProperties;
 
 public final class AddressBook implements AddressRouted {
@@ -24,17 +24,17 @@ public final class AddressBook implements AddressRouted {
 	}
 
 	@Override
-	public Registry getRegion() {
+	public RegistryBoth getRegion() {
 		return getAddress().getRegion();
 	}
 
 	@Override
-	public Registry getTrack() {
+	public RegistryBoth getTrack() {
 		return getAddress().getTrack();
 	}
 
 	@Override
-	public Registry getStation() {
+	public RegistryBoth getStation() {
 		return getAddress().getStation();
 	}
 

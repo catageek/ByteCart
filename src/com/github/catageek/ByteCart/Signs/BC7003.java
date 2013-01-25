@@ -7,7 +7,7 @@ import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.IO.InputPin;
-import com.github.catageek.ByteCart.IO.InputPinFactory;
+import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
@@ -68,9 +68,9 @@ public final class BC7003 extends AbstractIC implements TriggeredSign, PoweredSi
 		InputPin[] wire = new InputPin[2];
 
 		// Right
-		wire[0] = InputPinFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.clockwise(getCardinal())));
+		wire[0] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.clockwise(getCardinal())));
 		// left
-		wire[1] = InputPinFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.anticlockwise(getCardinal())));
+		wire[1] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.anticlockwise(getCardinal())));
 
 		// InputRegistry[0] = detector
 		this.addInputRegistry(new PinRegistry<InputPin>(wire));

@@ -5,9 +5,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.HAL.Registry;
+import com.github.catageek.ByteCart.HAL.RegistryBoth;
 
-public final class InventorySlot implements Registry {
+public final class InventorySlot implements RegistryBoth {
 	
 	private final Inventory Inventory;
 	private final int Index;

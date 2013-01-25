@@ -1,12 +1,12 @@
 package com.github.catageek.ByteCart.HAL;
 
-public class SubRegistry implements Registry {
+public class SubRegistry <T extends Registry> implements RegistryBoth {
 	
 	private final Registry Registry;
 	private final int Length;
 	private final int First;
 	
-	public SubRegistry(Registry reg, int length, int first) {
+	public SubRegistry(T reg, int length, int first) {
 		this.Registry = reg;
 		this.Length = length;
 		this.First = first;

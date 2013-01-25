@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart.Util;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.HAL.Registry;
+import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.HAL.VirtualRegistry;
 
 public final class DirectionRegistry {
@@ -82,7 +83,7 @@ public final class DirectionRegistry {
 	}
 	
 	public final Registry getRegistry() {
-		Registry reg = new VirtualRegistry(4);
+		RegistryOutput reg = new VirtualRegistry(4);
 		reg.setAmount(this.getAmount());
 		return reg;
 	}

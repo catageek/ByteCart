@@ -6,7 +6,7 @@ import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.HAL.Registry;
+import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.HAL.SubRegistry;
 import com.github.catageek.ByteCart.IO.OutputPin;
@@ -100,9 +100,9 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 		return SimpleCollisionAvoider.Side.LEFT;
 	}
 
-	protected final RegistryInput applyNetmask(RegistryInput station) {
+	protected final RegistryBoth applyNetmask(RegistryBoth station) {
 		if (this.netmask < station.length())
-			return new SubRegistry((Registry) station, this.netmask, 0);
+			return new SubRegistry<RegistryBoth>(station, this.netmask, 0);
 		return station;
 	}
 
@@ -143,7 +143,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 
 		Address IPaddress = AddressFactory.getAddress(this.getInventory());
 
-		Registry slot2 = IPaddress.getRegion();
+		RegistryInput slot2 = IPaddress.getRegion();
 
 
 		this.addInputRegistry(slot2);
@@ -157,7 +157,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 
 		// Input[2] = destination station taken from cart, slot #2, 6 bits
 
-		RegistryInput slot0 = IPaddress.getStation();
+		RegistryBoth slot0 = IPaddress.getStation();
 
 
 		// We keep only the X most significant bits (netmask)
@@ -188,7 +188,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 			// Input[5] = station number from sign, line #0, 6 bits registry
 
 			//RegistryInput station = new SignRegistry(this.getBlock(), 0, 6);
-			RegistryInput station = sign.getStation();
+			RegistryBoth station = sign.getStation();
 
 			// We keep only the X most significant bits (netmask)
 

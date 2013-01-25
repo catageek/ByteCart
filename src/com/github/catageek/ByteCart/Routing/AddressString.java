@@ -1,6 +1,6 @@
 package com.github.catageek.ByteCart.Routing;
 
-import com.github.catageek.ByteCart.HAL.Registry;
+import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.HAL.VirtualRegistry;
 
 
@@ -86,7 +86,7 @@ public class AddressString extends AbstractAddress implements Address {
 
 	@Override
 	public void setIsTrain(boolean isTrain) {
-		Registry tmp = new VirtualRegistry(6);
+		RegistryOutput tmp = new VirtualRegistry(6);
 		tmp.setAmount(this.getField(2));
 		tmp.setBit(Offsets.ISTRAIN.getOffset(), isTrain);
 		this.String = this.getField(0) + "." + this.getField(1) + "." + tmp.getAmount();
@@ -114,7 +114,6 @@ public class AddressString extends AbstractAddress implements Address {
 		this.String = "";
 		this.isValid = false;
 	}
-
 
 
 }

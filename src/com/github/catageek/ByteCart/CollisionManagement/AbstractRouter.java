@@ -9,7 +9,6 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.HAL.Registry;
 import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
@@ -188,7 +187,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 		// West
 		sortie[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.NORTH,3).getRelative(BlockFace.WEST));
 
-		Registry main = new PinRegistry<OutputPin>(sortie);
+		RegistryOutput main = new PinRegistry<OutputPin>(sortie);
 
 		// output[0] is main levers
 		this.addOutputRegistry(main);

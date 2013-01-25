@@ -1,6 +1,6 @@
 package com.github.catageek.ByteCart.HAL;
 
-public class VirtualRegistry implements Registry, RegistryInput, RegistryOutput {
+public class VirtualRegistry implements RegistryBoth {
 	
 	// bit index 0 est le bit de poids fort
 	

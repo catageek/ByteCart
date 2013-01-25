@@ -15,7 +15,7 @@ import org.bukkit.util.Vector;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputPin;
-import com.github.catageek.ByteCart.IO.InputPinFactory;
+import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
@@ -58,9 +58,9 @@ public class BC7001 extends AbstractTriggeredSign implements TriggeredSign, Powe
 		InputPin[] wire = new InputPin[2];
 
 		// Right
-		wire[0] = InputPinFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.clockwise(getCardinal())));
+		wire[0] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.clockwise(getCardinal())));
 		// left
-		wire[1] = InputPinFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.anticlockwise(getCardinal())));
+		wire[1] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.anticlockwise(getCardinal())));
 
 		// InputRegistry[0] = start/stop command
 		this.addInputRegistry(new PinRegistry<InputPin>(wire));

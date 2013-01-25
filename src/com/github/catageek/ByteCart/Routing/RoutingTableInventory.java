@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.catageek.ByteCart.HAL.Registry;
+import com.github.catageek.ByteCart.HAL.RegistryBoth;
+import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.HAL.SubRegistry;
 import com.github.catageek.ByteCart.IO.InventorySlot;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
@@ -32,8 +34,8 @@ public final class RoutingTableInventory extends AbstractRoutingTable implements
 
 	@Override
 	public int getDistance(int entry) {
-		Registry reg = new InventorySlot(this.Inventory, entry);
-		return new SubRegistry(reg, 4, 2).getAmount();
+		RegistryBoth reg = new InventorySlot(this.Inventory, entry);
+		return new SubRegistry<RegistryBoth>(reg, 4, 2).getAmount();
 	}
 
 	/**
@@ -50,7 +52,7 @@ public final class RoutingTableInventory extends AbstractRoutingTable implements
 
 	@Override
 	public void setEntry(int entry, int direction, int distance) {
-		Registry reg = new InventorySlot(this.Inventory, entry);
+		RegistryOutput reg = new InventorySlot(this.Inventory, entry);
 		reg.setAmount(direction+distance);
 	}
 

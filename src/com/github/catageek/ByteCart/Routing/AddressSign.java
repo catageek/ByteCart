@@ -2,7 +2,7 @@ package com.github.catageek.ByteCart.Routing;
 
 import org.bukkit.block.Block;
 
-import com.github.catageek.ByteCart.HAL.Registry;
+import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.IO.AbstractComponent;
 import com.github.catageek.ByteCart.IO.ComponentSign;
 
@@ -24,17 +24,17 @@ public final class AddressSign extends AbstractComponent implements Address {
 	}
 	
 	@Override
-	public final Registry getRegion() {
+	public final RegistryBoth getRegion() {
 		return Address.getRegion();
 	}
 
 	@Override
-	public final Registry getTrack() {
+	public final RegistryBoth getTrack() {
 		return Address.getTrack();
 	}
 
 	@Override
-	public final Registry getStation() {
+	public final RegistryBoth getStation() {
 		return Address.getStation();
 	}
 

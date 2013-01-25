@@ -9,7 +9,7 @@ import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputPin;
-import com.github.catageek.ByteCart.IO.InputPinFactory;
+import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.Updater;
@@ -40,9 +40,9 @@ public class BC9001 extends AbstractBC9000 implements TriggeredSign, PoweredSign
 			InputPin[] wire = new InputPin[2];
 
 			// Right
-			wire[0] = InputPinFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(getCardinal(), 2).getRelative(MathUtil.clockwise(getCardinal())));
+			wire[0] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(getCardinal(), 2).getRelative(MathUtil.clockwise(getCardinal())));
 			// left
-			wire[1] = InputPinFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(getCardinal(), 2).getRelative(MathUtil.anticlockwise(getCardinal())));
+			wire[1] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(getCardinal(), 2).getRelative(MathUtil.anticlockwise(getCardinal())));
 
 			// InputRegistry[0] = start/stop command
 			this.addInputRegistry(new PinRegistry<InputPin>(wire));
