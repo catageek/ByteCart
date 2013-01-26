@@ -9,19 +9,10 @@
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
+			<url>http://repo.bukkit.org/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.4.7-R0.2-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -61,4 +52,15 @@
 		<url>https://github.com/catageek/ByteCart/issues</url>
 		<system>gitHub issues</system>
 	</issueManagement>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<bukkit.version>1.4.7-R0.2-SNAPSHOT</bukkit.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>${bukkit.version}</version>
+		</dependency>
+	</dependencies>
 </project>
