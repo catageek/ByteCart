@@ -14,14 +14,14 @@ import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.Updater;
-import com.github.catageek.ByteCart.Routing.Updater.Level;
-import com.github.catageek.ByteCart.Routing.UpdaterLocal;
+import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-abstract public class AbstractBC9000 extends AbstractTriggeredSign {
+abstract public class AbstractBC9000 extends AbstractTriggeredSign implements BCSign,HasNetmask {
 
 	protected int netmask;
+
 	protected CollisionAvoiderBuilder builder;
 
 	public AbstractBC9000(org.bukkit.block.Block block,
@@ -29,7 +29,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 		super(block, vehicle);
 		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
 		this.Permission = this.Permission + this.Name;
-		builder = new SimpleCollisionAvoiderBuilder((TriggeredSign) this, block.getRelative(this.getCardinal(), 3).getLocation());
+		builder = new SimpleCollisionAvoiderBuilder((Triggable) this, block.getRelative(this.getCardinal(), 3).getLocation());
 		/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : SimpleCollisionAvoiderBuilder(" + block.getRelative(this.getCardinal(), 3).getLocation()+")");
 		 */	}
@@ -41,8 +41,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 
 			SimpleCollisionAvoider intersection = ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder);
 
-			if (! ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId(), this.getLevel())
-					&& !ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId(), Level.RESET_LOCAL )) {
+			if (! ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId())) {
 
 				// if this is a cart in a train
 				if (this.wasTrain(this.getLocation())) {
@@ -84,14 +83,13 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 
 	protected void manageUpdater(SimpleCollisionAvoider intersection) {
 		// it's an updater, so let it choosing direction
-		Updater updater = new UpdaterLocal(getVehicle(),
-				AddressFactory.getAddress(this.getBlock(),3), null, netmask, getLevel());
+		Updater updater = UpdaterFactory.getUpdater(this);
 
 		// routing
 		Side to = intersection.WishToGo(updater.giveSimpleDirection(), false);
 
 		// here we perform routes update
-		updater.Update(to);
+		updater.doAction(to);
 	}
 
 	protected SimpleCollisionAvoider.Side route() {
@@ -118,7 +116,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 	}
 
 
-	protected Updater.Level getLevel() {
+	public Updater.Level getLevel() {
 		return Updater.Level.LOCAL;
 	}
 
@@ -197,5 +195,13 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign {
 			this.addInputRegistry(station);
 		}
 
+	}
+	
+	public final Address getSignAddress() {
+		return AddressFactory.getAddress(getBlock(), 3);
+	}
+
+	public final int getNetmask() {
+		return netmask;
 	}
 }

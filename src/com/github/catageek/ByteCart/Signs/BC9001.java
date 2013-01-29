@@ -13,12 +13,11 @@ import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.Updater;
-import com.github.catageek.ByteCart.Routing.UpdaterLocal;
-import com.github.catageek.ByteCart.Routing.Updater.Level;
+import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-public class BC9001 extends AbstractBC9000 implements TriggeredSign, PoweredSign {
+public class BC9001 extends AbstractBC9000 implements BCSign, Powerable, Triggable {
 
 
 	public BC9001(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
@@ -49,8 +48,7 @@ public class BC9001 extends AbstractBC9000 implements TriggeredSign, PoweredSign
 
 			triggerBC7003();
 
-			if (! ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId(), this.getLevel())
-					&& !ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId(), Level.RESET_LOCAL )) {
+			if (! ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId())) {
 
 				// if this is a cart in a train
 				if (this.wasTrain(this.getLocation())) {
@@ -75,14 +73,13 @@ public class BC9001 extends AbstractBC9000 implements TriggeredSign, PoweredSign
 			}
 			
 			// it's an updater, so let it choosing direction
-			Updater updater = new UpdaterLocal(getVehicle(),
-					AddressFactory.getAddress(this.getBlock(),3), null, netmask, getLevel());
+			Updater updater = UpdaterFactory.getUpdater(this);
 
 			// routing
 			this.getOutput(0).setAmount(0); // unpower levers
 
 			// here we perform routes update
-			updater.Update(Side.LEFT);
+			updater.doAction(Side.LEFT);
 
 
 

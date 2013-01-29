@@ -150,6 +150,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 					public void run() {
 						int id = ((StorageMinecart) inventory.getHolder()).getEntityId();
 						ByteCart.myPlugin.getUm().addUpdater(id, level, region);
+						ByteCart.myPlugin.getWm().addWanderer(id, region);
 						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Info.SetUpdater") );
 
 					}

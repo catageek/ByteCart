@@ -15,7 +15,7 @@ final public class ClickedSignFactory {
 
 	// instantiates the BCXXXX member at specified location.
 	// return null if no IC is present.
-	static final public ClickedSign getClickedIC(Block block, Player player) {
+	static final public Clickable getClickedIC(Block block, Player player) {
 		
 			
 		if(AbstractIC.checkEligibility(block)) {
@@ -35,7 +35,7 @@ final public class ClickedSignFactory {
 
 
 	
-	static final public ClickedSign getClickedIC(Block block, String signString, Player player) {
+	static final public Clickable getClickedIC(Block block, String signString, Player player) {
 
 		int ICnumber = Integer.parseInt(signString.substring(3, 7));
 /*		

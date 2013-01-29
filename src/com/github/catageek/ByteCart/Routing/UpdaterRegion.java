@@ -1,27 +1,20 @@
 package com.github.catageek.ByteCart.Routing;
 
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Vehicle;
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Signs.BCSign;
 
-public final class UpdaterRegion extends AbstractUpdater implements Updater {
+public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 
-	private final int Region;
-
-	public UpdaterRegion(RoutingTable routingtable, Vehicle vehicle,
-			Address ringAddress, BlockFace from, boolean isTrackNumberProvider, Level level) {
-		super(routingtable, vehicle, ringAddress, from, isTrackNumberProvider, level);
-		Region = ByteCart.myPlugin.getUm().getMapRoutes().get(vehicle.getEntityId()).getRegion();
-
+	protected UpdaterRegion(BCSign bc) {
+		super(bc);
 	}
 
-	@Override
-	protected String getAddress(int ring) {
-		return "" + Region + "." + ring + ".0";
+	private final String getAddress(int ring) {
+		return "" + getRegion() + "." + ring + ".0";
 	}
 
-	@Override
-	protected int setSign(int current) {
+	private int setSign(int current) {
 		current = findFreeTrackNumber(current);
 		// update sign with new number we found or current
 		this.getSignAddress().setAddress(this.getAddress(current));
@@ -46,7 +39,7 @@ public final class UpdaterRegion extends AbstractUpdater implements Updater {
 	}
 
 
-	protected int getCurrent(int current) {
+	private int getOrSetCurrent(int current) {
 		// check if the sign has not priority
 		if (current >= 0  && current < getTrackNumber()) {
 			// current < sign => reset counter, clear route and write sign
@@ -67,18 +60,17 @@ public final class UpdaterRegion extends AbstractUpdater implements Updater {
 		}
 	}
 
-	protected boolean isSignNeedUpdate(int current) {
+	private boolean isSignNeedUpdate(int current) {
 		return (! getSignAddress().isValid() && current != -2) 
 				|| (getSignAddress().isValid() && getCounter().getCount(getTrackNumber()) == 0 && current != -2)
 				|| (current >= 0 && current != getTrackNumber())
 				|| ! this.getRoutingTable().isDirectlyConnected(getTrackNumber(), getFrom());
 	}
 
-	@Override
 	protected BlockFace selectDirection() {
 		BlockFace face;
-		if ((face = super.selectDirection()) != null)
-			return face;
+		if ((isAtBorder()))
+			return getFrom().getBlockFace();
 
 		if (this.getRoutes() != null) {
 			// current: track number we are on
@@ -97,22 +89,17 @@ public final class UpdaterRegion extends AbstractUpdater implements Updater {
 					return this.getRoutingTable().getDirection(min).getBlockFace();
 			}
 		}
-		return AbstractUpdater.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
+		return DefaultRouterWanderer.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
 	}
 
 	@Override
 	public void Update(BlockFace To) {
 
-		if (isResetCart()) {
-			reset();
-			return;
-		}
+		// current: track number we are on
+		int current = getCurrent();
 
 		if (getRoutes() != null) {
 
-			// current: track number we are on
-			int current = getRoutes().getCurrent();
-			boolean isNew = (current < 0);
 
 			if(isTrackNumberProvider() && ! getSignAddress().isValid()) {
 				// if there is no address on the sign
@@ -123,28 +110,23 @@ public final class UpdaterRegion extends AbstractUpdater implements Updater {
 
 			if (getSignAddress().isValid()) {
 				// there is an address on the sign
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : track number is " + getTrackNumber());
-				current = getCurrent(current);
-
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : current is " + current);
+				current = getOrSetCurrent(current);
 			}
 
-			// update track counter if we have entered a new one
-			if (current >= 0 && isNew) {
-				this.getCounter().incrementCount(current);
-				if (this.getCounter().isAllFull()) {
-					int zero = this.getCounter().getCount(0);
-					this.getCounter().resetAll();
-					this.getCounter().setCount(0, ++zero);
-				}
-			}
+			if (isSameTrack(To))
+				setCurrent(current);
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart : current is " + current);
 
-			routeUpdates(To, current);
-
+			routeUpdates(To);
 		}
-
 	}
+	
+
+	@Override
+	protected final int getTrackNumber() {
+		return getSignAddress().getTrack().getAmount();
+	}
+
 
 }

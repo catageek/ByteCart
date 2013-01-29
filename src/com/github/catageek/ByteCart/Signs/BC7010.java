@@ -12,7 +12,7 @@ import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 
 
-public class BC7010 extends AbstractTriggeredSign implements TriggeredSign, ClickedSign {
+public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickable {
 
 	protected boolean PlayerAllowed = true;
 	protected boolean StorageCartAllowed = false;

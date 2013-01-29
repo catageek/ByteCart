@@ -10,7 +10,7 @@ import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
-public class BC7014 extends BC7010 implements TriggeredSign {
+public class BC7014 extends BC7010 implements Triggable {
 
 	public BC7014(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

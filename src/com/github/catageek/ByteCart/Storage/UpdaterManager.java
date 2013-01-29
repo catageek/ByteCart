@@ -17,7 +17,7 @@ public final class UpdaterManager {
 	}
 	
 	public boolean isUpdater(Integer id, Updater.Level level) {
-		return (UpdateMap.contains(id) && (UpdateMap.get(id).getLevel().number & 7) == level.number);
+		return (UpdateMap.contains(id) && (UpdateMap.get(id).getLevel().number) == level.number);
 	}
 	
 	public void addUpdater(int id, Updater.Level level, int region) {

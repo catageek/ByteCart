@@ -31,8 +31,8 @@ public interface Updater {
 		}
 	}
 
-	void Update(Side to);
-	void Update(BlockFace to);
+	void doAction(Side to);
+	void doAction(BlockFace to);
 	BlockFace giveRouterDirection();
 	Side giveSimpleDirection();
 

@@ -14,7 +14,7 @@ import com.github.catageek.ByteCart.Storage.ExpirableMap;
 import com.github.catageek.ByteCart.ThreadManagement.Expirable;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
-public final class BC7003 extends AbstractIC implements TriggeredSign, PoweredSign {
+public final class BC7003 extends AbstractIC implements Triggable, Powerable {
 
 	final static private ExpirableMap<org.bukkit.Location, Integer> wavecount = new ExpirableMap<org.bukkit.Location, Integer>(400, false, "BC7003");
 

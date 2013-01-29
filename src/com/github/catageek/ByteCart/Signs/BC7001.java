@@ -29,7 +29,7 @@ import com.github.catageek.ByteCart.Util.MathUtil;
 // lever off = block occupied and not powered
 // lever on = block free OR powered
 
-public class BC7001 extends AbstractTriggeredSign implements TriggeredSign, PoweredSign {
+public class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable {
 
 
 	// Constructor : !! vehicle can be null !!
@@ -150,7 +150,7 @@ public class BC7001 extends AbstractTriggeredSign implements TriggeredSign, Powe
 	public void power() {
 		// power update
 
-		TriggeredSign bc = this;
+		Triggable bc = this;
 
 		// We need to find if a cart is stopped and set the member variable Vehicle
 		Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();

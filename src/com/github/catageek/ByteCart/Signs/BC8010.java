@@ -9,24 +9,25 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.Router;
 import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBuilder;
-import com.github.catageek.ByteCart.Routing.AbstractUpdater;
+import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
 import com.github.catageek.ByteCart.Routing.Updater;
-import com.github.catageek.ByteCart.Routing.Updater.Level;
-import com.github.catageek.ByteCart.Routing.UpdaterBackBone;
-import com.github.catageek.ByteCart.Routing.UpdaterLocal;
-import com.github.catageek.ByteCart.Routing.UpdaterRegion;
+import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Storage.UpdaterManager;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 
-public class BC8010 extends AbstractTriggeredSign implements TriggeredSign {
-
+public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, HasRoutingTable {
+	
+	private final BlockFace From;
+	private final Address Sign;
+	private final RoutingTable RoutingTable;
+	protected boolean IsTrackNumberProvider;
 
 	public BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
@@ -34,7 +35,18 @@ public class BC8010 extends AbstractTriggeredSign implements TriggeredSign {
 		this.FriendlyName = "L1 router";
 		this.Triggertax = ByteCart.myPlugin.getConfig().getInt("usetax." + this.Name);
 		this.Permission = this.Permission + this.Name;
+		this.IsTrackNumberProvider = true;
+		From = this.getCardinal().getOppositeFace();
+		// reading address written on BC8010 sign
+		Sign = AddressFactory.getAddress(this.getBlock(),3);
+		// Centre de l'aiguillage
+		Block center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
 
+		// Loading inventory of chest above router
+		Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 5).getState()).getInventory();
+
+		// Converting inventory in routing table
+		RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
 	}
 
 	@Override
@@ -50,16 +62,8 @@ public class BC8010 extends AbstractTriggeredSign implements TriggeredSign {
 			// reading destination address of the cart
 			AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
 
-			// reading address written on BC8010 sign
-			Address sign = AddressFactory.getAddress(this.getBlock(),3);
 
-			// Loading inventory of chest above router
-			Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 5).getState()).getInventory();
-
-			// Converting inventory in routing table
-			RoutingTable RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
-
-			BlockFace direction, to, from = this.getCardinal().getOppositeFace();
+			BlockFace direction, to;
 			org.bukkit.entity.Vehicle vehicle = this.getVehicle();
 			Router router = ByteCart.myPlugin.getCollisionAvoiderManager().<Router>getCollisionAvoider(builder);
 
@@ -103,34 +107,34 @@ public class BC8010 extends AbstractTriggeredSign implements TriggeredSign {
 					}
 
 
-					direction = this.SelectRoute(IPaddress, sign, RoutingTable);
+					direction = this.SelectRoute(IPaddress, Sign, RoutingTable);
 				}
 				else {
 					// is an updater (this code is executed only by BC8020)
-					int region = um.getMapRoutes().get(vehicle.getEntityId()).getRegion();
+					int region = ByteCart.myPlugin.getWm().getRegion(vehicle.getEntityId());
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart : region " + region);
 					try {
 						direction = RoutingTable.getDirection(region).getBlockFace();
 					} catch (NullPointerException e) {
 						// this region does not exist
-						direction = from;
+						direction = From;
 						// remove the cart as updater
 						um.getMapRoutes().remove(vehicle.getEntityId());
 					}
 				}
-				router.WishToGo(from, direction, isTrain());
+				router.WishToGo(From, direction, isTrain());
 				return;
 			}
 
 			// it's an updater, so let it choosing direction
-			Updater updater = getUpdater(RoutingTable, vehicle, sign, from);
+			Updater updater = getUpdater();
 
 			// routing normally
-			to = router.WishToGo(from, updater.giveRouterDirection(), isTrain());
+			to = router.WishToGo(From, updater.giveRouterDirection(), isTrain());
 
 			// here we perform routes update
-			updater.Update(to);
+			updater.doAction(to);
 
 		}
 		catch (ClassCastException e) {
@@ -181,33 +185,33 @@ public class BC8010 extends AbstractTriggeredSign implements TriggeredSign {
 		} catch (NullPointerException e) {
 		}
 
-		return AbstractUpdater.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
+		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
 
 
 	}
 
-	protected Updater getUpdater(RoutingTable routingtable, org.bukkit.entity.Vehicle vehicle,
-			Address ringAddress, BlockFace from) {
-		return this.getNewUpdater(routingtable, vehicle, ringAddress, from, true, Level.REGION);
+	protected final Updater getUpdater() {
+		return UpdaterFactory.getUpdater(this);
 	}
 
-	protected Updater getNewUpdater(RoutingTable routingtable, org.bukkit.entity.Vehicle vehicle,
-			Address ringAddress, BlockFace from, boolean isTrackNumberProvider, Level level) {
-		int id = vehicle.getEntityId();
-		UpdaterManager manager = ByteCart.myPlugin.getUm();
 
-		if (manager.isUpdater(id, Level.BACKBONE) || manager.isUpdater(id, Level.RESET_BACKBONE))
-			return new UpdaterBackBone(routingtable, vehicle, ringAddress, from, isTrackNumberProvider, level);
-		if (manager.isUpdater(id, Level.REGION) || manager.isUpdater(id, Level.RESET_REGION))
-			return new UpdaterRegion(routingtable, vehicle, ringAddress, from, isTrackNumberProvider, level);
-		if (manager.isUpdater(id, Level.LOCAL) || manager.isUpdater(id, Level.RESET_LOCAL))
-			return new UpdaterLocal(routingtable, vehicle, ringAddress, from, level);
-		return null;
-
-
-	}
-
-	protected Updater.Level getLevel() {
+	public Updater.Level getLevel() {
 		return Updater.Level.REGION;
+	}
+
+	public final BlockFace getFrom() {
+		return From;
+	}
+
+	public final Address getSignAddress() {
+		return Sign;
+	}
+
+	public final RoutingTable getRoutingTable() {
+		return RoutingTable;
+	}
+	
+	public final boolean isTrackNumberProvider() {
+		return IsTrackNumberProvider;
 	}
 }

@@ -4,7 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.Routing.AbstractUpdater;
+import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
@@ -14,7 +14,7 @@ import com.github.catageek.ByteCart.Storage.UpdaterManager;
 
 
 
-public class BC8020 extends BC8010 implements TriggeredSign {
+public class BC8020 extends BC8010 implements BCSign, Triggable, HasRoutingTable {
 
 
 	public BC8020(Block block, org.bukkit.entity.Vehicle vehicle) {
@@ -23,7 +23,7 @@ public class BC8020 extends BC8010 implements TriggeredSign {
 		this.FriendlyName = "L2 router";
 		this.Triggertax = ByteCart.myPlugin.getConfig().getInt("usetax." + this.Name);
 		this.Permission = this.Permission + this.Name;
-
+		this.IsTrackNumberProvider = true;
 	}
 
 	/**
@@ -53,18 +53,12 @@ public class BC8020 extends BC8010 implements TriggeredSign {
 		} catch (NullPointerException e) {
 		}
 
-		return AbstractUpdater.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
+		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
 
 	}
 
 	@Override
-	protected Updater getUpdater(RoutingTable routingtable, org.bukkit.entity.Vehicle vehicle,
-			Address ringAddress, BlockFace from) {
-		return this.getNewUpdater(routingtable, vehicle, ringAddress, from, false, Level.BACKBONE);
-	}
-
-	@Override
-	protected Updater.Level getLevel() {
+	public Updater.Level getLevel() {
 		return Updater.Level.BACKBONE;
 	}
 

@@ -9,8 +9,9 @@ import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
 import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.Storage.UpdaterManager;
+import com.github.catageek.ByteCart.Storage.WandererManager;
 
-public class ByteCart extends JavaPlugin {
+public final class ByteCart extends JavaPlugin {
 	
 	public static Logger log = Logger.getLogger("Minecraft");
 	public static ByteCart myPlugin;
@@ -18,14 +19,15 @@ public class ByteCart extends JavaPlugin {
 	private CollisionAvoiderManager cam;
 	private IsTrainManager it;
 	private UpdaterManager um;
+	private WandererManager wm;
 	public int Lockduration;
 
     public void onEnable(){
     	log.info("ByteCart plugin has been enabled.");
+
+    	myPlugin = this;
     	
     	this.saveDefaultConfig();
-    	
-    	myPlugin = this;
     	
     	debug = this.getConfig().getBoolean("debug", false);
     	
@@ -40,6 +42,7 @@ public class ByteCart extends JavaPlugin {
     	this.setCam(new CollisionAvoiderManager());
     	this.setIt(new IsTrainManager());
     	this.setUm(new UpdaterManager());
+    	this.setWm(new WandererManager());
     	
     	getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
     	
@@ -70,7 +73,7 @@ public class ByteCart extends JavaPlugin {
 	/**
 	 * @param cam the cam to set
 	 */
-	public void setCam(CollisionAvoiderManager cam) {
+	private void setCam(CollisionAvoiderManager cam) {
 		this.cam = cam;
 	}
 
@@ -84,7 +87,7 @@ public class ByteCart extends JavaPlugin {
 	/**
 	 * @param it the it to set
 	 */
-	public void setIt(IsTrainManager it) {
+	private void setIt(IsTrainManager it) {
 		this.it = it;
 	}
 
@@ -98,8 +101,16 @@ public class ByteCart extends JavaPlugin {
 	/**
 	 * @param um the um to set
 	 */
-	public void setUm(UpdaterManager um) {
+	private void setUm(UpdaterManager um) {
 		this.um = um;
+	}
+
+	public WandererManager getWm() {
+		return wm;
+	}
+
+	private void setWm(WandererManager wm) {
+		this.wm = wm;
 	}
 
    

@@ -117,5 +117,6 @@ public abstract class AbstractTriggeredSign extends AbstractIC {
 			ByteCart.myPlugin.getIsTrainManager().getMap().put(loc, true);
 
 	}
+	
 
 }

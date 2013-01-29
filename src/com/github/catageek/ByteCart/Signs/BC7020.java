@@ -6,7 +6,7 @@ import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
-public class BC7020 extends AbstractTriggeredSign implements TriggeredSign {
+public class BC7020 extends AbstractTriggeredSign implements Triggable {
 
 	public BC7020(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

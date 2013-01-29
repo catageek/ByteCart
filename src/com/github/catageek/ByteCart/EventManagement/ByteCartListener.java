@@ -16,11 +16,11 @@ import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
-import com.github.catageek.ByteCart.Signs.ClickedSign;
+import com.github.catageek.ByteCart.Signs.Clickable;
 import com.github.catageek.ByteCart.Signs.ClickedSignFactory;
-import com.github.catageek.ByteCart.Signs.PoweredSign;
+import com.github.catageek.ByteCart.Signs.Powerable;
 import com.github.catageek.ByteCart.Signs.PoweredSignFactory;
-import com.github.catageek.ByteCart.Signs.TriggeredSign;
+import com.github.catageek.ByteCart.Signs.Triggable;
 import com.github.catageek.ByteCart.Signs.TriggeredSignFactory;
 
 
@@ -56,7 +56,7 @@ public class ByteCartListener implements Listener {
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
 
-			TriggeredSign myIC = TriggeredSignFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
+			Triggable myIC = TriggeredSignFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
 
 			Player player;
 			int tax;
@@ -97,7 +97,7 @@ public class ByteCartListener implements Listener {
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
 
-			TriggeredSign myIC = TriggeredSignFactory.getTriggeredIC(vehicle.getLocation().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
+			Triggable myIC = TriggeredSignFactory.getTriggeredIC(vehicle.getLocation().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
 
 			if (myIC != null) {
 				myIC.trigger();
@@ -128,7 +128,7 @@ public class ByteCartListener implements Listener {
 			return;
 
 		try {
-			TriggeredSign myIC = TriggeredSignFactory.getTriggeredIC(event.getBlock(), event.getLine(1), null);
+			Triggable myIC = TriggeredSignFactory.getTriggeredIC(event.getBlock(), event.getLine(1), null);
 
 			if (myIC != null) {
 				if (! event.getPlayer().hasPermission(myIC.getBuildPermission())) {
@@ -161,7 +161,7 @@ public class ByteCartListener implements Listener {
 			ByteCart.log.info("ByteCart: event " + event.getBlock().toString());
 		 */
 
-		PoweredSign myIC = this.MyPoweredICFactory.getIC(event.getBlock().getRelative(BlockFace.DOWN));
+		Powerable myIC = this.MyPoweredICFactory.getIC(event.getBlock().getRelative(BlockFace.DOWN));
 
 
 		if (myIC != null) {
@@ -175,7 +175,7 @@ public class ByteCartListener implements Listener {
 
 		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0 || !AbstractIC.checkEligibility(event.getClickedBlock()))
 			return;
-		ClickedSign myIC = ClickedSignFactory.getClickedIC(event.getClickedBlock(), event.getPlayer());
+		Clickable myIC = ClickedSignFactory.getClickedIC(event.getClickedBlock(), event.getPlayer());
 
 		if (myIC != null) {
 

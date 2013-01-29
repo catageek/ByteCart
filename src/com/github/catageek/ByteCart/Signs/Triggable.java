@@ -1,12 +1,11 @@
 package com.github.catageek.ByteCart.Signs;
 
 import org.bukkit.Location;
-
 import com.github.catageek.ByteCart.HAL.IC;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.HAL.RegistryOutput;
 
-public interface TriggeredSign extends IC {
+public interface Triggable extends IC {
 	public RegistryInput getInput(int index);
 	public RegistryOutput getOutput(int index);
 	public void addInputRegistry(RegistryInput reg);

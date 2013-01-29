@@ -16,21 +16,39 @@ import com.github.catageek.ByteCart.ByteCart;
 public final class BookProperties {
 
 	private final Properties Properties = new Properties();
-	private final int PageNumber = 1, Index;
+	private final Conf PageNumber;
+	private final int Index;
 	private Reader Reader = null;
 	private OutputStream OutputStream = null;
 	private final Inventory Inventory;
+	
+	public enum Conf {
+		NETWORK(0, "Network"),
+		BILLING(1, "Billing"),
+		ACCESS(2, "Access"),
+		PROTECTION(3, "Protection"),
+		HISTORY(4, "History");
+		
+		private final int page;
+		private final String name;
+		
+		Conf(int page, String name) {
+			this.page = page;
+			this.name = name;
+		}
+	}
 
-	public BookProperties(Inventory inventory, int index) {
+	public BookProperties(Inventory inventory, int index, Conf page) {
 		super();
 		Inventory = inventory;
 		Index = index;
+		PageNumber = page;
 		ItemStack stack = inventory.getItem(index);
 
 		ItemMeta meta = stack.hasItemMeta() ? stack.getItemMeta() : null;
 
 		try {
-			BookOutputStream bookoutputstream = new BookOutputStream((BookMeta) meta, PageNumber);
+			BookOutputStream bookoutputstream = new BookOutputStream((BookMeta) meta, PageNumber.page);
 			ItemStackOutputStream stackoutputstream = new ItemStackMetaWriter(stack, bookoutputstream);
 			InventoryItemStackOutputStream inventoryoutputstream = new InventoryItemStackOutputStream(inventory, index, stackoutputstream);
 			OutputStream = new BufferedOutputStream(inventoryoutputstream, 256);
@@ -43,7 +61,7 @@ public final class BookProperties {
 		try {
 			readPrepare();
 			Properties.setProperty(key, value);
-			Properties.store(OutputStream, null);
+			Properties.store(OutputStream, PageNumber.name);
 			OutputStream.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -55,7 +73,7 @@ public final class BookProperties {
 		try {
 			readPrepare();
 			Properties.remove(key);
-			Properties.store(OutputStream, null);
+			Properties.store(OutputStream, PageNumber.name);
 			OutputStream.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -78,7 +96,7 @@ public final class BookProperties {
 		ItemMeta meta = stack.hasItemMeta() ? stack.getItemMeta() : null;
 
 		try {
-			Reader = new BookReader((BookMeta) meta, PageNumber);
+			Reader = new BookReader((BookMeta) meta, PageNumber.page);
 		} catch (NullPointerException e) {
 		}
 		Properties.load(Reader);

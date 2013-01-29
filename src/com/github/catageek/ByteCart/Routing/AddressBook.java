@@ -5,6 +5,7 @@ import org.bukkit.inventory.Inventory;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.IO.BookProperties;
+import com.github.catageek.ByteCart.IO.BookProperties.Conf;
 
 public final class AddressBook implements AddressRouted {
 	
@@ -14,7 +15,7 @@ public final class AddressBook implements AddressRouted {
 	private final Inventory Inventory;
 	
 	public AddressBook(Inventory inv, int index, String parameter) {
-		Properties = new BookProperties(inv, index);
+		Properties = new BookProperties(inv, index, Conf.NETWORK);
 		Parameter = parameter;
 		Inventory = inv;
 	}

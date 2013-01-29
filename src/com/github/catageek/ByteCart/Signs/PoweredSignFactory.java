@@ -11,7 +11,7 @@ public class PoweredSignFactory {
 	
 	// instantiates the BCXXXX member at specified location.
 	// return null if no IC is present.
-	public PoweredSign getIC(Block block) {
+	public Powerable getIC(Block block) {
 		
 			
 		if(AbstractIC.checkEligibility(block)) {
@@ -29,7 +29,7 @@ public class PoweredSignFactory {
 		
 	}
 
-	private PoweredSign getPoweredIC(Block block, String signString) {
+	private Powerable getPoweredIC(Block block, String signString) {
 
 		int ICnumber = Integer.parseInt(signString.substring(3, 7));
 /*		
@@ -43,11 +43,11 @@ public class PoweredSignFactory {
 			switch (ICnumber) {
 
 				case 7001:
-					return (PoweredSign)(new BC7001(block, null));
+					return (Powerable)(new BC7001(block, null));
 				case 7003:
-					return (PoweredSign)(new BC7003(block));
+					return (Powerable)(new BC7003(block));
 				case 9001:
-					return (PoweredSign)(new BC9001(block, null));
+					return (Powerable)(new BC9001(block, null));
 				
 		
 			}

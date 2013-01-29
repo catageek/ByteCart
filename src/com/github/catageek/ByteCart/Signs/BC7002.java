@@ -10,7 +10,7 @@ import com.github.catageek.ByteCart.IO.OutputPinFactory;
 
 
 
-public class BC7002 extends AbstractTriggeredSign implements TriggeredSign {
+public class BC7002 extends AbstractTriggeredSign implements Triggable {
 
 	public BC7002(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

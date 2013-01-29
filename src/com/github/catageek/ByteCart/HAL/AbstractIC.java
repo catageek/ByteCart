@@ -5,6 +5,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 
+import com.github.catageek.ByteCart.Routing.Address;
+
 
 // All ICs must inherit from this class
 abstract public class AbstractIC implements IC {
@@ -24,7 +26,7 @@ abstract public class AbstractIC implements IC {
 	
 	private RegistryOutput[] output = new RegistryOutput[6];
 	private int output_args = 0;
-	
+
 	public AbstractIC(Block block) {
 		this.Block = block;
 		this.Location = block.getLocation();
@@ -117,5 +119,9 @@ abstract public class AbstractIC implements IC {
 	
 	public boolean isTrain() {
 		return false;
+	}
+	
+	public Address getSignAddress() {
+		return null;
 	}
 }

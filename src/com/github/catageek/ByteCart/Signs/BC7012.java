@@ -4,7 +4,7 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 
-public class BC7012 extends BC7013 implements TriggeredSign {
+public class BC7012 extends BC7013 implements Triggable {
 
 	public BC7012(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

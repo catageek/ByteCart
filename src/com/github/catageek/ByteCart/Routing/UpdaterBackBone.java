@@ -1,59 +1,36 @@
 package com.github.catageek.ByteCart.Routing;
 
 import org.bukkit.block.BlockFace;
-
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Signs.BCSign;
 
-public final class UpdaterBackBone extends AbstractUpdater implements Updater {
+public class UpdaterBackBone extends AbstractRegionUpdater implements Updater {
 
-	public UpdaterBackBone(
-			com.github.catageek.ByteCart.Routing.RoutingTable routingtable,
-			org.bukkit.entity.Vehicle vehicle, Address trackaddress, BlockFace from, boolean isTrackNumberProvider, Level level) {
-		super(routingtable, vehicle, trackaddress, from, isTrackNumberProvider, level);
+	protected UpdaterBackBone(BCSign bc) {
+		super(bc);
 	}
 
-	@Override
-	protected String getAddress(int var) {
-		return "" + var + ".0.0";
-	}
 
-	@Override
-	protected int setSign(int current) {
-		return -1;
-	}
-
-	@Override
-	protected int getCurrent(int current) {
-		return getTrackNumber();
-	}
-
-	@Override
 	protected BlockFace selectDirection() {
-		BlockFace face;
-		if ((face = super.selectDirection()) != null)
-			return face;
+		if ((isAtBorder()))
+			return getFrom().getBlockFace();
 
-		return AbstractUpdater.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
+		return DefaultRouterWanderer.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
 	}
-	
+
 	@Override
 	public void Update(BlockFace To) {
 
-		if (isResetCart()) {
-			reset();
-			return;
-		}
+		// current: track number we are on
+		int current = getCurrent();
 
 		if (getRoutes() != null) {
-
-			// current: track number we are on
-			int current = getRoutes().getCurrent();
 
 			if (getSignAddress().isValid()) {
 				// there is an address on the sign
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart : track number is " + getTrackNumber());
-				current = getCurrent(current);
+				setCurrent(getTrackNumber());
 
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart : current is " + current);
@@ -62,10 +39,16 @@ public final class UpdaterBackBone extends AbstractUpdater implements Updater {
 				// no address on sign, and is not provider
 				// assumes it's 0 if first sign met
 				if (current == -2)
-					current = 0;
+					setCurrent(0);
 
-			routeUpdates(To, current);
+			routeUpdates(To);
 
 		}
 	}
+
+	@Override
+	protected final int getTrackNumber() {
+		return getSignAddress().getRegion().getAmount();
+	}
+
 }

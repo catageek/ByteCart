@@ -8,9 +8,12 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.HAL.CounterInventory;
 import com.github.catageek.ByteCart.HAL.StackInventory;
+import com.github.catageek.ByteCart.Signs.BC8010;
+import com.github.catageek.ByteCart.Signs.BCSign;
+import com.github.catageek.ByteCart.Signs.HasNetmask;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
-public final class UpdaterLocal implements Updater {
+public class UpdaterLocal implements Updater {
 
 	private final Vehicle Vehicle;
 	private Address SignAddress;
@@ -19,9 +22,8 @@ public final class UpdaterLocal implements Updater {
 	private final StackInventory Start;
 	private final StackInventory End;
 	private final int SignNetmask;
-	private final Level Level;
-	private final BlockFace From;
-	private RoutingTable RoutingTable;
+	private BlockFace From = null;
+	protected RoutingTable RoutingTable = null;
 
 	private enum counterSlot {
 		REGION(16),
@@ -34,39 +36,35 @@ public final class UpdaterLocal implements Updater {
 		}
 	}
 
-	public UpdaterLocal(org.bukkit.entity.Vehicle vehicle,
-			Address signAddress, BlockFace from, int netmask, Level level) {
-		super();
-		Vehicle = vehicle;
-		SignAddress = signAddress;
-		SignNetmask = netmask;
-		Level = level;
-		From = from;
+	protected UpdaterLocal(BCSign bc) {
+		Vehicle = bc.getVehicle();
+		SignAddress = bc.getSignAddress();
 		Counter = new CounterInventory(((StorageMinecart) this.getVehicle()).getInventory(), 18);
 		Start = new StackInventory(((StorageMinecart) this.getVehicle()).getInventory(), 18, 5);
 		End = new StackInventory(((StorageMinecart) this.getVehicle()).getInventory(), 23, 5);
 		Routes = ByteCart.myPlugin.getUm().getMapRoutes().get(getVehicle().getEntityId());
-		RoutingTable = null;
+
+		if (bc instanceof BC8010) {
+			BC8010 ic = (BC8010) bc;
+			From = ic.getFrom();
+			RoutingTable = ic.getRoutingTable();
+		}
+
+		if (bc instanceof HasNetmask)
+			SignNetmask = ((HasNetmask)bc).getNetmask();
+		else
+			SignNetmask = 0;
 
 		// set cookie A to wait a router
-		if(this.getRoutes().getCurrent() == -2 && ! isResetCart()) {
+		if(this.getRoutes().getCurrent() == -2) {
 			this.getStart().push(1);
 			this.getRoutes().setCurrent(0);
 		}
 
 	}
 
-
-	public UpdaterLocal(RoutingTable routingtable,
-			org.bukkit.entity.Vehicle vehicle2, Address ringAddress,
-			BlockFace from2, Level level2) {
-		this(vehicle2, ringAddress, from2, 0, level2);
-		RoutingTable = routingtable;
-	}
-
-
 	@Override
-	public void Update(BlockFace to) {
+	public void doAction(BlockFace to) {
 
 		int signring = this.SignAddress.getTrack().getAmount();
 		// the route where we went the lesser
@@ -75,7 +73,7 @@ public final class UpdaterLocal implements Updater {
 
 		// if we are not in the good region or on ring 0, skip update
 		if (this.SignAddress.getRegion().getAmount() != Routes.getRegion()
-				|| signring == 0 || isResetCart())
+				|| signring == 0)
 			return;
 
 
@@ -124,17 +122,10 @@ public final class UpdaterLocal implements Updater {
 	}
 
 	@Override
-	public void Update(Side to) {
+	public void doAction(Side to) {
 
-		// reset cart
-		if (isResetCart()) {
-			this.getSignAddress().remove();
-			return;
-		}
-
-		// wrong level or cookie still there or we did not enter the subnet
-		if (this.getLevel().number != (this.getRoutes().getLevel().number & 7)
-				|| this.getStart().empty() ^ this.getEnd().empty()
+		// cookie still there or we did not enter the subnet
+		if (this.getStart().empty() ^ this.getEnd().empty()
 				|| (to.Value() != Side.RIGHT.Value() && this.getNetmask() < 4))
 			return;
 
@@ -173,18 +164,11 @@ public final class UpdaterLocal implements Updater {
 		}
 	}
 
-
-	private boolean isResetCart() {
-		return this.getRoutes().getLevel().number == com.github.catageek.ByteCart.Routing.Updater.Level.RESET_LOCAL.number;
-	}
-
 	@Override
 	public Side giveSimpleDirection() {
 		// turn if it's not a station, and the ring is initialized or the address is invalid
-		if (this.getLevel().number == (this.getRoutes().getLevel().number & 7)
-				&& this.getNetmask() < 4
-				&& (! (this.getStart().empty() ^ this.getEnd().empty())
-						|| (isResetCart() && ! this.getSignAddress().isValid())))
+		if (this.getNetmask() < 4
+				&& (! (this.getStart().empty() ^ this.getEnd().empty())))
 			return Side.RIGHT;
 		return Side.LEFT;
 	}
@@ -202,10 +186,8 @@ public final class UpdaterLocal implements Updater {
 				return this.getFrom();
 			}
 		}
-		
-		if (isResetCart() && ! this.getSignAddress().isValid())
-			return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
-			
+
+
 
 		// there is a cookie (so it is cookie A) or it's a reset cart
 		if (this.getStart().empty() ^ this.getEnd().empty()) {
@@ -220,7 +202,7 @@ public final class UpdaterLocal implements Updater {
 					return RoutingTable.getDirection(preferredroute).getBlockFace();
 				} catch (NullPointerException e) {
 					// no route to ring
-					return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+					return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getFrom());
 				}
 		}
 		else {
@@ -249,7 +231,7 @@ public final class UpdaterLocal implements Updater {
 					return RoutingTable.getDirection(preferredroute).getBlockFace();
 				} catch (NullPointerException e) {
 					// no route to ring
-					return AbstractUpdater.getRandomBlockFace(RoutingTable, getFrom());
+					return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getFrom());
 				}
 
 			}
@@ -260,7 +242,7 @@ public final class UpdaterLocal implements Updater {
 
 	}
 
-	public void leaveSubnet() {
+	public final void leaveSubnet() {
 		if(!this.getStart().empty() && ! this.getEnd().empty()) {
 			this.fillSubnet();
 			this.getStart().pop();
@@ -268,19 +250,7 @@ public final class UpdaterLocal implements Updater {
 		}
 	}
 
-	/*
-	@SuppressWarnings("unused")
-	private int findFreeStationNumber(int current) {
-		// find a free number for the track if needed
-		current = this.getCounter().firstEmpty();
-		if (this.isInMask(current, this.getCurrentNetmask())) {
-			return current;
-		}
-		return -1;
-	}
-	 */
-
-	private int getFreeSubnet(int netmask) {
+	private final int getFreeSubnet(int netmask) {
 		boolean free;
 		int start = (this.getStart().empty() ? 0 : this.getStart().peek());
 		int end = (this.getEnd().empty()) ? 16 : this.getEnd().peek();
@@ -304,7 +274,7 @@ public final class UpdaterLocal implements Updater {
 		return -1;
 	}
 
-	private void fillSubnet() {
+	private final void fillSubnet() {
 		int start = this.getCurrent();
 		int end = this.getNext();
 		if(ByteCart.debug)
@@ -313,51 +283,46 @@ public final class UpdaterLocal implements Updater {
 			this.getCounter().incrementCount(i, 64);
 	}
 
-
-	private Level getLevel() {
-		return this.Level;
-	}
-
-	private Vehicle getVehicle() {
+	private final Vehicle getVehicle() {
 		return Vehicle;
 	}
 
-	private Address getSignAddress() {
+	protected final Address getSignAddress() {
 		return SignAddress;
 	}
 
 
-	private RoutingTableExchange getRoutes() {
+	private final RoutingTableExchange getRoutes() {
 		return Routes;
 	}
 
 
-	private CounterInventory getCounter() {
+	private final CounterInventory getCounter() {
 		return Counter;
 	}
 
 
-	private int getNetmask() {
+	protected final int getNetmask() {
 		return SignNetmask;
 	}
 
-	private int getNext() {
+	private final int getNext() {
 		if (this.getEnd().empty())
 			return 16;
 		return this.getEnd().peek();
 	}
 
-	private int getCurrent() {
+	private final int getCurrent() {
 		if (this.getStart().empty())
 			return 0;
 		return this.getStart().peek();
 	}
 
-	private boolean isInSubnet(int address, int netmask) {
+	private final boolean isInSubnet(int address, int netmask) {
 		return (address >= this.getCurrent() && (address | (15 >> netmask))  < this.getNext());
 	}
 
-	private boolean needUpdate() {
+	private final boolean needUpdate() {
 		return getSignAddress().getRegion().getAmount() != this.getCounter().getCount(counterSlot.REGION.slot)
 				|| getSignAddress().getTrack().getAmount() != this.getCounter().getCount(counterSlot.RING.slot)
 				|| ! isInSubnet(getSignAddress().getStation().getAmount(), this.getNetmask());
@@ -369,12 +334,12 @@ public final class UpdaterLocal implements Updater {
 	}
 
 
-	private StackInventory getStart() {
+	private final StackInventory getStart() {
 		return Start;
 	}
 
 
-	private StackInventory getEnd() {
+	private final StackInventory getEnd() {
 		return End;
 	}
 
