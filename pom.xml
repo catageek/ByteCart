@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.catageek</groupId>
 	<artifactId>ByteCart</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
+	<version>1.2.1</version>
 	<name>ByteCart</name>
 
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/repositories/snapshots/</url>
+			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
 	</repositories>
 
@@ -54,7 +54,7 @@
 	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkit.version>1.4.7-R0.2-SNAPSHOT</bukkit.version>
+		<bukkit.version>1.4.7-R1.0</bukkit.version>
 	</properties>
 	<dependencies>
 		<dependency>
