@@ -1,9 +1,12 @@
 package com.github.catageek.ByteCart.Signs;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+
+import Event.VehiclePreRouteEvent;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
@@ -171,10 +174,14 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 	}
 
 	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
+
 		// same region : lookup destination track
 		try {
 			if (IPaddress.getRegion().getAmount() == sign.getRegion().getAmount() && IPaddress.getTTL() != 0) {
-				return RoutingTable.getDirection(IPaddress.getTrack().getAmount()).getBlockFace();
+				int destination = IPaddress.getTrack().getAmount();
+				VehiclePreRouteEvent event = new VehiclePreRouteEvent(this.getVehicle(), sign.getTrack().getAmount(), destination);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+				return RoutingTable.getDirection(destination).getBlockFace();
 			}
 		} catch (NullPointerException e) {
 		}
