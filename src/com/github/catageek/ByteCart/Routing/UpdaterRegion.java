@@ -1,7 +1,9 @@
 package com.github.catageek.ByteCart.Routing;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Event.UpdaterSetRingEvent;
 import com.github.catageek.ByteCart.Signs.BCSign;
 
 public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
@@ -61,10 +63,11 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 	}
 
 	private boolean isSignNeedUpdate(int current) {
+		int track = getTrackNumber();
 		return (! getSignAddress().isValid() && current != -2) 
-				|| (getSignAddress().isValid() && getCounter().getCount(getTrackNumber()) == 0 && current != -2)
-				|| (current >= 0 && current != getTrackNumber())
-				|| ! this.getRoutingTable().isDirectlyConnected(getTrackNumber(), getFrom());
+				|| (getSignAddress().isValid() && getCounter().getCount(track) == 0 && current != -2)
+				|| (current >= 0 && current != track)
+				|| (track != -1 && ! this.getRoutingTable().isDirectlyConnected(track, getFrom()));
 	}
 
 	protected BlockFace selectDirection() {
@@ -100,18 +103,25 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 
 		if (getRoutes() != null) {
 
+			UpdaterSetRingEvent event = null;
 
 			if(isTrackNumberProvider() && ! getSignAddress().isValid()) {
 				// if there is no address on the sign
 				// we provide one
 				current = setSign(current);
-
+				event = new UpdaterSetRingEvent(this, -1, current);
+				Bukkit.getServer().getPluginManager().callEvent(event);
 			}
 
 			if (getSignAddress().isValid()) {
 				// there is an address on the sign
+				int old = getTrackNumber();
 				current = getOrSetCurrent(current);
+				event = new UpdaterSetRingEvent(this, old, current);
+				if (old != current)
+					Bukkit.getServer().getPluginManager().callEvent(event);
 			}
+
 
 			if (isSameTrack(To))
 				setCurrent(current);
@@ -121,12 +131,11 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 			routeUpdates(To);
 		}
 	}
-	
+
 
 	@Override
-	protected final int getTrackNumber() {
-		return getSignAddress().getTrack().getAmount();
+	public final int getTrackNumber() {
+		int ret = getSignAddress().getTrack().getAmount();
+		return ret == 0 ? -1 : ret;
 	}
-
-
 }

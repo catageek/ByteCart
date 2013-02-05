@@ -31,7 +31,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 
 	protected final void routeUpdates(BlockFace To) {
 		if(isRouteConsumer()) {
-			List<Integer> connected = getRoutingTable().getDirectlyConnected(getFrom());
+			List<Integer> connected = getRoutingTable().getDirectlyConnectedList(getFrom());
 			int current = getCurrent();
 
 			// if the track we come from is not recorded
@@ -105,7 +105,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		return counter;
 	}
 
-	protected final int getCurrent() {
+	public final int getCurrent() {
 		if (getRoutes() != null)
 			// current: track number we are on
 			return getRoutes().getCurrent();

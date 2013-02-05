@@ -6,12 +6,14 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-import Event.VehiclePreRouteEvent;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.Router;
 import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBuilder;
+import com.github.catageek.ByteCart.Event.SignPostRouteEvent;
+import com.github.catageek.ByteCart.Event.UpdaterPassRouterEvent;
+import com.github.catageek.ByteCart.Event.SignPreRouteEvent;
 import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
@@ -21,15 +23,18 @@ import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
 import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Storage.UpdaterManager;
+import com.github.catageek.ByteCart.Util.DirectionRegistry;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 
-public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, HasRoutingTable {
+public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable, HasRoutingTable {
 	
 	private final BlockFace From;
 	private final Address Sign;
 	private final RoutingTable RoutingTable;
+	private final AddressRouted destination;
+	private final Block center;
 	protected boolean IsTrackNumberProvider;
 
 	public BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {
@@ -40,10 +45,12 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 		this.Permission = this.Permission + this.Name;
 		this.IsTrackNumberProvider = true;
 		From = this.getCardinal().getOppositeFace();
+		// reading destination address of the cart
+		destination = AddressFactory.getAddress(this.getInventory());
 		// reading address written on BC8010 sign
 		Sign = AddressFactory.getAddress(this.getBlock(),3);
 		// Centre de l'aiguillage
-		Block center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
+		center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
 
 		// Loading inventory of chest above router
 		Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 5).getState()).getInventory();
@@ -55,16 +62,9 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 	@Override
 	public void trigger() {
 
-		// Centre de l'aiguillage
-		Block center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
-
 		CollisionAvoiderBuilder builder = new RouterCollisionAvoiderBuilder(this, center.getLocation());
 
 		try {
-
-			// reading destination address of the cart
-			AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
-
 
 			BlockFace direction, to;
 			org.bukkit.entity.Vehicle vehicle = this.getVehicle();
@@ -91,16 +91,16 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 					// Time-to-live management
 
 					//loading TTl of cart
-					int ttl = IPaddress.getTTL();
+					int ttl = destination.getTTL();
 
 					// if ttl did not reach end of life ( = 0)
 					if (ttl != 0) {
 
-						IPaddress.updateTTL(ttl-1);
+						destination.updateTTL(ttl-1);
 					}
 
 					if(ByteCart.debug)
-						ByteCart.log.info("ByteCart : TTL is " + IPaddress.getTTL());
+						ByteCart.log.info("ByteCart : TTL is " + destination.getTTL());
 
 
 					// if this is the first car of a train
@@ -110,7 +110,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 					}
 
 
-					direction = this.SelectRoute(IPaddress, Sign, RoutingTable);
+					direction = this.SelectRoute(destination, Sign, RoutingTable);
 				}
 				else {
 					// is an updater (this code is executed only by BC8020)
@@ -126,7 +126,13 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 						um.getMapRoutes().remove(vehicle.getEntityId());
 					}
 				}
-				router.WishToGo(From, direction, isTrain());
+
+				// trigger event
+				BlockFace bdest = router.WishToGo(From, direction, isTrain());
+				int ring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(bdest));
+				SignPostRouteEvent event = new SignPostRouteEvent(this, ring);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+				
 				return;
 			}
 
@@ -135,6 +141,10 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 
 			// routing normally
 			to = router.WishToGo(From, updater.giveRouterDirection(), isTrain());
+			
+			int nextring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(to));
+			UpdaterPassRouterEvent event = new UpdaterPassRouterEvent(updater, to, nextring);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 
 			// here we perform routes update
 			updater.doAction(to);
@@ -178,10 +188,12 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 		// same region : lookup destination track
 		try {
 			if (IPaddress.getRegion().getAmount() == sign.getRegion().getAmount() && IPaddress.getTTL() != 0) {
-				int destination = IPaddress.getTrack().getAmount();
-				VehiclePreRouteEvent event = new VehiclePreRouteEvent(this.getVehicle(), sign.getTrack().getAmount(), destination);
+				int destination = this.destination.getTrack().getAmount();
+				DirectionRegistry out = RoutingTable.getDirection(destination);
+				// trigger event
+				SignPreRouteEvent event = new SignPreRouteEvent(this, this.getRoutingTable().getDirectlyConnected(out));
 				Bukkit.getServer().getPluginManager().callEvent(event);
-				return RoutingTable.getDirection(destination).getBlockFace();
+				return out.getBlockFace();
 			}
 		} catch (NullPointerException e) {
 		}
@@ -220,5 +232,17 @@ public class BC8010 extends AbstractTriggeredSign implements BCSign, Triggable, 
 	
 	public final boolean isTrackNumberProvider() {
 		return IsTrackNumberProvider;
+	}
+	
+	public final String getDestinationIP() {
+		return destination.toString();
+	}
+	
+	public final int getOriginTrack() {
+		return Sign.getTrack().getAmount();
+	}
+
+	public final Block getCenter() {
+		return center;
 	}
 }

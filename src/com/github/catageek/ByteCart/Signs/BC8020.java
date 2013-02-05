@@ -14,7 +14,7 @@ import com.github.catageek.ByteCart.Storage.UpdaterManager;
 
 
 
-public class BC8020 extends BC8010 implements BCSign, Triggable, HasRoutingTable {
+public class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTable {
 
 
 	public BC8020(Block block, org.bukkit.entity.Vehicle vehicle) {

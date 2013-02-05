@@ -9,7 +9,7 @@ import com.github.catageek.ByteCart.Routing.UpdaterLocal;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-public class BC9000 extends AbstractBC9000 implements BCSign, Triggable {
+public class BC9000 extends AbstractBC9000 implements Subnet, Triggable {
 
 	public BC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

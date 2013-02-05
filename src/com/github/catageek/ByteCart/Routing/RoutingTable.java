@@ -24,7 +24,8 @@ public interface RoutingTable {
 	public Set<Entry<Integer,Integer>> getRoutesTo(DirectionRegistry direction);
 	public void clear();
 	public boolean isDirectlyConnected(int ring, DirectionRegistry direction);
-	public List<Integer> getDirectlyConnected(DirectionRegistry direction);
+	public int getDirectlyConnected(DirectionRegistry direction);
 	public BlockFace getFirstUnknown();
 	public Set<Entry<Integer, Integer>> getEntrySet();
+	public List<Integer> getDirectlyConnectedList(DirectionRegistry from);
 }

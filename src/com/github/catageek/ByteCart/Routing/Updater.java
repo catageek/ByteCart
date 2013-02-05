@@ -1,8 +1,12 @@
 package com.github.catageek.ByteCart.Routing;
 
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
+import com.github.catageek.ByteCart.Signs.BCSign;
+import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
 public interface Updater {
 
@@ -36,4 +40,12 @@ public interface Updater {
 	BlockFace giveRouterDirection();
 	Side giveSimpleDirection();
 
+	public int getTrackNumber();
+	public DirectionRegistry getFrom();
+	public Level getLevel();
+	public Vehicle getVehicle();
+	public int getRegion();
+	public Block getCenter();
+	public String getFriendlyName();
+	public BCSign getBcSign();
 }

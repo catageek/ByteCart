@@ -1,11 +1,18 @@
 package com.github.catageek.ByteCart.Routing;
 
+import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
+import com.github.catageek.ByteCart.Event.UpdaterEnterSubnetEvent;
+import com.github.catageek.ByteCart.Event.UpdaterLeaveSubnetEvent;
+import com.github.catageek.ByteCart.Event.UpdaterPassStationEvent;
+import com.github.catageek.ByteCart.Event.UpdaterSetStationEvent;
+import com.github.catageek.ByteCart.Event.UpdaterSetSubnetEvent;
 import com.github.catageek.ByteCart.HAL.CounterInventory;
 import com.github.catageek.ByteCart.HAL.StackInventory;
 import com.github.catageek.ByteCart.Signs.BC8010;
@@ -15,15 +22,15 @@ import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
 public class UpdaterLocal implements Updater {
 
-	private final Vehicle Vehicle;
-	private Address SignAddress;
+	private final BCSign bcsign;
 	private final RoutingTableExchange Routes;
 	private final CounterInventory Counter;
 	private final StackInventory Start;
 	private final StackInventory End;
 	private final int SignNetmask;
-	private BlockFace From = null;
+	private DirectionRegistry From = null;
 	protected RoutingTable RoutingTable = null;
+	private Address SignAddress;
 
 	private enum counterSlot {
 		REGION(16),
@@ -37,7 +44,7 @@ public class UpdaterLocal implements Updater {
 	}
 
 	protected UpdaterLocal(BCSign bc) {
-		Vehicle = bc.getVehicle();
+		bcsign = bc;
 		SignAddress = bc.getSignAddress();
 		Counter = new CounterInventory(((StorageMinecart) this.getVehicle()).getInventory(), 18);
 		Start = new StackInventory(((StorageMinecart) this.getVehicle()).getInventory(), 18, 5);
@@ -46,7 +53,7 @@ public class UpdaterLocal implements Updater {
 
 		if (bc instanceof BC8010) {
 			BC8010 ic = (BC8010) bc;
-			From = ic.getFrom();
+			From = new DirectionRegistry(ic.getFrom());
 			RoutingTable = ic.getRoutingTable();
 		}
 
@@ -66,16 +73,15 @@ public class UpdaterLocal implements Updater {
 	@Override
 	public void doAction(BlockFace to) {
 
-		int signring = this.SignAddress.getTrack().getAmount();
+		int signring = this.getSignAddress().getTrack().getAmount();
 		// the route where we went the lesser
-		int preferredroute = this.getRoutes().getMinDistance(RoutingTable, new DirectionRegistry(this.getFrom()));
+		int preferredroute = this.getRoutes().getMinDistance(RoutingTable, this.getFrom());
 
 
 		// if we are not in the good region or on ring 0, skip update
-		if (this.SignAddress.getRegion().getAmount() != Routes.getRegion()
+		if (this.getSignAddress().getRegion().getAmount() != Routes.getRegion()
 				|| signring == 0)
 			return;
-
 
 		// if this is cookie A, do nothing if this is not the route where we want to go
 		if (this.getEnd().empty() ^ this.getStart().empty()
@@ -103,7 +109,7 @@ public class UpdaterLocal implements Updater {
 
 
 		// incrementing ring counter in the RoutingTableExchange map
-		int ring = this.getCounter().getCount(counterSlot.RING.slot);
+		int ring = getCurrent();
 		if (this.getRoutes().hasRouteTo(ring))
 			this.getRoutes().setRoute(ring, this.getRoutes().getDistance(ring) + 1);
 		else
@@ -124,52 +130,77 @@ public class UpdaterLocal implements Updater {
 	@Override
 	public void doAction(Side to) {
 
+		if (this.getNetmask() == 4) {
+			//it's a station, launch event
+			UpdaterPassStationEvent event = new UpdaterPassStationEvent(this, this.getSignAddress());
+			Bukkit.getServer().getPluginManager().callEvent(event);
+		}
+
 		// cookie still there or we did not enter the subnet
 		if (this.getStart().empty() ^ this.getEnd().empty()
 				|| (to.Value() != Side.RIGHT.Value() && this.getNetmask() < 4))
 			return;
 
-		// if sign is not consistent, rewrite it
-		if (! getSignAddress().isValid() || this.needUpdate()) {
-			int start;
-			if ((start = this.getFreeSubnet(getNetmask())) != -1) {
-				String address = "" + this.getCounter().getCount(counterSlot.REGION.slot)
-						+ "." + this.getCounter().getCount(counterSlot.RING.slot)
-						+ "." + start;
-				this.getSignAddress().setAddress(address);
+		int length = 16 >> this.getNetmask();
 
-				// reload sign
-				this.setSignAddress(AddressFactory.getAddress(address));
+				// if sign is not consistent, rewrite it
+				if (! getSignAddress().isValid() || this.needUpdate()) {
+					Address old = this.getSignAddress();
+					int start;
+					if ((start = this.getFreeSubnet(getNetmask())) != -1) {
+						String address = buildAddress(start);
+						this.getSignAddress().setAddress(address);
 
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : UpdaterLocal : Update() : rewrite sign to " + address + "(" + this.getSignAddress().toString() + ")");
-			}
-		}
+						// reload sign
+						Address reloadAddress = AddressFactory.getAddress(address);
+						this.setSignAddress(reloadAddress);
+
+						// launch event
+						if (length > 1) {
+							UpdaterSetSubnetEvent event = new UpdaterSetSubnetEvent(this, old, reloadAddress, length);
+							Bukkit.getServer().getPluginManager().callEvent(event);
+						}
+						else {
+							UpdaterSetStationEvent event = new UpdaterSetStationEvent(this, old, reloadAddress);
+							Bukkit.getServer().getPluginManager().callEvent(event);
+						}
+
+						if(ByteCart.debug)
+							ByteCart.log.info("ByteCart : UpdaterLocal : Update() : rewrite sign to " + address + "(" + this.getSignAddress().toString() + ")");
+					}
+				}
 
 
-		if (getSignAddress().isValid()) {
-			if (this.getNetmask() != 4) {
-				// general case
-				// if we go out from the current subnet and possibly entering a new one
-				if (! this.isInSubnet(getSignAddress().getStation().getAmount(), this.getNetmask()))
-					leaveSubnet();
+				if (getSignAddress().isValid()) {
+					int stationfield = this.getSignAddress().getStation().getAmount();
+					if (length != 1) {
+						// general case
+						// if we go out from the current subnet and possibly entering a new one
+						if (! this.isInSubnet(stationfield, this.getNetmask()))
+							leaveSubnet();
 
-				// register new subnet start and mask
-				this.getStart().push(this.getSignAddress().getStation().getAmount());
-				this.getEnd().push(this.getCurrent() + (16 >> this.getNetmask()));
-			}
-			else
-				// case of stations
-				this.getCounter().incrementCount(this.getSignAddress().getStation().getAmount(), 64);
-		}
+						// register new subnet start and mask
+						this.getStart().push(stationfield);
+						this.getEnd().push(stationfield + length);
+						// launch event
+						UpdaterEnterSubnetEvent event = new UpdaterEnterSubnetEvent(this, getSignAddress(), length);
+						Bukkit.getServer().getPluginManager().callEvent(event);
+					}
+					else
+						// case of stations
+						this.getCounter().incrementCount(stationfield, 64);
+				}
 	}
 
 	@Override
 	public Side giveSimpleDirection() {
-		// turn if it's not a station, and the ring is initialized or the address is invalid
+
+
+		// turn if it's not a station, and the ring is initialized or the address is invalid 
 		if (this.getNetmask() < 4
 				&& (! (this.getStart().empty() ^ this.getEnd().empty())))
 			return Side.RIGHT;
+
 		return Side.LEFT;
 	}
 
@@ -183,7 +214,7 @@ public class UpdaterLocal implements Updater {
 				return RoutingTable.getDirection(0).getBlockFace();
 			} catch (NullPointerException e) {
 				// no route to 0
-				return this.getFrom();
+				return this.getFrom().getBlockFace();
 			}
 		}
 
@@ -191,7 +222,7 @@ public class UpdaterLocal implements Updater {
 
 		// there is a cookie (so it is cookie A) or it's a reset cart
 		if (this.getStart().empty() ^ this.getEnd().empty()) {
-			int signring = this.SignAddress.getTrack().getAmount();
+			int signring = this.getSignAddress().getTrack().getAmount();
 			int preferredroute = this.getStart().peek();
 
 			// if we are not arrived yet or in ring 0, we continue
@@ -202,7 +233,7 @@ public class UpdaterLocal implements Updater {
 					return RoutingTable.getDirection(preferredroute).getBlockFace();
 				} catch (NullPointerException e) {
 					// no route to ring
-					return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getFrom());
+					return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getFrom().getBlockFace());
 				}
 		}
 		else {
@@ -225,28 +256,28 @@ public class UpdaterLocal implements Updater {
 				this.getStart().push(0);
 
 				// the route where we went the lesser
-				int preferredroute = this.getRoutes().getMinDistance(RoutingTable, new DirectionRegistry(getFrom()));
+				int preferredroute = this.getRoutes().getMinDistance(RoutingTable, getFrom());
 
 				try {
 					return RoutingTable.getDirection(preferredroute).getBlockFace();
 				} catch (NullPointerException e) {
 					// no route to ring
-					return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getFrom());
+					return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getFrom().getBlockFace());
 				}
 
 			}
 		}
-		return this.getFrom();
-
-
-
+		return this.getFrom().getBlockFace();
 	}
 
 	public final void leaveSubnet() {
 		if(!this.getStart().empty() && ! this.getEnd().empty()) {
 			this.fillSubnet();
-			this.getStart().pop();
-			this.getEnd().pop();
+			int start = this.getStart().pop();
+			int end = this.getEnd().pop();
+			// launch event
+			UpdaterLeaveSubnetEvent event = new UpdaterLeaveSubnetEvent(this, AddressFactory.getAddress(buildAddress(start)), end - start);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 		}
 	}
 
@@ -275,7 +306,7 @@ public class UpdaterLocal implements Updater {
 	}
 
 	private final void fillSubnet() {
-		int start = this.getCurrent();
+		int start = this.getCurrentSubnet();
 		int end = this.getNext();
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : UpdaterLocal : fill start " + start + " end " + end);
@@ -283,8 +314,15 @@ public class UpdaterLocal implements Updater {
 			this.getCounter().incrementCount(i, 64);
 	}
 
-	private final Vehicle getVehicle() {
-		return Vehicle;
+	private String buildAddress(int start) {
+		String address = "" + this.getCounter().getCount(counterSlot.REGION.slot)
+				+ "." + getCurrent()
+				+ "." + start;
+		return address;
+	}
+
+	public final Vehicle getVehicle() {
+		return this.getBcSign().getVehicle();
 	}
 
 	protected final Address getSignAddress() {
@@ -312,14 +350,14 @@ public class UpdaterLocal implements Updater {
 		return this.getEnd().peek();
 	}
 
-	private final int getCurrent() {
+	private final int getCurrentSubnet() {
 		if (this.getStart().empty())
 			return 0;
 		return this.getStart().peek();
 	}
 
 	private final boolean isInSubnet(int address, int netmask) {
-		return (address >= this.getCurrent() && (address | (15 >> netmask))  < this.getNext());
+		return (address >= this.getCurrentSubnet() && (address | (15 >> netmask))  < this.getNext());
 	}
 
 	private final boolean needUpdate() {
@@ -329,7 +367,7 @@ public class UpdaterLocal implements Updater {
 	}
 
 
-	protected final BlockFace getFrom() {
+	public final DirectionRegistry getFrom() {
 		return From;
 	}
 
@@ -345,6 +383,41 @@ public class UpdaterLocal implements Updater {
 
 	private final void setSignAddress(Address signAddress) {
 		SignAddress = signAddress;
+	}
+
+	private int getCurrent() {
+		return this.getCounter().getCount(counterSlot.RING.slot);
+	}
+
+	@Override
+	public final Level getLevel() {
+		return Level.LOCAL;
+	}
+
+	@Override
+	public final int getRegion() {
+		return this.getSignAddress().getRegion().getAmount();
+	}
+
+	@Override
+	public int getTrackNumber() {
+		return this.getSignAddress().getTrack().getAmount();
+	}
+
+	@Override
+	public final Block getCenter() {
+		return this.getBcSign().getCenter();
+	}
+
+	/**
+	 * @return the bcsign
+	 */
+	public final BCSign getBcSign() {
+		return bcsign;
+	}
+	
+	public final String getFriendlyName() {
+		return this.getBcSign().getFriendlyName();
 	}
 
 }

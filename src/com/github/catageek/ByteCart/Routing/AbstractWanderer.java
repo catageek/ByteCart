@@ -2,6 +2,7 @@ package com.github.catageek.ByteCart.Routing;
 
 import java.util.Random;
 
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Vehicle;
 
@@ -27,19 +28,17 @@ public abstract class AbstractWanderer {
 	public abstract void doAction(BlockFace To);
 	public abstract void doAction(Side To);
 
-	private final Vehicle Vehicle;
+	private final BCSign bcsign;
 	private final Address SignAddress;
 	private final DirectionRegistry From;
-	private final Level Level;
 	private final boolean IsTrackNumberProvider;
 	private final int Region;
 	private final RoutingTable RoutingTable;
 
 	protected AbstractWanderer(BCSign bc) {
-		Vehicle = bc.getVehicle();
+		bcsign = bc;
 		SignAddress = bc.getSignAddress();
-		Level = bc.getLevel();
-		Region = ByteCart.myPlugin.getWm().getRegion(Vehicle.getEntityId());
+		Region = ByteCart.myPlugin.getWm().getRegion(this.getVehicle().getEntityId());
 		
 		if (bc instanceof BC8010) {
 			BC8010 ic = (BC8010) bc;
@@ -92,16 +91,16 @@ public abstract class AbstractWanderer {
 		return SignAddress;
 	}
 
-	protected final DirectionRegistry getFrom() {
+	public final DirectionRegistry getFrom() {
 		return From;
 	}
 
-	protected final Level getLevel() {
-		return Level;
+	public final Level getLevel() {
+		return this.getBcSign().getLevel();
 	}
 
-	protected final Vehicle getVehicle() {
-		return Vehicle;
+	public final Vehicle getVehicle() {
+		return this.getBcSign().getVehicle();
 	}
 
 	protected final boolean isTrackNumberProvider() {
@@ -112,8 +111,23 @@ public abstract class AbstractWanderer {
 		return getFrom().getBlockFace().equals(To);
 	}
 
-	protected final int getRegion() {
+	public final int getRegion() {
 		return Region;
 	}
+
+	public final Block getCenter() {
+		return this.getBcSign().getCenter();
+	}
+	
+	public final String getFriendlyName() {
+		return this.getBcSign().getFriendlyName();
+	}
+	/**
+	 * @return the bcsign
+	 */
+	public BCSign getBcSign() {
+		return bcsign;
+	}
+
 
 }

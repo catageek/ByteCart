@@ -47,8 +47,9 @@ public class UpdaterBackBone extends AbstractRegionUpdater implements Updater {
 	}
 
 	@Override
-	protected final int getTrackNumber() {
-		return getSignAddress().getRegion().getAmount();
+	public final int getTrackNumber() {
+		int ret = getSignAddress().getRegion().getAmount();
+		return ret == 0 ? -1 : ret;
 	}
 
 }

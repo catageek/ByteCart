@@ -20,7 +20,7 @@ public class AddressString extends AbstractAddress implements Address {
 	}
 	
 	static public boolean isAddress(String s) {
-		if(! (s.matches("([0-9]{1,2}\\.){2,2}[0-9]{1,2}"))) {
+		if(! (s.matches("([0-9]{1,2}\\.){2,2}[0-9]{1,2}")) || s == "0.0.0") {
 			return false;
 		}
 		

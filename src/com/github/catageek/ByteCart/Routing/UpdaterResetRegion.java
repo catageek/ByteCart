@@ -1,6 +1,9 @@
 package com.github.catageek.ByteCart.Routing;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
+
+import com.github.catageek.ByteCart.Event.UpdaterClearRingEvent;
 import com.github.catageek.ByteCart.Signs.BCSign;
 
 public final class UpdaterResetRegion extends UpdaterRegion implements Updater {
@@ -11,6 +14,10 @@ public final class UpdaterResetRegion extends UpdaterRegion implements Updater {
 
 	@Override
 	public void doAction(BlockFace to) {
+		if (this.getSignAddress().isValid()) {
+			UpdaterClearRingEvent event = new UpdaterClearRingEvent(this, this.getTrackNumber());
+			Bukkit.getServer().getPluginManager().callEvent(event);
+		}
 		reset();
 	}
 

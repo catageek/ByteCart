@@ -51,7 +51,7 @@ public abstract class AbstractRoutingTable {
 		return false;
 	}
 
-	public final List<Integer> getDirectlyConnected(DirectionRegistry direction) {
+	public final List<Integer> getDirectlyConnectedList(DirectionRegistry direction) {
 		List<Integer> list = new ArrayList<Integer>();
 		Iterator<Entry<Integer,Integer>> iterator = this.getRoutesTo(direction).iterator();
 		while(iterator.hasNext()) {
@@ -60,6 +60,11 @@ public abstract class AbstractRoutingTable {
 				list.add(entry.getKey());
 		}
 		return list;
+	}
+	
+	public final int getDirectlyConnected(DirectionRegistry direction) {
+		List<Integer> rings = getDirectlyConnectedList(direction);
+		return rings.size() == 1 ? rings.get(0) : -1 ;
 	}
 
 	public final BlockFace getFirstUnknown() {
@@ -70,7 +75,7 @@ public abstract class AbstractRoutingTable {
 			case SOUTH:
 			case WEST:
 
-				if (this.getDirectlyConnected(new DirectionRegistry(face)).isEmpty())
+				if (this.getDirectlyConnectedList(new DirectionRegistry(face)).isEmpty())
 					return face;
 			default:
 				break;

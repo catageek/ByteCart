@@ -1,10 +1,15 @@
 package com.github.catageek.ByteCart.Signs;
 
+import org.bukkit.Bukkit;
+
+
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoiderBuilder;
+import com.github.catageek.ByteCart.Event.SignPostSubnetEvent;
+import com.github.catageek.ByteCart.Event.SignPreSubnetEvent;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
@@ -18,7 +23,7 @@ import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-abstract public class AbstractBC9000 extends AbstractTriggeredSign implements BCSign,HasNetmask {
+abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,HasNetmask {
 
 	protected int netmask;
 
@@ -56,7 +61,9 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements BC
 					this.setWasTrain(this.getLocation(), true);
 				}
 
-				intersection.WishToGo(this.route(), this.isTrain());
+				Side result = intersection.WishToGo(this.route(), this.isTrain());
+				SignPostSubnetEvent event = new SignPostSubnetEvent(this, result);
+				Bukkit.getServer().getPluginManager().callEvent(event);
 				return;
 			}
 
@@ -93,9 +100,14 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements BC
 	}
 
 	protected SimpleCollisionAvoider.Side route() {
+		SignPreSubnetEvent event;
 		if (this.isAddressMatching())
-			return SimpleCollisionAvoider.Side.RIGHT;
-		return SimpleCollisionAvoider.Side.LEFT;
+			event = new SignPreSubnetEvent(this, Side.RIGHT);
+		else
+			event = new SignPreSubnetEvent(this, Side.LEFT);
+
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		return event.getSide();
 	}
 
 	protected final RegistryBoth applyNetmask(RegistryBoth station) {
@@ -121,7 +133,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements BC
 	}
 
 	protected void addIO() {
-		Address sign = AddressFactory.getAddress(this.getBlock(),3);
+		Address sign = this.getSignAddress();
 
 
 		// Output[0] = 2 bits registry representing levers on the left and on the right of the sign
@@ -196,12 +208,20 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements BC
 		}
 
 	}
-	
+
 	public final Address getSignAddress() {
 		return AddressFactory.getAddress(getBlock(), 3);
 	}
 
 	public final int getNetmask() {
 		return netmask;
+	}
+
+	public final String getDestinationIP() {
+		return AddressFactory.getAddress(this.getInventory()).toString();
+	}
+	
+	public final org.bukkit.block.Block getCenter() {
+		return this.getBlock();
 	}
 }

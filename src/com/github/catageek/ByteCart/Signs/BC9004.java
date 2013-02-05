@@ -3,7 +3,7 @@ package com.github.catageek.ByteCart.Signs;
 import com.github.catageek.ByteCart.ByteCart;
 
 
-public class BC9004 extends AbstractBC9000 implements BCSign,HasNetmask, Triggable {
+public class BC9004 extends AbstractBC9000 implements Subnet,HasNetmask, Triggable {
 
 	public BC9004(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

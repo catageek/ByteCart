@@ -1,12 +1,16 @@
 package com.github.catageek.ByteCart.Signs;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
+import com.github.catageek.ByteCart.Event.SignPostStationEvent;
+import com.github.catageek.ByteCart.Event.SignPreStationEvent;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.InputFactory;
@@ -17,7 +21,7 @@ import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-public class BC9001 extends AbstractBC9000 implements BCSign, Powerable, Triggable {
+public class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggable {
 
 
 	public BC9001(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
@@ -118,14 +122,25 @@ public class BC9001 extends AbstractBC9000 implements BCSign, Powerable, Triggab
 
 
 	protected SimpleCollisionAvoider.Side route() {
+		SignPreStationEvent event;
+		SignPostStationEvent event1;
 		// test if every destination field matches sign field
-		if (this.isAddressMatching()  && this.getInput(6).getAmount() == 0) {
+		if (this.isAddressMatching()  && this.getInput(6).getAmount() == 0)
+			event = new SignPreStationEvent(this, Side.RIGHT); // power levers if matching
+		else
+			event = new SignPreStationEvent(this, Side.LEFT); // unpower levers if not matching
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		
+		if (event.getSide().equals(Side.RIGHT)  && this.getInput(6).getAmount() == 0) {
 			this.getOutput(0).setAmount(3); // power levers if matching
+			event1 = new SignPostStationEvent(this, Side.RIGHT);
 		}
 		else
 		{
 			this.getOutput(0).setAmount(0); // unpower levers if not matching
+			event1 = new SignPostStationEvent(this, Side.RIGHT);
 		}
+		Bukkit.getServer().getPluginManager().callEvent(event1);
 		return null;
 	}
 
