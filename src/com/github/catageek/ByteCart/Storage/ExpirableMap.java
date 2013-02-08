@@ -54,4 +54,8 @@ public final class ExpirableMap<K, T> extends Expirable<K> {
 	public void clear() {
 		Map.clear();
 	}
+	
+	public boolean isEmpty() {
+		return Map.isEmpty();
+	}
 }

@@ -6,9 +6,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.StorageMinecart;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.EventManagement.ByteCartInventoryListener;
+import com.github.catageek.ByteCart.EventManagement.ByteCartUpdaterMoveListener;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
@@ -151,6 +153,11 @@ public class BytecartCommandExecutor implements CommandExecutor {
 						int id = ((StorageMinecart) inventory.getHolder()).getEntityId();
 						ByteCart.myPlugin.getUm().addUpdater(id, level, region);
 						ByteCart.myPlugin.getWm().addWanderer(id, region);
+						if (! ByteCartUpdaterMoveListener.isExist()) {
+							Listener updatermove = new ByteCartUpdaterMoveListener();
+							ByteCart.myPlugin.getServer().getPluginManager().registerEvents(updatermove, ByteCart.myPlugin);
+							ByteCartUpdaterMoveListener.setExist(true);
+						}
 						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Info.SetUpdater") );
 
 					}

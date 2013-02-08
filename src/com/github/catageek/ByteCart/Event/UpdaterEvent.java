@@ -8,7 +8,7 @@ import com.github.catageek.ByteCart.Signs.BCSign;
  * An event concerning an updater.
  * Implementations must inherit this class.
  */
-abstract class UpdaterEvent extends BCSignEvent {
+abstract public class UpdaterEvent extends BCSignEvent {
 	
 	private final Updater updater;
 	
