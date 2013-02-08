@@ -29,6 +29,8 @@ public class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggab
 		this.netmask = 4;
 		this.Name = "BC9001";
 		this.FriendlyName = "Station";
+		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
+		this.Permission = "bytecart." + this.Name;
 	}
 	@Override
 	public void trigger() {
