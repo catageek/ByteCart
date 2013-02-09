@@ -57,4 +57,15 @@ public abstract class AbstractCollisionAvoider extends AbstractIC {
 		setRecentlyUsed(true);
 		setHasTrain(this.getHasTrain() | isTrain);
 	}
+	
+	@Override
+	public final String getName() {
+		return "Collision avoider";
+	}
+
+	@Override
+	public final String getFriendlyName() {
+		return getName();
+	}
+
 }

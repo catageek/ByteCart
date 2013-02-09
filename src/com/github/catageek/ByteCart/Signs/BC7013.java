@@ -2,7 +2,6 @@ package com.github.catageek.ByteCart.Signs;
 
 import org.bukkit.block.BlockFace;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.HAL.SuperRegistry;
@@ -16,10 +15,6 @@ public class BC7013 extends BC7014 implements Triggable {
 	public BC7013(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC7013";
-		this.FriendlyName = "setTrack";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = this.Permission + this.Name;
 	}
 
 	@Override
@@ -46,5 +41,15 @@ public class BC7013 extends BC7014 implements Triggable {
 
 		this.addInputRegistry(ret);
 
+	}
+
+	@Override
+	public String getName() {
+		return "BC7013";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "setTrack";
 	}
 }

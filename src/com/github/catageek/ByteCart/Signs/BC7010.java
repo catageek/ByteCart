@@ -22,10 +22,6 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	public BC7010(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC7010";
-		this.FriendlyName = "Goto";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = this.Permission + this.Name;
 	}
 
 	public BC7010(Block block, Player player) {
@@ -99,5 +95,15 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	public final void click() {
 		this.trigger();
 
+	}
+
+	@Override
+	public String getName() {
+		return "BC7010";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Goto";
 	}
 }

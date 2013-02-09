@@ -20,10 +20,6 @@ public final class BC7003 extends AbstractIC implements Triggable, Powerable {
 
 	public BC7003(org.bukkit.block.Block block) {
 		super(block);
-		this.Name = "BC7003";
-		this.FriendlyName = "Cart counter";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = "bytecart." + this.Name;
 	}
 
 	public BC7003(org.bukkit.block.Block block, RegistryOutput io) {
@@ -152,10 +148,16 @@ public final class BC7003 extends AbstractIC implements Triggable, Powerable {
 		public void expire(Object... objects) {
 				((RegistryOutput) objects[0]).setAmount(0);
 		}
+	}
 
+	@Override
+	public final String getName() {
+		return "BC7003";
+	}
 
-
-
+	@Override
+	public final String getFriendlyName() {
+		return "Cart counter";
 	}
 }
 

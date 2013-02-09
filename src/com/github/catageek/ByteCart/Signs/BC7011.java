@@ -1,7 +1,5 @@
 package com.github.catageek.ByteCart.Signs;
 
-import com.github.catageek.ByteCart.ByteCart;
-
 
 public final class BC7011 extends BC7010 implements Triggable {
 
@@ -9,15 +7,16 @@ public final class BC7011 extends BC7010 implements Triggable {
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 
-		this.Name = "BC7011";
-		this.FriendlyName = "Storage Goto";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = this.Permission + this.Name;
-
-
 		this.StorageCartAllowed = true;
 	}
 
-	
+	@Override
+	public String getName() {
+		return "BC7011";
+	}
 
+	@Override
+	public String getFriendlyName() {
+		return "Storage Goto";
+	}
 }

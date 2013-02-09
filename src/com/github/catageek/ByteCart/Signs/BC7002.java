@@ -15,10 +15,6 @@ public class BC7002 extends AbstractTriggeredSign implements Triggable {
 	public BC7002(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC7002";
-		this.FriendlyName = "Cart detector";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = "bytecart." + this.Name;
 	}
 
 	@Override
@@ -52,8 +48,15 @@ public class BC7002 extends AbstractTriggeredSign implements Triggable {
 		public void run() {
 			this.bc.getOutput(0).setAmount(0);
 		}
-
-
 	}
 
+	@Override
+	public final String getName() {
+		return "BC7002";
+	}
+
+	@Override
+	public final String getFriendlyName() {
+		return "Cart detector";
+	}
 }

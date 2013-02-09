@@ -1,6 +1,5 @@
 package com.github.catageek.ByteCart.Signs;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.OutputPin;
@@ -15,11 +14,7 @@ public class BC9000 extends AbstractBC9000 implements Subnet, Triggable {
 	public BC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC9000";
-		this.FriendlyName = "Collision avoider";
 		this.netmask = 0;
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = "bytecart." + this.Name;
 	}
 
 	@Override
@@ -54,5 +49,13 @@ public class BC9000 extends AbstractBC9000 implements Subnet, Triggable {
 		this.addOutputRegistry(command1);
 	}
 
+	@Override
+	public String getName() {
+		return "BC9000";
+	}
 
+	@Override
+	public String getFriendlyName() {
+		return "Collision avoider";
+	}
 }

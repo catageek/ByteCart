@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart.Signs;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
@@ -39,10 +40,6 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 
 	public BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC8010";
-		this.FriendlyName = "L1 router";
-		this.Triggertax = ByteCart.myPlugin.getConfig().getInt("usetax." + this.Name);
-		this.Permission = this.Permission + this.Name;
 		this.IsTrackNumberProvider = true;
 		From = this.getCardinal().getOppositeFace();
 		// reading destination address of the cart
@@ -51,12 +48,19 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		Sign = AddressFactory.getAddress(this.getBlock(),3);
 		// Centre de l'aiguillage
 		center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
+		
+		BlockState blockstate;
+		
+		if ((blockstate = center.getRelative(BlockFace.UP, 5).getState()) instanceof InventoryHolder) {
+			// Loading inventory of chest above router
+			Inventory ChestInventory = ((InventoryHolder) blockstate).getInventory();
 
-		// Loading inventory of chest above router
-		Inventory ChestInventory = ((InventoryHolder) center.getRelative(BlockFace.UP, 5).getState()).getInventory();
-
-		// Converting inventory in routing table
-		RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
+			// Converting inventory in routing table
+			RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
+		}
+		else {
+			RoutingTable = null;
+		}
 	}
 
 	@Override
@@ -244,5 +248,15 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 
 	public final Block getCenter() {
 		return center;
+	}
+	
+	@Override
+	public String getName() {
+		return "BC8010";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "L1 Router";
 	}
 }

@@ -19,10 +19,6 @@ public class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTab
 
 	public BC8020(Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC8020";
-		this.FriendlyName = "L2 router";
-		this.Triggertax = ByteCart.myPlugin.getConfig().getInt("usetax." + this.Name);
-		this.Permission = this.Permission + this.Name;
 		this.IsTrackNumberProvider = true;
 	}
 
@@ -62,4 +58,13 @@ public class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTab
 		return Updater.Level.BACKBONE;
 	}
 
+	@Override
+	public String getName() {
+		return "BC8020";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "L2 Router";
+	}
 }

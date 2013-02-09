@@ -252,7 +252,4 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	protected ExpirableMap<Location, Boolean> getHasTrainMap() {
 		return hasTrainMap;
 	}
-
-
-
 }

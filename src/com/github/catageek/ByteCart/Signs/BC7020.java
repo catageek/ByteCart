@@ -11,10 +11,6 @@ public class BC7020 extends AbstractTriggeredSign implements Triggable {
 	public BC7020(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC7020";
-		this.FriendlyName = "Is a Train ?";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = this.Permission + this.Name;
 	}
 
 	@Override
@@ -52,6 +48,16 @@ public class BC7020 extends AbstractTriggeredSign implements Triggable {
 		PinRegistry<OutputPin> command1 = new PinRegistry<OutputPin>(lever2);
 
 		this.addOutputRegistry(command1);
+	}
+
+	@Override
+	public String getName() {
+		return "BC7020";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Is a Train ?";
 	}
 
 }

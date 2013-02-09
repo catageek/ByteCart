@@ -15,10 +15,6 @@ public class BC7014 extends BC7010 implements Triggable {
 	public BC7014(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC7014";
-		this.FriendlyName = "setStation";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = this.Permission + this.Name;
 		this.StorageCartAllowed = true;
 	}
 
@@ -51,5 +47,13 @@ public class BC7014 extends BC7010 implements Triggable {
 		this.addInputRegistry(wire);
 	}
 
+	@Override
+	public String getName() {
+		return "BC7014";
+	}
 
+	@Override
+	public String getFriendlyName() {
+		return "setStation";
+	}
 }

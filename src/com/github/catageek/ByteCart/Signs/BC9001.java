@@ -27,10 +27,6 @@ public class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggab
 	public BC9001(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 		this.netmask = 4;
-		this.Name = "BC9001";
-		this.FriendlyName = "Station";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = "bytecart." + this.Name;
 	}
 	@Override
 	public void trigger() {
@@ -144,6 +140,16 @@ public class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggab
 		}
 		Bukkit.getServer().getPluginManager().callEvent(event1);
 		return null;
+	}
+
+	@Override
+	public final String getName() {
+		return "BC9001";
+	}
+
+	@Override
+	public final String getFriendlyName() {
+		return "Station";
 	}
 
 }

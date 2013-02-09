@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Routing.Address;
 
 
@@ -14,11 +15,9 @@ abstract public class AbstractIC implements IC {
 	final private Block Block;
 	final private org.bukkit.Location Location;
 	
-	protected String Name = "";
-	protected String FriendlyName;
-	protected String Permission = "bytecart.";
+	abstract public String getName();
+	abstract public String getFriendlyName();
 	
-	protected int Buildtax = 0 ;
 	protected int Triggertax = 0;
 	
 	private RegistryInput[] input = new RegistryInput[7];
@@ -90,23 +89,15 @@ abstract public class AbstractIC implements IC {
 	}
 	
 	public final String getBuildPermission() {
-		return this.Permission;
-	}
-
-	public final String getName() {
-		return Name;
-	}
-
-	public final String getFriendlyName() {
-		return this.FriendlyName;
+		return "bytecart." + getName();
 	}
 
 	public final int getTriggertax() {
-		return Triggertax;
+		return ByteCart.myPlugin.getConfig().getInt("usetax." + this.getName());
 	}
 
 	public final int getBuildtax() {
-		return Buildtax;
+		return ByteCart.myPlugin.getConfig().getInt("buildtax." + this.getName());
 	}
 
 	public org.bukkit.Location getLocation() {

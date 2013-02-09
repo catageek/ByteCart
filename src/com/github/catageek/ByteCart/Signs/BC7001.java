@@ -36,10 +36,6 @@ public class BC7001 extends AbstractTriggeredSign implements Triggable, Powerabl
 
 	public BC7001(org.bukkit.block.Block block, Vehicle vehicle) {
 		super(block, vehicle);
-		this.Name = "BC7001";
-		this.FriendlyName = "Stop/Start";
-		this.Buildtax = ByteCart.myPlugin.getConfig().getInt("buildtax." + this.Name);
-		this.Permission = this.Permission + this.Name;
 	}
 
 	@Override
@@ -193,4 +189,13 @@ public class BC7001 extends AbstractTriggeredSign implements Triggable, Powerabl
 
 	}
 
+	@Override
+	public final String getName() {
+		return "BC7001";
+	}
+
+	@Override
+	public final String getFriendlyName() {
+		return "Stop/Start";
+	}
 }
