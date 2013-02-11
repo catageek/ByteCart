@@ -1,6 +1,6 @@
 name: ByteCart
 main: com.github.catageek.ByteCart.ByteCart
-version: 1.2.3
+version: 1.3.1
 permissions:
     bytecart.*:
         description: give access to all blocks
@@ -24,6 +24,7 @@ permissions:
             bytecart.BC9008: true
             bytecart.BC9016: true
             bytecart.bcupdater: true
+            bytecart.bcreload: true
 
     bytecart.helper:
         description: give acces to small subnets and station blocks
@@ -110,6 +111,8 @@ permissions:
         default: true
     bytecart.bcupdater:
         default: false
+    bytecart.bcreload:
+        default: false
 
 commands:
     mego:
@@ -128,4 +131,10 @@ commands:
         description: set a cart as Updater for ByteCart
         usage: "Usage : /<command>"
         permission: bytecart.bcupdater
+        permission-message: You don't have permission <permission>
+
+    bcreload:
+        description: reload configuration file
+        usage: "Usage : /<command>"
+        permission: bytecart.bcreload
         permission-message: You don't have permission <permission>

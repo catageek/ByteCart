@@ -20,10 +20,6 @@ Routing tables are stored ingame using a innovative information storage technolo
 
 A tool is provided to configure automatically the network if you do not have network skills.
 
-Bukkit version
-=================================
-The master branch of ByteCart runs currently on Minecraft v1.4.6-R0.3 to 1.4.7-R0.1. 
-
 Features
 =================================
 * Minimum CPU and memory usage, even with a huge network.
