@@ -1,161 +1,53 @@
 package com.github.catageek.ByteCart.Routing;
 
-import org.bukkit.entity.Player;
-
-import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.HAL.RegistryBoth;
-import com.github.catageek.ByteCart.HAL.RegistryOutput;
-import com.github.catageek.ByteCart.HAL.SubRegistry;
-import com.github.catageek.ByteCart.HAL.SuperRegistry;
-import com.github.catageek.ByteCart.HAL.VirtualRegistry;
-import com.github.catageek.ByteCart.IO.InventorySlot;
-import com.github.catageek.ByteCart.IO.InventorySlotWriter;
-
 
 
 /* 
  * This class represents an address stored in an inventory
  */
-public final class AddressInventory extends AbstractAddress implements AddressRouted {
-
-	private final org.bukkit.inventory.Inventory Inventory;
-	private InventorySlotWriter InventoryWriter;
-
-	private enum Slots {
-		// #slot
-		REGION(0),
-		TRACK(1),
-		STATION(2),
-		ISTRAIN(2),
-		UNUSED(2),
-		TTL(3);
-
-		private final int Slot;
-
-		private Slots(int slot) {
-			Slot = slot;
-		}
-
-		/**
-		 * @return the slot
-		 */
-		public int getSlot() {
-			return Slot;
-		}
-	}
+public final class AddressInventory extends AbstractAddressInventory implements AddressRouted {
 
 	public AddressInventory(org.bukkit.inventory.Inventory inv) {
-		this.Inventory = inv;
-		this.InventoryWriter = new InventorySlotWriter(this.getInventory());
+		super(inv);
 	}
 
 	@Override
-	public RegistryBoth getRegion() {
-		return new SubRegistry<RegistryBoth>( new InventorySlot(this.getInventory(), Slots.REGION.getSlot()), Offsets.REGION.getLength(), Offsets.REGION.getOffset());
+	protected int getRegionSlot() {
+		return Slots.REGION.getSlot();
 	}
 
 	@Override
-	public RegistryBoth getTrack() {
-		return new SubRegistry<RegistryBoth>( new InventorySlot(this.getInventory(), Slots.TRACK.getSlot()), Offsets.TRACK.getLength(), Offsets.TRACK.getOffset());
+	protected int getTrackSlot() {
+		return Slots.TRACK.getSlot();
 	}
 
 	@Override
-	public RegistryBoth getStation() {
-		return new SubRegistry<RegistryBoth>( new InventorySlot(this.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset());
+	protected int getStationSlot() {
+		return Slots.STATION.getSlot();
 	}
 
 	@Override
-	public boolean isTrain() {
-		return (new SubRegistry<RegistryBoth>(new InventorySlot(this.getInventory(), Slots.ISTRAIN.getSlot()), Offsets.ISTRAIN.getLength(), Offsets.ISTRAIN.getOffset())).getBit(0);
-	}
-
-	/**
-	 * @return the inventory
-	 */
-	private org.bukkit.inventory.Inventory getInventory() {
-		return Inventory;
-	}
-
-	/**
-	 * @param inventory the inventory to set
-	 */
-	@SuppressWarnings("deprecation")
-	private boolean UpdateInventory(org.bukkit.inventory.Inventory inventory) {
-		if (this.InventoryWriter.isSuccess()) {
-			this.Inventory.setContents(inventory.getContents());
-			if (this.getInventory().getHolder() instanceof Player)
-				((Player) this.getInventory().getHolder()).updateInventory();
-			return true;
-		}
-
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : UpdateInventory is not success");
-		return false;
-	}
-	
-	public boolean UpdateAddress() {
-		return this.UpdateInventory(this.InventoryWriter.getInventory());
-	}
-
-
-	@Override
-	public void setRegion(int region) {
-		this.InventoryWriter.Write(region, Slots.REGION.getSlot());
+	protected int getIsTrainSlot() {
+		return Slots.ISTRAIN.getSlot();
 	}
 
 	@Override
-	public void setTrack(int track) {
-		this.InventoryWriter.Write(track, Slots.TRACK.getSlot());
+	protected void setRegion(int region) {
+		protectReturnAddress();
+		super.setRegion(region);
 	}
 
 	@Override
-	public void setStation(int station) {
-		this.InventoryWriter.Write(station, Slots.STATION.getSlot());
+	protected void setTrack(int track) {
+		protectReturnAddress();
+		super.setTrack(track);
 	}
 
 	@Override
-	protected void setIsTrain(boolean isTrain) {
-		boolean written = this.InventoryWriter.setUnwritten(Slots.STATION.getSlot());
-		RegistryOutput station = new SubRegistry<RegistryBoth>(new InventorySlot(this.InventoryWriter.getInventory(), Slots.STATION.getSlot()), Offsets.STATION.getLength(), Offsets.STATION.getOffset());
-		RegistryOutput tmp = new SuperRegistry<RegistryOutput>(new VirtualRegistry(2), station);
-		tmp.setBit(0, isTrain);
-		this.InventoryWriter.Write(tmp.getAmount(), Slots.STATION.getSlot());
-		if (written)
-			this.InventoryWriter.setWritten(Slots.STATION.getSlot());
+	protected void setStation(int station) {
+		protectReturnAddress();
+		super.setStation(station);
 	}
 
-	@Override
-	public int getTTL() {
-		if (this.getInventory().getHolder() instanceof Player) {
-			return ByteCart.myPlugin.getConfig().getInt("TTL.value");
-		}
-		else
-			return (new SubRegistry<RegistryBoth>(new InventorySlot(this.getInventory(), Slots.TTL.getSlot(), Offsets.TTL.getLength()), Offsets.TTL.getLength(), Offsets.TTL.getOffset())).getAmount();
-	}
-
-	@Override
-	public Address initializeTTL() {
-		if (! (this.getInventory().getHolder() instanceof Player)) {
-			this.InventoryWriter.Write(ByteCart.myPlugin.getConfig().getInt("TTL.value"), Slots.TTL.getSlot(), false);
-			this.Inventory.setContents(this.InventoryWriter.getInventory().getContents());
-		}
-		return this;
-	}
-
-	@Override
-	public void updateTTL(int i) {
-		if (! (this.getInventory().getHolder() instanceof Player)) {
-			this.InventoryWriter.setWritten(Slots.REGION.getSlot()).setWritten(Slots.TRACK.getSlot()).setWritten(Slots.STATION.getSlot());
-			this.InventoryWriter.Write(i, Slots.TTL.getSlot());
-			this.UpdateInventory(this.InventoryWriter.getInventory());
-		}
-	}
-
-	@Override
-	public void remove() {
-		this.setRegion(0);
-		this.setTrack(0);
-		this.setStation(0);
-	}
 
 }

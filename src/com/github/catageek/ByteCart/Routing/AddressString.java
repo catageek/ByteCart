@@ -115,5 +115,10 @@ public class AddressString extends AbstractAddress implements Address {
 		this.isValid = false;
 	}
 
+	@Override
+	public boolean isReturnable() {
+		return false;
+	}
+
 
 }

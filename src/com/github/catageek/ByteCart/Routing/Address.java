@@ -8,6 +8,7 @@ public interface Address {
 	public RegistryBoth getTrack();
 	public RegistryBoth getStation();
 	public boolean isTrain();
+	public boolean isReturnable();
 	public boolean setAddress(String s);
 	public boolean setAddress(Address a);
 	public boolean setTrain(boolean istrain);

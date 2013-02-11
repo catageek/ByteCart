@@ -82,6 +82,11 @@ public final class AddressSign extends AbstractComponent implements Address {
 	final public String toString() {
 		return Address.toString();
 	}
+
+	@Override
+	public boolean isReturnable() {
+		return false;
+	}
 	
 	
 

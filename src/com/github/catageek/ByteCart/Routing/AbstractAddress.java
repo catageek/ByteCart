@@ -15,7 +15,7 @@ public abstract class AbstractAddress implements Address {
 		TRACK(),
 		STATION(4, 2),
 		ISTRAIN(1, 0),
-		UNUSED(1, 1),
+		ISRETURNABLE(1, 1),
 		TTL(7, 0);
 
 		private final int Length, Offset;
@@ -81,5 +81,4 @@ public abstract class AbstractAddress implements Address {
 	abstract protected void setTrack(int track);
 	abstract protected void setStation(int station);
 	abstract protected void setIsTrain(boolean isTrain);
-
 }

@@ -4,24 +4,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.RegistryBoth;
-import com.github.catageek.ByteCart.IO.BookProperties;
-import com.github.catageek.ByteCart.IO.BookProperties.Conf;
+import com.github.catageek.ByteCart.Routing.BookParameter.Parameter;
 
 public final class AddressBook implements AddressRouted {
-	
-	private final BookProperties Properties;
-	private final String Parameter;
+
 	private final String TTL = "net.ttl";
-	private final Inventory Inventory;
+	private final BookParameter parameter;
 	
-	public AddressBook(Inventory inv, int index, String parameter) {
-		Properties = new BookProperties(inv, index, Conf.NETWORK);
-		Parameter = parameter;
-		Inventory = inv;
+	AddressBook(Inventory inv, int index, Parameter parameter) {
+		this.parameter = new BookParameter(inv, index, parameter);
 	}
 
 	public AddressBook(Inventory inv, int index) {
-		this(inv, index, "net.dst.adr");
+		this.parameter = new BookParameter(inv, index, Parameter.DESTINATION);
 	}
 
 	@Override
@@ -42,14 +37,14 @@ public final class AddressBook implements AddressRouted {
 	@Override
 	public boolean isTrain() {
 		return getAddress().isTrain();
-}
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean setAddress(String s) {
-		Properties.setProperty(Parameter, s);
-		if (this.Inventory.getHolder() instanceof Player)
-			((Player) this.Inventory.getHolder()).updateInventory();
+		parameter.getProperties().setProperty(parameter.getParameter().getName(), s);
+		if (this.parameter.getInventory().getHolder() instanceof Player)
+			((Player) this.parameter.getInventory().getHolder()).updateInventory();
 		return true;
 	}
 
@@ -71,27 +66,22 @@ public final class AddressBook implements AddressRouted {
 	}
 
 	@Override
-	public void remove() {
-		Properties.clearProperty(Parameter);
-	}
-
-	@Override
 	public int getTTL() {
-		return Properties.getInt(TTL, 0);
+		return parameter.getProperties().getInt(TTL, 0);
 	}
 
 	@Override
 	public void updateTTL(int i) {
-		Properties.setProperty(TTL, ""+i);
+		parameter.getProperties().setProperty(TTL, ""+i);
 
 	}
 
 	@Override
 	public Address initializeTTL() {
-		Properties.setProperty(TTL, "64");
+		parameter.getProperties().setProperty(TTL, "64");
 		return getAddress();
 	}
-	
+
 	@Override
 	public String toString() {
 		return getAddress().toString();
@@ -99,7 +89,24 @@ public final class AddressBook implements AddressRouted {
 
 	private Address getAddress() {
 		String defaultaddr = ByteCart.myPlugin.getConfig().getString("EmptyCartsDefaultRoute", "0.0.0");
-		return new AddressString(Properties.getString(Parameter, defaultaddr));
+		return new AddressString(parameter.getProperties().getString(parameter.getParameter().getName(), defaultaddr));
+	}
+
+	/**
+	 * @return the parameter
+	 */
+	public BookParameter getParameter() {
+		return parameter;
+	}
+
+	@Override
+	public void remove() {
+		parameter.remove();
+	}
+
+	@Override
+	public boolean isReturnable() {
+		return parameter.getProperties().getString(Parameter.RETURN.getName()) != null;
 	}
 
 }
