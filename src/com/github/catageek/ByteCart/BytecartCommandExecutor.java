@@ -98,7 +98,25 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			}
 			return true;
 		}
+		
 
+		if (cmd.getName().equalsIgnoreCase("bcreload")) {
+			ByteCart.myPlugin.reloadConfig();
+			ByteCart.myPlugin.loadConfig();
+			
+			String s = "Configuration file reloaded.";
+
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(s);
+			} else {
+				Player player = (Player) sender;
+				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + s);
+			}
+			
+			return true;
+		}
+		
+		
 		if (cmd.getName().equalsIgnoreCase("bcupdater")) {
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("This command can only be run by a player.");
