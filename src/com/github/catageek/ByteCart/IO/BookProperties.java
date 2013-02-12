@@ -6,11 +6,11 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Properties;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import com.github.catageek.ByteCart.ByteCart;
 
 public final class BookProperties {
@@ -21,17 +21,17 @@ public final class BookProperties {
 	private Reader Reader = null;
 	private OutputStream OutputStream = null;
 	private final Inventory Inventory;
-	
+
 	public enum Conf {
-		NETWORK(0, "Network"),
-		BILLING(1, "Billing"),
-		ACCESS(2, "Access"),
-		PROTECTION(3, "Protection"),
-		HISTORY(4, "History");
-		
+		NETWORK(1, "Network"),
+		BILLING(2, "Billing"),
+		ACCESS(3, "Access"),
+		PROTECTION(4, "Protection"),
+		HISTORY(5, "History");
+
 		private final int page;
 		private final String name;
-		
+
 		Conf(int page, String name) {
 			this.page = page;
 			this.name = name;
@@ -45,10 +45,12 @@ public final class BookProperties {
 		PageNumber = page;
 		ItemStack stack = inventory.getItem(index);
 
-		ItemMeta meta = stack.hasItemMeta() ? stack.getItemMeta() : null;
+		BookMeta meta = (BookMeta) (stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(Material.BOOK_AND_QUILL));
+		if (! meta.hasPages())
+			meta.addPage((String) null);
 
 		try {
-			BookOutputStream bookoutputstream = new BookOutputStream((BookMeta) meta, PageNumber.page);
+			BookOutputStream bookoutputstream = new BookOutputStream(meta, PageNumber.page);
 			ItemStackOutputStream stackoutputstream = new ItemStackMetaWriter(stack, bookoutputstream);
 			InventoryItemStackOutputStream inventoryoutputstream = new InventoryItemStackOutputStream(inventory, index, stackoutputstream);
 			OutputStream = new BufferedOutputStream(inventoryoutputstream, 256);
@@ -68,7 +70,7 @@ public final class BookProperties {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void clearProperty(String key) {
 		try {
 			readPrepare();
@@ -79,7 +81,7 @@ public final class BookProperties {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public String getString(String key) {
@@ -93,13 +95,16 @@ public final class BookProperties {
 
 	private void readPrepare() throws IOException {
 		ItemStack stack = Inventory.getItem(Index);
-		ItemMeta meta = stack.hasItemMeta() ? stack.getItemMeta() : null;
+		BookMeta meta = (BookMeta) (stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(Material.BOOK_AND_QUILL));
+		if (! meta.hasPages())
+			meta.addPage((String) null);
 
-		try {
-			Reader = new BookReader((BookMeta) meta, PageNumber.page);
-		} catch (NullPointerException e) {
+		{
+			if (ByteCart.debug)
+				ByteCart.log.info("ByteCart: read page " + PageNumber.page);
+			Reader = new BookReader(meta, PageNumber.page);
+			Properties.load(Reader);
 		}
-		Properties.load(Reader);
 	}
 
 	public String getString(String key, String defaultvalue) {
@@ -120,14 +125,14 @@ public final class BookProperties {
 		return Integer.getInteger(Properties.getProperty(key));
 
 	}
-	
+
 	public int getInt(String key, int defaultvalue) {
 		try {
 			readPrepare();
 		} catch (IOException e) {
 			return 0;
 		}
-		
+
 		if (ByteCart.debug)
 			ByteCart.log.info("ByteCart: property string : "+ Properties.getProperty(key, ""+defaultvalue));
 		return Integer.parseInt(Properties.getProperty(key, ""+defaultvalue));
