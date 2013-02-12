@@ -1,7 +1,7 @@
 package com.github.catageek.ByteCart.Signs;
 
 
-public final class BC7011 extends BC7010 implements Triggable {
+public class BC7011 extends BC7010 implements Triggable {
 
 	public BC7011(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {

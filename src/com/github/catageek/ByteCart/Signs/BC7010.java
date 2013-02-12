@@ -42,10 +42,10 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		}
 
 		Address address = getAddressToWrite();
-		
+
 		if (address == null)
 			return;
-		
+
 		this.setAddress(address);
 
 		// if this is the first car of a train
@@ -62,13 +62,17 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		return Address;
 	}
 
+	protected AddressRouted getTargetAddress() {
+		return AddressFactory.getAddress(this.getInventory());
+	}
+
 	public final boolean setAddress(Address SignAddress){
-		AddressRouted IPaddress = AddressFactory.getAddress(this.getInventory());
+		AddressRouted IPaddress = getTargetAddress();
 
 		if (!IPaddress.setAddress(SignAddress)) {
 
 			if (this.getInventory().getHolder() instanceof Player) {
-					((Player) this.getInventory().getHolder()).sendMessage(ChatColor.GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
+				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
 			}
 			return false;
 		}
@@ -77,7 +81,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 			if (this.getVehicle() == null)
 				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress2") );
 		} else
-			IPaddress.initializeTTL();
+				IPaddress.initializeTTL();
 		return true;
 	}
 
