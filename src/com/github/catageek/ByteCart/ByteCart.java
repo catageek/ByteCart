@@ -45,6 +45,7 @@ public final class ByteCart extends JavaPlugin {
 		getCommand("sendto").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcreload").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcupdater").setExecutor(new BytecartCommandExecutor());
+		getCommand("bcticket").setExecutor(new BytecartCommandExecutor());
 	}
 
 	public void onDisable(){ 

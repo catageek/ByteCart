@@ -1,6 +1,8 @@
 package com.github.catageek.ByteCart;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.EventManagement.ByteCartInventoryListener;
 import com.github.catageek.ByteCart.EventManagement.ByteCartUpdaterMoveListener;
@@ -21,6 +25,7 @@ import com.github.catageek.ByteCart.Signs.BC7011;
 
 public class BytecartCommandExecutor implements CommandExecutor {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -98,12 +103,12 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			}
 			return true;
 		}
-		
+
 
 		if (cmd.getName().equalsIgnoreCase("bcreload")) {
 			ByteCart.myPlugin.reloadConfig();
 			ByteCart.myPlugin.loadConfig();
-			
+
 			String s = "Configuration file reloaded.";
 
 			if (!(sender instanceof Player)) {
@@ -112,11 +117,41 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				Player player = (Player) sender;
 				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + s);
 			}
-			
+
 			return true;
 		}
-		
-		
+
+		if (cmd.getName().equalsIgnoreCase("bcticket")) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("This command can only be run by a player.");
+				return true;
+			}
+			
+			Player player = (Player) sender;				
+			ItemStack stack = player.getItemInHand();
+			BookMeta book;
+
+			if (! stack.getType().equals(Material.BOOK_AND_QUILL) 
+					|| (stack.hasItemMeta() 
+							&& (book = (BookMeta)stack.getItemMeta()).hasPages() && (! book.getPage(1).isEmpty()))) {
+				String msg = "Error : Please take an empty Book & Quill in hand !";
+				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + msg);
+				return true;
+			}
+
+			book = (BookMeta) Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
+			book.setAuthor(ByteCart.myPlugin.getConfig().getString("author"));
+			book.setTitle(ByteCart.myPlugin.getConfig().getString("title"));
+			stack = new ItemStack(Material.WRITTEN_BOOK);
+			stack.setItemMeta(book);
+			player.setItemInHand(stack);
+			player.updateInventory();
+			String msg = "Ticket created successfully.";
+			player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + msg);
+			return true;
+		}
+
+
 		if (cmd.getName().equalsIgnoreCase("bcupdater")) {
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("This command can only be run by a player.");

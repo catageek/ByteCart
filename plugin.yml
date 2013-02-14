@@ -26,8 +26,11 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
+            bytecart.mego: true
+            bytecart.sendto: true
             bytecart.bcupdater: true
             bytecart.bcreload: true
+            bytecart.bcticket: true
 
     bytecart.helper:
         description: give access to small subnets and station blocks
@@ -122,6 +125,8 @@ permissions:
         default: false
     bytecart.bcreload:
         default: false
+    bytecart.bcticket:
+        default: true
 
 commands:
     mego:
@@ -146,4 +151,9 @@ commands:
         description: reload configuration file
         usage: "Usage : /<command>"
         permission: bytecart.bcreload
+        permission-message: You don't have permission <permission>
+    bcticket:
+        description: create a book ticket
+        usage: "Usage : /<command>"
+        permission: bytecart.bcticket
         permission-message: You don't have permission <permission>
