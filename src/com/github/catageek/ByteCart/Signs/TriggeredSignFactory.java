@@ -67,6 +67,10 @@ final public class TriggeredSignFactory {
 				return (Triggable)(new BC7014(block, vehicle));
 			case 7015:
 				return (Triggable)(new BC7015(block, vehicle));
+			case 7016:
+				return (Triggable)(new BC7016(block, vehicle));
+			case 7017:
+				return (Triggable)(new BC7017(block, vehicle));
 			case 7020:
 				return (Triggable)(new BC7020(block, vehicle));
 			case 7021:

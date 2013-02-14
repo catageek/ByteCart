@@ -46,7 +46,10 @@ public final class AddressInventory extends AbstractAddressInventory implements 
 	@Override
 	protected void setStation(int station) {
 		protectReturnAddress();
+		boolean isreturnable = isReturnable();
 		super.setStation(station);
+		if (isreturnable)
+			setIsReturnable(true);
 	}
 
 

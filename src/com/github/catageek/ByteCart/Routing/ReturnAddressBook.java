@@ -77,4 +77,9 @@ public final class ReturnAddressBook implements Returnable {
 	public boolean isReturnable() {
 		return address.isReturnable();
 	}
+
+	@Override
+	public String toString() {
+		return address.toString();
+	}
 }
