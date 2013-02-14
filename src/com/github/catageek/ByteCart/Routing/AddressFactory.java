@@ -6,20 +6,26 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+
+import com.github.catageek.ByteCart.ByteCart;
 
 public final class AddressFactory {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Address> T getAddress(Inventory inv){
-		if (inv.contains(Material.BOOK_AND_QUILL)) {
+		if (inv.contains(Material.WRITTEN_BOOK)) {
 			ListIterator<? extends ItemStack> it = inv.iterator();
 
 			while (it.hasNext()) {
 				ItemStack stack = it.next();
 				try {
 
-					if (stack.getTypeId() == Material.BOOK_AND_QUILL.getId())
-						return (T) new AddressBook(inv, it.previousIndex());
+					if (stack.getTypeId() == Material.WRITTEN_BOOK.getId() && stack.hasItemMeta()) {
+						String bookauthor = ((BookMeta) stack.getItemMeta()).getAuthor();
+						if (bookauthor.equals(ByteCart.myPlugin.getConfig().getString("author")))
+							return (T) new AddressBook(inv, it.previousIndex());
+					}
 				} catch (NullPointerException e) {
 				}
 			}
