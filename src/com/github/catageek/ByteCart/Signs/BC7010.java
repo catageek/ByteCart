@@ -11,10 +11,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.IO.ComponentSign;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
-import com.github.catageek.ByteCart.Util.Book;
+import com.github.catageek.ByteCart.Util.Ticket;
 
 
 public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickable {
@@ -51,7 +52,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		if (address == null)
 			return;
 
-		this.setAddress(address);
+		this.setAddress(address, this.getNameToWrite());
 
 		// if this is the first car of a train
 		// we save the state during 2 s
@@ -66,12 +67,16 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		Address Address = AddressFactory.getAddress(this.getBlock(), 3);
 		return Address;
 	}
+	
+	protected String getNameToWrite() {
+		return (new ComponentSign(this.getBlock())).getLine(2);
+	}
 
 	protected AddressRouted getTargetAddress() {
 		return AddressFactory.getAddress(this.getInventory());
 	}
 
-	public final boolean setAddress(Address SignAddress){
+	public final boolean setAddress(Address SignAddress, String name){
 		Player player = null;
 		
 		if (this.getInventory().getHolder() instanceof Player)
@@ -83,7 +88,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 
 		AddressRouted IPaddress = getTargetAddress();
 
-		if (!IPaddress.setAddress(SignAddress)) {
+		if (!IPaddress.setAddress(SignAddress, name)) {
 
 			if (this.getInventory().getHolder() instanceof Player) {
 				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
@@ -91,9 +96,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 			return false;
 		}
 		if (this.getInventory().getHolder() instanceof Player) {
-			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + IPaddress + ")");
-			if (this.getVehicle() == null)
-				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress2") );
+			this.infoPlayer(IPaddress);
 		} else
 			IPaddress.initializeTTL();
 		return true;
@@ -107,13 +110,16 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 			// if storage cart or we must reuse a existing ticket
 			// check if a ticket exists and return
 			// otherwise continue
-			slot = Book.getTicketslot(this.getInventory());
+			slot = Ticket.getTicketslot(this.getInventory());
 			if (slot != -1)
 				return;
 		}
 
 		// get a slot containing an emtpy book (or nothing)
-		slot = Book.getEmptyOrBookAndQuillSlot(this.getInventory());
+		slot = Ticket.getEmptyOrBookAndQuillSlot(this.getInventory());
+
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart: BC7010 : slot " + slot);
 
 		if (slot == -1) {
 			String msg = "Error: No space in inventory.";
@@ -141,8 +147,16 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		book.setTitle(ByteCart.myPlugin.getConfig().getString("title"));
 		stack = new ItemStack(Material.WRITTEN_BOOK);
 		stack.setItemMeta(book);
+		
+		// swap with an existing book if needed
+		int existingticket = Ticket.getTicketslot(getInventory());
+		if (existingticket != -1 && existingticket != slot) {
+			this.getInventory().setItem(slot, this.getInventory().getItem(existingticket));
+			slot = existingticket;
+		}
 
 		this.getInventory().setItem(slot, stack);
+		
 		if (player != null)
 			player.updateInventory();
 	}
@@ -155,6 +169,12 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 			return StorageCartAllowed;
 		}
 		return false;
+	}
+	
+	protected void infoPlayer(Address address) {
+		((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + address + ")");
+		if (this.getVehicle() == null)
+			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress2") );
 	}
 
 	@Override

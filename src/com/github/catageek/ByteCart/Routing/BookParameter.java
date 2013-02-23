@@ -1,15 +1,13 @@
 package com.github.catageek.ByteCart.Routing;
 
-import org.bukkit.inventory.Inventory;
-
 import com.github.catageek.ByteCart.IO.BookProperties;
 import com.github.catageek.ByteCart.IO.BookProperties.Conf;
+import com.github.catageek.ByteCart.Util.Ticket;
 
 final class BookParameter {
 
 	private final BookProperties properties;
 	private final Parameter parameter;
-	private final Inventory inventory;
 
 	public enum Parameter {
 		DESTINATION("net.dst.addr"),
@@ -29,10 +27,9 @@ final class BookParameter {
 		}
 	}
 	
-	public BookParameter(Inventory inv, int index, Parameter parameter) {
-		properties = new BookProperties(inv, index, Conf.NETWORK);
+	public BookParameter(Ticket ticket, Parameter parameter) {
+		properties = new BookProperties(ticket, Conf.NETWORK);
 		this.parameter = parameter;
-		inventory = inv;
 	}
 
 	void remove() {
@@ -47,17 +44,11 @@ final class BookParameter {
 	}
 
 	/**
-	 * @return the inventory
-	 */
-	Inventory getInventory() {
-		return inventory;
-	}
-
-	/**
 	 * @return the properties
 	 */
 	BookProperties getProperties() {
 		return properties;
 	}
+
 
 }

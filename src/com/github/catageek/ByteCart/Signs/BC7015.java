@@ -23,4 +23,9 @@ public final class BC7015 extends BC7011 implements Triggable {
 	public String getFriendlyName() {
 		return "Set Return";
 	}
+
+	@Override
+	protected boolean forceTicketReuse() {
+		return true;
+	}
 }
