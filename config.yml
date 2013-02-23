@@ -6,8 +6,12 @@ debug: false
 # set false if you don't want to load chunks automatically around a moving cart
 loadchunks: true
 
-# set true if you want use books as destination address storage and more
+# set to true if you want use books as destination address storage and more
 usebooks: true
+
+# Force players to provide books to get tickets when needed
+# set to false if you want the plugin to automatically create books when needed
+mustProvideBooks: false
 
 # Name to use as author of ticket book
 author: ByteCart
