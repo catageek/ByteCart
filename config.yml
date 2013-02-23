@@ -17,7 +17,7 @@ mustProvideBooks: false
 author: ByteCart
 
 # Title of ticket book
-title: Travel ticket
+title: Ticket to
 
 # material id to use when the plugin needs to write
 # in an inventory for its internal needs
@@ -61,6 +61,9 @@ Error.SetAddress: Erreur - Pas assez/trop d'elements dans l'inventaire
 
 # New destination address
 Info.SetAddress: Nouvelle destination
+
+# New return address
+Info.SetReturnAddress: Nouvelle adresse de retour
 
 # don't touch your inventory
 # take a cart and have a nice trip !
