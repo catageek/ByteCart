@@ -67,7 +67,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		Address Address = AddressFactory.getAddress(this.getBlock(), 3);
 		return Address;
 	}
-	
+
 	protected String getNameToWrite() {
 		return (new ComponentSign(this.getBlock())).getLine(2);
 	}
@@ -78,7 +78,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 
 	public final boolean setAddress(Address SignAddress, String name){
 		Player player = null;
-		
+
 		if (this.getInventory().getHolder() instanceof Player)
 			player = (Player) this.getInventory().getHolder();
 
@@ -128,7 +128,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		}
 
 		ItemStack stack;
-		
+
 		if (this.getInventory().getItem(slot) == null
 				&& ByteCart.myPlugin.getConfig().getBoolean("mustProvideBooks")
 				&& ByteCart.myPlugin.getConfig().getBoolean("usebooks")) {
@@ -147,7 +147,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		book.setTitle(ByteCart.myPlugin.getConfig().getString("title"));
 		stack = new ItemStack(Material.WRITTEN_BOOK);
 		stack.setItemMeta(book);
-		
+
 		// swap with an existing book if needed
 		int existingticket = Ticket.getTicketslot(getInventory());
 		if (existingticket != -1 && existingticket != slot) {
@@ -156,7 +156,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		}
 
 		this.getInventory().setItem(slot, stack);
-		
+
 		if (player != null)
 			player.updateInventory();
 	}
@@ -170,7 +170,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		}
 		return false;
 	}
-	
+
 	protected void infoPlayer(Address address) {
 		((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + address + ")");
 		if (this.getVehicle() == null  && ! ByteCart.myPlugin.getConfig().getBoolean("usebooks"))
@@ -192,7 +192,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	public String getFriendlyName() {
 		return "Goto";
 	}
-	
+
 	protected boolean forceTicketReuse() {
 		return false;
 	}

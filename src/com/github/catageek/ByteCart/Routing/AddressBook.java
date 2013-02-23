@@ -84,7 +84,7 @@ public final class AddressBook implements AddressRouted {
 
 	@Override
 	public int getTTL() {
-		return parameter.getProperties().getInt(TTL, 0);
+		return parameter.getProperties().getInt(TTL, 64);
 	}
 
 	@Override
