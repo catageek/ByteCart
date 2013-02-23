@@ -1,22 +1,25 @@
 package com.github.catageek.ByteCart.Routing;
 
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.Routing.BookParameter.Parameter;
+import com.github.catageek.ByteCart.Util.Ticket;
 
 public final class AddressBook implements AddressRouted {
 
 	private final String TTL = "net.ttl";
 	private final BookParameter parameter;
-	
-	AddressBook(Inventory inv, int index, Parameter parameter) {
-		this.parameter = new BookParameter(inv, index, parameter);
+	private final Ticket ticket;
+
+	AddressBook(Ticket ticket, Parameter parameter) {
+		this.parameter = new BookParameter(ticket, parameter);
+		this.ticket = ticket;
 	}
 
-	public AddressBook(Inventory inv, int index) {
-		this.parameter = new BookParameter(inv, index, Parameter.DESTINATION);
+	AddressBook(Ticket ticket) {
+		this.parameter = new BookParameter(ticket, Parameter.DESTINATION);
+		this.ticket = ticket;
 	}
 
 	@Override
@@ -39,25 +42,39 @@ public final class AddressBook implements AddressRouted {
 		return getAddress().isTrain();
 	}
 
-	@SuppressWarnings("deprecation")
+	/**
+	 * @return the ticket
+	 */
+	public Ticket getTicket() {
+		return ticket;
+	}
+
 	@Override
 	public boolean setAddress(String s) {
+		return setAddress(s, null);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean setAddress(String s, String name) {
 		parameter.getProperties().setProperty(parameter.getParameter().getName(), s);
-		if (this.parameter.getInventory().getHolder() instanceof Player)
-			((Player) this.parameter.getInventory().getHolder()).updateInventory();
+		if (this.parameter.getParameter().equals(Parameter.DESTINATION))
+			ticket.appendTitle(name, s);
+		if (this.getTicket().getTicketHolder() instanceof Player)
+			((Player) this.getTicket().getTicketHolder()).updateInventory();
 		return true;
 	}
 
 	@Override
-	public boolean setAddress(Address a) {
-		return setAddress(a.toString());
+	public boolean setAddress(Address a, String name) {
+		return setAddress(a.toString(), name);
 	}
 
 	@Override
 	public boolean setTrain(boolean istrain) {
 		Address address = getAddress();
 		address.setTrain(istrain);
-		return setAddress(address);
+		return setAddress(address, null);
 	}
 
 	@Override
@@ -67,7 +84,7 @@ public final class AddressBook implements AddressRouted {
 
 	@Override
 	public int getTTL() {
-		return parameter.getProperties().getInt(TTL, 0);
+		return parameter.getProperties().getInt(TTL, 64);
 	}
 
 	@Override
@@ -108,5 +125,4 @@ public final class AddressBook implements AddressRouted {
 	public boolean isReturnable() {
 		return parameter.getProperties().getString(Parameter.RETURN.getName()) != null;
 	}
-
 }

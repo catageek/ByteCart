@@ -1,14 +1,13 @@
 package com.github.catageek.ByteCart.Routing;
 
-import org.bukkit.inventory.Inventory;
-
 import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.Routing.BookParameter.Parameter;
+import com.github.catageek.ByteCart.Util.Ticket;
 
 public final class ReturnAddressBook implements Returnable {
 
-	public ReturnAddressBook(Inventory inv, int index) {
-		this.address = new AddressBook(inv, index, Parameter.RETURN);
+	public ReturnAddressBook(Ticket ticket) {
+		this.address = new AddressBook(ticket, Parameter.RETURN);
 	}
 
 	private final AddressBook address;
@@ -39,8 +38,13 @@ public final class ReturnAddressBook implements Returnable {
 	}
 
 	@Override
-	public boolean setAddress(Address a) {
-		return address.setAddress(a);
+	public boolean setAddress(String s, String name) {
+		return address.setAddress(s);
+	}
+
+	@Override
+	public boolean setAddress(Address a, String name) {
+		return address.setAddress(a, name);
 	}
 
 	@Override

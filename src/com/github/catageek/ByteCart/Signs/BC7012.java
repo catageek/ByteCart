@@ -26,4 +26,10 @@ public class BC7012 extends BC7013 implements Triggable {
 	public final String getFriendlyName() {
 		return "setRegion";
 	}
+	
+	@Override
+	protected boolean forceTicketReuse() {
+		return true;
+	}
+
 }

@@ -58,9 +58,17 @@ public abstract class AbstractAddress implements Address {
 		return this.UpdateAddress();
 
 	}
+
+	public boolean setAddress(Address a, String name) {
+		return this.setAddress(a);
+	}
 	
 	public boolean setAddress(String s) {
 		return setAddress(AddressFactory.getAddress(s));
+	}
+	
+	public boolean setAddress(String s, String name) {
+		return setAddress(s);
 	}
 	
 	public final boolean setTrain(boolean istrain) {

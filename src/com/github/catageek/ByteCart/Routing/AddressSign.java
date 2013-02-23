@@ -47,13 +47,19 @@ public final class AddressSign extends AbstractComponent implements Address {
 	}
 
 	@Override
+	public boolean setAddress(String s, String name) {
+		(new ComponentSign(this.getLocation().getBlock())).setLine(2, name);		
+		return setAddress(s);
+	}
+
+	@Override
 	public boolean isTrain() {
 		return this.Address.isTrain();
 	}
 
 	@Override
-	public boolean setAddress(com.github.catageek.ByteCart.Routing.Address a) {
-		return this.setAddress(a.toString());
+	public boolean setAddress(com.github.catageek.ByteCart.Routing.Address a, String name) {
+		return this.setAddress(a.toString(), name);
 	}
 
 	@Override
@@ -87,9 +93,4 @@ public final class AddressSign extends AbstractComponent implements Address {
 	public boolean isReturnable() {
 		return false;
 	}
-	
-	
-
-
-
 }

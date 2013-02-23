@@ -22,6 +22,7 @@ import com.github.catageek.ByteCart.Routing.AddressString;
 import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
+import com.github.catageek.ByteCart.Util.Ticket;
 
 public class BytecartCommandExecutor implements CommandExecutor {
 
@@ -43,7 +44,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				if (args.length == 2 && args[1].equalsIgnoreCase("train"))
 					address.setTrain(true);
 
-				(new BC7010(player.getLocation().getBlock(), player)).setAddress(address);
+				(new BC7010(player.getLocation().getBlock(), player)).setAddress(address, null);
 			}
 			return true;
 		}
@@ -75,7 +76,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 					}
 
 					public void run() {
-						if ((new BC7011(player.getLocation().getBlock(), ((StorageMinecart) inventory.getHolder()))).setAddress(address)) {
+						if ((new BC7011(player.getLocation().getBlock(), ((StorageMinecart) inventory.getHolder()))).setAddress(address, null)) {
 							player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress"));
 							player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.GetTTL") + AddressFactory.<AddressRouted>getAddress(inventory).getTTL());
 						}
@@ -126,25 +127,25 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				sender.sendMessage("This command can only be run by a player.");
 				return true;
 			}
-			
-			Player player = (Player) sender;				
-			ItemStack stack = player.getItemInHand();
-			BookMeta book;
 
-			if (! stack.getType().equals(Material.BOOK_AND_QUILL) 
-					|| (stack.hasItemMeta() 
-							&& (book = (BookMeta)stack.getItemMeta()).hasPages() && (! book.getPage(1).isEmpty()))) {
-				String msg = "Error : Please take an empty Book & Quill in hand !";
-				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + msg);
-				return true;
-			}
+			Player player = (Player) sender;				
+			ItemStack stack;
+			BookMeta book;
 
 			book = (BookMeta) Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
 			book.setAuthor(ByteCart.myPlugin.getConfig().getString("author"));
 			book.setTitle(ByteCart.myPlugin.getConfig().getString("title"));
 			stack = new ItemStack(Material.WRITTEN_BOOK);
 			stack.setItemMeta(book);
-			player.setItemInHand(stack);
+			int slot = Ticket.getEmptyOrBookAndQuillSlot(player.getInventory());
+
+			if (slot == -1) {
+				String msg = "No space in inventory.";
+				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + msg);
+				return true;
+			}
+
+			player.getInventory().setItem(slot, stack);
 			player.updateInventory();
 			String msg = "Ticket created successfully.";
 			player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + msg);

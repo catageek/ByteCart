@@ -52,4 +52,9 @@ public class BC7013 extends BC7014 implements Triggable {
 	public String getFriendlyName() {
 		return "setTrack";
 	}
+	
+	@Override
+	protected boolean forceTicketReuse() {
+		return true;
+	}
 }

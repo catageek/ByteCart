@@ -6,12 +6,11 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Properties;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Util.Ticket;
 
 public final class BookProperties {
 
@@ -21,6 +20,7 @@ public final class BookProperties {
 	private Reader Reader = null;
 	private OutputStream OutputStream = null;
 	private final Inventory Inventory;
+	private final BookMeta meta;
 
 	public enum Conf {
 		NETWORK(1, "Network"),
@@ -38,21 +38,21 @@ public final class BookProperties {
 		}
 	}
 
-	public BookProperties(Inventory inventory, int index, Conf page) {
+	public BookProperties(Ticket ticket, Conf page) {
 		super();
-		Inventory = inventory;
-		Index = index;
+		Inventory = ticket.getInventory();
+		Index = ticket.getSlot();
 		PageNumber = page;
-		ItemStack stack = inventory.getItem(index);
+		ItemStack stack = ticket.getItemStack();
 
-		BookMeta meta = (BookMeta) (stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(Material.BOOK_AND_QUILL));
+		meta = ticket.getBookMeta();
 		if (! meta.hasPages())
 			meta.addPage((String) null);
 
 		try {
 			BookOutputStream bookoutputstream = new BookOutputStream(meta, PageNumber.page);
 			ItemStackOutputStream stackoutputstream = new ItemStackMetaWriter(stack, bookoutputstream);
-			InventoryItemStackOutputStream inventoryoutputstream = new InventoryItemStackOutputStream(inventory, index, stackoutputstream);
+			InventoryItemStackOutputStream inventoryoutputstream = new InventoryItemStackOutputStream(Inventory, Index, stackoutputstream);
 			OutputStream = new BufferedOutputStream(inventoryoutputstream, 256);
 
 		} catch (NullPointerException e) {
@@ -94,8 +94,7 @@ public final class BookProperties {
 	}
 
 	private void readPrepare() throws IOException {
-		ItemStack stack = Inventory.getItem(Index);
-		BookMeta meta = (BookMeta) (stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(Material.BOOK_AND_QUILL));
+
 		if (! meta.hasPages())
 			meta.addPage((String) null);
 

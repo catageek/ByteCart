@@ -1,5 +1,8 @@
 package com.github.catageek.ByteCart.Signs;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
@@ -28,16 +31,20 @@ public final class BC7017 extends AbstractTriggeredSign implements Triggable {
 		Address returnAddress = ReturnAddressFactory.getAddress(this.getInventory());
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: 7017 : Reading address " + returnAddress.toString());
-		
+
 		if (! returnAddress.isReturnable())
 			return;
-		
+
 		String returnAddressString = returnAddress.toString();
 		AddressRouted targetAddress = AddressFactory.getAddress(getInventory());
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: 7017 : Writing address " + returnAddressString);
 		returnAddress.remove();
 		targetAddress.setAddress(returnAddressString);
-		targetAddress.initializeTTL();
+		if (this.getInventory().getHolder() instanceof Player)
+			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + returnAddressString + ")");
+		else
+			targetAddress.initializeTTL();
+
 	}
 }
