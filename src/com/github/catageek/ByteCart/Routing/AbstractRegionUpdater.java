@@ -33,6 +33,8 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		if(isRouteConsumer()) {
 			List<Integer> connected = getRoutingTable().getDirectlyConnectedList(getFrom());
 			int current = getCurrent();
+			
+			current = (current == -2 ? 0 : current); 
 
 			// if the track we come from is not recorded
 			// or others track are wrongly recorded, we correct this
@@ -74,6 +76,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		this.Update(To);
 
 		int current = getCurrent();
+		current = (current == -2 ? 0 : current); 
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : current is " + current);
 
