@@ -84,12 +84,17 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 
 			// if there is a side we don't have visited yet, let go there
 			if (isTrackNumberProvider()) {
-				if ((face = this.getRoutingTable().getFirstUnknown()) != null && ! this.isSameTrack(face))
-					return face;
+				try {
+					if ((face = this.getRoutingTable().getFirstUnknown()) != null && ! this.isSameTrack(face))
+						return face;
+				} catch (NullPointerException e) {
+					ByteCart.log.log(java.util.logging.Level.SEVERE, "ByteCart : Chest expected at position " + this.getCenter().getRelative(BlockFace.UP, 5).getLocation());
+					throw e;
+				}
 
-				int min;
-				if((min = this.getCounter().getMinimum(this.getRoutingTable(), this.getFrom())) != -1)
-					return this.getRoutingTable().getDirection(min).getBlockFace();
+					int min;
+					if((min = this.getCounter().getMinimum(this.getRoutingTable(), this.getFrom())) != -1)
+						return this.getRoutingTable().getDirection(min).getBlockFace();
 			}
 		}
 		return DefaultRouterWanderer.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());

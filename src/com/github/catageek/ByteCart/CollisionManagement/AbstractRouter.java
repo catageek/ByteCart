@@ -186,6 +186,8 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 		sortie[3] = OutputPinFactory.getOutput(center.getRelative(BlockFace.SOUTH,3).getRelative(BlockFace.EAST));
 		// West
 		sortie[2] = OutputPinFactory.getOutput(center.getRelative(BlockFace.NORTH,3).getRelative(BlockFace.WEST));
+		
+		checkIOPresence(sortie);
 
 		RegistryOutput main = new PinRegistry<OutputPin>(sortie);
 
@@ -203,12 +205,22 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 			f = g;
 			g = MathUtil.clockwise(g);			
 		}
+		
+		checkIOPresence(secondary);
 
 		RegistryOutput second = new PinRegistry<OutputPin>(secondary);
 
 		// output[1] is second and third levers
 		this.addOutputRegistry(second);
 
+	}
+
+	private void checkIOPresence(OutputPin[] sortie) {
+		for (int i = 0; i < sortie.length; i++)
+			if (sortie[i] == null) {
+				ByteCart.log.log(java.util.logging.Level.SEVERE, "ByteCart : Lever missing or wrongly positioned in router " + this.getLocation());
+				throw new NullPointerException();
+			}
 	}
 
 	/**
