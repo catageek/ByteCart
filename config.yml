@@ -58,36 +58,36 @@ BC7001.startvelocity: 2
 EmptyCartsDefaultRoute: 0.0.0
 
 # error messages
-# Error : too few/many items in inventory
-Error.SetAddress: Erreur - Pas assez/trop d'elements dans l'inventaire
+Error.SetAddress: Error - too few/many items in inventory
+#Error.SetAddress: Erreur - Pas assez/trop d'elements dans l'inventaire
 
 #Info messages
 
-# New destination address
-Info.SetAddress: Nouvelle destination
+Info.SetAddress: New destination address
+#Info.SetAddress: Nouvelle destination
 
-# New return address
-Info.SetReturnAddress: Nouvelle adresse de retour
+Info.SetReturnAddress: New return address
+#Info.SetReturnAddress: Nouvelle adresse de retour
 
-# don't touch your inventory
-# take a cart and have a nice trip !
-Info.SetAddress2: Ne touchez pas a votre inventaire
-                  Prenez un cart et bonne route !
+Info.SetAddress2: Don't touch your inventory
+                  Take a cart and have a nice trip !
+#Info.SetAddress2: Ne touchez pas a votre inventaire
+#                  Prenez un cart et bonne route !
 
-# Left-click on a storage cart
-Info.RightClickCart: Clic droit sur un storage cart pour le selectionner
+Info.RightClickCart: Right-click on a storage cart to select it
+#Info.RightClickCart: Clic droit sur un storage cart pour le selectionner
 
 #Updater
 Info.SetUpdater: "This cart is now an Updater !"
 
-# Maximum # of used routers
-Info.GetTTL: "nb max de routeurs : "
+Info.GetTTL: "Routers to cross : up to "
+#Info.GetTTL: "nb max de routeurs :"
 
-#On the way to region
-Info.BC8010_region: En route pour la region
+Info.BC8010_region: On the way to region
+#Info.BC8010_region: En route pour la region
 
-#You are entering track
-Info.BC8010_track: Vous entrez sur la voie
+Info.BC8010_Track: You are entering track
+#Info.BC8010_track: Vous entrez sur la voie
 
-#You have arrived at
-Info.Destination: Vous etes arrive a
+Info.Destination: You are arrived at
+#Info.Destination: Vous etes arrive a
