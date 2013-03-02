@@ -13,6 +13,10 @@ usebooks: true
 # set to false if you want the plugin to automatically create books when needed
 mustProvideBooks: false
 
+# If possible, reuse an existing ticket found in players inventory
+# set to false to create a new ticket each time a player request one
+reusetickets: true
+
 # Name to use as author of ticket book
 author: ByteCart
 

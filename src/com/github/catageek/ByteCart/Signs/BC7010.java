@@ -106,7 +106,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	private void getOrCreateTicket(Player player) {
 		int slot;
 
-		if (player == null  || this.forceTicketReuse()) {
+		if (player == null  || this.forceTicketReuse() || ByteCart.myPlugin.getConfig().getBoolean("reusetickets", true)) {
 			// if storage cart or we must reuse a existing ticket
 			// check if a ticket exists and return
 			// otherwise continue
