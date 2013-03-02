@@ -14,10 +14,10 @@ import com.github.catageek.ByteCart.Storage.UpdaterManager;
 
 
 
-public class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTable {
+public final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTable {
 
 
-	public BC8020(Block block, org.bukkit.entity.Vehicle vehicle) {
+	BC8020(Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 		this.IsTrackNumberProvider = true;
 	}
@@ -35,6 +35,7 @@ public class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTab
 
 	@Override
 	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
+
 		try {
 			if (IPaddress.getTTL() != 0) {
 				// lookup destination region
@@ -42,13 +43,14 @@ public class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTab
 			}
 		} catch (NullPointerException e) {
 		}
-		
-		// if TTL reached end of life, then we lookup region 0
+
+		// if TTL reached end of life and is not returnable, then we lookup region 0
 		try {
 			return RoutingTable.getDirection(0).getBlockFace();
 		} catch (NullPointerException e) {
 		}
 
+		// If everything has failed, then we randomize output direction
 		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
 
 	}

@@ -19,6 +19,7 @@ import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
+import com.github.catageek.ByteCart.Routing.ReturnAddressFactory;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
 import com.github.catageek.ByteCart.Routing.Updater;
@@ -30,15 +31,15 @@ import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable, HasRoutingTable {
-	
+
 	private final BlockFace From;
 	private final Address Sign;
 	private final RoutingTable RoutingTable;
-	private final AddressRouted destination;
+	private AddressRouted destination;
 	private final Block center;
 	protected boolean IsTrackNumberProvider;
 
-	public BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {
+	BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 		this.IsTrackNumberProvider = true;
 		From = this.getCardinal().getOppositeFace();
@@ -48,9 +49,9 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		Sign = AddressFactory.getAddress(this.getBlock(),3);
 		// Centre de l'aiguillage
 		center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
-		
+
 		BlockState blockstate;
-		
+
 		if ((blockstate = center.getRelative(BlockFace.UP, 5).getState()) instanceof InventoryHolder) {
 			// Loading inventory of chest above router
 			Inventory ChestInventory = ((InventoryHolder) blockstate).getInventory();
@@ -102,7 +103,12 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 
 						destination.updateTTL(ttl-1);
 					}
+					
+					// if ttl was 1 (now 0), we try to return the cart to source station
 
+					if (ttl == 1 && tryReturnCart())
+						destination = AddressFactory.getAddress(this.getInventory());
+					
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart : TTL is " + destination.getTTL());
 
@@ -136,7 +142,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 				int ring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(bdest));
 				SignPostRouteEvent event = new SignPostRouteEvent(this, ring);
 				Bukkit.getServer().getPluginManager().callEvent(event);
-				
+
 				return;
 			}
 
@@ -145,7 +151,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 
 			// routing normally
 			to = router.WishToGo(From, updater.giveRouterDirection(), isTrain());
-			
+
 			int nextring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(to));
 			UpdaterPassRouterEvent event = new UpdaterPassRouterEvent(updater, to, nextring);
 			Bukkit.getServer().getPluginManager().callEvent(event);
@@ -202,15 +208,23 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		} catch (NullPointerException e) {
 		}
 
-		// If not in same region, or if TTL is 1 or 0, then we lookup track 0
+		// If not in same region, or if TTL is 0, then we lookup track 0
 		try {
 			return RoutingTable.getDirection(0).getBlockFace();
 		} catch (NullPointerException e) {
 		}
 
+		// If everything has failed, then we randomize output direction
 		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
+	}
 
-
+	private boolean tryReturnCart() {
+		Address returnAddress = ReturnAddressFactory.getAddress(this.getInventory());
+		if (returnAddress.isReturnable()) {
+			(new BC7017(this.getBlock(), this.getVehicle())).trigger();
+			return true;
+		}
+		return false;
 	}
 
 	protected final Updater getUpdater() {
@@ -233,15 +247,15 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	public final RoutingTable getRoutingTable() {
 		return RoutingTable;
 	}
-	
+
 	public final boolean isTrackNumberProvider() {
 		return IsTrackNumberProvider;
 	}
-	
+
 	public final String getDestinationIP() {
 		return destination.toString();
 	}
-	
+
 	public final int getOriginTrack() {
 		return Sign.getTrack().getAmount();
 	}
@@ -249,7 +263,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	public final Block getCenter() {
 		return center;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "BC8010";
