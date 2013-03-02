@@ -22,6 +22,7 @@ import com.github.catageek.ByteCart.Routing.AddressString;
 import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
+import com.github.catageek.ByteCart.Signs.BC7017;
 import com.github.catageek.ByteCart.Util.Ticket;
 
 public class BytecartCommandExecutor implements CommandExecutor {
@@ -152,7 +153,21 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			return true;
 		}
 
+		if (cmd.getName().equalsIgnoreCase("bcback")) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("This command can only be run by a player.");
+				return true;
+			}
 
+			Player player = (Player) sender;				
+			
+			(new BC7017(player.getLocation().getBlock(), player)).trigger();
+			String msg = "Return back";
+			player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + msg);
+			return true;
+		}
+
+		
 		if (cmd.getName().equalsIgnoreCase("bcupdater")) {
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("This command can only be run by a player.");

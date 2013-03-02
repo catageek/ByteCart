@@ -15,6 +15,11 @@ public final class BC7017 extends AbstractTriggeredSign implements Triggable {
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 	}
+	
+	public BC7017(org.bukkit.block.Block block, Player player) {
+		super(block, null);
+		this.setInventory(player.getInventory());
+	}
 
 	@Override
 	public String getName() {

@@ -31,6 +31,7 @@ permissions:
             bytecart.bcupdater: true
             bytecart.bcreload: true
             bytecart.bcticket: true
+            bytecart.bcback: true
 
     bytecart.helper:
         description: give access to small subnets and station blocks
@@ -127,6 +128,8 @@ permissions:
         default: false
     bytecart.bcticket:
         default: true
+    bytecart.bcback:
+        default: true
 
 commands:
     mego:
@@ -156,4 +159,9 @@ commands:
         description: create a book ticket
         usage: "Usage : /<command>"
         permission: bytecart.bcticket
+        permission-message: You don't have permission <permission>
+    bcback:
+        description: go to return address
+        usage: "Usage : /<command>"
+        permission: bytecart.bcback
         permission-message: You don't have permission <permission>
