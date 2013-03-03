@@ -45,7 +45,9 @@ public final class BC7017 extends AbstractTriggeredSign implements Triggable {
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: 7017 : Writing address " + returnAddressString);
 		returnAddress.remove();
+		boolean isTrain = targetAddress.isTrain();
 		targetAddress.setAddress(returnAddressString);
+		targetAddress.setTrain(isTrain);
 		if (this.getInventory().getHolder() instanceof Player)
 			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + returnAddressString + ")");
 		else
