@@ -64,9 +64,6 @@ public abstract class AbstractTriggeredSign extends AbstractIC {
 						return ((Player) this.getVehicle().getPassenger()).getInventory();
 					}
 				}
-
-
-
 			}
 
 			/* There is no inventory, so we create one */
@@ -127,6 +124,6 @@ public abstract class AbstractTriggeredSign extends AbstractIC {
 			ByteCart.myPlugin.getIsTrainManager().getMap().put(loc, true);
 
 	}
-	
+
 
 }

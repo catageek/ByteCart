@@ -163,7 +163,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 
 		this.addOutputRegistry(command1);
 
-		// Input[0] = destination region taken from Inventory, slot #0			
+		// Input[0] = destination region taken from Inventory, slot #0
 
 
 		Address IPaddress = AddressFactory.getAddress(this.getInventory());
@@ -235,7 +235,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 	public final String getDestinationIP() {
 		return AddressFactory.getAddress(this.getInventory()).toString();
 	}
-	
+
 	public final org.bukkit.block.Block getCenter() {
 		return this.getBlock();
 	}
