@@ -13,7 +13,11 @@ import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
 import com.github.catageek.ByteCart.Routing.AddressRouted;
 
-
+/**
+ * Base class for all signs that are triggered by vehicles that pass over it.
+ *
+ * Reads the address configuration of the vehicle from its inventory and caches it.
+ */
 public abstract class AbstractTriggeredSign extends AbstractIC {
 
 	private final org.bukkit.entity.Vehicle Vehicle;
@@ -27,12 +31,18 @@ public abstract class AbstractTriggeredSign extends AbstractIC {
 	}
 
 	/**
-	 * @return the vehicle
+	 * @return The vehicle which triggered the sign.
 	 */
 	final public org.bukkit.entity.Vehicle getVehicle() {
 		return Vehicle;
 	}
 
+	/**
+	 * Extract the address configuration of the current vehicle. If the vehicle has
+	 * no address configuration, the default address (if configured) is applied.
+	 *
+	 * @return Inventory with address configuration from the current vehicle.
+	 */
 	final private org.bukkit.inventory.Inventory extractInventory() {
 
 		org.bukkit.inventory.Inventory newInv = Bukkit.createInventory(null, 27);
@@ -84,7 +94,7 @@ public abstract class AbstractTriggeredSign extends AbstractIC {
 	}
 
 	/**
-	 * @return the inventory
+	 * @return The inventory of the vehicle which triggered this sign.
 	 */
 	public org.bukkit.inventory.Inventory getInventory() {
 		return Inventory;

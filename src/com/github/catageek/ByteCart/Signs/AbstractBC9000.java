@@ -130,6 +130,23 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 		return Updater.Level.LOCAL;
 	}
 
+	/**
+	 * Configures all IO ports of this sign.
+	 *
+	 * The following input pins are configured:
+	 * 0: vehicle region
+	 * 1: vehicle track
+	 * 2: vehicle station
+	 * 3: vehicle net mask
+	 * 4: sign region
+	 * 5: sign track
+	 * 6: sign station
+	 * 7: sign net mask
+	 *
+	 * The following output pins are configured:
+	 * 0: left lever
+	 * 1: right lever
+	 */
 	protected void addIO() {
 		Address sign = this.getSignAddress();
 
