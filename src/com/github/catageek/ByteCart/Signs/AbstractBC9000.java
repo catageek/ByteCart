@@ -136,12 +136,10 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 	 * The following input pins are configured:
 	 * 0: vehicle region
 	 * 1: vehicle track
-	 * 2: vehicle station
-	 * 3: vehicle net mask
-	 * 4: sign region
-	 * 5: sign track
-	 * 6: sign station
-	 * 7: sign net mask
+	 * 2: vehicle station (w/ applied net mask)
+	 * 3: sign region
+	 * 4: sign track
+	 * 5: sign station (w/ applied net mask)
 	 *
 	 * The following output pins are configured:
 	 * 0: left lever
