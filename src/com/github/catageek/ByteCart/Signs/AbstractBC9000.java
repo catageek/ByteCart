@@ -130,6 +130,21 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 		return Updater.Level.LOCAL;
 	}
 
+	/**
+	 * Configures all IO ports of this sign.
+	 *
+	 * The following input pins are configured:
+	 * 0: vehicle region
+	 * 1: vehicle track
+	 * 2: vehicle station (w/ applied net mask)
+	 * 3: sign region
+	 * 4: sign track
+	 * 5: sign station (w/ applied net mask)
+	 *
+	 * The following output pins are configured:
+	 * 0: left lever
+	 * 1: right lever
+	 */
 	protected void addIO() {
 		Address sign = this.getSignAddress();
 
@@ -146,7 +161,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 
 		this.addOutputRegistry(command1);
 
-		// Input[0] = destination region taken from Inventory, slot #0			
+		// Input[0] = destination region taken from Inventory, slot #0
 
 
 		Address IPaddress = AddressFactory.getAddress(this.getInventory());
@@ -218,7 +233,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 	public final String getDestinationIP() {
 		return AddressFactory.getAddress(this.getInventory()).toString();
 	}
-	
+
 	public final org.bukkit.block.Block getCenter() {
 		return this.getBlock();
 	}
