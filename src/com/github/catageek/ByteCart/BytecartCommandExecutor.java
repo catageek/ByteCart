@@ -88,7 +88,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 
 					/**
-					 * @param inventory 
+					 * @param inventory
 					 * @param inventory the inventory to set
 					 */
 
@@ -123,31 +123,49 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			return true;
 		}
 
+
 		if (cmd.getName().equalsIgnoreCase("bcticket")) {
+			Player player;
+			Address destination;
+			String addressString;
+
 			if (!(sender instanceof Player)) {
-				sender.sendMessage("This command can only be run by a player.");
-				return true;
+				if(args.length != 2) {
+					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Usage: /bcticket <player> <destination>");
+					return false;
+				}
+
+				if(!AddressString.isAddress(args[1])) {
+					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
+					return false;
+				}
+
+				player = Bukkit.getServer().getPlayer(args[0]);
+				addressString = args[1];
+
+				if(player == null) {
+					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Can't find player "+args[0]+".");
+					return false;
+				}
+			} else {
+				if(args.length != 1) {
+					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Usage: /bcticket <destination>");
+					return false;
+				}
+
+				player = (Player) sender;
+				addressString = args[0];
 			}
 
-			Player player = (Player) sender;				
-			ItemStack stack;
-			BookMeta book;
-
-			book = (BookMeta) Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
-			book.setAuthor(ByteCart.myPlugin.getConfig().getString("author"));
-			book.setTitle(ByteCart.myPlugin.getConfig().getString("title"));
-			stack = new ItemStack(Material.WRITTEN_BOOK);
-			stack.setItemMeta(book);
-			int slot = Ticket.getEmptyOrBookAndQuillSlot(player.getInventory());
-
-			if (slot == -1) {
-				String msg = "No space in inventory.";
-				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + msg);
-				return true;
+			if(!AddressString.isAddress(addressString)) {
+				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
+				return false;
 			}
 
-			player.getInventory().setItem(slot, stack);
-			player.updateInventory();
+			destination = new AddressString(addressString);
+
+			(new BC7010(player.getLocation().getBlock(), player)).setAddress(destination, null);
+
 			String msg = "Ticket created successfully.";
 			player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + msg);
 			return true;
@@ -159,15 +177,15 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				return true;
 			}
 
-			Player player = (Player) sender;				
-			
+			Player player = (Player) sender;
+
 			(new BC7017(player.getLocation().getBlock(), player)).trigger();
 			String msg = "Return back";
 			player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + msg);
 			return true;
 		}
 
-		
+
 		if (cmd.getName().equalsIgnoreCase("bcupdater")) {
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("This command can only be run by a player.");
@@ -233,7 +251,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 
 					/**
-					 * @param inventory 
+					 * @param inventory
 					 * @param inventory the inventory to set
 					 */
 
