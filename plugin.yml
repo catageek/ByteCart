@@ -26,6 +26,8 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
+            bytecart.BC9037: true
+            bytecart.BC9137: true
             bytecart.mego: true
             bytecart.sendto: true
             bytecart.bcupdater: true
@@ -54,6 +56,8 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: false
             bytecart.BC9016: false
+            bytecart.BC9037: false
+            bytecart.BC9137: false
 
     bytecart.subnetwork:
         description: give acces to all subnets and station blocks
@@ -76,6 +80,8 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
+            bytecart.BC9037: true
+            bytecart.BC9137: true
     bytecart.BC7001:
         default: true
     bytecart.BC7002:
@@ -117,6 +123,10 @@ permissions:
     bytecart.BC9008:
         default: false
     bytecart.BC9016:
+        default: false
+    bytecart.BC9037:
+        default: false
+    bytecart.BC9137:
         default: false
     bytecart.mego:
         default: true

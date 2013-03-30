@@ -25,7 +25,7 @@ public class BC9037 extends AbstractBC9037 {
 	}
 
 	public final String getFriendlyName() {
-		return "Negated range matcher";
+		return "Range matcher";
 	}
 
 }

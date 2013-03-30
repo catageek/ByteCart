@@ -20,7 +20,7 @@ abstract public class AbstractIC implements IC {
 	
 	protected int Triggertax = 0;
 	
-	private RegistryInput[] input = new RegistryInput[7];
+	private RegistryInput[] input = new RegistryInput[9];
 	private int input_args = 0;
 	
 	private RegistryOutput[] output = new RegistryOutput[6];

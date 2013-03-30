@@ -114,7 +114,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 		return station;
 	}
 
-	final protected boolean isAddressMatching() {
+	protected boolean isAddressMatching() {
 		try {
 			return this.getInput(2).getAmount() == this.getInput(5).getAmount()
 					&& this.getInput(1).getAmount() == this.getInput(4).getAmount()
@@ -191,37 +191,26 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 
 
 		// Address is on a sign, line #3
-		if (sign.isValid()) {
-
-			RegistryInput region = sign.getRegion();
-
+		// Input[3] = region from sign, line #3, 6 bits registry
+		// Input[4] = track from sign, line #3, 6 bits registry
+		// Input[5] = station number from sign, line #0, 6 bits registry
+		this.addAddressAsInputs(sign);
+	}
+	
+	protected void addAddressAsInputs(Address addr) {
+		if(addr.isValid()) {
+			RegistryInput region = addr.getRegion();
 			this.addInputRegistry(region);
 
-			// Input[4] = station track from sign, line #3, 6 bits registry
-
-			//			RegistryInput track = new SignRegistry(this.getBlock(), 3, 6);
-			RegistryInput track = sign.getTrack();
-
-			// only 5 most significant bits are taken into account
-
-			//track = new SubRegistry(track, 5, 0);
-
+			RegistryInput track = addr.getTrack();
 			this.addInputRegistry(track);
 
-			// Input[5] = station number from sign, line #0, 6 bits registry
-
-			//RegistryInput station = new SignRegistry(this.getBlock(), 0, 6);
-			RegistryBoth station = sign.getStation();
-
-			// We keep only the X most significant bits (netmask)
-
+			RegistryBoth station = addr.getStation();
 			station = applyNetmask(station);
-
 			this.addInputRegistry(station);
 		}
-
 	}
-
+	
 	public final Address getSignAddress() {
 		return AddressFactory.getAddress(getBlock(), 3);
 	}

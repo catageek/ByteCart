@@ -1,18 +1,6 @@
 package com.github.catageek.ByteCart.Signs;
 
-import org.bukkit.Bukkit;
-
-import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.Event.SignPostStationEvent;
-import com.github.catageek.ByteCart.Event.SignPreStationEvent;
-import com.github.catageek.ByteCart.HAL.RegistryBoth;
-import com.github.catageek.ByteCart.HAL.RegistryInput;
-import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
-import com.github.catageek.ByteCart.Routing.Updater;
-import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 
 
 
@@ -47,86 +35,12 @@ public abstract class AbstractBC9037 extends AbstractBC9000 implements Subnet, T
 	 */
 	protected abstract boolean negated();
 
-	/**
-	 *
-	 * @return Range start address from the third line.
-	 */
-	protected Address getRangeStartAddress() {
-		return AddressFactory.getAddress(getBlock(), 2);
-	}
-
-	/**
-	 * @return Range end address from the fourth line.
-	 */
-	protected Address getRangeEndAddress() {
-		return AddressFactory.getAddress(getBlock(), 3);
-	}
-
-	protected Address getVehicleAddress() {
-		return AddressFactory.getAddress(this.getInventory());
-	}
-
-	protected void addAddressAsInputs(Address addr) {
-		if(addr.isValid()) {
-			RegistryInput region = addr.getRegion();
-			this.addInputRegistry(region);
-
-			RegistryInput track = addr.getTrack();
-			this.addInputRegistry(track);
-
-			RegistryBoth station = addr.getStation();
-			this.addInputRegistry(station);
-		}
-	}
-
 	@Override
-	public void trigger() {
-		try {
-			this.addIO();
-
-			if (! ByteCart.myPlugin.getUm().isUpdater(this.getVehicle().getEntityId())) {
-
-				// if this is a cart in a train
-				if (this.wasTrain(this.getLocation())) {
-					ByteCart.myPlugin.getIsTrainManager().getMap().reset(getLocation());
-					return;
-				}
-
-				// if this is the first car of a train
-				// we keep the state during 2 s
-				if (this.isTrain()) {
-					this.setWasTrain(this.getLocation(), true);
-				}
-
-				this.route();
-
-				return;
-			}
-
-			// it's an updater, so let it choosing direction
-			Updater updater = UpdaterFactory.getUpdater(this);
-
-			// routing
-			this.getOutput(0).setAmount(0); // unpower levers
-
-			// here we perform routes update
-			updater.doAction(Side.LEFT);
-		}
-		catch (ClassCastException e) {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : " + e.toString());
-
-			// Not the good blocks to build the signs
-			return;
-		}
-		catch (NullPointerException e) {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : "+ e.toString());
-			e.printStackTrace();
-
-			// there was no inventory in the cart
-			return;
-		}
+	protected void addIO() {
+		// add input [0] to [5] from vehicle and 4th line
+		super.addIO();
+		// add input [6], [7] and [8] from 3th line
+		this.addAddressAsInputs(AddressFactory.getAddress(getBlock(), 2));
 	}
 
 	/**
@@ -143,52 +57,31 @@ public abstract class AbstractBC9037 extends AbstractBC9000 implements Subnet, T
 	 * The result is negated if said method returns true.
 	 *
 	 */
-	protected boolean isAddressInRange() {
-		Address rangeStart = getRangeStartAddress();
-		Address rangeEnd = getRangeEndAddress();
-		Address ip = getVehicleAddress();
+	@Override
+	protected boolean isAddressMatching() {
+		try {
+			int startRegion = getInput(6).getAmount();
+			int region = getInput(0).getAmount();
+			int endRegion = getInput(3).getAmount();
 
-		int startRegion = rangeStart.getRegion().getAmount();
-		int region = ip.getRegion().getAmount();
-		int endRegion = rangeEnd.getRegion().getAmount();
+			int startTrack = getInput(7).getAmount();
+			int track = getInput(1).getAmount();
+			int endTrack = getInput(4).getAmount();
 
-		int startTrack = rangeStart.getTrack().getAmount();
-		int track = ip.getTrack().getAmount();
-		int endTrack = rangeEnd.getTrack().getAmount();
+			int startStation = getInput(8).getAmount();
+			int station = getInput(2).getAmount();
+			int endStation = getInput(5).getAmount();
 
-		int startStation = rangeStart.getStation().getAmount();
-		int station = ip.getStation().getAmount();
-		int endStation = rangeEnd.getStation().getAmount();
+			boolean value =	in(startRegion, region, endRegion) &&
+					in(startTrack, track, endTrack) &&
+					in(startStation, station, endStation);
 
-		boolean value =	in(startRegion, region, endRegion) &&
-				in(startTrack, track, endTrack) &&
-				in(startStation, station, endStation);
-
-		if(negated())
-			return !value;
-		return value;
-	}
-
-	protected SimpleCollisionAvoider.Side route() {
-		SignPreStationEvent event;
-		SignPostStationEvent event1;
-
-		// test if every destination field matches sign field
-		if (this.isAddressInRange())
-			event = new SignPreStationEvent(this, Side.RIGHT); // power levers if matching
-		else
-			event = new SignPreStationEvent(this, Side.LEFT); // unpower levers if not matching
-		Bukkit.getServer().getPluginManager().callEvent(event);
-
-		if (event.getSide().equals(Side.RIGHT)) {
-			this.getOutput(0).setAmount(3); // power levers if matching
-			event1 = new SignPostStationEvent(this, Side.RIGHT);
-		} else {
-			this.getOutput(0).setAmount(0); // unpower levers if not matching
-			event1 = new SignPostStationEvent(this, Side.RIGHT);
+			if(negated())
+				return !value;
+			return value;
+		} catch (NullPointerException e) {
+			// There is no address on sign
 		}
-		Bukkit.getServer().getPluginManager().callEvent(event1);
-
-		return null;
+		return false;
 	}
 }
