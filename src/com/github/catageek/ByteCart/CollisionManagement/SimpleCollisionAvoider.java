@@ -13,7 +13,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	
 	private RegistryOutput Lever1 = null, Lever2 = null;
 	
-	private Side state = Side.RIGHT;
+	private Side state;
 
 	public enum Side {
 		RIGHT (3),
@@ -35,7 +35,8 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 /*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: new SimpleCollisionAvoider() at " + loc);
 */		Lever1 = ic.getOutput(0);
-		Initialize();
+		state = (Lever1.getAmount() == 0 ? Side.LEFT : Side.RIGHT);
+		//Initialize();
 	}
 
 	public Side WishToGo(Side s, boolean isTrain) {
@@ -71,10 +72,10 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		state = s;
 	}
 	
-	private void Initialize() {
-		Set(Side.RIGHT);
+/*	private void Initialize() {
+		//Set(Side.RIGHT);
 	}
-
+*/
 	@Override
 	public int getSecondpos() {
 		throw new UnsupportedOperationException();
