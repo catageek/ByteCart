@@ -1,7 +1,7 @@
 package com.github.catageek.ByteCart.EventManagement;
 
 import org.bukkit.entity.Player;
-import org.bukkit.entity.minecart.StorageMinecart;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -25,7 +25,7 @@ public class ByteCartInventoryListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onInventoryOpen(InventoryOpenEvent event) {
 		
-		if (! event.getPlayer().equals(Player) || !(event.getInventory().getHolder() instanceof StorageMinecart)) {
+		if (! event.getPlayer().equals(Player) || !(event.getInventory().getHolder() instanceof Vehicle)) {
 			PlayerInteractEvent.getHandlerList().unregister(this);
 			return;
 		}

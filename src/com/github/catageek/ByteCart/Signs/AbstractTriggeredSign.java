@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.minecart.StorageMinecart;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.catageek.ByteCart.ByteCart;
@@ -51,8 +51,8 @@ public abstract class AbstractTriggeredSign extends AbstractIC {
 		// we load inventory of cart or player
 		if (this.Vehicle != null) {
 
-			if (this.getVehicle() instanceof StorageMinecart)
-				return ((StorageMinecart) this.getVehicle()).getInventory();
+			if (this.getVehicle() instanceof InventoryHolder)
+				return ((InventoryHolder) this.getVehicle()).getInventory();
 
 			else if (this.getVehicle() instanceof Minecart) {
 				if (! this.getVehicle().isEmpty()) {
