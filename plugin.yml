@@ -157,7 +157,9 @@ commands:
         permission-message: You don't have permission <permission>
     bcticket:
         description: create a book ticket
-        usage: "Usage : /<command>"
+        usage: |
+           Usage : /<command> destination [isTrain]
+                   /<command> player destination [isTrain]
         permission: bytecart.bcticket
         permission-message: You don't have permission <permission>
     bcback:
