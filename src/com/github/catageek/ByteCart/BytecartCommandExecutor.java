@@ -245,9 +245,10 @@ public class BytecartCommandExecutor implements CommandExecutor {
 		Player player;
 		Address destination;
 		String addressString;
+		boolean isTrain = false;
 
 		if (!(sender instanceof Player)) {
-			if(args.length != 2) {
+			if(args.length < 2) {
 				return false;
 			}
 
@@ -258,18 +259,20 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 			player = Bukkit.getServer().getPlayer(args[0]);
 			addressString = args[1];
+			isTrain = (args.length == 3 && args[2].equalsIgnoreCase("train"));
 
 			if(player == null) {
 				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Can't find player "+args[0]+".");
 				return false;
 			}
 		} else {
-			if(args.length != 1) {
+			if(args.length < 1) {
 				return false;
 			}
 
 			player = (Player) sender;
 			addressString = args[0];
+			isTrain = (args.length == 2 && args[1].equalsIgnoreCase("train"));
 		}
 
 		if(!AddressString.isAddress(addressString)) {
@@ -278,6 +281,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 		}
 
 		destination = new AddressString(addressString);
+		destination.setTrain(isTrain);
 
 		(new BC7010(player.getLocation().getBlock(), player)).setAddress(destination, null);
 
