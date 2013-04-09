@@ -125,51 +125,9 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 
 		if (cmd.getName().equalsIgnoreCase("bcticket")) {
-			Player player;
-			Address destination;
-			String addressString;
-
-			if (!(sender instanceof Player)) {
-				if(args.length != 2) {
-					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Usage: /bcticket <player> <destination>");
-					return false;
-				}
-
-				if(!AddressString.isAddress(args[1])) {
-					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
-					return false;
-				}
-
-				player = Bukkit.getServer().getPlayer(args[0]);
-				addressString = args[1];
-
-				if(player == null) {
-					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Can't find player "+args[0]+".");
-					return false;
-				}
-			} else {
-				if(args.length != 1) {
-					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Usage: /bcticket <destination>");
-					return false;
-				}
-
-				player = (Player) sender;
-				addressString = args[0];
-			}
-
-			if(!AddressString.isAddress(addressString)) {
-				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
-				return false;
-			}
-
-			destination = new AddressString(addressString);
-
-			(new BC7010(player.getLocation().getBlock(), player)).setAddress(destination, null);
-
-			String msg = "Ticket created successfully.";
-			player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + msg);
-			return true;
+			return bcticket(sender, cmd, label, args);
 		}
+
 
 		if (cmd.getName().equalsIgnoreCase("bcback")) {
 			if (!(sender instanceof Player)) {
@@ -269,6 +227,63 @@ public class BytecartCommandExecutor implements CommandExecutor {
 		}
 
 		return false;
+	}
+
+	/**
+	 * bcticket command.
+	 *
+	 * Usage: /bcticket destination [isTrain]
+	 *     OR /bcticket player destination [isTrain]
+	 *
+	 * @param sender
+	 * @param cmd
+	 * @param label
+	 * @param args
+	 * @return True on success of the command.
+	 */
+	protected boolean bcticket(CommandSender sender, Command cmd, String label, String[] args) {
+		Player player;
+		Address destination;
+		String addressString;
+
+		if (!(sender instanceof Player)) {
+			if(args.length != 2) {
+				return false;
+			}
+
+			if(!AddressString.isAddress(args[1])) {
+				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
+				return false;
+			}
+
+			player = Bukkit.getServer().getPlayer(args[0]);
+			addressString = args[1];
+
+			if(player == null) {
+				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Can't find player "+args[0]+".");
+				return false;
+			}
+		} else {
+			if(args.length != 1) {
+				return false;
+			}
+
+			player = (Player) sender;
+			addressString = args[0];
+		}
+
+		if(!AddressString.isAddress(addressString)) {
+			sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
+			return false;
+		}
+
+		destination = new AddressString(addressString);
+
+		(new BC7010(player.getLocation().getBlock(), player)).setAddress(destination, null);
+
+		player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + "Ticket created successfully.");
+
+		return true;
 	}
 
 }
