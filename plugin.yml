@@ -137,7 +137,7 @@ commands:
         usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
         permission: bytecart.mego
         permission-message: You don't have permission <permission>
-        
+
     sendto:
         description: set ByteCart destination address in a storage cart inventory
         usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
