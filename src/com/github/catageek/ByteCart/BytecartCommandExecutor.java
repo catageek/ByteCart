@@ -2,7 +2,6 @@ package com.github.catageek.ByteCart;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,9 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-
 import com.github.catageek.ByteCart.EventManagement.ByteCartInventoryListener;
 import com.github.catageek.ByteCart.EventManagement.ByteCartUpdaterMoveListener;
 import com.github.catageek.ByteCart.Routing.Address;
@@ -23,11 +19,9 @@ import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
 import com.github.catageek.ByteCart.Signs.BC7017;
-import com.github.catageek.ByteCart.Util.Ticket;
 
 public class BytecartCommandExecutor implements CommandExecutor {
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -245,9 +239,10 @@ public class BytecartCommandExecutor implements CommandExecutor {
 		Player player;
 		Address destination;
 		String addressString;
+		boolean isTrain = false;
 
 		if (!(sender instanceof Player)) {
-			if(args.length != 2) {
+			if(args.length < 2) {
 				return false;
 			}
 
@@ -258,18 +253,20 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 			player = Bukkit.getServer().getPlayer(args[0]);
 			addressString = args[1];
+			isTrain = (args.length == 3 && args[2].equalsIgnoreCase("train"));
 
 			if(player == null) {
 				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Can't find player "+args[0]+".");
 				return false;
 			}
 		} else {
-			if(args.length != 1) {
+			if(args.length < 1) {
 				return false;
 			}
 
 			player = (Player) sender;
 			addressString = args[0];
+			isTrain = (args.length == 2 && args[1].equalsIgnoreCase("train"));
 		}
 
 		if(!AddressString.isAddress(addressString)) {
@@ -278,6 +275,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 		}
 
 		destination = new AddressString(addressString);
+		destination.setTrain(isTrain);
 
 		(new BC7010(player.getLocation().getBlock(), player)).setAddress(destination, null);
 

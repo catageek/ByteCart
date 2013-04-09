@@ -158,8 +158,8 @@ commands:
     bcticket:
         description: create a book ticket
         usage: |
-           Usage : /<command> destination [isTrain]
-                   /<command> player destination [isTrain]
+           Usage : /<command> destination [train]
+                   /<command> player destination [train]
         permission: bytecart.bcticket
         permission-message: You don't have permission <permission>
     bcback:
