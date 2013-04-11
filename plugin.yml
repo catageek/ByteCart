@@ -147,7 +147,7 @@ commands:
         usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
         permission: bytecart.mego
         permission-message: You don't have permission <permission>
-        
+
     sendto:
         description: set ByteCart destination address in a storage cart inventory
         usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
@@ -167,7 +167,9 @@ commands:
         permission-message: You don't have permission <permission>
     bcticket:
         description: create a book ticket
-        usage: "Usage : /<command>"
+        usage: |
+           Usage : /<command> destination [train]
+                   /<command> player destination [train]
         permission: bytecart.bcticket
         permission-message: You don't have permission <permission>
     bcback:
