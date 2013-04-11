@@ -78,17 +78,17 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 					public void run() {
 						if ((new BC7011(player.getLocation().getBlock(), ((org.bukkit.entity.Vehicle) inventory.getHolder()))).setAddress(address, null)) {
-							player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress"));
-							player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.GetTTL") + AddressFactory.<AddressRouted>getAddress(inventory).getTTL());
+							sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.SetAddress"));
+							sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.GetTTL") + AddressFactory.<AddressRouted>getAddress(inventory).getTTL());
 						}
 						else
-							player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
+							sendError(player, ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );
 
 					}
 
 
 					/**
-					 * @param inventory 
+					 * @param inventory
 					 * @param inventory the inventory to set
 					 */
 
@@ -117,7 +117,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				sender.sendMessage(s);
 			} else {
 				Player player = (Player) sender;
-				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + s);
+				sendError(player, s);
 			}
 
 			return true;
@@ -129,7 +129,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				return true;
 			}
 
-			Player player = (Player) sender;				
+			Player player = (Player) sender;
 			ItemStack stack;
 			BookMeta book;
 
@@ -141,15 +141,13 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			int slot = Ticket.getEmptyOrBookAndQuillSlot(player.getInventory());
 
 			if (slot == -1) {
-				String msg = "No space in inventory.";
-				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + msg);
+				sendError(player, "No space in inventory.");
 				return true;
 			}
 
 			player.getInventory().setItem(slot, stack);
 			player.updateInventory();
-			String msg = "Ticket created successfully.";
-			player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + msg);
+			sendSuccess(player, "Ticket created successfully.");
 			return true;
 		}
 
@@ -159,15 +157,16 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				return true;
 			}
 
-			Player player = (Player) sender;				
-			
+			Player player = (Player) sender;
+
 			(new BC7017(player.getLocation().getBlock(), player)).trigger();
-			String msg = "Return back";
-			player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + msg);
+
+			sendSuccess(player, "Return back");
+
 			return true;
 		}
 
-		
+
 		if (cmd.getName().equalsIgnoreCase("bcupdater")) {
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("This command can only be run by a player.");
@@ -227,13 +226,12 @@ public class BytecartCommandExecutor implements CommandExecutor {
 							ByteCart.myPlugin.getServer().getPluginManager().registerEvents(updatermove, ByteCart.myPlugin);
 							ByteCartUpdaterMoveListener.setExist(true);
 						}
-						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Info.SetUpdater") );
-
+						sendError(player, ByteCart.myPlugin.getConfig().getString("Info.SetUpdater") );
 					}
 
 
 					/**
-					 * @param inventory 
+					 * @param inventory
 					 * @param inventory the inventory to set
 					 */
 
@@ -244,13 +242,22 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 				}
 
-				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
+				sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
+
 				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, Updater.Level.valueOf(args[0].toUpperCase()), region));
 			}
 			return true;
 		}
 
 		return false;
+	}
+
+	protected void sendError(CommandSender sender, String message) {
+		sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + message);
+	}
+
+	protected void sendSuccess(CommandSender sender, String message) {
+		sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + message);
 	}
 
 }
