@@ -4,6 +4,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
+import com.github.catageek.ByteCart.ByteCart;
+
 
 public final class MathUtil {
 
@@ -28,6 +30,7 @@ public final class MathUtil {
 		case WEST:
 			return BlockFace.NORTH;
 		default:
+			ByteCart.log.severe("ByteCart: Tilted sign found. Please straight it up in the axis of the track");
 			break;
 		}
 		return b;
@@ -45,6 +48,7 @@ public final class MathUtil {
 		case WEST:
 			return BlockFace.SOUTH;
 		default:
+			ByteCart.log.severe("ByteCart: Tilted sign found. Please straight it up in the axis of the track");
 			break;
 		}
 		return b;
