@@ -2,7 +2,7 @@ package com.github.catageek.ByteCart.IO;
 
 import java.util.Map;
 
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.material.Button;
 
@@ -13,9 +13,9 @@ import com.github.catageek.ByteCart.Util.MathUtil;
 public class SetButtonOff implements Runnable {
 
 	final private Component component;
-	final private Map<Block, Integer> ActivatedButtonMap;
+	final private Map<Location, Integer> ActivatedButtonMap;
 
-	public SetButtonOff(Component component, Map<Block, Integer> ActivatedButtonMap){
+	public SetButtonOff(Component component, Map<Location, Integer> ActivatedButtonMap){
 		this.component = component;
 		this.ActivatedButtonMap = ActivatedButtonMap;
 	}
@@ -35,6 +35,6 @@ public class SetButtonOff implements Runnable {
 			MathUtil.forceUpdate(component.getLocation().getBlock().getRelative(button.getAttachedFace()));
 		}
 
-		ActivatedButtonMap.remove(block);
+		ActivatedButtonMap.remove(block.getLocation());
 	}
 }

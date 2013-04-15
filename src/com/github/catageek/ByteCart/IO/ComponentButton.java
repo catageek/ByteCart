@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart.IO;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.material.Button;
@@ -13,7 +14,7 @@ import com.github.catageek.ByteCart.Util.MathUtil;
 
 public class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 	
-	final static private Map<Block, Integer> ActivatedButtonMap = new ConcurrentHashMap<Block, Integer>();
+	final static private Map<Location, Integer> ActivatedButtonMap = new ConcurrentHashMap<Location, Integer>();
 
 	protected ComponentButton(Block block) {
 		super(block.getLocation());
@@ -43,7 +44,7 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 					, 40);
 					
 					// We update the HashMap
-					ActivatedButtonMap.put(block, id);
+					ActivatedButtonMap.put(block.getLocation(), id);
 					
 				}
 				
@@ -66,7 +67,7 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 					, 40);
 					
 					// We update the HashMap
-					ActivatedButtonMap.put(block, id);
+					ActivatedButtonMap.put(block.getLocation(), id);
 				}
 			}
 				
