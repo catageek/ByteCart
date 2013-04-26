@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.Signs;
 
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.Routing.Address;
@@ -13,4 +14,6 @@ public interface BCSign {
 	public String getDestinationIP();
 	public Block getCenter();
 	public String getFriendlyName();
+	public String getName();
+	public BlockFace getCardinal();
 }

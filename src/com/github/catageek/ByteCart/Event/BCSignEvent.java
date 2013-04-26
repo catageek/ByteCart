@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.Event;
 
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.Routing.Updater.Level;
@@ -66,5 +67,19 @@ public abstract class BCSignEvent extends BCEvent {
 	 */
 	public final String getFriendlyName() {
 		return getSign().getFriendlyName();
+	}
+	
+	/**
+	 * Get the string on the 2nd line of the sign
+	 * without the brackets
+	 *
+	 * @return The content of the 2nd line of the sign
+	 */
+	public final String getName() {
+		return getSign().getName();
+	}
+	
+	public final BlockFace getDirection() {
+		return getSign().getCardinal();
 	}
 }
