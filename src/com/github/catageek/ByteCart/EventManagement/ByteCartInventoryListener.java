@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.ModifiableRunnable;
+import com.github.catageek.ByteCart.Event.UpdaterCreateEvent;
 
 public class ByteCartInventoryListener implements Listener {
 
@@ -34,6 +35,11 @@ public class ByteCartInventoryListener implements Listener {
 		this.Execute.run();
 
 		event.setCancelled(true);
+		
+		Vehicle v = (Vehicle) event.getInventory().getHolder();
+		
+		UpdaterCreateEvent e = new UpdaterCreateEvent(v.getEntityId(), v.getLocation());
+		ByteCart.myPlugin.getServer().getPluginManager().callEvent(e);
 
 		InventoryOpenEvent.getHandlerList().unregister(this);
 	}
