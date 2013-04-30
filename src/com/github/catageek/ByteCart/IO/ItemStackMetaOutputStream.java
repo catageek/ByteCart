@@ -4,9 +4,9 @@ import java.io.IOException;
 import org.bukkit.inventory.ItemStack;
 import com.github.catageek.ByteCart.ByteCart;
 
-public final class ItemStackMetaWriter extends ItemStackOutputStream {
+public final class ItemStackMetaOutputStream extends ItemStackOutputStream {
 	
-	public ItemStackMetaWriter(ItemStack stack, BookOutputStream outputstream) {
+	public ItemStackMetaOutputStream(ItemStack stack, BookOutputStream outputstream) {
 		super(stack);
 		OutputStream = outputstream;
 	}

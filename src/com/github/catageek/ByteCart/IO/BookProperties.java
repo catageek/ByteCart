@@ -51,7 +51,7 @@ public final class BookProperties {
 
 		try {
 			BookOutputStream bookoutputstream = new BookOutputStream(meta, PageNumber.page);
-			ItemStackOutputStream stackoutputstream = new ItemStackMetaWriter(stack, bookoutputstream);
+			ItemStackOutputStream stackoutputstream = new ItemStackMetaOutputStream(stack, bookoutputstream);
 			InventoryItemStackOutputStream inventoryoutputstream = new InventoryItemStackOutputStream(Inventory, Index, stackoutputstream);
 			OutputStream = new BufferedOutputStream(inventoryoutputstream, 256);
 
