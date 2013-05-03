@@ -1,14 +1,14 @@
 package com.github.catageek.ByteCart.Event;
 
+import com.github.catageek.ByteCart.HAL.IC;
 import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Routing.Updater.Level;
-import com.github.catageek.ByteCart.Signs.BCSign;
 
 /**
  * An event concerning an updater.
  * Implementations must inherit this class.
  */
-abstract public class UpdaterEvent extends BCSignEvent {
+abstract public class UpdaterEvent extends BCEvent {
 	
 	private final Updater updater;
 	
@@ -18,11 +18,11 @@ abstract public class UpdaterEvent extends BCSignEvent {
 	 * @param updater involved in the event
 	 */
 	UpdaterEvent(Updater updater) {
+		super(updater.getBcSign());
 		this.updater = updater;
 	}
 	
-	@Override
-	protected final BCSign getSign() {
+	protected final IC getSign() {
 		return updater.getBcSign();
 	}
 

@@ -11,7 +11,7 @@ import com.github.catageek.ByteCart.Signs.BCSign;
  * 
  * The target track is definitive.
  */
-public class SignPostRouteEvent extends BCSignEvent {
+public class SignPostRouteEvent extends BCRoutableSignEvent {
 
     private static final HandlerList handlers = new HandlerList();
     
@@ -26,7 +26,7 @@ public class SignPostRouteEvent extends BCSignEvent {
 	 * @param to The ring number of the track where the vehicle is currently (not the destination ring) 
 	 */
 	public SignPostRouteEvent(BCRouter router, int to) {
-		super();
+		super(router);
 		this.router = router;
 		this.to = to;
 	}

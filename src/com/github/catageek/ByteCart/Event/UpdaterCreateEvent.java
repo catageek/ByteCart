@@ -1,12 +1,13 @@
 package com.github.catageek.ByteCart.Event;
 
 import org.bukkit.Location;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
  * Event triggered when an updater is created
  */
-public final class UpdaterCreateEvent extends BCEvent {
+public final class UpdaterCreateEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 

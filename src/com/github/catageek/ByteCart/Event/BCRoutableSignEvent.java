@@ -2,36 +2,22 @@ package com.github.catageek.ByteCart.Event;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Vehicle;
 
+import com.github.catageek.ByteCart.HAL.IC;
 import com.github.catageek.ByteCart.Routing.Updater.Level;
 import com.github.catageek.ByteCart.Signs.BCSign;
 
 /**
  * A sign event. Implementations must inherit this class
  */
-public abstract class BCSignEvent extends BCEvent {
+public abstract class BCRoutableSignEvent extends BCEvent {
+
+	public BCRoutableSignEvent(IC ic) {
+		super(ic);
+	}
+
 
 	abstract protected BCSign getSign();
-
-	/**
-	 * Get the vehicle involved in event
-	 * 
-	 * @return The vehicle
-	 */
-	public final Vehicle getVehicle() {
-
-		return getSign().getVehicle();
-	}
-
-	/**
-	 * Get the destination address of the vehicle
-	 * 
-	 * @return A String containing the address
-	 */
-	public final String getDestination() {
-		return getSign().getDestinationIP();
-	}
 
 
 	/**

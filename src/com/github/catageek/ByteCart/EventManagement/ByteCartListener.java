@@ -1,21 +1,27 @@
 package com.github.catageek.ByteCart.EventManagement;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
+
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Event.SignRemoveEvent;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
+import com.github.catageek.ByteCart.Signs.BCSign;
 import com.github.catageek.ByteCart.Signs.Clickable;
 import com.github.catageek.ByteCart.Signs.ClickedSignFactory;
 import com.github.catageek.ByteCart.Signs.Powerable;
@@ -150,6 +156,22 @@ public class ByteCartListener implements Listener {
 			e.printStackTrace();
 		}
 	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onBlockBreak(BlockBreakEvent event) {
+		if (! (event.getBlock().getState() instanceof Sign))
+			return;
+		
+		Sign sign = (Sign)event.getBlock().getState();
+		String line = sign.getLine(1);
+		
+		Triggable myIC = TriggeredSignFactory.getTriggeredIC(event.getBlock(), line, null);
+		
+		if (myIC != null)
+			Bukkit.getPluginManager().callEvent(new SignRemoveEvent((BCSign) myIC, event.getPlayer()));
+
+	}
+
 
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
