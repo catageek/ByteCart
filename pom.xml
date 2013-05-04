@@ -8,28 +8,32 @@
 
 	<repositories>
 		<repository>
+			<id>lib</id>
+			<url>file://${basedir}/lib</url>
+		</repository>
+		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
 	</repositories>
 
-   <distributionManagement>
-   		<site>
-      		<id>website</id>
-      		<url>ftp://bytecart.catageek.info/bytecart/maven/</url>
-    	</site>
-        <repository>
-            <id>repobc-rel</id>
-            <name>bytecart.catageek.info Releases</name>
-            <url>ftp://bytecart.catageek.info/bytecart/maven/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>repobc-snap</id>
-            <name>bytecart.catageek.info Snapshots</name>
-            <url>ftp://bytecart.catageek.info/bytecart/maven/repositories/snapshots/</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
+	<distributionManagement>
+		<site>
+			<id>website</id>
+			<url>ftp://bytecart.catageek.info/bytecart/maven/</url>
+		</site>
+		<repository>
+			<id>repobc-rel</id>
+			<name>bytecart.catageek.info Releases</name>
+			<url>ftp://bytecart.catageek.info/bytecart/maven/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>repobc-snap</id>
+			<name>bytecart.catageek.info Snapshots</name>
+			<url>ftp://bytecart.catageek.info/bytecart/maven/repositories/snapshots/</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -42,27 +46,50 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
-			</plugin>	
+			</plugin>
 			<plugin>
-          		<groupId>org.apache.maven.plugins</groupId>
-          		<artifactId>maven-site-plugin</artifactId>
-          		<version>3.2</version>
-          		<dependencies>
-            		<dependency><!-- add support for ssh/scp -->
-              			<groupId>org.apache.maven.wagon</groupId>
-              			<artifactId>wagon-ftp</artifactId>
-              			<version>2.4</version>
-            		</dependency>
-          		</dependencies>
-        	</plugin>		
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.2</version>
+				<dependencies>
+					<dependency><!-- add support for ssh/scp -->
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ftp</artifactId>
+						<version>2.4</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>add-resource</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>add-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>src/com/github/catageek/ByteCart/plugins/resources</directory>
+									<targetPath>com/github/catageek/ByteCart/plugins/resources</targetPath>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
-    	<extensions>
-         	<extension>
-            	<groupId>org.apache.maven.wagon</groupId>
-            	<artifactId>wagon-ftp</artifactId>
-            	<version>2.4</version>
-         	</extension>
-     	</extensions>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>2.4</version>
+			</extension>
+		</extensions>
 		<resources>
 			<resource>
 				<filtering>false</filtering>
@@ -97,6 +124,11 @@
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
 			<version>${bukkit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>external-lib</groupId>
+			<artifactId>dynmap</artifactId>
+			<version>1.6</version>
 		</dependency>
 	</dependencies>
 </project>
