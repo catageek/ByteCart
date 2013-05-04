@@ -1,5 +1,6 @@
 package com.github.catageek.ByteCart.Event;
 
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.HandlerList;
 
@@ -60,5 +61,13 @@ public class UpdaterPassRouterEvent extends UpdaterEvent {
 	public BlockFace getTo() {
 		return to;
 	}
+	
+	/**
+	 * @return The center of the router, at sign level
+	 */
+	public Block getCenter() {
+		return getUpdater().getCenter();
+	}
+
 
 }

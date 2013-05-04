@@ -56,6 +56,13 @@ abstract public class UpdaterEvent extends BCEvent {
 	}
 	
 	/**
+	 * @return the entity id of the vehicle
+	 */
+	public final int getVehicleId() {
+		return updater.getVehicle().getEntityId();
+	}
+	
+	/**
 	 * @return The updater involved
 	 */
 	protected final Updater getUpdater() {

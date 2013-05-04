@@ -47,7 +47,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		destination = AddressFactory.getAddress(this.getInventory());
 		// reading address written on BC8010 sign
 		Sign = AddressFactory.getAddress(this.getBlock(),3);
-		// Centre de l'aiguillage
+		// Center of the router, at sign level
 		center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
 
 		BlockState blockstate;
