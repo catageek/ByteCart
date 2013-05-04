@@ -23,6 +23,9 @@ author: ByteCart
 # Title of ticket book
 title: Ticket to
 
+# Name of Dynmap layer
+dynmap.layer: ByteCart 
+
 # material id to use when the plugin needs to write
 # in an inventory for its internal needs
 material.id: 3

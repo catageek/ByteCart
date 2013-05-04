@@ -2,6 +2,7 @@ package com.github.catageek.ByteCart;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,6 +12,7 @@ import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.Storage.UpdaterManager;
 import com.github.catageek.ByteCart.Storage.WandererManager;
+import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 
 public final class ByteCart extends JavaPlugin {
 
@@ -25,7 +27,6 @@ public final class ByteCart extends JavaPlugin {
 	public int Lockduration;
 
 	public void onEnable(){
-		log.info("ByteCart plugin has been enabled.");
 
 		myPlugin = this;
 
@@ -47,6 +48,13 @@ public final class ByteCart extends JavaPlugin {
 		getCommand("bcupdater").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcticket").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcback").setExecutor(new BytecartCommandExecutor());
+		
+		if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
+			log.info("[ByteCart] loading dynmap plugin.");
+			getServer().getPluginManager().registerEvents(new BCDynmapPlugin(), this);
+		}
+
+		log.info("[ByteCart] plugin has been enabled.");
 	}
 
 	public void onDisable(){ 
