@@ -24,7 +24,11 @@ author: ByteCart
 title: Ticket to
 
 # Name of Dynmap layer
-dynmap.layer: ByteCart 
+dynmap.layer: ByteCart
+
+# timeout of updaters in minutes
+# set to 0 for no timeout
+updater.timeout: 60
 
 # material id to use when the plugin needs to write
 # in an inventory for its internal needs
