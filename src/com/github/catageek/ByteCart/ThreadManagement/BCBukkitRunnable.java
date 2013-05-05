@@ -12,17 +12,17 @@ import com.github.catageek.ByteCart.ByteCart;
  *
  * @param <K> key used in the map or set
  */
-public final class BCBukkitRunnable<K> {
+final class BCBukkitRunnable<K> {
 
 	private final Expirable<K> Expirable;
 	private final K Key;
 
-	public BCBukkitRunnable(Expirable<K> expirable, K key) {
+	BCBukkitRunnable(Expirable<K> expirable, K key) {
 		this.Expirable = expirable;
 		this.Key = key;
 	}
 
-	public BukkitTask renewTaskLater(Object...objects) {
+	BukkitTask renewTaskLater(Object...objects) {
 		BukkitTask task;
 		Map<K,BukkitTask> map = Expirable.getThreadMap();
 		synchronized(map) {
@@ -49,18 +49,18 @@ public final class BCBukkitRunnable<K> {
 		return task;
 	}
 
-	public void cancel() {
+	void cancel() {
 		if(Expirable.getThreadMap().containsKey(Key))
 			Expirable.getThreadMap().remove(Key);
 	}
 
-	public BukkitTask runTaskLater(Object...objects) {
+	BukkitTask runTaskLater(Object...objects) {
 		BukkitRunnable runnable = new Expire(Expirable, Key, objects);
 		org.bukkit.scheduler.BukkitTask task = runnable.runTaskLater(ByteCart.myPlugin, Expirable.getDuration());
 		return task;
 	}
 
-	public BukkitTask runTaskLaterAsynchronously(Object...objects) {
+	BukkitTask runTaskLaterAsynchronously(Object...objects) {
 		BukkitRunnable runnable = new Expire(Expirable, Key, objects);
 		org.bukkit.scheduler.BukkitTask task = runnable.runTaskLaterAsynchronously(ByteCart.myPlugin, Expirable.getDuration());
 		return task;
