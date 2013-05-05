@@ -95,7 +95,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 
 				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
-				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, address));
+				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, address), false);
 			}
 			return true;
 		}
@@ -216,7 +216,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 				sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
 
-				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, Updater.Level.valueOf(args[0].toUpperCase()), region));
+				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, Updater.Level.valueOf(args[0].toUpperCase()), region), true);
 			}
 			return true;
 		}
