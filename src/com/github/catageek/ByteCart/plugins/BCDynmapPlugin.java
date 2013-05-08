@@ -17,8 +17,10 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Event.SignCreateEvent;
 import com.github.catageek.ByteCart.Event.SignRemoveEvent;
 import com.github.catageek.ByteCart.Event.UpdaterClearStationEvent;
+import com.github.catageek.ByteCart.Event.UpdaterEvent;
 import com.github.catageek.ByteCart.Event.UpdaterPassStationEvent;
 import com.github.catageek.ByteCart.Event.UpdaterSetStationEvent;
+import com.github.catageek.ByteCart.Event.UpdaterSignInvalidateEvent;
 import com.github.catageek.ByteCart.HAL.IC;
 import com.github.catageek.ByteCart.Routing.Address;
 import com.github.catageek.ByteCart.Routing.AddressFactory;
@@ -89,6 +91,10 @@ public final class BCDynmapPlugin implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onUpdaterClearStation(UpdaterClearStationEvent event) {
+		deleteMarker(event);
+	}
+
+	private void deleteMarker(UpdaterEvent event) {
 		Block block = event.getIc().getBlock();
 		Marker marker = markerset.findMarker(buildId(block));
 		if (marker != null)
@@ -104,6 +110,11 @@ public final class BCDynmapPlugin implements Listener {
 		Marker marker = markerset.findMarker(buildId(block));
 		if (marker != null)
 			marker.deleteMarker();
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onUpdaterSignInvalidate(UpdaterSignInvalidateEvent event) {
+		deleteMarker(event);
 	}
 
 	@EventHandler(ignoreCancelled = true)

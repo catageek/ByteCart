@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.Event.UpdaterClearStationEvent;
 import com.github.catageek.ByteCart.Event.UpdaterClearSubnetEvent;
+import com.github.catageek.ByteCart.Event.UpdaterSignInvalidateEvent;
 import com.github.catageek.ByteCart.Signs.BCSign;
 
 public final class UpdaterResetLocal extends UpdaterLocal implements Updater {
@@ -31,6 +32,10 @@ public final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 				UpdaterClearSubnetEvent event = new UpdaterClearSubnetEvent(this, address, 16 >> this.getNetmask());
 				Bukkit.getServer().getPluginManager().callEvent(event);
 			}
+		}
+		else {
+			UpdaterSignInvalidateEvent event = new UpdaterSignInvalidateEvent(this);
+			Bukkit.getServer().getPluginManager().callEvent(event);
 		}
 		address.remove();
 	}
