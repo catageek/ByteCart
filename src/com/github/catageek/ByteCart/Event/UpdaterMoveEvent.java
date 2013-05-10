@@ -1,12 +1,13 @@
 package com.github.catageek.ByteCart.Event;
 
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 
 /**
  * Event trigger when an updater moves from 1 block
  */
-public final class UpdaterMoveEvent extends BCEvent {
+public final class UpdaterMoveEvent extends Event {
 	
     private static final HandlerList handlers = new HandlerList();
 	private final VehicleMoveEvent event;

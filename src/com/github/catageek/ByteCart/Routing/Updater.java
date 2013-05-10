@@ -5,7 +5,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.Signs.BCSign;
+import com.github.catageek.ByteCart.HAL.IC;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
 public interface Updater {
@@ -47,5 +47,5 @@ public interface Updater {
 	public int getRegion();
 	public Block getCenter();
 	public String getFriendlyName();
-	public BCSign getBcSign();
+	public IC getBcSign();
 }

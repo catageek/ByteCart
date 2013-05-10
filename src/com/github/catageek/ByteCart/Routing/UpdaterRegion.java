@@ -65,7 +65,7 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 	private boolean isSignNeedUpdate(int current) {
 		int track = getTrackNumber();
 		return (! getSignAddress().isValid() && current != -2) 
-				|| (getSignAddress().isValid() && getCounter().getCount(track) == 0 && current != -2)
+				|| (getSignAddress().isValid() && current != -2 && getCounter().getCount(track) == 0)
 				|| (current >= 0 && current != track)
 				|| (track != -1 && ! this.getRoutingTable().isDirectlyConnected(track, getFrom()));
 	}

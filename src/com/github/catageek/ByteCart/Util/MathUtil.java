@@ -4,6 +4,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
+import com.github.catageek.ByteCart.ByteCart;
+
 
 public final class MathUtil {
 
@@ -17,7 +19,8 @@ public final class MathUtil {
 		return log + ( bits >>> 1 );
 	}
 
-	public static final BlockFace clockwise(BlockFace b) {
+	public static final BlockFace clockwise(BlockFace f) {
+		BlockFace b = MathUtil.straightUp(f);
 		switch(b) {
 		case NORTH:
 			return BlockFace.EAST;
@@ -34,7 +37,8 @@ public final class MathUtil {
 
 	}
 
-	public static final BlockFace anticlockwise(BlockFace b) {
+	public static final BlockFace anticlockwise(BlockFace f) {
+		BlockFace b = MathUtil.straightUp(f);
 		switch(b) {
 		case NORTH:
 			return BlockFace.WEST;
@@ -49,6 +53,31 @@ public final class MathUtil {
 		}
 		return b;
 
+	}
+
+	public static final BlockFace straightUp(BlockFace b) {
+		switch(b) {
+		case NORTH:
+		case NORTH_NORTH_WEST:
+		case NORTH_NORTH_EAST:
+			return BlockFace.NORTH;
+		case EAST:
+		case EAST_NORTH_EAST:
+		case EAST_SOUTH_EAST:
+			return BlockFace.EAST;
+		case SOUTH:
+		case SOUTH_SOUTH_WEST:
+		case SOUTH_SOUTH_EAST:
+			return BlockFace.SOUTH;
+		case WEST:
+		case WEST_NORTH_WEST:
+		case WEST_SOUTH_WEST:
+			return BlockFace.WEST;
+		default:
+			ByteCart.log.severe("ByteCart: Tilted sign found. Please straight it up in the axis of the track");
+			break;
+		}
+		return b;
 	}
 
 	public static final void forceUpdate(Block b) {
@@ -65,32 +94,32 @@ public final class MathUtil {
 		int j, i = x-radius, k = x+radius, l = z+radius;
 
 
-//		long start = System.nanoTime();
+		//		long start = System.nanoTime();
 
 		for (; i<=k; ++i) {
 			for (j=z-radius;  j<=l ; ++j) {
 				world.loadChunk(i, j, false);
-/*				if(ByteCart.debug)
+				/*				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: loading chunk (" + i + "," + j + ")");
-*/			}
+				 */			}
 		}
 
-/*		long end = System.nanoTime();
+		/*		long end = System.nanoTime();
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: time to load chunks (millis) : "  + (end - start));
-*/
+		 */
 
 	}
 
 	public static final boolean unloadChunkAround(World world, int x, int z) {
 		int j, i = x-9, k = x+9, l = z+9;
-		
+
 		boolean ret = true;
 
 		for (; i<=k; ++i) {
 			for (j=z-9;  j<=l ; ++j) {
 				ret &= world.unloadChunk(i, j, true, false);
-				}
+			}
 		}
 		return ret;
 	}

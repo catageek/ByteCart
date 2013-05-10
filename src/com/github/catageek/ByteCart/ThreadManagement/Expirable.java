@@ -16,7 +16,7 @@ public abstract class Expirable<K> {
 	private final long Duration;
 	private final String name;
 	private final boolean IsSync;
-	
+
 	abstract public void expire(Object...objects);
 
 	public Expirable(long duration, boolean isSync, String name) {
@@ -25,13 +25,15 @@ public abstract class Expirable<K> {
 		this.name = name;
 		this.IsSync = isSync;
 	}
-	
+
 	public void reset(K key, Object...objects) {
-		(new BCBukkitRunnable<K>(this, key)).renewTaskLater(objects);
+		if (Duration != 0)
+			(new BCBukkitRunnable<K>(this, key)).renewTaskLater(objects);
 	}
 
 	public final void cancel(K key) {
-		(new BCBukkitRunnable<K>(this, key)).cancel();
+		if (Duration != 0)
+			(new BCBukkitRunnable<K>(this, key)).cancel();
 	}
 
 	protected final Map<K, BukkitTask> getThreadMap() {

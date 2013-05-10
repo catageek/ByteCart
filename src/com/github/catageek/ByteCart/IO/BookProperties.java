@@ -1,9 +1,9 @@
 package com.github.catageek.ByteCart.IO;
 
-import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Writer;
 import java.util.Properties;
 
 import org.bukkit.inventory.Inventory;
@@ -18,7 +18,7 @@ public final class BookProperties {
 	private final Conf PageNumber;
 	private final int Index;
 	private Reader Reader = null;
-	private OutputStream OutputStream = null;
+	private Writer writer = null;
 	private final Inventory Inventory;
 	private final BookMeta meta;
 
@@ -49,11 +49,19 @@ public final class BookProperties {
 		if (! meta.hasPages())
 			meta.addPage((String) null);
 
-		try {
+/*		try {
 			BookOutputStream bookoutputstream = new BookOutputStream(meta, PageNumber.page);
-			ItemStackOutputStream stackoutputstream = new ItemStackMetaWriter(stack, bookoutputstream);
+			ItemStackOutputStream stackoutputstream = new ItemStackMetaOutputStream(stack, bookoutputstream);
 			InventoryItemStackOutputStream inventoryoutputstream = new InventoryItemStackOutputStream(Inventory, Index, stackoutputstream);
 			OutputStream = new BufferedOutputStream(inventoryoutputstream, 256);
+
+		} catch (NullPointerException e) {
+		}
+*/		try {
+			BookWriter bookwriter = new BookWriter(meta, PageNumber.page);
+			ItemStackWriter stackwriter = new ItemStackMetaWriter(stack, bookwriter);
+			InventoryItemStackWriter inventorywriter = new InventoryItemStackWriter(Inventory, Index, stackwriter);
+			writer = new BufferedWriter(inventorywriter, 256);
 
 		} catch (NullPointerException e) {
 		}
@@ -63,8 +71,8 @@ public final class BookProperties {
 		try {
 			readPrepare();
 			Properties.setProperty(key, value);
-			Properties.store(OutputStream, PageNumber.name);
-			OutputStream.flush();
+			Properties.store(writer, PageNumber.name);
+			writer.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,8 +83,8 @@ public final class BookProperties {
 		try {
 			readPrepare();
 			Properties.remove(key);
-			Properties.store(OutputStream, PageNumber.name);
-			OutputStream.flush();
+			Properties.store(writer, PageNumber.name);
+			writer.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

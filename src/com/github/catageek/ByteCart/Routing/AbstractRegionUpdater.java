@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.StorageMinecart;
+import org.bukkit.entity.minecart.StorageMinecart;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.CounterInventory;

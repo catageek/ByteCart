@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.StorageMinecart;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -165,10 +164,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		InventoryHolder holder = this.getInventory().getHolder();
 		if (holder instanceof Player)
 			return PlayerAllowed;
-		if (holder instanceof StorageMinecart) {
-			return StorageCartAllowed;
-		}
-		return false;
+		return StorageCartAllowed;
 	}
 
 	protected void infoPlayer(Address address) {

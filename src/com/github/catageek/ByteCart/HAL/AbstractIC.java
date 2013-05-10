@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 // All ICs must inherit from this class
@@ -78,7 +79,7 @@ abstract public class AbstractIC implements IC {
 	public final BlockFace getCardinal() {
 		try {
 			BlockFace f = ((org.bukkit.material.Sign) this.getBlock().getState().getData()).getFacing().getOppositeFace();
-			return f;
+			return MathUtil.straightUp(f);
 		}
 		catch (ClassCastException e) {
 			// this is not a sign

@@ -3,7 +3,7 @@ package com.github.catageek.ByteCart.Routing;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.StorageMinecart;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.ByteCart;

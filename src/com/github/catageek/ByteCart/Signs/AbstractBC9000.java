@@ -114,7 +114,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 		return station;
 	}
 
-	final protected boolean isAddressMatching() {
+	protected boolean isAddressMatching() {
 		try {
 			return this.getInput(2).getAmount() == this.getInput(5).getAmount()
 					&& this.getInput(1).getAmount() == this.getInput(4).getAmount()
@@ -130,6 +130,21 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 		return Updater.Level.LOCAL;
 	}
 
+	/**
+	 * Configures all IO ports of this sign.
+	 *
+	 * The following input pins are configured:
+	 * 0: vehicle region
+	 * 1: vehicle track
+	 * 2: vehicle station (w/ applied net mask)
+	 * 3: sign region
+	 * 4: sign track
+	 * 5: sign station (w/ applied net mask)
+	 *
+	 * The following output pins are configured:
+	 * 0: left lever
+	 * 1: right lever
+	 */
 	protected void addIO() {
 		Address sign = this.getSignAddress();
 
@@ -146,7 +161,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 
 		this.addOutputRegistry(command1);
 
-		// Input[0] = destination region taken from Inventory, slot #0			
+		// Input[0] = destination region taken from Inventory, slot #0
 
 
 		Address IPaddress = AddressFactory.getAddress(this.getInventory());
@@ -176,37 +191,26 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 
 
 		// Address is on a sign, line #3
-		if (sign.isValid()) {
-
-			RegistryInput region = sign.getRegion();
-
+		// Input[3] = region from sign, line #3, 6 bits registry
+		// Input[4] = track from sign, line #3, 6 bits registry
+		// Input[5] = station number from sign, line #0, 6 bits registry
+		this.addAddressAsInputs(sign);
+	}
+	
+	protected void addAddressAsInputs(Address addr) {
+		if(addr.isValid()) {
+			RegistryInput region = addr.getRegion();
 			this.addInputRegistry(region);
 
-			// Input[4] = station track from sign, line #3, 6 bits registry
-
-			//			RegistryInput track = new SignRegistry(this.getBlock(), 3, 6);
-			RegistryInput track = sign.getTrack();
-
-			// only 5 most significant bits are taken into account
-
-			//track = new SubRegistry(track, 5, 0);
-
+			RegistryInput track = addr.getTrack();
 			this.addInputRegistry(track);
 
-			// Input[5] = station number from sign, line #0, 6 bits registry
-
-			//RegistryInput station = new SignRegistry(this.getBlock(), 0, 6);
-			RegistryBoth station = sign.getStation();
-
-			// We keep only the X most significant bits (netmask)
-
+			RegistryBoth station = addr.getStation();
 			station = applyNetmask(station);
-
 			this.addInputRegistry(station);
 		}
-
 	}
-
+	
 	public final Address getSignAddress() {
 		return AddressFactory.getAddress(getBlock(), 3);
 	}
@@ -218,7 +222,7 @@ abstract public class AbstractBC9000 extends AbstractTriggeredSign implements Su
 	public final String getDestinationIP() {
 		return AddressFactory.getAddress(this.getInventory()).toString();
 	}
-	
+
 	public final org.bukkit.block.Block getCenter() {
 		return this.getBlock();
 	}

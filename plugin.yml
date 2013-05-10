@@ -1,6 +1,6 @@
 name: ByteCart
 main: com.github.catageek.ByteCart.ByteCart
-version: 1.3.4
+version: 1.5.2
 permissions:
     bytecart.*:
         description: give access to all blocks
@@ -26,6 +26,8 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
+            bytecart.BC9037: true
+            bytecart.BC9137: true
             bytecart.mego: true
             bytecart.sendto: true
             bytecart.bcupdater: true
@@ -54,6 +56,8 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: false
             bytecart.BC9016: false
+            bytecart.BC9037: false
+            bytecart.BC9137: false
 
     bytecart.subnetwork:
         description: give acces to all subnets and station blocks
@@ -76,6 +80,8 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
+            bytecart.BC9037: true
+            bytecart.BC9137: true
     bytecart.BC7001:
         default: true
     bytecart.BC7002:
@@ -118,6 +124,10 @@ permissions:
         default: false
     bytecart.BC9016:
         default: false
+    bytecart.BC9037:
+        default: false
+    bytecart.BC9137:
+        default: false
     bytecart.mego:
         default: true
     bytecart.sendto:
@@ -137,7 +147,7 @@ commands:
         usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
         permission: bytecart.mego
         permission-message: You don't have permission <permission>
-        
+
     sendto:
         description: set ByteCart destination address in a storage cart inventory
         usage: "Usage : /<command> address [train], where address is formatted as a.b.c"
@@ -157,7 +167,9 @@ commands:
         permission-message: You don't have permission <permission>
     bcticket:
         description: create a book ticket
-        usage: "Usage : /<command>"
+        usage: |
+           Usage : /<command> destination [train]
+                   /<command> player destination [train]
         permission: bytecart.bcticket
         permission-message: You don't have permission <permission>
     bcback:

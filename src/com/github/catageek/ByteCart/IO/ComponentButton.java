@@ -3,16 +3,18 @@ package com.github.catageek.ByteCart.IO;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.Material;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.material.Button;
+import org.bukkit.material.MaterialData;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 public class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 	
-	final static private Map<Block, Integer> ActivatedButtonMap = new ConcurrentHashMap<Block, Integer>();
+	final static private Map<Location, Integer> ActivatedButtonMap = new ConcurrentHashMap<Location, Integer>();
 
 	protected ComponentButton(Block block) {
 		super(block.getLocation());
@@ -23,12 +25,13 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 
 	@Override
 	public void write(boolean bit) {
-		if(this.getLocation().getBlock().getState().getData() instanceof Button) {
+		final Block block = this.getLocation().getBlock();
+		final BlockState blockstate = block.getState();
+		if(blockstate.getData() instanceof Button) {
 			final ComponentButton component = this;
-			final Block block = this.getLocation().getBlock();
 			int id;
 			
-			final Button button = new Button(Material.STONE_BUTTON, this.getLocation().getBlock().getData());
+			final Button button = (Button) blockstate.getData();
 			
 			if (bit) {
 				if (ActivatedButtonMap.containsKey(block)) {
@@ -41,14 +44,15 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 					, 40);
 					
 					// We update the HashMap
-					ActivatedButtonMap.put(block, id);
+					ActivatedButtonMap.put(block.getLocation(), id);
 					
 				}
 				
 				else {
 					// if button is off, we power the button
 					button.setPowered(true);
-					this.getLocation().getBlock().setData(button.getData(), true);
+					blockstate.setData(button);
+					blockstate.update(false, true);
 					MathUtil.forceUpdate(this.getLocation().getBlock().getRelative(button.getAttachedFace()));
 			
 			
@@ -63,7 +67,7 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 					, 40);
 					
 					// We update the HashMap
-					ActivatedButtonMap.put(block, id);
+					ActivatedButtonMap.put(block.getLocation(), id);
 				}
 			}
 				
@@ -72,10 +76,9 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 
 	@Override
 	public boolean read() {
-		if(this.getLocation().getBlock().getState().getData() instanceof Button) {
-			final Button button = new Button(Material.STONE_BUTTON, this.getLocation().getBlock().getData());
-			return button.isPowered();
-				
+		MaterialData md = this.getLocation().getBlock().getState().getData();
+		if(md instanceof Button) {
+			return ((Button) md).isPowered();
 		}
 		return false;
 	}

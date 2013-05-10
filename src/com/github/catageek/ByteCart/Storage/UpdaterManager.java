@@ -1,12 +1,18 @@
 package com.github.catageek.ByteCart.Storage;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Routing.RoutingTableExchange;
 import com.github.catageek.ByteCart.Routing.Updater;
 
 public final class UpdaterManager {
 
 	// entries stay for 1h
-	private final ExpirableMap<Integer, RoutingTableExchange> UpdateMap = new ExpirableMap<Integer, RoutingTableExchange>(72000, false, "UpdaterRoutes");
+	public UpdaterManager() {
+		long duration = ByteCart.myPlugin.getConfig().getInt("updater.timeout", 60)*1200;
+		UpdateMap = new ExpirableMap<Integer, RoutingTableExchange>(duration, false, "UpdaterRoutes");
+	}
+
+	private final ExpirableMap<Integer, RoutingTableExchange> UpdateMap;
 
 	public ExpirableMap<Integer, RoutingTableExchange> getMapRoutes() {
 		return UpdateMap;

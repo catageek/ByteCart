@@ -12,7 +12,7 @@ import com.github.catageek.ByteCart.Signs.Subnet;
  * 
  * The direction is definitive.
  */
-public class SignPostSubnetEvent extends BCSignEvent {
+public class SignPostSubnetEvent extends BCRoutableSignEvent {
 
 	/**
 	 * Default constructor
@@ -25,7 +25,7 @@ public class SignPostSubnetEvent extends BCSignEvent {
 	 * @param side The direction taken by the vehicle
 	 */
 	public SignPostSubnetEvent(Subnet subnet, Side side) {
-		super();
+		super(subnet);
 		this.subnet = subnet;
 		this.side = side;
 	}
