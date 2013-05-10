@@ -159,6 +159,16 @@ public final class BC7003 extends AbstractIC implements Triggable, Powerable {
 	public final String getFriendlyName() {
 		return "Cart counter";
 	}
+
+	@Override
+	public boolean isTrain() {
+		return false;
+	}
+
+	@Override
+	public boolean wasTrain(org.bukkit.Location loc) {
+		return false;
+	}
 }
 
 

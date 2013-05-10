@@ -149,7 +149,8 @@ public class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggab
 
 	@Override
 	public final String getFriendlyName() {
-		return "Station";
+		String s;
+		return (s = super.getFriendlyName()).equals("") ? "Station" : s;
 	}
 
 }

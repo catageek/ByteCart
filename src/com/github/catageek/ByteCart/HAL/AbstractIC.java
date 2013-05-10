@@ -6,7 +6,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.Routing.Address;
 
 
 // All ICs must inherit from this class
@@ -15,12 +14,17 @@ abstract public class AbstractIC implements IC {
 	final private Block Block;
 	final private org.bukkit.Location Location;
 	
+	@Override
 	abstract public String getName();
-	abstract public String getFriendlyName();
+	
+	@Override
+	public String getFriendlyName() {
+		return ((Sign) this.getBlock().getState()).getLine(2);
+	}
 	
 	protected int Triggertax = 0;
 	
-	private RegistryInput[] input = new RegistryInput[7];
+	private RegistryInput[] input = new RegistryInput[9];
 	private int input_args = 0;
 	
 	private RegistryOutput[] output = new RegistryOutput[6];
@@ -33,15 +37,11 @@ abstract public class AbstractIC implements IC {
 
 	public final void addInputRegistry(RegistryInput reg) {
 		this.input[this.input_args++] = reg;
-/*		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : added 1 input registry");
-*/	}
+	}
 	
 	public final void addOutputRegistry(RegistryOutput reg) {
 		this.output[this.output_args++] = reg;
-/*		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : added 1 output registry");
-*/	}
+	}
 
 	public final RegistryInput getInput(int index) {
 		return input[index];
@@ -74,9 +74,11 @@ abstract public class AbstractIC implements IC {
 	}
 
 	
+	@Override
 	public final BlockFace getCardinal() {
 		try {
-			return ((org.bukkit.material.Sign) this.getBlock().getState().getData()).getFacing().getOppositeFace();
+			BlockFace f = ((org.bukkit.material.Sign) this.getBlock().getState().getData()).getFacing().getOppositeFace();
+			return f;
 		}
 		catch (ClassCastException e) {
 			// this is not a sign
@@ -84,35 +86,28 @@ abstract public class AbstractIC implements IC {
 		}
 	}
 
+	@Override
 	public final Block getBlock() {
 		return Block;
 	}
 	
+	@Override
 	public final String getBuildPermission() {
 		return "bytecart." + getName();
 	}
 
+	@Override
 	public final int getTriggertax() {
 		return ByteCart.myPlugin.getConfig().getInt("usetax." + this.getName());
 	}
 
+	@Override
 	public final int getBuildtax() {
 		return ByteCart.myPlugin.getConfig().getInt("buildtax." + this.getName());
 	}
 
+	@Override
 	public org.bukkit.Location getLocation() {
 		return Location;
-	}
-	
-	public boolean wasTrain(org.bukkit.Location loc) {
-		return false;
-	}
-	
-	public boolean isTrain() {
-		return false;
-	}
-	
-	public Address getSignAddress() {
-		return null;
 	}
 }
