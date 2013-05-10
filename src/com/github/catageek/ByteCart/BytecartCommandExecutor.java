@@ -72,7 +72,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 					public void run() {
 						if ((new BC7011(player.getLocation().getBlock(), ((org.bukkit.entity.Vehicle) inventory.getHolder()))).setAddress(address, null)) {
-							sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.SetAddress"));
+							sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " " + address);
 							sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.GetTTL") + AddressFactory.<AddressRouted>getAddress(inventory).getTTL());
 						}
 						else
