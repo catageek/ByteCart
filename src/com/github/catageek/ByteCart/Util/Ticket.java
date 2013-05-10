@@ -115,7 +115,7 @@ public final class Ticket {
 	private static boolean isEmptyBook(ItemStack stack) {
 		BookMeta book;
 
-		if (stack.getType().equals(Material.BOOK_AND_QUILL)) {
+		if (stack != null && stack.getType().equals(Material.BOOK_AND_QUILL)) {
 
 			if (stack.hasItemMeta()) {
 
