@@ -124,7 +124,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		return getRoutes().getLevel().number == this.getLevel().number;
 	}
 
-	protected final void reset() {
+	protected void reset() {
 		// case of reset
 		// erase address on sign
 		getSignAddress().remove();

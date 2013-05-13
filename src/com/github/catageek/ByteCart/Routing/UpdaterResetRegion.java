@@ -14,10 +14,6 @@ public final class UpdaterResetRegion extends UpdaterRegion implements Updater {
 
 	@Override
 	public void doAction(BlockFace to) {
-		if (this.getSignAddress().isValid()) {
-			UpdaterClearRingEvent event = new UpdaterClearRingEvent(this, this.getTrackNumber());
-			Bukkit.getServer().getPluginManager().callEvent(event);
-		}
 		reset();
 	}
 
@@ -32,5 +28,25 @@ public final class UpdaterResetRegion extends UpdaterRegion implements Updater {
 		}
 		return DefaultRouterWanderer.getRandomBlockFace(getRoutingTable(), getFrom().getBlockFace());
 	}
+	
+	@Override
+	protected final void reset() {
+		// case of reset
+		// erase address on sign if ring 0
+		Address address = this.getSignAddress();
+		boolean isValid = address.isValid();
+		int track = this.getTrackNumber();
+		
+		if (!isValid || track == -1) {
+			address.remove();
+			if (isValid) {
+				UpdaterClearRingEvent event = new UpdaterClearRingEvent(this, 0);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+			}
+		}
+		// clear routes except route to ring 0
+		getRoutingTable().clear();
+	}
+
 
 }

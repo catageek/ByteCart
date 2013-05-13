@@ -56,8 +56,8 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 			// sign seems to have priority
 			// if the router knows that it is directly connected
 			// we keep it, otherwise we find a new number (if possible)
-			if (! this.getRoutingTable().isDirectlyConnected(getTrackNumber(), getFrom()) && this.isTrackNumberProvider())
-				return setSign(current);
+//			if (! this.getRoutingTable().isDirectlyConnected(getTrackNumber(), getFrom()) && this.isTrackNumberProvider())
+//				return setSign(current);
 			return getTrackNumber();
 		}
 	}
