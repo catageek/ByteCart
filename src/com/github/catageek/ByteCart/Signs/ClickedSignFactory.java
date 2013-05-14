@@ -37,6 +37,9 @@ final public class ClickedSignFactory {
 	
 	static final public Clickable getClickedIC(Block block, String signString, Player player) {
 
+		if (signString.length() < 7)
+			return null;
+
 		int ICnumber = Integer.parseInt(signString.substring(3, 7));
 /*		
 		if(ByteCart.debug)

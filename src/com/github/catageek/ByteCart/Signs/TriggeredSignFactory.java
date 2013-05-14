@@ -37,6 +37,9 @@ final public class TriggeredSignFactory {
 
 	static final public Triggable getTriggeredIC(Block block, String signString, Vehicle vehicle) {
 
+		if (signString.length() < 7)
+			return null;
+		
 		int ICnumber = Integer.parseInt(signString.substring(3, 7));
 		/*		
 		if(ByteCart.debug)
