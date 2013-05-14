@@ -42,7 +42,7 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 
 
 	private int getOrSetCurrent(int current) {
-		// check if the sign has not priority
+		// check if the sign has not priority. always return the lesser
 		if (current >= 0  && current < getTrackNumber()) {
 			// current < sign => reset counter, clear route and write sign
 			this.getCounter().reset(getTrackNumber());
@@ -54,10 +54,13 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 		}
 		else {
 			// sign seems to have priority
-			// if the router knows that it is directly connected
-			// we keep it, otherwise we find a new number (if possible)
-//			if (! this.getRoutingTable().isDirectlyConnected(getTrackNumber(), getFrom()) && this.isTrackNumberProvider())
-//				return setSign(current);
+			// if there is (are) route(s) already configured for this ring number
+			// we find a new number (if possible)
+			if (! this.getRoutingTable().isDirectlyConnected(getTrackNumber(), getFrom())
+					&& (this.getRoutingTable().getDirection(getTrackNumber()) != null
+						|| this.getRoutes().hasRouteTo(getTrackNumber())) 
+					&& this.isTrackNumberProvider())
+				return setSign(current);
 			return getTrackNumber();
 		}
 	}
@@ -103,6 +106,10 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 	@Override
 	public void Update(BlockFace To) {
 
+		boolean isNew = (getCurrent() < 0);
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : isNew " + isNew);
+
 		// current: track number we are on
 		int current = getCurrent();
 
@@ -132,6 +139,18 @@ public class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 				setCurrent(current);
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : current is " + current);
+
+			// update track counter if we have entered a new one
+			if (current >= 0 && isNew) {
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart : incrementing counter of " + current);
+				this.getCounter().incrementCount(current);
+				if (this.getCounter().isAllFull()) {
+					int zero = this.getCounter().getCount(0);
+					this.getCounter().resetAll();
+					this.getCounter().setCount(0, ++zero);
+				}
+			}
 
 			routeUpdates(To);
 		}

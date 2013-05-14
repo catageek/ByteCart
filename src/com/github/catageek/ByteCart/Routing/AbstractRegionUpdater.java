@@ -71,7 +71,6 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 	@Override
 	public void doAction(BlockFace To) {
 
-		boolean isNew = (getCurrent() < 0);
 
 		this.Update(To);
 
@@ -80,15 +79,6 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : current is " + current);
 
-		// update track counter if we have entered a new one
-		if (current >= 0 && isNew) {
-			this.getCounter().incrementCount(current);
-			if (this.getCounter().isAllFull()) {
-				int zero = this.getCounter().getCount(0);
-				this.getCounter().resetAll();
-				this.getCounter().setCount(0, ++zero);
-			}
-		}
 
 		// If we are turning back, keep current track otherwise discard
 		if (!isSameTrack(To))
