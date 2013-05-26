@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.catageek</groupId>
+	<artifactId>ByteCart</artifactId>
+	<version>2.0.0</version>
+	<name>ByteCart</name>
+
+	<repositories>
+		<repository>
+			<id>lib</id>
+			<url>file://${basedir}/lib</url>
+		</repository>
+		<repository>
+			<id>bukkit-repo</id>
+			<url>http://repo.bukkit.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<site>
+			<id>website</id>
+			<url>ftp://bytecart.catageek.info/bytecart/maven/</url>
+		</site>
+		<repository>
+			<id>repobc-rel</id>
+			<name>bytecart.catageek.info Releases</name>
+			<url>ftp://bytecart.catageek.info/bytecart/maven/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>repobc-snap</id>
+			<name>bytecart.catageek.info Snapshots</name>
+			<url>ftp://bytecart.catageek.info/bytecart/maven/repositories/snapshots/</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.2</version>
+				<dependencies>
+					<dependency><!-- add support for ssh/scp -->
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ftp</artifactId>
+						<version>2.4</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>add-resource</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>add-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>src/com/github/catageek/ByteCart/plugins/resources</directory>
+									<targetPath>com/github/catageek/ByteCart/plugins/resources</targetPath>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>2.4</version>
+			</extension>
+		</extensions>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>${basedir}</directory>
+				<includes>
+					<include>plugin.yml</include>
+					<include>config.yml</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
+	<url>http://dev.bukkit.org/server-mods/bytecart/</url>
+	<description>ByteCart is a bukkit plugin that allows to create a railed network using principle of Internet.</description>
+
+	<scm>
+		<connection>scm:git:git://github.com/catageek/ByteCart.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/catageek/ByteCart.git</developerConnection>
+		<url>https://github.com/catageek/ByteCart</url>
+	</scm>
+
+	<issueManagement>
+		<url>https://github.com/catageek/ByteCart/issues</url>
+		<system>gitHub issues</system>
+	</issueManagement>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<bukkit.version>1.5.2-R0.1</bukkit.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>${bukkit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>external-lib</groupId>
+			<artifactId>dynmap</artifactId>
+			<version>1.6</version>
+		</dependency>
+	</dependencies>
+</project>

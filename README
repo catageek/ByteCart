@@ -1,0 +1,58 @@
+   ___       _         ___           _   
+  / __\_   _| |_ ___  / __\__ _ _ __| |_ 
+ /__\// | | | __/ _ \/ /  / _` | '__| __|
+/ \/  \ |_| | ||  __/ /__| (_| | |  | |_ 
+\_____/\__, |\__\___\____/\__,_|_|   \__|
+       |___/                             
+
+
+Overview
+=================================
+ByteCart is a bukkit plugin that allows to create a railed network using principle of Internet.
+
+A cart with a player, or a storage cart, with a destination address recorded in inventory, will be
+routed through the network to the destination station matching the address.
+
+ByteCart provides a set of blocks to create routers and stations according to a predefined network topology.
+It allows the connection of 45000 stations in 53 regions.
+
+Routing tables are stored ingame using a innovative information storage technology using chests. There is no database.
+
+A tool is provided to configure automatically the network if you do not have network skills.
+
+Features
+=================================
+* Minimum CPU and memory usage, even with a huge network.
+ByteCart is fully scalable, meaning that whatever the size of your network, the same amount of resources are used
+to take a cart from one point to another.
+
+* Reliable anti-collision system on sensitive points. When a collision is about to occur, a specific algorithm takes
+path modification decisions to avoid collisions. 
+
+* Well-known pathfinding algorithm
+ByteCart implements Djikstra algorithm as used in Internet routing protocol, with the success we know. All paths
+are precomputed and stored in routing tables. finding the best path is only a read operation on routing tables.
+
+* Possibility to form logical trains with a unique destination. Only the head cart must be "byteCart" compliant.
+
+* Support Permissions API. Check plugin.yml for available permissions.
+
+* WorldEdit compatibility
+Since there is no external data storage, all world editing tools are compatible with Bytecart. You can duplicate
+a part of a network to expand it, at little cost of a new automatic configuration session.
+
+* Falsebook and Minecart revolution compatibility
+
+Installation
+=================================
+Drop ByteCart.jar into the bukkit plugin directory. It will create its own configuration file with
+default configuration options.
+
+
+Configuration
+=================================
+Check configuration file ByteCart/config.yml to see available configuration parameters.
+
+Credits
+=================================
+Developped by Catageek (catageek@free.fr)

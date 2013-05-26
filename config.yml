@@ -1,0 +1,93 @@
+# config file for ByteCart bukkit plugin.
+
+# set true if you want a lot debug messages on the console
+debug: false
+
+# set false if you don't want to load chunks automatically around a moving cart
+loadchunks: true
+
+# Force players to provide books to get tickets when needed
+# set to false if you want the plugin to automatically create books when needed
+mustProvideBooks: false
+
+# If possible, reuse an existing ticket found in players inventory
+# set to false to create a new ticket each time a player request one
+reusetickets: true
+
+# Name to use as author of ticket book
+author: ByteCart
+
+# Title of ticket book
+title: Ticket to
+
+# Name of Dynmap layer
+dynmap.layer: ByteCart
+
+# timeout of updaters in minutes
+# set to 0 for no timeout
+updater.timeout: 60
+
+# this is the tax taken from the player when triggering the block
+# with a cart passing on it you can create any usetax you wish using the parameter:
+# usetax.BCxxxx: n
+######## currently not implemented ########
+usetax.BC8010: 0
+
+# this is the tax taken from
+# the player when building the sign
+######### currently not implemented ############
+buildtax.BC7010: 0
+buildtax.BC9001: 0
+buildtax.BC9002: 0
+buildtax.BC9004: 0
+buildtax.BC9008: 0
+buildtax.BC9016: 0
+
+# initial value of time-to-live stack (slot #4)
+# number of routers that a storagecart may use
+# before going to recycling center.
+# this is to prevent loops.
+TTL.value: 64
+
+# initial speed of minecarts
+BC7001.startvelocity: 2
+
+# Address where empty carts (not storage carts)
+# will be routed.
+# Default : 0.0.0
+EmptyCartsDefaultRoute: 0.0.0
+
+# error messages
+Error.SetAddress: Error - too few/many items in inventory
+#Error.SetAddress: Erreur - Pas assez/trop d'elements dans l'inventaire
+
+#Info messages
+
+Info.SetAddress: New destination address
+#Info.SetAddress: Nouvelle destination
+
+Info.SetReturnAddress: New return address
+#Info.SetReturnAddress: Nouvelle adresse de retour
+
+Info.SetAddress2: Don't touch your inventory
+                  Take a cart and have a nice trip !
+#Info.SetAddress2: Ne touchez pas a votre inventaire
+#                  Prenez un cart et bonne route !
+
+Info.RightClickCart: Right-click on a storage cart to select it
+#Info.RightClickCart: Clic droit sur un storage cart pour le selectionner
+
+#Updater
+Info.SetUpdater: "This cart is now an Updater !"
+
+Info.GetTTL: "Routers to cross : up to "
+#Info.GetTTL: "nb max de routeurs :"
+
+Info.BC8010_region: On the way to region
+#Info.BC8010_region: En route pour la region
+
+Info.BC8010_Track: You are entering track
+#Info.BC8010_track: Vous entrez sur la voie
+
+Info.Destination: You are arrived at
+#Info.Destination: Vous etes arrive a
