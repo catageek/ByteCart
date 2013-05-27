@@ -46,7 +46,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		if (address == null)
 			return;
 		
-		boolean isTrain = (new ComponentSign(this.getBlock())).getLine(0).equalsIgnoreCase("train");
+		boolean isTrain = getIsTrain();
 
 		this.setAddress(address, this.getNameToWrite(), isTrain);
 
@@ -55,6 +55,10 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 		if (isTrain) {
 			this.setWasTrain(this.getLocation(), true);
 		}
+	}
+	
+	protected boolean getIsTrain() {
+		return (new ComponentSign(this.getBlock())).getLine(0).equalsIgnoreCase("train");
 	}
 
 	protected Address getAddressToWrite() {

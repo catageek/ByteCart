@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.Address;
+import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.AddressLayer.ReturnAddressFactory;
 
@@ -17,6 +18,14 @@ final class BC7015 extends BC7011 implements Triggable {
 
 	protected AddressRouted getTargetAddress() {
 		return ReturnAddressFactory.getAddress(this.getInventory());
+	}
+	
+	@Override
+	protected final boolean getIsTrain() {
+		Address address;
+		if((address = AddressFactory.getAddress(this.getInventory())) != null)
+			return address.isTrain();
+		return false;
 	}
 
 	@Override
