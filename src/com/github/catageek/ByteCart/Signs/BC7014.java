@@ -51,6 +51,15 @@ class BC7014 extends BC7010 implements Triggable {
 	}
 
 	@Override
+	protected final boolean getIsTrain() {
+		boolean signtrain = super.getIsTrain();
+		Address address;
+		if((address = AddressFactory.getAddress(this.getInventory())) != null)
+			return address.isTrain() || signtrain;
+		return signtrain;
+	}
+
+	@Override
 	public String getName() {
 		return "BC7014";
 	}
