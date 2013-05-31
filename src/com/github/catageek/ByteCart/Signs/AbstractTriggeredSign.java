@@ -5,12 +5,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
-
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
+import com.github.catageek.ByteCart.AddressLayer.TicketFactory;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 
 /**
@@ -72,15 +71,9 @@ abstract class AbstractTriggeredSign extends AbstractIC {
 			if (ByteCart.myPlugin.getConfig().contains("EmptyCartsDefaultRoute"))
 			{
 				String DefaultRoute = ByteCart.myPlugin.getConfig().getString("EmptyCartsDefaultRoute");
+				TicketFactory.getOrCreateTicket(newInv);
 				//construct address object
 				AddressRouted myAddress = AddressFactory.getAddress(newInv);
-				//fill empty inventory with stuff
-				ItemStack stack = new ItemStack(1);
-				stack.setAmount(stack.getMaxStackSize());
-				newInv.addItem(stack);
-				newInv.addItem(stack);
-				newInv.addItem(stack);
-				newInv.addItem(stack);
 				//write address
 				myAddress.setAddress(DefaultRoute);
 				myAddress.initializeTTL();

@@ -71,37 +71,42 @@ public class ByteCartListener implements Listener {
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
 
-			Triggable myIC = TriggeredSignFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
+			Triggable myIC;
+			try {
+				myIC = TriggeredSignFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
 
-			Player player;
-			int tax;
+				Player player;
+				int tax;
 
-			if (myIC != null) {
+				if (myIC != null) {
 
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart: " + myIC.getName() + ".trigger()");
+					if(ByteCart.debug)
+						ByteCart.log.info("ByteCart: " + myIC.getName() + ".trigger()");
 
-				try {
 					myIC.trigger();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+
+					if ((! vehicle.isEmpty())
+							&& vehicle.getPassenger() instanceof Player) {
+
+						player = (Player) vehicle.getPassenger();
+						tax = myIC.getTriggertax();
+
+						if (tax != 0)
+							player.sendMessage(ChatColor.DARK_GRAY+"[Bytecart] " + "Echangeur (tarif: " + myIC.getTriggertax() + " eur0x)");	
+					}
+
 				}
-
-				if ((! vehicle.isEmpty())
-						&& vehicle.getPassenger() instanceof Player) {
-
-					player = (Player) vehicle.getPassenger();
-					tax = myIC.getTriggertax();
-
-					if (tax != 0)
-						player.sendMessage(ChatColor.DARK_GRAY+"[Bytecart] " + "Echangeur (tarif: " + myIC.getTriggertax() + " eur0x)");	
-				}
-
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IndexOutOfBoundsException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
+
 		}
 
 
@@ -120,32 +125,34 @@ public class ByteCartListener implements Listener {
 			// we instantiate a member of the BCXXXX class
 			// XXXX is read from the sign
 
-			Triggable myIC = TriggeredSignFactory.getTriggeredIC(vehicle.getLocation().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
+			Triggable myIC;
+			try {
+				myIC = TriggeredSignFactory.getTriggeredIC(vehicle.getLocation().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
 
-			if (myIC != null) {
-				try {
+				if (myIC != null) {
 					myIC.trigger();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					if ((! vehicle.isEmpty())
+							&& vehicle.getPassenger() instanceof Player) {
+
+						player = (Player) vehicle.getPassenger();
+						tax = myIC.getTriggertax();
+
+						if (tax != 0)
+							player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "1 aiguillage traversé (tarif: " + myIC.getTriggertax() + " eur0x");	
+					}
+
 				}
-
-
-
-				if ((! vehicle.isEmpty())
-						&& vehicle.getPassenger() instanceof Player) {
-
-					player = (Player) vehicle.getPassenger();
-					tax = myIC.getTriggertax();
-
-					if (tax != 0)
-						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "1 aiguillage traversé (tarif: " + myIC.getTriggertax() + " eur0x");	
-				}
-
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IndexOutOfBoundsException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
+
 		}
 
 
@@ -253,12 +260,22 @@ public class ByteCartListener implements Listener {
 		Sign sign = (Sign)block.getState();
 		String line = sign.getLine(1);
 
-		IC myIC = TriggeredSignFactory.getTriggeredIC(block, line, null);
-		
+		IC myIC;
+		try {
+			myIC = TriggeredSignFactory.getTriggeredIC(block, line, null);
+
 		if (myIC == null)
 			myIC = ClickedSignFactory.getClickedIC(block, line, null);
 
 		if (myIC != null)
 			Bukkit.getPluginManager().callEvent(new SignRemoveEvent(myIC, entity));
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

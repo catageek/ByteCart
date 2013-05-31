@@ -3,6 +3,8 @@ package com.github.catageek.ByteCart.AddressLayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+
 import com.github.catageek.ByteCart.ByteCart;
 
 public final class TicketFactory {
@@ -49,5 +51,15 @@ public final class TicketFactory {
 		Ticket.createTicket(inv, Ticket.searchSlot(inv));
 
 	}
-
+	
+	@SuppressWarnings("deprecation")
+	public static final void removeTickets(Inventory inv) {
+		int slot;
+		while ((slot = Ticket.getTicketslot(inv)) != -1) {
+			inv.clear(slot);
+		}
+		InventoryHolder holder;
+		if ((holder = inv.getHolder()) instanceof Player)
+			((Player) holder).updateInventory();			
+	}
 }

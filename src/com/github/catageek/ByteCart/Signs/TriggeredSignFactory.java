@@ -1,10 +1,11 @@
 package com.github.catageek.ByteCart.Signs;
 
+import java.io.IOException;
+
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Vehicle;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 
 
@@ -13,7 +14,7 @@ final public class TriggeredSignFactory {
 
 	// instantiates the BCXXXX member at specified location.
 	// return null if no IC is present.
-	static final public Triggable getTriggeredIC(Block block, Vehicle vehicle) {
+	static final public Triggable getTriggeredIC(Block block, Vehicle vehicle) throws ClassNotFoundException, IndexOutOfBoundsException, IOException {
 
 		if(AbstractIC.checkEligibility(block)) {
 
@@ -27,14 +28,12 @@ final public class TriggeredSignFactory {
 		return null;
 	}
 
-	static final public Triggable getTriggeredIC(Block block, String signString, Vehicle vehicle) {
+	static final public Triggable getTriggeredIC(Block block, String signString, Vehicle vehicle) throws ClassNotFoundException, IOException {
 
 		if (signString.length() < 7)
 			return null;
 		
 		int ICnumber = Integer.parseInt(signString.substring(3, 7));
-
-		try {
 
 			// then we instantiate accordingly
 			switch (ICnumber) {
@@ -62,6 +61,8 @@ final public class TriggeredSignFactory {
 				return (Triggable)(new BC7016(block, vehicle));
 			case 7017:
 				return (Triggable)(new BC7017(block, vehicle));
+			case 7018:
+				return (Triggable)(new BC7018(block, vehicle));
 			case 7020:
 				return (Triggable)(new BC7020(block, vehicle));
 			case 7021:
@@ -90,15 +91,6 @@ final public class TriggeredSignFactory {
 			case 9137:
 				return (new BC9137(block, vehicle));
 			}
-		}
-		catch (Exception e) {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : "+ e.toString());
-			e.printStackTrace();
-
-			// there was no inventory in the cart
-			return null;
-		}
 		return null;
 	}
 }
