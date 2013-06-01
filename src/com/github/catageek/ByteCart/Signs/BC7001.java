@@ -41,18 +41,6 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 	@Override
 	public void trigger() {
 		
-		// add input command = redstone
-
-		InputPin[] wire = new InputPin[2];
-
-		// Right
-		wire[0] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.clockwise(getCardinal())));
-		// left
-		wire[1] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.anticlockwise(getCardinal())));
-
-		// InputRegistry[0] = start/stop command
-		this.addInputRegistry(new PinRegistry<InputPin>(wire));
-
 		// add output occupied line = lever
 
 		OutputPin[] lever = new OutputPin[1];
@@ -67,6 +55,21 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 
 		// is there a minecart above ?
 		if (this.getVehicle() != null) {
+
+			// add input command = redstone
+
+			InputPin[] wire = new InputPin[2];
+
+			// Right
+			wire[0] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.clockwise(getCardinal())));
+			// left
+			wire[1] = InputFactory.getInput(this.getBlock().getRelative(BlockFace.UP).getRelative(MathUtil.anticlockwise(getCardinal())));
+
+			// InputRegistry[0] = start/stop command
+			this.addInputRegistry(new PinRegistry<InputPin>(wire));
+
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : redstone value = " + this.getInput(0).getAmount());
 
 			// if the wire is on
 			if(this.getInput(0).getAmount() > 0) {
@@ -128,6 +131,8 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 
 		// there is no minecart above
 		else {
+			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : powering lever");
 			// the lever is on
 			this.getOutput(0).setAmount(1);
 		}

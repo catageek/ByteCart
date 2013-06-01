@@ -13,7 +13,7 @@ final class AddressSign extends AbstractComponent implements Address {
 
 	AddressSign(Block block, int ligne) {
 		
-		super(block.getLocation());
+		super(block);
 		
 		this.Address = new AddressString((new ComponentSign(block)).getLine(ligne));
 		
@@ -47,7 +47,7 @@ final class AddressSign extends AbstractComponent implements Address {
 
 	@Override
 	public boolean setAddress(String s, String name) {
-		(new ComponentSign(this.getLocation().getBlock())).setLine(2, name);		
+		(new ComponentSign(this.getBlock())).setLine(2, name);		
 		return setAddress(s);
 	}
 
@@ -68,7 +68,7 @@ final class AddressSign extends AbstractComponent implements Address {
 	
 	@Override
 	public final void finalizeAddress() {
-		(new ComponentSign(this.getLocation().getBlock())).setLine(3, this.Address.toString());		
+		(new ComponentSign(this.getBlock())).setLine(3, this.Address.toString());		
 	}
 
 	@Override
@@ -79,7 +79,7 @@ final class AddressSign extends AbstractComponent implements Address {
 	@Override
 	public void remove() {
 		this.Address.remove();
-		(new ComponentSign(this.getLocation().getBlock())).setLine(3, "");		
+		(new ComponentSign(this.getBlock())).setLine(3, "");		
 	}
 	
 	@Override

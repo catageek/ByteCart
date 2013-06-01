@@ -17,7 +17,7 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 	final static private Map<Location, Integer> ActivatedButtonMap = new ConcurrentHashMap<Location, Integer>();
 
 	protected ComponentButton(Block block) {
-		super(block.getLocation());
+		super(block);
 /*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : adding Button at " + block.getLocation().toString());
 */
@@ -25,7 +25,7 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 
 	@Override
 	public void write(boolean bit) {
-		final Block block = this.getLocation().getBlock();
+		final Block block = this.getBlock();
 		final BlockState blockstate = block.getState();
 		if(blockstate.getData() instanceof Button) {
 			final ComponentButton component = this;
@@ -53,7 +53,7 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 					button.setPowered(true);
 					blockstate.setData(button);
 					blockstate.update(false, true);
-					MathUtil.forceUpdate(this.getLocation().getBlock().getRelative(button.getAttachedFace()));
+					MathUtil.forceUpdate(this.getBlock().getRelative(button.getAttachedFace()));
 			
 			
 /*			if(ByteCart.debug)
@@ -76,7 +76,7 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 
 	@Override
 	public boolean read() {
-		MaterialData md = this.getLocation().getBlock().getState().getData();
+		MaterialData md = this.getBlock().getState().getData();
 		if(md instanceof Button) {
 			return ((Button) md).isPowered();
 		}

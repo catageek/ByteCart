@@ -8,11 +8,11 @@ import com.github.catageek.ByteCart.ByteCart;
 public final class ComponentSign extends AbstractComponent {
 
 	public ComponentSign(Block block) {
-		super(block.getLocation());
+		super(block);
 	}
 
 	public void setLine(int line, String s) {
-		BlockState blockstate = this.getLocation().getBlock().getState();
+		BlockState blockstate = this.getBlock().getState();
 
 		if (blockstate instanceof org.bukkit.block.Sign) {
 			((org.bukkit.block.Sign) blockstate).setLine(line, s);
@@ -21,7 +21,7 @@ public final class ComponentSign extends AbstractComponent {
 	}
 
 	public String getLine(int line) {
-		BlockState blockstate = this.getLocation().getBlock().getState();
+		BlockState blockstate = this.getBlock().getState();
 		if (blockstate instanceof org.bukkit.block.Sign)
 			return ((org.bukkit.block.Sign) blockstate).getLine(line);
 		else {

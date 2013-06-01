@@ -1,16 +1,18 @@
 package com.github.catageek.ByteCart.IO;
 
-import org.bukkit.Location;
+import org.bukkit.block.Block;
 
 public abstract class AbstractComponent implements Component {
-	private final Location location;
+	private final Block block;
 	
-	protected AbstractComponent(Location loc) {
-		location = loc;
+	protected AbstractComponent(Block block) {
+		this.block = block;
 	}
 
-	public Location getLocation() {
-		return location;
+	/**
+	 * @return the block
+	 */
+	public Block getBlock() {
+		return block;
 	}
-
 }

@@ -23,7 +23,7 @@ public class SetButtonOff implements Runnable {
 	@Override
 	public void run() {
 
-		BlockState block = component.getLocation().getBlock().getState();
+		BlockState block = component.getBlock().getState();
 
 		if (block.getData() instanceof Button) {
 			Button button = (Button) block.getData();
@@ -32,7 +32,7 @@ public class SetButtonOff implements Runnable {
 			block.setData(button);
 
 			block.update(false, true);
-			MathUtil.forceUpdate(component.getLocation().getBlock().getRelative(button.getAttachedFace()));
+			MathUtil.forceUpdate(component.getBlock().getRelative(button.getAttachedFace()));
 		}
 
 		ActivatedButtonMap.remove(block.getLocation());

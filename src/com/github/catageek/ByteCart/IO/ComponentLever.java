@@ -5,32 +5,33 @@ import org.bukkit.block.BlockState;
 import org.bukkit.material.Lever;
 import org.bukkit.material.MaterialData;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 public class ComponentLever extends AbstractComponent implements OutputPin, InputPin, RegistryInput {
 
 	public ComponentLever(Block block) {
-		super(block.getLocation());
+		super(block);
 	}
 
 	@Override
 	public void write(boolean bit) {
-		BlockState block = this.getLocation().getBlock().getState();
-		if(block.getData() instanceof Lever) {
-			Lever lever = (Lever) block.getData();
-			if(lever.isPowered()^bit) {
-				lever.setPowered(bit);
-				block.setData(lever);
-				block.update(false, true);
-				MathUtil.forceUpdate(this.getLocation().getBlock().getRelative(lever.getAttachedFace()));
-			}
+		BlockState block = this.getBlock().getState();
+		Lever lever = (Lever) block.getData();
+		if (ByteCart.debug)
+			ByteCart.log.info("writing lever at loc " + block.getLocation() + " with value " + bit);
+		if(lever.isPowered()^bit) {
+			lever.setPowered(bit);
+			block.setData(lever);
+			block.update(false, true);
+			MathUtil.forceUpdate(this.getBlock().getRelative(lever.getAttachedFace()));
 		}
 	}
 
 	@Override
 	public boolean read() {
-		MaterialData md = this.getLocation().getBlock().getState().getData();
+		MaterialData md = this.getBlock().getState().getData();
 		if(md instanceof Lever) {
 			return ((Lever) md).isPowered();
 		}
