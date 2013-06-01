@@ -27,6 +27,9 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
+            bytecart.BC9032: true
+            bytecart.BC9064: true
+            bytecart.BC9128: true
             bytecart.BC9037: true
             bytecart.BC9137: true
             bytecart.mego: true
@@ -58,6 +61,9 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: false
             bytecart.BC9016: false
+            bytecart.BC9032: false
+            bytecart.BC9064: false
+            bytecart.BC9128: false
             bytecart.BC9037: false
             bytecart.BC9137: false
 
@@ -83,6 +89,9 @@ permissions:
             bytecart.BC9004: true
             bytecart.BC9008: true
             bytecart.BC9016: true
+            bytecart.BC9032: true
+            bytecart.BC9064: true
+            bytecart.BC9128: true
             bytecart.BC9037: true
             bytecart.BC9137: true
     bytecart.BC7001:
@@ -128,6 +137,12 @@ permissions:
     bytecart.BC9008:
         default: false
     bytecart.BC9016:
+        default: false
+    bytecart.BC9032:
+        default: false
+    bytecart.BC9064:
+        default: false
+    bytecart.BC9128:
         default: false
     bytecart.BC9037:
         default: false
