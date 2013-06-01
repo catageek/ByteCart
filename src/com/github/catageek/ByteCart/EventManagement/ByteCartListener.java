@@ -2,7 +2,6 @@ package com.github.catageek.ByteCart.EventManagement;
 
 import java.io.IOException;
 import java.util.Iterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -161,9 +160,11 @@ public class ByteCartListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
-
+		
 		if (! AbstractIC.checkEligibility(event.getLine(1)))
 			return;
+
+		AbstractIC.removeFromCache(event.getBlock());
 
 		try {
 			Triggable myIC = TriggeredSignFactory.getTriggeredIC(event.getBlock(), event.getLine(1), null);
@@ -215,15 +216,14 @@ public class ByteCartListener implements Listener {
 		if (event.getChangedType() != Material.REDSTONE_WIRE || ! AbstractIC.checkEligibility(event.getBlock().getRelative(BlockFace.DOWN)))
 			return;
 
-		/*				if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: event " + event.getBlock().toString());
-		 */
-
 		Powerable myIC = this.MyPoweredICFactory.getIC(event.getBlock().getRelative(BlockFace.DOWN));
 
 
 		if (myIC != null) {
 			try {
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart: power()");
+
 				myIC.power();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -235,7 +235,42 @@ public class ByteCartListener implements Listener {
 		}
 
 	}
+/*
+	@EventHandler(ignoreCancelled = true)
+	public void onBlockRedstone(BlockRedstoneEvent event) {
+		Block block = event.getBlock().getRelative(BlockFace.DOWN);
+		List<Block> blocks = new ArrayList<Block>(4);
+		blocks.add(block.getRelative(BlockFace.NORTH));
+		blocks.add(block.getRelative(BlockFace.EAST));
+		blocks.add(block.getRelative(BlockFace.SOUTH));
+		blocks.add(block.getRelative(BlockFace.WEST));
 
+		for (Block b : blocks) {
+			if (! AbstractIC.checkEligibility(b))
+				continue;
+
+			Powerable myIC = this.MyPoweredICFactory.getIC(b);
+
+
+			if (myIC != null) {
+				try {
+					if(ByteCart.debug)
+						ByteCart.log.info("ByteCart: power()");
+
+					myIC.power();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return;
+		}
+
+	}
+*/
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
@@ -264,11 +299,13 @@ public class ByteCartListener implements Listener {
 		try {
 			myIC = TriggeredSignFactory.getTriggeredIC(block, line, null);
 
-		if (myIC == null)
-			myIC = ClickedSignFactory.getClickedIC(block, line, null);
+			if (myIC == null)
+				myIC = ClickedSignFactory.getClickedIC(block, line, null);
 
-		if (myIC != null)
-			Bukkit.getPluginManager().callEvent(new SignRemoveEvent(myIC, entity));
+			if (myIC != null) {
+				Bukkit.getPluginManager().callEvent(new SignRemoveEvent(myIC, entity));
+				AbstractIC.removeFromCache(block);
+			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

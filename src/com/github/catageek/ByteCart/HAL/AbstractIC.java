@@ -1,5 +1,8 @@
 package com.github.catageek.ByteCart.HAL;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -14,6 +17,8 @@ abstract public class AbstractIC implements IC {
 	
 	final private Block Block;
 	final private org.bukkit.Location Location;
+	private static final Map<String,Boolean> icCache = new WeakHashMap<String, Boolean>();
+	private static org.bukkit.Location emptyLocation = new org.bukkit.Location(null, 0, 0, 0);
 	
 	@Override
 	abstract public String getName();
@@ -52,16 +57,24 @@ abstract public class AbstractIC implements IC {
 		return output[index];
 	}
 
+	static public final void removeFromCache(Block block) {
+		icCache.remove(block.getLocation(emptyLocation).toString());
+	}
 	
 	// This function checks if we have a ByteCart sign at this location
 	static public final boolean checkEligibility(Block b){
-
+		
 		if(b.getType() != Material.SIGN_POST && b.getType() != Material.WALL_SIGN) {
 			return false;
 		}
+
+		Boolean ret;
+		String s;
+		if ((ret = icCache.get(s = b.getLocation(emptyLocation).toString())) != null)
+			return ret;
 		
-		return AbstractIC.checkEligibility(((Sign) b.getState()).getLine(1));
-		
+		icCache.put(s, ret = AbstractIC.checkEligibility(((Sign) b.getState()).getLine(1)));
+		return ret;
 	}
 
 	static public final boolean checkEligibility(String s){
