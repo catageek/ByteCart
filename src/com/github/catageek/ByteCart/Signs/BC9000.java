@@ -21,7 +21,7 @@ final class BC9000 extends AbstractBC9000 implements Subnet, Triggable {
 
 	@Override
 	protected SimpleCollisionAvoider.Side route() {
-		return SimpleCollisionAvoider.Side.RIGHT;
+		return SimpleCollisionAvoider.Side.LEFT;
 	}
 	
 	@Override

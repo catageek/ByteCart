@@ -28,6 +28,12 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		public int Value() {
 			return Value;
 		}
+		
+		public Side opposite() {
+			if (this.equals(LEFT))
+				return RIGHT;
+			return LEFT;
+		}
 	}
 
 	public SimpleCollisionAvoider(Triggable ic, org.bukkit.Location loc) {
@@ -62,13 +68,13 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	@Override
 	public void Add(Triggable t) {
 		Lever2 = t.getOutput(0);
-		Lever2.setAmount(state.Value());
+		Lever2.setAmount(state.opposite().Value());
 	}
 
 	private void Set(Side s) {
 		this.Lever1.setAmount(s.Value());
 		if (this.Lever2 != null)
-			this.Lever2.setAmount(s.Value());
+			this.Lever2.setAmount(s.opposite().Value());
 		state = s;
 	}
 	

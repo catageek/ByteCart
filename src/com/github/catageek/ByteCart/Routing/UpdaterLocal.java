@@ -152,16 +152,30 @@ public class UpdaterLocal implements Updater {
 			Bukkit.getServer().getPluginManager().callEvent(event);
 		}
 
-		// cookie still there or we did not enter the subnet
-		if (this.getStart().empty() ^ this.getEnd().empty()
-				|| (to.Value() != Side.RIGHT.Value() && this.getNetmask() < 8))
+		// cookie still there
+		if (this.getStart().empty() ^ this.getEnd().empty())
 			return;
+
+		// we did not enter the subnet
+		int start;
+		if(to.Value() != Side.RIGHT.Value() && this.getNetmask() < 8) {
+			// if we have the same sign as when entering the subnet, close the subnet
+			if (this.isExactSubnet((start = this.getCurrentSubnet()), this.getNetmask())) {
+				if (! this.getSignAddress().isValid()) {
+					this.getSignAddress().setAddress(buildAddress(start));
+					this.getSignAddress().finalizeAddress();
+					this.getContent().updateTimestamp();
+				}
+				this.leaveSubnet();
+				this.save();
+			}
+			return;
+		}
 
 		int length = (256 >> this.getNetmask());
 		// if sign is not consistent, rewrite it
 		if (! getSignAddress().isValid() || this.needUpdate()) {
 			Address old = this.getSignAddress();
-			int start;
 			if ((start = this.getFreeSubnet(getNetmask())) != -1) {
 				String address = buildAddress(start);
 				this.getSignAddress().setAddress(address);
@@ -219,9 +233,11 @@ public class UpdaterLocal implements Updater {
 	public Side giveSimpleDirection() {
 
 
-		// turn if it's not a station, and the ring is initialized or the address is invalid 
+		// turn if it's not a station, and the ring is initialized or the address is invalid
+		// and the subnet is contained in the current borders
 		if (this.getNetmask() < 8
-				&& (! (this.getStart().empty() ^ this.getEnd().empty())))
+				&& (! (this.getStart().empty() ^ this.getEnd().empty()))
+				&& ! this.isExactSubnet(this.getCurrentSubnet(), this.getNetmask()))
 			return Side.RIGHT;
 
 		return Side.LEFT;
@@ -383,6 +399,10 @@ public class UpdaterLocal implements Updater {
 
 	private final boolean isInSubnet(int address, int netmask) {
 		return (address >= this.getCurrentSubnet() && (address | (255 >> netmask))  < this.getNext());
+	}
+
+	private final boolean isExactSubnet(int address, int netmask) {
+		return (address == this.getCurrentSubnet() && (address | (255 >> netmask))  == (this.getNext() - 1));
 	}
 
 	private final boolean needUpdate() {
