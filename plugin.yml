@@ -176,7 +176,11 @@ commands:
 
     bcupdater:
         description: set a cart as Updater for ByteCart
-        usage: "Usage : /<command>"
+        usage: |
+           Usage : /<command> (region|local) n
+                     /<command> backbone
+                     /<command> (reset_region|reset_local) n [full]
+                     /<command> reset_backbone [full]
         permission: bytecart.bcupdater
         permission-message: You don't have permission <permission>
 
