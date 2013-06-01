@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import org.bukkit.inventory.meta.BookMeta;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.Base64;
 
 class BookInputStream extends ByteArrayInputStream {
@@ -28,8 +27,6 @@ class BookInputStream extends ByteArrayInputStream {
 			sb.append(it.next());
 
 		sb.trimToSize();
-		if(ByteCart.debug)
-		ByteCart.log.info("ByteCart : reading " + sb.length() + " bytes");
 		if (binary)
 			return Base64.decodeFast(sb.toString());
 		return sb.toString().getBytes();

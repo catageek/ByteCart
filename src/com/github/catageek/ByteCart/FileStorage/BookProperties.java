@@ -40,8 +40,6 @@ public final class BookProperties implements Closeable, Flushable {
 			e.printStackTrace();
 		}
 		PageNumber = page;
-		if (ByteCart.debug)
-			ByteCart.log.info("ByteCart: BookProperties : " + Properties.size() + " properties loaded.");
 	}
 
 	public void setProperty(String key, String value) throws IOException {

@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import com.github.catageek.ByteCart.ByteCart;
-
 
 
 final class RouteNumber extends RoutingTableContent<RouteNumber>
@@ -35,7 +33,5 @@ implements Comparable<RouteNumber>, Externalizable {
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 		this.setValue(in.readShort() & ((1 << rlength) - 1));
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : loading route : loading route to " + this.value());
 	}
 }
