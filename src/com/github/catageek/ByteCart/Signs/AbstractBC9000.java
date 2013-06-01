@@ -56,7 +56,7 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 				// if this is a cart in a train
 				if (this.wasTrain(this.getLocation())) {
 					ByteCart.myPlugin.getIsTrainManager().getMap().reset(getBlock().getLocation());
-					ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder).Book(isTrain);
+					intersection.Book(isTrain);
 					return;
 				}
 

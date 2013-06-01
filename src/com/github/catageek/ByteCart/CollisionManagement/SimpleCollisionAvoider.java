@@ -10,9 +10,10 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 
 	private static final ExpirableMap<Location, Boolean> recentlyUsedMap = new ExpirableMap<Location, Boolean>(20, false, "recentlyUsed9000");
 	private static final ExpirableMap<Location, Boolean> hasTrainMap = new ExpirableMap<Location, Boolean>(14, false, "hastrain");
-	
+
 	private RegistryOutput Lever1 = null, Lever2 = null;
-	
+	private final Location loc1;
+
 	private Side state;
 
 	public enum Side {
@@ -28,7 +29,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		public int Value() {
 			return Value;
 		}
-		
+
 		public Side opposite() {
 			if (this.equals(LEFT))
 				return RIGHT;
@@ -41,20 +42,20 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 /*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: new SimpleCollisionAvoider() at " + loc);
 */		Lever1 = ic.getOutput(0);
+		loc1 = ic.getLocation();
 		state = (Lever1.getAmount() == 0 ? Side.LEFT : Side.RIGHT);
-		//Initialize();
 	}
 
 	public Side WishToGo(Side s, boolean isTrain) {
-/*
-		if(ByteCart.debug)
+
+/*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : WishToGo to side " + s + " and isTrain is " + isTrain);
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : state is " + state + " and Lever2 is " + Lever2);
+			ByteCart.log.info("ByteCart : state is " + state);
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : recentlyUsed is " + recentlyUsed + " and hasTrain is " + hasTrain);
+			ByteCart.log.info("ByteCart : recentlyUsed is " + this.getRecentlyUsed() + " and hasTrain is " + this.getHasTrain());
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : Lever1 is " + Lever1);
+			ByteCart.log.info("ByteCart : Lever1 is " + Lever1.getAmount());
 */
 		if ( s != state && (Lever2 == null || ( !this.getRecentlyUsed()) && !this.getHasTrain())) {
 			Set(s);
@@ -67,21 +68,26 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 
 	@Override
 	public void Add(Triggable t) {
+		if (t.getLocation().equals(loc1))
+			return;
 		Lever2 = t.getOutput(0);
 		Lever2.setAmount(state.opposite().Value());
-	}
+/*		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart: Add and setting lever2 to " + Lever2.getAmount());
+*/	}
 
 	private void Set(Side s) {
 		this.Lever1.setAmount(s.Value());
-		if (this.Lever2 != null)
+/*		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart: Setting lever1 to " + Lever1.getAmount());
+*/		if (this.Lever2 != null) {
 			this.Lever2.setAmount(s.opposite().Value());
+/*			if(ByteCart.debug)
+				ByteCart.log.info("ByteCart: Setting lever2 to " + Lever2.getAmount());
+*/		}
 		state = s;
 	}
-	
-/*	private void Initialize() {
-		//Set(Side.RIGHT);
-	}
-*/
+
 	@Override
 	public int getSecondpos() {
 		throw new UnsupportedOperationException();
