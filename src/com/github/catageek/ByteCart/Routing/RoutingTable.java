@@ -24,6 +24,7 @@ public interface RoutingTable {
 	public boolean isDirectlyConnected(int ring, DirectionRegistry direction);
 	public int getDirectlyConnected(DirectionRegistry direction);
 	public BlockFace getFirstUnknown();
+	public int size();
 	
 	/**
 	 * Return an iterator of Route in incrementing order

@@ -68,9 +68,6 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 			// InputRegistry[0] = start/stop command
 			this.addInputRegistry(new PinRegistry<InputPin>(wire));
 
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : redstone value = " + this.getInput(0).getAmount());
-
 			// if the wire is on
 			if(this.getInput(0).getAmount() > 0) {
 				if (this.wasTrain(this.getLocation()))

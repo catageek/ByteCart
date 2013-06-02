@@ -244,4 +244,9 @@ RoutingTable, Externalizable {
 	public void writeExternal(ObjectOutput out) throws IOException {
 		out.writeObject(map);
 	}
+
+	@Override
+	public int size() {
+		return map.size();
+	}
 }

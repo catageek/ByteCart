@@ -302,9 +302,9 @@ public class UpdaterLocal implements Updater {
 	protected void incrementRingCounter(int ring) {
 		if (this.getContent().hasRouteTo(ring))
 			this.getContent().setRoute(ring
-					, new Metric(this.getContent().getMetric(ring) + (new Random()).nextInt(3) + 1));
+					, new Metric(this.getContent().getMetric(ring) + (new Random()).nextInt(RoutingTable.size()) + 1));
 		else
-			this.getContent().setRoute(ring, new Metric(1));
+			this.getContent().setRoute(ring, new Metric((new Random()).nextInt(RoutingTable.size()) + 1));
 	}
 
 	public final void leaveSubnet() {
