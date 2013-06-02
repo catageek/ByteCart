@@ -18,7 +18,6 @@ import com.github.catageek.ByteCart.Event.UpdaterLeaveSubnetEvent;
 import com.github.catageek.ByteCart.Event.UpdaterPassStationEvent;
 import com.github.catageek.ByteCart.Event.UpdaterSetStationEvent;
 import com.github.catageek.ByteCart.Event.UpdaterSetSubnetEvent;
-import com.github.catageek.ByteCart.HAL.Counter;
 import com.github.catageek.ByteCart.Signs.BC8010;
 import com.github.catageek.ByteCart.Signs.BCSign;
 import com.github.catageek.ByteCart.Signs.HasNetmask;
@@ -422,7 +421,7 @@ public class UpdaterLocal implements Updater {
 	}
 
 
-	private final Stack<Integer> getEnd() {
+	protected final Stack<Integer> getEnd() {
 		return End;
 	}
 

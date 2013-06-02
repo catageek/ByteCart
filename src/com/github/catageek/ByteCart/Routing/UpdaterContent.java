@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.HAL.Counter;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
 public class UpdaterContent implements Serializable {

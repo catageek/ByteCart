@@ -1,4 +1,4 @@
-package com.github.catageek.ByteCart.HAL;
+package com.github.catageek.ByteCart.Routing;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
 public final class Counter implements Serializable {
@@ -65,13 +64,20 @@ public final class Counter implements Serializable {
 	}
 
 	public int getMinimum(RoutingTable routes, DirectionRegistry from) {
-		Iterator<Integer> it = map.keySet().iterator();
+		Iterator<RouteNumber> it = routes.getOrderedRouteNumbers();
 		int min = 10000000;  //big value
 		int index = -1;
 		while (it.hasNext()) {
-			int ring, value;
-			if ((value = map.get(ring = it.next())) < min
-					&& routes.getDirection(ring) != null
+			int ring = it.next().value();
+			
+			if (ring == 0)
+				continue;
+			
+			if (! map.containsKey(ring))
+				return ring;
+
+			int value;
+			if((value = map.get(ring)) < min
 					&& routes.getDirection(ring).getAmount() != from.getAmount()
 					&& ring != 0) {
 				min = value;

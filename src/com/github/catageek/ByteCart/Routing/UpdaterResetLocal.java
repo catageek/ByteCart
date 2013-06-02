@@ -1,5 +1,7 @@
 package com.github.catageek.ByteCart.Routing;
 
+import java.util.Stack;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 
@@ -23,8 +25,9 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 		int ring;
 		if ((ring = this.getTrackNumber()) != -1) {
 			incrementRingCounter(ring);
-			save();
 		}
+		this.getEnd().clear();
+		save();
 	}
 
 	@Override
@@ -56,12 +59,25 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 		if (ByteCart.debug)
 			ByteCart.log.info("ByteCart: removing address");
 
+		int mask = this.getNetmask();
+		if (mask < 8) {
+			Stack<Integer> end = this.getEnd();
+			if (to.equals(Side.RIGHT) && (end.isEmpty() || mask > end.peek())) {
+				end.push(mask);
+			}
+			else
+				if (to.equals(Side.LEFT) && ! end.isEmpty()) {
+					end.pop();
+				}
+		}
 		save();
 	}
 
 	@Override
 	public Side giveSimpleDirection() {
-		if (this.getNetmask() < 8)
+		int mask = this.getNetmask();
+		Stack<Integer> end = this.getEnd();
+		if ( mask < 8 && (end.isEmpty() || mask > end.peek()))
 			return Side.RIGHT;
 		return Side.LEFT;
 	}
