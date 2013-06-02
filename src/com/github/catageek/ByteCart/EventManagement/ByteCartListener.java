@@ -221,9 +221,6 @@ public class ByteCartListener implements Listener {
 
 		if (myIC != null) {
 			try {
-				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart: power()");
-
 				myIC.power();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

@@ -5,7 +5,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.material.Lever;
 import org.bukkit.material.MaterialData;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
@@ -19,8 +18,6 @@ public class ComponentLever extends AbstractComponent implements OutputPin, Inpu
 	public void write(boolean bit) {
 		BlockState block = this.getBlock().getState();
 		Lever lever = (Lever) block.getData();
-		if (ByteCart.debug)
-			ByteCart.log.info("writing lever at loc " + block.getLocation() + " with value " + bit);
 		if(lever.isPowered()^bit) {
 			lever.setPowered(bit);
 			block.setData(lever);
