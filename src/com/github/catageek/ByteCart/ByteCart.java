@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
 import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
+import com.github.catageek.ByteCart.EventManagement.ConstantSpeedListener;
 import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
@@ -18,6 +19,7 @@ public final class ByteCart extends JavaPlugin {
 	public static ByteCart myPlugin;
 	public static boolean debug;
 	private PreloadChunkListener preloadchunklistener;
+	private ConstantSpeedListener constantspeedlistener;
 	private CollisionAvoiderManager cam;
 	private IsTrainManager it;
 	public int Lockduration;
@@ -79,7 +81,19 @@ public final class ByteCart extends JavaPlugin {
 				HandlerList.unregisterAll(preloadchunklistener);
 				preloadchunklistener = null;
 			}
-	}
+
+		if(this.getConfig().getBoolean("constantspeed", false)) {
+			if (constantspeedlistener == null) {
+				constantspeedlistener = new ConstantSpeedListener();
+				getServer().getPluginManager().registerEvents(constantspeedlistener, this);
+			}
+		}
+		else
+			if (constantspeedlistener != null) {
+				HandlerList.unregisterAll(constantspeedlistener);
+				constantspeedlistener = null;
+			}
+}
 
 
 	/**

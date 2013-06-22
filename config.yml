@@ -6,6 +6,9 @@ debug: false
 # set false if you don't want to load chunks automatically around a moving cart
 loadchunks: true
 
+# set true if you want minecarts keep their velocity without boosters
+constantspeed: false
+
 # Force players to provide books to get tickets when needed
 # set to false if you want the plugin to automatically create books when needed
 mustProvideBooks: false
