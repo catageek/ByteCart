@@ -15,7 +15,7 @@ public final class BC7017 extends AbstractTriggeredSign implements Triggable {
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 	}
-	
+
 	public BC7017(org.bukkit.block.Block block, Player player) {
 		super(block, null);
 		this.setInventory(player.getInventory());
@@ -49,8 +49,7 @@ public final class BC7017 extends AbstractTriggeredSign implements Triggable {
 		targetAddress.setTrain(isTrain);
 		if (this.getInventory().getHolder() instanceof Player)
 			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + returnAddressString + ")");
-		else
-			targetAddress.initializeTTL();
+		targetAddress.initializeTTL();
 		targetAddress.finalizeAddress();
 
 	}
