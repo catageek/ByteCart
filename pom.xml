@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.catageek</groupId>
 	<artifactId>ByteCart</artifactId>
-	<version>2.0.3-SNAPSHOT</version>
+	<version>2.0.3</version>
 	<name>ByteCart</name>
 
 	<repositories>
@@ -148,7 +148,7 @@
 	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkit.version>1.5.2-R1.1-SNAPSHOT</bukkit.version>
+		<bukkit.version>1.5.2-R1.0</bukkit.version>
 	</properties>
 	<dependencies>
 		<dependency>
