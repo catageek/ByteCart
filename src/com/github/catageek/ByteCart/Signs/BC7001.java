@@ -128,8 +128,6 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 
 		// there is no minecart above
 		else {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : powering lever");
 			// the lever is on
 			this.getOutput(0).setAmount(1);
 		}
