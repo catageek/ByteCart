@@ -38,6 +38,7 @@ permissions:
             bytecart.bcreload: true
             bytecart.bcticket: true
             bytecart.bcback: true
+            bytecart.bcdmapsync: true
 
     bytecart.helper:
         description: give access to small subnets and station blocks
@@ -160,6 +161,8 @@ permissions:
         default: true
     bytecart.bcback:
         default: true
+    bytecart.bcdmapsync:
+        default: false
 
 commands:
     mego:
@@ -201,3 +204,9 @@ commands:
         usage: "Usage : /<command>"
         permission: bytecart.bcback
         permission-message: You don't have permission <permission>
+    bcdmapsync:
+        description: remove obsolete stations in dynmap
+        usage: "Usage : /<command>"
+        permission: bytecart.bcdmapsync
+        permission-message: You don't have permission <permission>
+        

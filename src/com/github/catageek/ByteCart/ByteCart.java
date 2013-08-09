@@ -46,6 +46,7 @@ public final class ByteCart extends JavaPlugin {
 		getCommand("bcupdater").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcticket").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcback").setExecutor(new BytecartCommandExecutor());
+		getCommand("bcdmapsync").setExecutor(new BytecartCommandExecutor());
 
 		if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
 			log.info("[ByteCart] loading dynmap plugin.");
