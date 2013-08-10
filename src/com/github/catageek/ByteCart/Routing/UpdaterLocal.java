@@ -213,10 +213,15 @@ public class UpdaterLocal implements Updater {
 
 			if (stationfield != -1) {
 				// register new subnet start and mask
-				this.getStart().push(stationfield);
-				this.getEnd().push(stationfield + length);
+				Stack<Integer> startstack = this.getStart();
+				Stack<Integer> endstack = this.getEnd();
+				Integer oldstart = startstack.peek();
+				Integer oldend = endstack.peek();
+				startstack.push(stationfield);
+				endstack.push(stationfield + length);
 				// launch event
-				UpdaterEnterSubnetEvent event = new UpdaterEnterSubnetEvent(this, getSignAddress(), length);
+				UpdaterEnterSubnetEvent event = new UpdaterEnterSubnetEvent(this, getSignAddress(), length,
+						AddressFactory.getAddress(buildAddress(oldstart)), oldend - oldstart);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 			}
 		}
@@ -310,10 +315,15 @@ public class UpdaterLocal implements Updater {
 	public final void leaveSubnet() {
 		if(!this.getStart().empty() && ! this.getEnd().empty()) {
 			this.fillSubnet();
-			int start = this.getStart().pop();
-			int end = this.getEnd().pop();
+			Stack<Integer> startstack = this.getStart();
+			Stack<Integer> endstack = this.getEnd();
+			int start = startstack.pop();
+			int end = endstack.pop();
+			int newstart = startstack.peek();
+			int newend = endstack.peek();
 			// launch event
-			UpdaterLeaveSubnetEvent event = new UpdaterLeaveSubnetEvent(this, AddressFactory.getAddress(buildAddress(start)), end - start);
+			UpdaterLeaveSubnetEvent event = new UpdaterLeaveSubnetEvent(this, AddressFactory.getAddress(buildAddress(start)), end - start
+					, AddressFactory.getAddress(buildAddress(newstart)), newend - newstart);
 			Bukkit.getServer().getPluginManager().callEvent(event);
 		}
 	}
