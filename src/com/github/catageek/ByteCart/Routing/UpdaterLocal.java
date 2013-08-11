@@ -159,7 +159,7 @@ public class UpdaterLocal implements Updater {
 		int start;
 		if(to.Value() != Side.RIGHT.Value() && this.getNetmask() < 8) {
 			// if we have the same sign as when entering the subnet, close the subnet
-			if (this.isExactSubnet((start = this.getCurrentSubnet()), this.getNetmask())) {
+			if (this.isExactSubnet((start = this.getFirstStationNumber()), this.getNetmask())) {
 				if (! this.getSignAddress().isValid()) {
 					this.getSignAddress().setAddress(buildAddress(start));
 					this.getSignAddress().finalizeAddress();
@@ -215,8 +215,8 @@ public class UpdaterLocal implements Updater {
 				// register new subnet start and mask
 				Stack<Integer> startstack = this.getStart();
 				Stack<Integer> endstack = this.getEnd();
-				Integer oldstart = startstack.peek();
-				Integer oldend = endstack.peek();
+				int oldstart = getFirstStationNumber();
+				int oldend = getLastStationNumber();
 				startstack.push(stationfield);
 				endstack.push(stationfield + length);
 				// launch event
@@ -241,7 +241,7 @@ public class UpdaterLocal implements Updater {
 		// and the subnet is contained in the current borders
 		if (this.getNetmask() < 8
 				&& (! (this.getStart().empty() ^ this.getEnd().empty()))
-				&& ! this.isExactSubnet(this.getCurrentSubnet(), this.getNetmask()))
+				&& ! this.isExactSubnet(this.getFirstStationNumber(), this.getNetmask()))
 			return Side.RIGHT;
 
 		return Side.LEFT;
@@ -319,8 +319,8 @@ public class UpdaterLocal implements Updater {
 			Stack<Integer> endstack = this.getEnd();
 			int start = startstack.pop();
 			int end = endstack.pop();
-			int newstart = startstack.peek();
-			int newend = endstack.peek();
+			int newstart = getFirstStationNumber();
+			int newend = getLastStationNumber();
 			// launch event
 			UpdaterLeaveSubnetEvent event = new UpdaterLeaveSubnetEvent(this, AddressFactory.getAddress(buildAddress(start)), end - start
 					, AddressFactory.getAddress(buildAddress(newstart)), newend - newstart);
@@ -330,8 +330,8 @@ public class UpdaterLocal implements Updater {
 
 	private final int getFreeSubnet(int netmask) {
 		boolean free;
-		int start = (this.getStart().empty() ? 0 : this.getStart().peek());
-		int end = (this.getEnd().empty()) ? 256 : this.getEnd().peek();
+		int start = getFirstStationNumber();
+		int end = getLastStationNumber();
 		int step = 256 >> netmask;
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : getFreeSubnet() : start = "
@@ -355,9 +355,29 @@ public class UpdaterLocal implements Updater {
 		return -1;
 	}
 
+	/**
+	 * Get the current element of the last station number stack
+	 *
+	 *
+	 * @return the last station number
+	 */
+	private int getLastStationNumber() {
+		return (this.getEnd().empty()) ? 256 : this.getEnd().peek();
+	}
+
+	/**
+	 * Get the current element of the first station number stack
+	 *
+	 *
+	 * @return the first station number
+	 */
+	private int getFirstStationNumber() {
+		return (this.getStart().empty() ? 0 : this.getStart().peek());
+	}
+
 	private final void fillSubnet() {
-		int start = this.getCurrentSubnet();
-		int end = this.getNext();
+		int start = this.getFirstStationNumber();
+		int end = this.getLastStationNumber();
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : UpdaterLocal : fill start " + start + " end " + end);
 		for (int i = start; i < end; i++)
@@ -394,24 +414,12 @@ public class UpdaterLocal implements Updater {
 		return SignNetmask;
 	}
 
-	private final int getNext() {
-		if (this.getEnd().empty())
-			return 256;
-		return this.getEnd().peek();
-	}
-
-	private final int getCurrentSubnet() {
-		if (this.getStart().empty())
-			return 0;
-		return this.getStart().peek();
-	}
-
 	private final boolean isInSubnet(int address, int netmask) {
-		return (address >= this.getCurrentSubnet() && (address | (255 >> netmask))  < this.getNext());
+		return (address >= this.getFirstStationNumber() && (address | (255 >> netmask))  < this.getLastStationNumber());
 	}
 
 	private final boolean isExactSubnet(int address, int netmask) {
-		return (address == this.getCurrentSubnet() && (address | (255 >> netmask))  == (this.getNext() - 1));
+		return (address == this.getFirstStationNumber() && (address | (255 >> netmask))  == (this.getLastStationNumber() - 1));
 	}
 
 	private final boolean needUpdate() {
