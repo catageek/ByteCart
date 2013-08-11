@@ -34,6 +34,25 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 	public void doAction(Side to) {
 		Address address = this.getSignAddress();
 
+		// Keep track on the subring level we are in
+		int mask = this.getNetmask();
+		if (mask < 8) {
+			Stack<Integer> end = this.getEnd();
+			if (to.equals(Side.RIGHT) && (end.isEmpty() || mask > end.peek())) {
+				end.push(mask);
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart : pushing mask " + mask + " on stack");
+			}
+			else
+				if (to.equals(Side.LEFT) && ! end.isEmpty()) {
+					if(ByteCart.debug)
+						ByteCart.log.info("ByteCart : popping mask " + end.peek() + " from stack");
+
+					end.pop();
+				}
+		}
+		save();
+
 		// if we are not in the good region or on ring 0, skip update
 		if (address.isValid() && (address.getRegion().getAmount() != getContent().getRegion()
 				|| address.getTrack().getAmount() == 0))
@@ -59,18 +78,6 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 		if (ByteCart.debug)
 			ByteCart.log.info("ByteCart: removing address");
 
-		int mask = this.getNetmask();
-		if (mask < 8) {
-			Stack<Integer> end = this.getEnd();
-			if (to.equals(Side.RIGHT) && (end.isEmpty() || mask > end.peek())) {
-				end.push(mask);
-			}
-			else
-				if (to.equals(Side.LEFT) && ! end.isEmpty()) {
-					end.pop();
-				}
-		}
-		save();
 	}
 
 	@Override
