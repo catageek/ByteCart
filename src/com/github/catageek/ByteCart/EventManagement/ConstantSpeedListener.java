@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart.EventManagement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
@@ -12,11 +13,13 @@ import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
+import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 public final class ConstantSpeedListener implements Listener {
 
 	private final Map<Integer, Double> speedmap = new HashMap<Integer, Double>();
+	private Location location = new Location(null, 0, 0, 0);
 
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleMove(VehicleMoveEvent event) {
@@ -28,7 +31,10 @@ public final class ConstantSpeedListener implements Listener {
 		Minecart m = (Minecart) v;
 		double speed = getSpeed(m);
 		int id = m.getEntityId();
-		if (speed != 0) {
+		
+		MaterialData data = m.getLocation(location).getBlock().getState().getData();
+		
+		if (speed != 0 && (data instanceof org.bukkit.material.Rails)) {
 			Double storedspeed;
 			if (! speedmap.containsKey(id))
 				speedmap.put(id, speed);
@@ -56,7 +62,7 @@ public final class ConstantSpeedListener implements Listener {
 		speedmap.remove(event.getVehicle().getEntityId());
 	}
 
-	public static double getSpeed(final Minecart minecart) {
+	private static double getSpeed(final Minecart minecart) {
 
 		final Vector velocity = minecart.getVelocity();
 
@@ -73,7 +79,7 @@ public final class ConstantSpeedListener implements Listener {
 		}
 	}
 
-	public static void setSpeed(final Minecart minecart, final double speed) {
+	private static void setSpeed(final Minecart minecart, final double speed) {
 
 		final Vector velocity = minecart.getVelocity();
 
