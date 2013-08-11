@@ -29,7 +29,7 @@ import com.github.catageek.ByteCart.Signs.BCSign;
 public final class BCDynmapPlugin implements Listener {
 
 	private static final String name = ByteCart.myPlugin.getConfig().getString("dynmap.layer", "ByteCart");
-	private static MarkerSet markerset;
+	static MarkerSet markerset;
 	private static MarkerIcon defaulticon;
 	private static MarkerIcon erroricon;
 
@@ -111,7 +111,7 @@ public final class BCDynmapPlugin implements Listener {
 		if (marker != null)
 			marker.deleteMarker();
 	}
-	
+
 	@EventHandler(ignoreCancelled = true)
 	public void onUpdaterSignInvalidate(UpdaterSignInvalidateEvent event) {
 		deleteMarker(event);
@@ -165,5 +165,17 @@ public final class BCDynmapPlugin implements Listener {
 		ret &= (block.getZ() == marker.getZ());
 		ret &= (buildLabel(address, friendlyName).equals(marker.getLabel()));
 		return ret;
+	}
+
+	/**
+	 * Search for stations that do not exist anymore and
+	 * remove corresponding markers.
+	 * 
+	 * The search method is run asynchronously
+	 *
+	 */
+	public static void removeObsoleteMarkers() {
+		if (markerset != null)
+			Bukkit.getScheduler().runTaskAsynchronously(ByteCart.myPlugin, new searchObsoleteMarkers());
 	}
 }

@@ -24,6 +24,7 @@ import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
 import com.github.catageek.ByteCart.Signs.BC7017;
 import com.github.catageek.ByteCart.Util.LogUtil;
+import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 
 public class BytecartCommandExecutor implements CommandExecutor {
 
@@ -255,6 +256,11 @@ public class BytecartCommandExecutor implements CommandExecutor {
 								,full_reset, isnew)
 				,true);
 			}
+			return true;
+		}
+		
+		if (cmd.getName().equalsIgnoreCase("bcdmapsync")) {
+			BCDynmapPlugin.removeObsoleteMarkers();
 			return true;
 		}
 

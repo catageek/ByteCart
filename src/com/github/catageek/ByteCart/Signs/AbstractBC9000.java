@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
+import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
@@ -32,7 +33,7 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 
 	protected CollisionAvoiderBuilder builder;
 
-	private Address destination;
+	private AddressRouted destination;
 
 	AbstractBC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
@@ -115,8 +116,12 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 
 	protected SimpleCollisionAvoider.Side route() {
 		SignPreSubnetEvent event;
-		if (this.isAddressMatching())
+		AddressRouted dst = this.getDestinationAddress();
+		int ttl;
+		if (this.isAddressMatching() && (ttl = dst.getTTL()) != 0) {
+			dst.updateTTL(ttl -1);
 			event = new SignPreSubnetEvent(this, Side.RIGHT);
+		}
 		else
 			event = new SignPreSubnetEvent(this, Side.LEFT);
 
@@ -238,7 +243,7 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 		return netmask;
 	}
 
-	protected final Address getDestinationAddress() {
+	protected final AddressRouted getDestinationAddress() {
 		if (destination != null)
 			return destination;
 		return destination = AddressFactory.getAddress(this.getInventory());
