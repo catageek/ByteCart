@@ -12,8 +12,16 @@ import com.github.catageek.ByteCart.HAL.AbstractIC;
 // This class contains the method to instantiate any IC
 final public class TriggeredSignFactory {
 
-	// instantiates the BCXXXX member at specified location.
-	// return null if no IC is present.
+	/**
+	 * Check the sign and instantiate the IC object, or null
+	 * 
+	 * @param block
+	 * @param vehicle
+	 * @return a Triggable representing the IC
+	 * @throws ClassNotFoundException
+	 * @throws IndexOutOfBoundsException
+	 * @throws IOException
+	 */
 	static final public Triggable getTriggeredIC(Block block, Vehicle vehicle) throws ClassNotFoundException, IndexOutOfBoundsException, IOException {
 
 		if(AbstractIC.checkEligibility(block)) {
@@ -28,12 +36,26 @@ final public class TriggeredSignFactory {
 		return null;
 	}
 
+	/**
+	 * Read the string and instantiate the IC object, or null
+	 * 
+	 * The string must be checked before calling this method
+	 *
+	 * @param block the sign block
+	 * @param signString the string containing the IC number
+	 * @param vehicle the vehicle triggering the sign
+	 * @return a Triggable representing the IC
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	static final public Triggable getTriggeredIC(Block block, String signString, Vehicle vehicle) throws ClassNotFoundException, IOException {
 
 		if (signString.length() < 7)
 			return null;
 		
-		int ICnumber = Integer.parseInt(signString.substring(3, 7));
+		int ICnumber;
+		try {
+			ICnumber = Integer.parseInt(signString.substring(3, 7));
 
 			// then we instantiate accordingly
 			switch (ICnumber) {
@@ -97,6 +119,9 @@ final public class TriggeredSignFactory {
 			case 9137:
 				return (new BC9137(block, vehicle));
 			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 }
