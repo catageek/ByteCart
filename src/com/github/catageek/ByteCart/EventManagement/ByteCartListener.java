@@ -289,15 +289,12 @@ public class ByteCartListener implements Listener {
 		if (! (block.getState() instanceof Sign))
 			return;
 
-		Sign sign = (Sign)block.getState();
-		String line = sign.getLine(1);
-
 		IC myIC;
 		try {
-			myIC = TriggeredSignFactory.getTriggeredIC(block, line, null);
+			myIC = TriggeredSignFactory.getTriggeredIC(block, null);
 
 			if (myIC == null)
-				myIC = ClickedSignFactory.getClickedIC(block, line, null);
+				myIC = ClickedSignFactory.getClickedIC(block, null);
 
 			if (myIC != null) {
 				Bukkit.getPluginManager().callEvent(new SignRemoveEvent(myIC, entity));
