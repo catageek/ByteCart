@@ -27,6 +27,8 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 			incrementRingCounter(ring);
 		}
 		this.getEnd().clear();
+		// save the region number
+		this.getContent().setCurrent(this.getSignAddress().getRegion().getAmount());
 		save();
 	}
 
@@ -53,9 +55,8 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 		}
 		save();
 
-		// if we are not in the good region or on ring 0, skip update
-		if (address.isValid() && (address.getRegion().getAmount() != getContent().getRegion()
-				|| address.getTrack().getAmount() == 0))
+		// if we are not in the good region, skip update
+		if (getContent().getCurrent() != getContent().getRegion())
 			return;
 
 		if (address.isValid() && this.getContent().isFullreset()) {

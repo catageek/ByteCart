@@ -160,11 +160,9 @@ public class UpdaterLocal implements Updater {
 		if(to.Value() != Side.RIGHT.Value() && this.getNetmask() < 8) {
 			// if we have the same sign as when entering the subnet, close the subnet
 			if (this.isExactSubnet((start = this.getFirstStationNumber()), this.getNetmask())) {
-				if (! this.getSignAddress().isValid()) {
-					this.getSignAddress().setAddress(buildAddress(start));
-					this.getSignAddress().finalizeAddress();
-					this.getContent().updateTimestamp();
-				}
+				this.getSignAddress().setAddress(buildAddress(start));
+				this.getSignAddress().finalizeAddress();
+				this.getContent().updateTimestamp();
 				this.leaveSubnet();
 				this.save();
 			}
@@ -239,9 +237,11 @@ public class UpdaterLocal implements Updater {
 
 		// turn if it's not a station, and the ring is initialized or the address is invalid
 		// and the subnet is contained in the current borders
+		// and we are in the region
 		if (this.getNetmask() < 8
 				&& (! (this.getStart().empty() ^ this.getEnd().empty()))
-				&& ! this.isExactSubnet(this.getFirstStationNumber(), this.getNetmask()))
+				&& ! this.isExactSubnet(this.getFirstStationNumber(), this.getNetmask())
+				&& this.getWandererRegion() == this.getCounter().getCount(counterSlot.REGION.slot))
 			return Side.RIGHT;
 
 		return Side.LEFT;
