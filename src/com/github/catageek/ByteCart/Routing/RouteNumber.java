@@ -7,6 +7,9 @@ import java.io.ObjectOutput;
 
 
 
+/**
+ * A track number on 11 bits (from 0 to 2047)
+ */
 final class RouteNumber extends RoutingTableContent<RouteNumber>
 implements Comparable<RouteNumber>, Externalizable {
 
@@ -25,11 +28,17 @@ implements Comparable<RouteNumber>, Externalizable {
 		super(route, rlength);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
+	 */
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
 		out.writeShort(this.value());
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
+	 */
 	@Override
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 		this.setValue(in.readShort() & ((1 << rlength) - 1));

@@ -8,12 +8,21 @@ import org.bukkit.material.MaterialData;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * A lever
+ */
 public class ComponentLever extends AbstractComponent implements OutputPin, InputPin, RegistryInput {
 
+	/**
+	 * @param block the block containing the component
+	 */
 	public ComponentLever(Block block) {
 		super(block);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.IO.OutputPin#write(boolean)
+	 */
 	@Override
 	public void write(boolean bit) {
 		BlockState block = this.getBlock().getState();
@@ -26,6 +35,9 @@ public class ComponentLever extends AbstractComponent implements OutputPin, Inpu
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.IO.InputPin#read()
+	 */
 	@Override
 	public boolean read() {
 		MaterialData md = this.getBlock().getState().getData();
@@ -35,16 +47,25 @@ public class ComponentLever extends AbstractComponent implements OutputPin, Inpu
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.RegistryInput#getBit(int)
+	 */
 	@Override
 	public boolean getBit(int index) {
 		return read();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.Registry#getAmount()
+	 */
 	@Override
 	public int getAmount() {
 		return (read() ? 15 : 0);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.Registry#length()
+	 */
 	@Override
 	public int length() {
 		return 4;

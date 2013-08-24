@@ -7,10 +7,18 @@ import java.util.ListIterator;
 import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.OutputPin;
 
+/**
+ * A registry implementation
+ * 
+ * @param <T> InputPin or OutputPin type
+ */
 public class PinRegistry<T> implements RegistryInput, RegistryOutput, Registry {
 
 	final protected List<T> PinArray;
 	
+	/**
+	 * @param pins an array of pins
+	 */
 	public PinRegistry(T[] pins) {
 		this.PinArray = Arrays.asList(pins);
 /*		if(ByteCart.debug)
@@ -18,10 +26,17 @@ public class PinRegistry<T> implements RegistryInput, RegistryOutput, Registry {
 */
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.Registry#length()
+	 */
+	@Override
 	public int length() {
 		return PinArray.size();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.Registry#getAmount()
+	 */
 	@Override
 	public int getAmount() {
 		
@@ -44,11 +59,17 @@ public class PinRegistry<T> implements RegistryInput, RegistryOutput, Registry {
 		return amount;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.RegistryOutput#setBit(int, boolean)
+	 */
 	@Override
 	public void setBit(int index, boolean value) {
 		((OutputPin) this.PinArray.get(index)).write(value);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.RegistryOutput#setAmount(int)
+	 */
 	@Override
 	public void setAmount(int amount) {
 		int i = amount;
@@ -74,6 +95,9 @@ public class PinRegistry<T> implements RegistryInput, RegistryOutput, Registry {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.RegistryInput#getBit(int)
+	 */
 	@Override
 	public boolean getBit(int index) {
 		return ((InputPin) this.PinArray.get(index)).read();

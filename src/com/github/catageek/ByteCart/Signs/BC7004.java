@@ -80,6 +80,11 @@ final class BC7004 extends AbstractIC implements Powerable {
 		return "Cart spawner";
 	}
 	
+	/**
+	 * Get the type of cart to spawn
+	 *
+	 * @return the type
+	 */
 	private EntityType getType() {
 		if(type.equalsIgnoreCase("storage")) {
 			return EntityType.MINECART_CHEST;

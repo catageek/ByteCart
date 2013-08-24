@@ -18,24 +18,27 @@ import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
-
-// this IC represents a stop/start block
-// it is commanded by a wire (like FB 'station' block)
-// wire on => start or no velocity change
-// wire off => stop
-// it provides a busy bit with a lever on the block above the sign
-// lever off = block occupied and not powered
-// lever on = block free OR powered
-
+/**
+ * this IC represents a stop/start block
+ * it is commanded by a wire (like FalseBook 'station' block)
+ * wire on => start or no velocity change
+ * wire off => stop
+ * it provides a busy bit with a lever on the block above the sign
+ * lever off = block occupied and not powered
+ * lever on = block free OR powered
+ */
 final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable {
 
-
-	// Constructor : !! vehicle can be null !!
-
+	/**
+	 * Constructor : !! vehicle can be null !!
+	 */
 	BC7001(org.bukkit.block.Block block, Vehicle vehicle) {
 		super(block, vehicle);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
+	 */
 	@Override
 	public void trigger() {
 
@@ -134,6 +137,9 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Powerable#power()
+	 */
 	@Override
 	public void power() throws ClassNotFoundException, IOException {
 		// power update
@@ -158,11 +164,17 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 			this.trigger();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getName()
+	 */
 	@Override
 	public final String getName() {
 		return "BC7001";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
 	@Override
 	public final String getFriendlyName() {
 		return "Stop/Start";

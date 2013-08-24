@@ -7,8 +7,17 @@ import org.bukkit.inventory.InventoryHolder;
 
 import com.github.catageek.ByteCart.ByteCart;
 
+/**
+ * Factory to create or get a ticket
+ */
 public final class TicketFactory {
 
+	/**
+	 * Put a ticket in a player's inventory if necessary
+	 *
+	 * @param player the player
+	 * @param forcereuse must be true to force the reuse of existing ticket
+	 */
 	@SuppressWarnings("deprecation")
 	public static final void getOrCreateTicket(Player player, boolean forcereuse) {
 		int slot;
@@ -38,6 +47,11 @@ public final class TicketFactory {
 		player.updateInventory();
 	}
 
+	/**
+	 * Put a ticket in an inventory, if necessary. The inventory is not updated.
+	 *
+	 * @param inv the inventory where to put the ticket
+	 */
 	public static final void getOrCreateTicket(Inventory inv) {
 		int slot;
 
@@ -52,6 +66,11 @@ public final class TicketFactory {
 
 	}
 	
+	/**
+	 * Remove a ticket from an inventory
+	 *
+	 * @param inv
+	 */
 	@SuppressWarnings("deprecation")
 	public static final void removeTickets(Inventory inv) {
 		int slot;

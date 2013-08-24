@@ -7,6 +7,9 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * A router where a cart turns left
+ */
 public final class LeftRouter extends AbstractRouter implements
 		Router {
 
@@ -28,6 +31,9 @@ public final class LeftRouter extends AbstractRouter implements
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.CollisionManagement.AbstractRouter#getTo()
+	 */
 	@Override
 	public BlockFace getTo() {
 		return MathUtil.clockwise(this.getFrom());

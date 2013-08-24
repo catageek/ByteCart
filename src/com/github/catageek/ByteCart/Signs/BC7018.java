@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 
 import com.github.catageek.ByteCart.AddressLayer.TicketFactory;
 
+/**
+ * A ticket remover
+ */
 class BC7018 extends AbstractTriggeredSign implements Triggable,Clickable {
 
 	BC7018(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
@@ -18,6 +21,9 @@ class BC7018 extends AbstractTriggeredSign implements Triggable,Clickable {
 		this.setInventory(player.getInventory());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Clickable#click()
+	 */
 	@Override
 	public void click() {
 		try {
@@ -31,16 +37,25 @@ class BC7018 extends AbstractTriggeredSign implements Triggable,Clickable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
+	 */
 	@Override
 	public void trigger() throws ClassNotFoundException, IOException {
 		TicketFactory.removeTickets(this.getInventory());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getName()
+	 */
 	@Override
 	public String getName() {
 		return "BC7018";
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
 	@Override
 	public String getFriendlyName() {
 		return "Remove Ticket";

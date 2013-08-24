@@ -7,6 +7,9 @@ import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.Signs.Triggable;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
 
+/**
+ * A collision avoider for T cross-roads
+ */
 public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements CollisionAvoider {
 
 	private static final ExpirableMap<Location, Boolean> recentlyUsedMap = new ExpirableMap<Location, Boolean>(20, false, "recentlyUsed9000");
@@ -19,6 +22,9 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	
 	private boolean reversed;
 
+	/**
+	 * Position of the T cross-roads. RIGHT means lever ON
+	 */
 	public enum Side {
 		RIGHT (3),
 		LEFT (0);
@@ -52,6 +58,13 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		state = (Lever1.getAmount() == 0 ? Side.LEFT : Side.RIGHT);
 	}
 
+	/**
+	 * Ask for a direction, requesting a possible transition
+	 *
+	 * @param s the direction where the cart goes to
+	 * @param isTrain true if it is a train
+	 * @return the direction actually taken
+	 */
 	public Side WishToGo(Side s, boolean isTrain) {
 
 		Side trueside = getActiveTrueSide(s);
@@ -98,6 +111,9 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	}
 
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.CollisionManagement.CollisionAvoider#Add(com.github.catageek.ByteCart.Signs.Triggable)
+	 */
 	@Override
 	public void Add(Triggable t) {
 		if (t.getLocation().equals(loc1)) {
@@ -116,6 +132,11 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 			ByteCart.log.info("ByteCart: Add and setting lever2 to " + Lever2.getAmount());
 	}
 
+	/**
+	 * Activate levers. The 2 levers are in opposition
+	 *
+	 * @param s the side of the lever of the IC that created this collision avoider
+	 */
 	private void Set(Side s) {
 		this.Lever1.setAmount(s.Value());
 		if(ByteCart.debug)
@@ -128,15 +149,26 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		state = s;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.CollisionManagement.CollisionAvoider#getSecondpos()
+	 */
 	@Override
 	public int getSecondpos() {
 		throw new UnsupportedOperationException();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.CollisionManagement.AbstractCollisionAvoider#getRecentlyUsedMap()
+	 */
+	@Override
 	protected ExpirableMap<Location, Boolean> getRecentlyUsedMap() {
 		return recentlyUsedMap;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.CollisionManagement.AbstractCollisionAvoider#getHasTrainMap()
+	 */
+	@Override
 	protected ExpirableMap<Location, Boolean> getHasTrainMap() {
 		return hasTrainMap;
 	}

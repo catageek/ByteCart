@@ -3,6 +3,9 @@ package com.github.catageek.ByteCart.EventManagement;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Storage.ExpirableSet;
 
+/**
+ * A set for integers with a timeout of 1h
+ */
 final class UpdaterSet {
 
 	// entries stay for 1h

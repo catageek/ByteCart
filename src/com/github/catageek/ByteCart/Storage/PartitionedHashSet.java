@@ -4,6 +4,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/**
+ * A set containing powers of 2 of an integer
+ * 
+ * @param <E> A partitionable type
+ */
 public class PartitionedHashSet<E extends Partitionable> extends HashSet<E> {
 
 	/**
@@ -26,6 +31,11 @@ public class PartitionedHashSet<E extends Partitionable> extends HashSet<E> {
 		super(initialCapacity, loadFactor);
 	}
 	
+	/**
+	 * Get the addition of values from the set
+	 *
+	 * @return the value
+	 */
 	public final int getPartitionedValue() {
 		int ret = 0;
 		Iterator<E> it = this.iterator();

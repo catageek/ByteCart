@@ -20,6 +20,9 @@ import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 
 
+/**
+ * An abstract class for all subnet class
+ */
 abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,HasNetmask {
 
 	protected int netmask;
@@ -31,6 +34,9 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 		super(block, vehicle);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#trigger()
+	 */
 	@Override
 	public void trigger() {
 		try {
@@ -83,6 +89,9 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#manageUpdater(com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider)
+	 */
 	@Override
 	protected void manageUpdater(SimpleCollisionAvoider intersection) {
 		// it's an updater, so let it choosing direction
@@ -104,6 +113,9 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#route()
+	 */
 	@Override
 	protected SimpleCollisionAvoider.Side route() {
 		SignPreSubnetEvent event;
@@ -121,12 +133,23 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 		return event.getSide();
 	}
 
+	/**
+	 * Get the first station of the subnet
+	 *
+	 * @param station a station number in the subnet
+	 * @return the first station number
+	 */
 	protected final RegistryBoth applyNetmask(RegistryBoth station) {
 		if (this.netmask < station.length())
 			return new SubRegistry<RegistryBoth>(station, this.netmask, 0);
 		return station;
 	}
 
+	/**
+	 * Tell if the address stored in the ticket is matching the subnet address stored in the IC
+	 *
+	 * @return true if the address is in the subnet
+	 */
 	protected boolean isAddressMatching() {
 		try {
 			return this.getInput(2).getAmount() == this.getInput(5).getAmount()
@@ -139,7 +162,7 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 	}
 
 
-	/**
+	/*
 	 * Configures all IO ports of this sign.
 	 *
 	 * The following input pins are configured:
@@ -153,6 +176,9 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 	 * The following output pins are configured:
 	 * 0: left lever
 	 * 1: right lever
+	 */
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#addIO()
 	 */
 	@Override
 	protected void addIO() {
@@ -199,6 +225,13 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 		this.addAddressAsInputs(sign);
 	}
 
+	/**
+	 * Register the given address as an input of the IC
+	 * 
+	 * This method will register 3 inputs.
+	 *
+	 * @param addr the address to register
+	 */
 	protected void addAddressAsInputs(Address addr) {
 		if(addr.isValid()) {
 			RegistryInput region = addr.getRegion();
@@ -213,6 +246,9 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.HasNetmask#getNetmask()
+	 */
 	@Override
 	public final int getNetmask() {
 		return netmask;

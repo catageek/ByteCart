@@ -5,6 +5,9 @@ import java.util.Set;
 
 import org.bukkit.block.BlockFace;
 
+/**
+ * A router where the cart goes back
+ */
 public final class BackRouter extends AbstractRouter implements
 		Router {
 
@@ -26,6 +29,9 @@ public final class BackRouter extends AbstractRouter implements
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.CollisionManagement.AbstractRouter#getTo()
+	 */
 	@Override
 	public final BlockFace getTo() {
 		return this.getFrom();

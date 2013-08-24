@@ -26,6 +26,11 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 	private Counter counter;
 	abstract protected BlockFace selectDirection();
 
+	/**
+	 * Perform the IGP routing protocol update
+	 * 
+	 * @param To the direction where we are going to
+	 */
 	protected final void routeUpdates(BlockFace To) {
 		if(isRouteConsumer()) {
 			Set<Integer> connected = getRoutingTable().getDirectlyConnectedList(getFrom());
@@ -75,6 +80,9 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.DefaultRouterWanderer#doAction(org.bukkit.block.BlockFace)
+	 */
 	@Override
 	public void doAction(BlockFace To) {
 
@@ -102,11 +110,19 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.DefaultRouterWanderer#giveRouterDirection()
+	 */
 	@Override
 	public final BlockFace giveRouterDirection() {
 		return this.selectDirection();
 	}
 
+	/**
+	 * Get the type of updater
+	 * 
+	 * @return the type
+	 */
 	public final Level getLevel() {
 		return getRoutes().getLevel();
 	}
@@ -131,10 +147,16 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 			getRoutes().setCurrent(current);
 	}
 
+	/**
+	 * @return true if the IC can receive routes
+	 */
 	protected final boolean isRouteConsumer() {
 		return getRoutes().getLevel().equals(this.getSignLevel());
 	}
 
+	/**
+	 * Clear the routing table, keeping ring 0
+	 */
 	protected void reset() {
 		boolean fullreset = this.getRoutes().isFullreset();
 		if (fullreset)

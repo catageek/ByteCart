@@ -17,7 +17,7 @@ import com.github.catageek.ByteCart.HAL.AbstractIC;
  *
  * Reads the address configuration of the vehicle from its inventory and caches it.
  */
-abstract class AbstractTriggeredSign extends AbstractIC {
+abstract class AbstractTriggeredSign extends AbstractIC implements Triggable {
 
 	private final org.bukkit.entity.Vehicle Vehicle;
 	private org.bukkit.inventory.Inventory Inventory;
@@ -91,10 +91,19 @@ abstract class AbstractTriggeredSign extends AbstractIC {
 		return Inventory;
 	}
 
+	/**
+	 * Set the inventory variable
+	 *
+	 * @param inv
+	 */
 	protected void setInventory(org.bukkit.inventory.Inventory inv) {
 		this.Inventory = inv;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#isTrain()
+	 */
+	@Override
 	public final boolean isTrain() {
 		return AbstractTriggeredSign.isTrain(AddressFactory.getAddress(this.getInventory()));
 	}
@@ -105,6 +114,10 @@ abstract class AbstractTriggeredSign extends AbstractIC {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#wasTrain(org.bukkit.Location)
+	 */
+	@Override
 	public final boolean wasTrain(Location loc) {
 		boolean ret;
 		if (ByteCart.myPlugin.getIsTrainManager().getMap().contains(loc)) {
@@ -118,6 +131,12 @@ abstract class AbstractTriggeredSign extends AbstractIC {
 		 */		return false;
 	}
 
+	/**
+	 * Remember the train bit
+	 *
+	 * @param loc the location where to store the bit
+	 * @param b the bit
+	 */
 	protected final void setWasTrain(Location loc, boolean b) {
 		if (b)
 			ByteCart.myPlugin.getIsTrainManager().getMap().put(loc, true);

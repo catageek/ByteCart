@@ -18,10 +18,22 @@ import com.github.catageek.ByteCart.FileStorage.BookFile;
 import com.github.catageek.ByteCart.FileStorage.BookProperties;
 import com.github.catageek.ByteCart.FileStorage.BookProperties.Conf;
 
+/**
+ * Implement a ticket
+ */
 final class Ticket {
 
+	/**
+	 * Internal storage of the ticket
+	 */
 	private final BookProperties properties;
 
+	/**
+	 * Create a ticket using a book at a specific page
+	 * 
+	 * @param bookfile the book FS to use
+	 * @param network the name of the page
+	 */
 	Ticket(BookFile bookfile, Conf network) {
 		properties = new BookProperties(bookfile, network);
 	}
@@ -54,6 +66,12 @@ final class Ticket {
 		return -1;
 	}
 
+	/**
+	 * Tell if a stack is a ticket
+	 *
+	 * @param stack the stack to check
+	 * @return true if it is a ticket
+	 */
 	private final static boolean isTicket(ItemStack stack) {
 		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta()) {
 			String bookauthor = ((BookMeta) stack.getItemMeta()).getAuthor();
@@ -109,6 +127,13 @@ final class Ticket {
 		return -1;
 	}
 	
+	/**
+	 * Get a slot containing an empty book or nothing
+	 *
+	 *
+	 * @param player The player having the inventory to search in
+	 * @return a slot number, or -1
+	 */
 	static int getEmptyOrBookAndQuillSlot(Player player) {
 		int slot;
 		if ((slot = getEmptyOrBookAndQuillSlot(player.getInventory())) == -1) {
@@ -118,6 +143,13 @@ final class Ticket {
 		return slot;
 	}
 	
+	/**
+	 * Get a slot containing an empty book or nothing
+	 *
+	 *
+	 * @param inv The inventory to search in
+	 * @return a slot number, or -1
+	 */
 	static int searchSlot(Inventory inv) {
 		int slot;
 		// get a slot containing an emtpy book (or nothing)
@@ -134,6 +166,12 @@ final class Ticket {
 		return -1;
 	}
 
+	/**
+	 * Initialize a ticket in a inventory
+	 *
+	 * @param inv the inventory where to put the ticket
+	 * @param slot the slot number where to put the ticket
+	 */
 	static void createTicket(Inventory inv, int slot) {
 		
 		if (slot == -1)
@@ -152,6 +190,13 @@ final class Ticket {
 		inv.setItem(slot, stack);
 	}
 
+	/**
+	 * Return an ItemStack containing a ticket
+	 *
+	 * @param author the name of the author
+	 * @param title the name of the ticket
+	 * @return the ItemStack
+	 */
 	private static ItemStack getBookStack(String author, String title) {
 		ItemStack stack;
 		/*
@@ -168,6 +213,12 @@ final class Ticket {
 	}
 
 
+	/**
+	 * Tell if a book_and_quill is empty
+	 *
+	 * @param stack the ItemStack to check
+	 * @return true if it is an empty book_and_quill
+	 */
 	private static boolean isEmptyBook(ItemStack stack) {
 		BookMeta book;
 
@@ -187,10 +238,24 @@ final class Ticket {
 		return false;
 	}
 
+	/**
+	 * Get the holder of the ticket
+	 *
+	 * @return the holder
+	 */
 	InventoryHolder getTicketHolder() {
 		return properties.getFile().getContainer().getHolder();
 	}
 	
+	/**
+	 * Set a parameter value in the ticket
+	 * 
+	 * <p>{@link Ticket#close()} must be called to actually perform the operation</p>
+	 *
+	 * @param parameter parameter to set
+	 * @param value value to set
+	 * @return true
+	 */
 	final boolean setEntry(Parameter parameter, String value) {
 		try {
 			properties.setProperty(parameter.getName(), value);
@@ -201,14 +266,37 @@ final class Ticket {
 		return true;
 	}
 	
+	/**
+	 * Return the value of a parameter or a default value
+	 *
+	 * @param parameter the parameter to return
+	 * @param defaultvalue the default value
+	 * @return a string containing the parameter value, or the default value
+	 */
 	final String getString(Parameter parameter, String defaultvalue) {
 		return properties.getString(parameter.getName(), defaultvalue);
 	}
 
+	/**
+	 * Return the value of a parameter
+	 *
+	 * @param parameter the parameter to return
+	 * @return a string containing the parameter value
+	 */
 	final String getString(Parameter parameter) {
 		return properties.getString(parameter.getName());
 	}
 
+	/**
+	 * Append a name and a string to the title
+	 * 
+	 * <p>{@link Ticket#close()} must be called to actually perform the operation</p>
+	 * 
+	 * <p>The appended value is " name (string)"</p>
+	 *
+	 * @param name
+	 * @param s
+	 */
 	void appendTitle(String name, String s) {
 		StringBuilder build = new StringBuilder(ByteCart.myPlugin.getConfig().getString("title"));
 		if (name != null)
@@ -222,10 +310,25 @@ final class Ticket {
 		}
 	}
 	
+	/**
+	 * Get a parameter value as an integer or a default value
+	 *
+	 * @param parameter the parameter to get
+	 * @param defaultvalue the default value
+	 * @return the parameter value
+	 */
 	final int getInt(Parameter parameter, int defaultvalue) {
 		return properties.getInt(parameter.getName(), defaultvalue);
 	}
 	
+	/**
+	 * Reset the parameter to default value
+	 * 
+	 * <p>{@link Ticket#close()} must be called to actually perform the operation</p>
+	 *
+	 * @param parameter the parameter to set
+	 * @param defaultvalue the value to set
+	 */
 	void resetValue(Parameter parameter, String defaultvalue) {
 		try {
 			properties.setProperty(parameter.getName(), defaultvalue);
@@ -235,6 +338,13 @@ final class Ticket {
 		}
 	}
 
+	/**
+	 * Remove a parameter
+	 * 
+	 * <p>{@link Ticket#close()} must be called to actually perform the operation</p>
+	 *
+	 * @param parameter parameter to remove
+	 */
 	void remove(Parameter parameter) {
 		try {
 			properties.clearProperty(parameter.getName());
@@ -244,6 +354,10 @@ final class Ticket {
 		}
 	}
 
+	/**
+	 * Write the parameters and close the ticket
+	 *
+	 */
 	void close() {
 		try {
 			properties.flush();

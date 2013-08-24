@@ -9,14 +9,20 @@ import org.bukkit.entity.Player;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
-
-// This class contains the method to instantiate any IC
+/**
+ * This class contains the method to instantiate any IC
+ */
 final public class ClickedSignFactory {
 
 
 
-	// instantiates the BCXXXX member at specified location.
-	// return null if no IC is present.
+	/**
+	 * Get an IC at the clicked sign
+	 *
+	 * @param block the sign clicked
+	 * @param player the player who clicked the sign
+	 * @return a Clickable IC, or null
+	 */
 	static final public Clickable getClickedIC(Block block, Player player) {
 
 
@@ -58,6 +64,14 @@ final public class ClickedSignFactory {
 
 
 
+	/**
+	 * Get an IC with the specific code
+	 *
+	 * @param block the block where to reference the IC
+	 * @param signString the name of the sign as "BCXXXX"
+	 * @param player the player who clicked the sign
+	 * @return a Clickable IC, or null
+	 */
 	static final public Clickable getClickedIC(Block block, String signString, Player player) {
 
 		if (signString.length() < 7)

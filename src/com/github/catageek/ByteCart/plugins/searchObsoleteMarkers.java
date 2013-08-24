@@ -13,8 +13,14 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 
 // Executed in another thread
+/**
+ * Asynchronous task to search obsolete markers
+ */
 final class searchObsoleteMarkers implements Runnable {
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		Set<Marker> toRemove = new HashSet<Marker>();
@@ -34,6 +40,9 @@ final class searchObsoleteMarkers implements Runnable {
 	}
 	
 	// Executed in the main thread
+	/**
+	 * Synchronous task to remove markers
+	 */
 	private static final class removeMarkers implements Runnable {
 
 		private final Set<Marker> toRemove;
@@ -42,6 +51,9 @@ final class searchObsoleteMarkers implements Runnable {
 			this.toRemove = toRemove;
 		}
 
+		/* (non-Javadoc)
+		 * @see java.lang.Runnable#run()
+		 */
 		@Override
 		public void run() {
 			Iterator<Marker> it = toRemove.iterator();

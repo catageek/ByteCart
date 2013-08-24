@@ -4,11 +4,21 @@ import com.github.catageek.ByteCart.HAL.VirtualRegistry;
 
 
 
-// This class represents a canonical address like xx.xx.xx
+/**
+ *  This class represents a canonical address like xx.xx.xx
+ */
 public class AddressString extends AbstractAddress implements Address {
 
+	/**
+	 * String used as internal storage
+	 */
 	private String String; // address as displayed
 
+	/**
+	 * Creates the address
+	 * 
+	 * @param s the string containing the address
+	 */
 	public AddressString(String s) {
 		if (AddressString.isAddress(s))
 			this.String = s;
@@ -18,6 +28,14 @@ public class AddressString extends AbstractAddress implements Address {
 		}
 	}
 
+	/**
+	 * Static method to check the format of an address
+	 * 
+	 * This method does not check if the address fields are in a valid range
+	 *
+	 * @param s the string containing the address to check
+	 * @return true if the address is in the valid format
+	 */
 	static public boolean isAddress(String s) {
 		if(! (s.matches("([0-9]{1,4}\\.){2,2}[0-9]{1,3}"))) {
 			return false;
@@ -27,29 +45,50 @@ public class AddressString extends AbstractAddress implements Address {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.Address#getRegion()
+	 */
+	@Override
 	public VirtualRegistry getRegion() {
 		VirtualRegistry ret;
 		(ret = new VirtualRegistry(Offsets.REGION.getLength())).setAmount(this.getField(0));
 		return ret;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.Address#getTrack()
+	 */
+	@Override
 	public VirtualRegistry getTrack() {
 		VirtualRegistry ret;
 		(ret = new VirtualRegistry(Offsets.TRACK.getLength())).setAmount(this.getField(1));
 		return ret;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.Address#getStation()
+	 */
+	@Override
 	public VirtualRegistry getStation() {
 		VirtualRegistry ret;
 		(ret = new VirtualRegistry(Offsets.STATION.getLength())).setAmount(this.getField(2));
 		return ret;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.Address#isTrain()
+	 */
+	@Override
 	public boolean isTrain() {
 		throw new UnsupportedOperationException();
 	}
 
-
+	/**
+	 * Return a field by index
+	 *
+	 * @param index a number between 0 and 2
+	 * @return the number contained in the field
+	 */
 	private int getField(int index) {
 		if (this.String == null)
 			throw new IllegalStateException("Address is not valid.");
@@ -57,26 +96,41 @@ public class AddressString extends AbstractAddress implements Address {
 		return Integer.parseInt(st[ index ].trim());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.AbstractAddress#setRegion(int)
+	 */
 	@Override
 	public void setRegion(int region) {
 		throw new UnsupportedOperationException();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.AbstractAddress#setTrack(int)
+	 */
 	@Override
 	public void setTrack(int track) {
 		throw new UnsupportedOperationException();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.AbstractAddress#setStation(int)
+	 */
 	@Override
 	public void setStation(int station) {
 		throw new UnsupportedOperationException();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.AbstractAddress#setIsTrain(boolean)
+	 */
 	@Override
 	public void setIsTrain(boolean isTrain) {
 		throw new UnsupportedOperationException();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.AbstractAddress#toString()
+	 */
 	@Override
 	public java.lang.String toString() {
 		if (this.String != null)
@@ -84,6 +138,9 @@ public class AddressString extends AbstractAddress implements Address {
 		return "";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.AbstractAddress#setAddress(java.lang.String)
+	 */
 	@Override
 	public boolean setAddress(java.lang.String s) {
 		if (isAddress(s)) {
@@ -97,18 +154,27 @@ public class AddressString extends AbstractAddress implements Address {
 		return this.isValid;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.AbstractAddress#UpdateAddress()
+	 */
 	@Override
 	protected boolean UpdateAddress() {
 		finalizeAddress();
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.Address#remove()
+	 */
 	@Override
 	public void remove() {
 		this.String = null;
 		this.isValid = false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.AddressLayer.Address#isReturnable()
+	 */
 	@Override
 	public boolean isReturnable() {
 		return false;

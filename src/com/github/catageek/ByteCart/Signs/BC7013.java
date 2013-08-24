@@ -10,6 +10,9 @@ import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * A ring field setter using redstone
+ */
 class BC7013 extends BC7014 implements Triggable {
 
 	BC7013(org.bukkit.block.Block block,
@@ -17,6 +20,9 @@ class BC7013 extends BC7014 implements Triggable {
 		super(block, vehicle);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC7014#format(com.github.catageek.ByteCart.HAL.RegistryInput, com.github.catageek.ByteCart.AddressLayer.AddressRouted)
+	 */
 	@Override
 	protected String format(RegistryInput wire, AddressRouted InvAddress) {
 		return ""+InvAddress.getRegion().getAmount()+"."
@@ -24,6 +30,9 @@ class BC7013 extends BC7014 implements Triggable {
 				+InvAddress.getStation().getAmount();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC7014#addIO()
+	 */
 	@Override
 	protected void addIO() {
 		// Input[0] : wire on left
@@ -43,16 +52,25 @@ class BC7013 extends BC7014 implements Triggable {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC7014#getName()
+	 */
 	@Override
 	public String getName() {
 		return "BC7013";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC7014#getFriendlyName()
+	 */
 	@Override
 	public String getFriendlyName() {
 		return "setTrack";
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC7014#forceTicketReuse()
+	 */
 	@Override
 	protected boolean forceTicketReuse() {
 		return true;

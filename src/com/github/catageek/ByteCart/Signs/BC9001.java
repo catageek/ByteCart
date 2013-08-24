@@ -24,6 +24,9 @@ import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
 
+/**
+ * A station sign
+ */
 final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggable {
 
 
@@ -31,6 +34,9 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 		super(block, vehicle);
 		this.netmask = 8;
 	}
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractBC9000#trigger()
+	 */
 	@Override
 	public void trigger() {
 		try {
@@ -117,20 +123,36 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Powerable#power()
+	 */
+	@Override
 	public void power() {
 		this.powerBC7003();
 	}
 
 
+	/**
+	 * Manage the red light signal when triggered
+	 *
+	 */
 	protected void triggerBC7003() {
 		(new BC7003(this.getBlock())).trigger();
 	}
 
+	/**
+	 * Manage the red light signal when powered
+	 *
+	 */
 	protected void powerBC7003() {
 		(new BC7003(this.getBlock())).power();
 	}
 
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractBC9000#route()
+	 */
+	@Override
 	protected SimpleCollisionAvoider.Side route() {
 		SignPreStationEvent event;
 		SignPostStationEvent event1;
@@ -154,11 +176,17 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#getName()
+	 */
 	@Override
 	public final String getName() {
 		return "BC9001";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
 	@Override
 	public final String getFriendlyName() {
 		String s;

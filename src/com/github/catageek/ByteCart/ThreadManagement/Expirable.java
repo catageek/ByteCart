@@ -19,6 +19,11 @@ public abstract class Expirable<K> {
 
 	abstract public void expire(Object...objects);
 
+	/**
+	 * @param duration the timeout value
+	 * @param isSync true if the element must be removed synchronously in the main thread
+	 * @param name a name for the set
+	 */
 	public Expirable(long duration, boolean isSync, String name) {
 		super();
 		this.Duration = duration;

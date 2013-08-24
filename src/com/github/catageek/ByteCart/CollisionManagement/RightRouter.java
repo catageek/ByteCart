@@ -5,6 +5,9 @@ import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * A router where the cart turns right
+ */
 public final class RightRouter extends AbstractRouter implements
 		Router {
 
@@ -21,6 +24,9 @@ public final class RightRouter extends AbstractRouter implements
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.CollisionManagement.AbstractRouter#route(org.bukkit.block.BlockFace)
+	 */
 	@Override
 	public void route(BlockFace from) {
 		// activate main levers
@@ -28,6 +34,9 @@ public final class RightRouter extends AbstractRouter implements
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.CollisionManagement.AbstractRouter#getTo()
+	 */
 	@Override
 	public BlockFace getTo() {
 		return MathUtil.anticlockwise(this.getFrom());

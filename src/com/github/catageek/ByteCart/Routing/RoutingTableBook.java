@@ -20,12 +20,11 @@ import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
 import com.github.catageek.ByteCart.Storage.ExternalizableTreeMap;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
+/**
+ * A routing table in a book
+ */
 final class RoutingTableBook extends AbstractRoutingTable implements
 RoutingTable, Externalizable {
-
-	/**
-	 * 
-	 */
 
 	private boolean wasModified = false;
 
@@ -34,6 +33,11 @@ RoutingTable, Externalizable {
 	private static final long serialVersionUID = -7013741680310224056L;
 	private Inventory inventory;
 
+	/**
+	 * Set the inventory
+	 * 
+	 * @param inventory the inventory
+	 */
 	final void setInventory(Inventory inventory) {
 		this.inventory = inventory;
 	}
@@ -45,6 +49,9 @@ RoutingTable, Externalizable {
 		this.inventory = inv;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.RoutingTable#clear(boolean)
+	 */
 	@Override
 	public void clear(boolean fullreset) {
 		if (map.isEmpty())
@@ -75,6 +82,9 @@ RoutingTable, Externalizable {
 		return it;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getMetric(int, com.github.catageek.ByteCart.Util.DirectionRegistry)
+	 */
 	@Override
 	public int getMetric(int entry, DirectionRegistry direction) {
 		SortedMap<Metric, PartitionedHashSet<DirectionRegistry>> smap;
@@ -90,6 +100,9 @@ RoutingTable, Externalizable {
 		return -1;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getMinMetric(int)
+	 */
 	@Override
 	public Metric getMinMetric(int entry) {
 		SortedMap<Metric, PartitionedHashSet<DirectionRegistry>> smap;
@@ -101,6 +114,9 @@ RoutingTable, Externalizable {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#setEntry(int, com.github.catageek.ByteCart.Util.DirectionRegistry, com.github.catageek.ByteCart.Routing.Metric)
+	 */
 	private void setMapEntry(int entry, DirectionRegistry direction, Metric metric) {
 
 		RouteNumber route = new RouteNumber(entry);
@@ -123,16 +139,25 @@ RoutingTable, Externalizable {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#setEntry(int, com.github.catageek.ByteCart.Util.DirectionRegistry, com.github.catageek.ByteCart.Routing.Metric)
+	 */
 	@Override
 	public void setEntry(int entry, DirectionRegistry direction, Metric metric) {
 		setMapEntry(entry, direction, metric);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#isEmpty(int)
+	 */
 	@Override
 	public boolean isEmpty(int entry) {
 		return ! map.containsKey(new RouteNumber(entry));
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getDirection(int)
+	 */
 	@Override
 	public DirectionRegistry getDirection(int entry) {
 		RouteNumber route = new RouteNumber(entry);
@@ -147,6 +172,9 @@ RoutingTable, Externalizable {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getDirectlyConnectedList(com.github.catageek.ByteCart.Util.DirectionRegistry)
+	 */
 	@Override
 	public Set<Integer> getDirectlyConnectedList(DirectionRegistry direction) {
 		SortedMap<Integer, Metric> list = new TreeMap<Integer, Metric>();
@@ -168,6 +196,9 @@ RoutingTable, Externalizable {
 		return list.keySet();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getNotDirectlyConnectedList(com.github.catageek.ByteCart.Util.DirectionRegistry)
+	 */
 	@Override
 	protected Set<Integer> getNotDirectlyConnectedList(
 			DirectionRegistry direction) {
@@ -201,6 +232,9 @@ RoutingTable, Externalizable {
 		return list.keySet();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#removeEntry(int, com.github.catageek.ByteCart.Util.DirectionRegistry)
+	 */
 	@Override
 	public void removeEntry(int entry, DirectionRegistry from) {
 		RouteNumber route = new RouteNumber(entry);
@@ -219,6 +253,10 @@ RoutingTable, Externalizable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.RoutingTable#serialize()
+	 */
+	@Override
 	public void serialize() throws IOException {
 		if (! wasModified)
 			return;
@@ -233,6 +271,9 @@ RoutingTable, Externalizable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void readExternal(ObjectInput in) throws IOException,
@@ -240,11 +281,17 @@ RoutingTable, Externalizable {
 		this.map = (ExternalizableTreeMap<RouteNumber,RouteProperty>) in.readObject();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
+	 */
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException {
 		out.writeObject(map);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.RoutingTable#size()
+	 */
 	@Override
 	public int size() {
 		return map.size();

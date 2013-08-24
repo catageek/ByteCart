@@ -9,8 +9,19 @@ import org.bukkit.inventory.Inventory;
 import com.github.catageek.ByteCart.FileStorage.BookFile;
 
 
+/**
+ * Factory for routing tables
+ */
 public final class RoutingTableFactory {
 
+	/**
+	 * Get a routing table
+	 * 
+	 * @param inv the inventory to open
+	 * @return the RoutingTable object
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	static public RoutingTable getRoutingTable(Inventory inv) throws IOException, ClassNotFoundException {
 		RoutingTableBook rt;
 		

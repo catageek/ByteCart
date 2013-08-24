@@ -7,10 +7,17 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 
 
+/**
+ * This class contains the method to instantiate any IC
+ */
 public class PoweredSignFactory {
 	
-	// instantiates the BCXXXX member at specified location.
-	// return null if no IC is present.
+	/**
+	 * Get an IC at the powered sign
+	 *
+	 * @param block the sign clicked
+	 * @return a Powerable IC, or null
+	 */
 	public Powerable getIC(Block block) {
 		
 			
@@ -29,6 +36,13 @@ public class PoweredSignFactory {
 		
 	}
 
+	/**
+	 * Get an IC with the specific code
+	 *
+	 * @param block the block where to reference the IC
+	 * @param signString the name of the sign as "BCXXXX"
+	 * @return a Powerable IC, or null
+	 */
 	static final public Powerable getPoweredIC(Block block, String signString) {
 
 		if (signString.length() < 7)

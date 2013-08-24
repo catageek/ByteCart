@@ -11,6 +11,9 @@ import java.util.TreeMap;
 import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
+/**
+ * The content of a routing table entry
+ */
 final class RouteProperty implements Externalizable {
 
 	/**
@@ -23,10 +26,19 @@ final class RouteProperty implements Externalizable {
 	public RouteProperty() {
 	}
 
+	/**
+	 * @return the map associating each metric with a DirectionRegistry
+	 */
 	final TreeMap<Metric,PartitionedHashSet<DirectionRegistry>> getMap() {
 		return map;
 	}
 
+	/**
+	 * Decompose the registry value to a set of DirectionRegistry
+	 * 
+	 * @param value the value to decompose
+	 * @return the set
+	 */
 	public final PartitionedHashSet<DirectionRegistry> getPartitionedHashSet(int value) {
 		int reg = value;
 		int cur = 1;
@@ -41,6 +53,9 @@ final class RouteProperty implements Externalizable {
 		return set;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
+	 */
 	@Override
 	public void readExternal(ObjectInput arg0) throws IOException,
 	ClassNotFoundException {
@@ -54,6 +69,9 @@ final class RouteProperty implements Externalizable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
+	 */
 	@Override
 	public void writeExternal(ObjectOutput arg0) throws IOException {
 		arg0.writeInt(map.size());

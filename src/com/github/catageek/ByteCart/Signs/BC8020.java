@@ -15,6 +15,9 @@ import com.github.catageek.ByteCart.Routing.Updater.Scope;
 
 
 
+/**
+ * An IC at the entry of a L2 router
+ */
 final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTable {
 
 
@@ -23,8 +26,8 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 		this.IsTrackNumberProvider = true;
 	}
 
-	/**
-	 * Return true if it's a local updater or a normal cart to route normally
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC8010#selectUpdater()
 	 */
 	@Override
 	protected boolean selectUpdater() {
@@ -32,6 +35,9 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 				|| UpdaterContentFactory.isRoutingTableExchange(this.getInventory(), Scope.LOCAL);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC8010#SelectRoute(com.github.catageek.ByteCart.AddressLayer.AddressRouted, com.github.catageek.ByteCart.AddressLayer.Address, com.github.catageek.ByteCart.Routing.RoutingTable)
+	 */
 	@Override
 	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
 
@@ -54,16 +60,25 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC8010#getLevel()
+	 */
 	@Override
 	public Updater.Level getLevel() {
 		return Updater.Level.BACKBONE;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC8010#getName()
+	 */
 	@Override
 	public String getName() {
 		return "BC8020";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BC8010#getFriendlyName()
+	 */
 	@Override
 	public String getFriendlyName() {
 		return "L2 Router";

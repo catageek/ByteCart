@@ -17,6 +17,9 @@ import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * An abstract class for T-intersection signs
+ */
 abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements BCSign {
 
 	protected CollisionAvoiderBuilder builder;
@@ -29,8 +32,16 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 		builder = new SimpleCollisionAvoiderBuilder((Triggable) this, block.getRelative(this.getCardinal(), 3).getLocation());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getName()
+	 */
+	@Override
 	abstract public String getName();
 
+	/**
+	 * Register the inputs and outputs
+	 *
+	 */
 	protected void addIO() {
 		// Output[0] = 2 bits registry representing levers on the left and on the right of the sign
 		OutputPin[] lever2 = new OutputPin[2];
@@ -138,18 +149,34 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 		return destination = AddressFactory.getAddress(this.getInventory());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCSign#getLevel()
+	 */
+	@Override
 	public Updater.Level getLevel() {
 		return Updater.Level.LOCAL;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCSign#getSignAddress()
+	 */
+	@Override
 	public final Address getSignAddress() {
 		return AddressFactory.getAddress(getBlock(), 3);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCSign#getCenter()
+	 */
+	@Override
 	public final org.bukkit.block.Block getCenter() {
 		return this.getBlock();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCSign#getDestinationIP()
+	 */
+	@Override
 	public final String getDestinationIP() {
 		Address ip;
 		if ((ip = getDestinationAddress()) != null)

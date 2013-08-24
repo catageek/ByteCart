@@ -9,6 +9,9 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.AddressLayer.ReturnAddressFactory;
 
+/**
+ * A block that makes the cart return to its origin using return address
+ */
 public final class BC7017 extends AbstractTriggeredSign implements Triggable {
 
 	public BC7017(org.bukkit.block.Block block,
@@ -21,16 +24,25 @@ public final class BC7017 extends AbstractTriggeredSign implements Triggable {
 		this.setInventory(player.getInventory());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getName()
+	 */
 	@Override
 	public String getName() {
 		return "BC7017";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
 	@Override
 	public String getFriendlyName() {
 		return "Return back";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
+	 */
 	@Override
 	public void trigger() {
 		Address returnAddress = ReturnAddressFactory.getAddress(this.getInventory());

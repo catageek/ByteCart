@@ -7,6 +7,9 @@ import org.bukkit.inventory.meta.BookMeta;
 import com.github.catageek.ByteCart.ByteCart;
 
 
+/**
+ * An output stream to write in book
+ */
 class BookOutputStream extends ByteArrayOutputStream {
 	
 	private final BookMeta book;
@@ -18,6 +21,9 @@ class BookOutputStream extends ByteArrayOutputStream {
 		this.book = book;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.ByteArrayOutputStream#write(byte[], int, int)
+	 */
 	@Override
 	public void write (byte[] bytes, int off, int len) {
 //		this.reset();
@@ -27,6 +33,9 @@ class BookOutputStream extends ByteArrayOutputStream {
 		super.write(bytes, off, len);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.OutputStream#write(byte[])
+	 */
 	@Override
 	public void write(byte[] bytes) throws IOException {
 		if (isClosed)
@@ -34,10 +43,18 @@ class BookOutputStream extends ByteArrayOutputStream {
 		this.write(bytes, 0, bytes.length);
 	}
 	
+	/**
+	 * Get the content as a byte array
+	 *
+	 * @return the buffer
+	 */
 	protected byte[] getBuffer() {
 		return this.toByteArray();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.OutputStream#flush()
+	 */
 	@Override
 	public void flush() throws IOException {
 		
@@ -73,10 +90,18 @@ class BookOutputStream extends ByteArrayOutputStream {
 			ByteCart.log.info("ByteCart : Flushing " + len + " bytes of data to meta");
 	}
 
+	/**
+	 * Get the content as a string
+	 *
+	 * @return the content of the book
+	 */
 	protected String getEncodedString() {
 		return this.toString();
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.io.ByteArrayOutputStream#close()
+	 */
 	@Override
 	public void close() throws IOException {
 		if (isClosed)
@@ -84,6 +109,11 @@ class BookOutputStream extends ByteArrayOutputStream {
 		isClosed  = true;
 	}
 	
+	/**
+	 * Get the book
+	 *
+	 * @return the book
+	 */
 	final BookMeta getBook() {
 		return book;
 	}

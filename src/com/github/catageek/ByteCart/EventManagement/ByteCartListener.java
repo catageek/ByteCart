@@ -39,6 +39,9 @@ import com.github.catageek.ByteCart.Signs.TriggeredSignFactory;
 
 
 
+/**
+ * The main listener
+ */
 public class ByteCartListener implements Listener {
 
 	private PoweredSignFactory MyPoweredICFactory;
@@ -48,6 +51,11 @@ public class ByteCartListener implements Listener {
 		this.MyPoweredICFactory = new PoweredSignFactory();
 	}
 
+	/**
+	 * Detect if a sign is under the cart moving
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleMove(VehicleMoveEvent event) {
 
@@ -111,6 +119,11 @@ public class ByteCartListener implements Listener {
 
 	}
 
+	/**
+	 * Detect a sign under the cart created
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onVehicleCreate(VehicleCreateEvent event) {
 
@@ -158,6 +171,11 @@ public class ByteCartListener implements Listener {
 	}
 
 
+	/**
+	 * Detect if we create a sign
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
 
@@ -200,6 +218,11 @@ public class ByteCartListener implements Listener {
 		}
 	}
 
+	/**
+	 * Check if a sign was broken
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent event) {
 		removeSignIfNeeded(event.getBlock(), event.getPlayer());
@@ -210,6 +233,11 @@ public class ByteCartListener implements Listener {
 		removeSignIfNeeded(event.getBlock(), event.getEntity());
 	}
 
+	/**
+	 * Check if a sign was destroyed in the explosion
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onEntityExplode(EntityExplodeEvent event) {
 		Entity entity = event.getEntity();
@@ -218,6 +246,11 @@ public class ByteCartListener implements Listener {
 			removeSignIfNeeded(it.next(), entity);
 	}
 
+	/**
+	 * Check if a block is powered above a sign.
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event) {
 
@@ -275,6 +308,11 @@ public class ByteCartListener implements Listener {
 		}
 
 	}
+*/
+	/**
+	 * Detect a sign that a player right-clicks
+	 *
+	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
@@ -296,6 +334,12 @@ public class ByteCartListener implements Listener {
 		}
 	}
 
+	/**
+	 * Remove sign from cache and launch event
+	 *
+	 * @param block the sign
+	 * @param entity the entity at origin of the event
+	 */
 	private static void removeSignIfNeeded(Block block, Entity entity) {
 		if (! (block.getState() instanceof Sign))
 			return;

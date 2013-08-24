@@ -6,7 +6,6 @@ import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.S
 import com.github.catageek.ByteCart.Signs.BCSign;
 
 /**
- * @author catageek
  * 
  * This class implements a wanderer that will run through all routers
  * randomly, without going to branches.
@@ -20,21 +19,33 @@ public class DefaultRouterWanderer extends AbstractWanderer {
 		super(bc, region);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractWanderer#doAction(com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side)
+	 */
 	@Override
 	public void doAction(Side To) {
 		return;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractWanderer#doAction(org.bukkit.block.BlockFace)
+	 */
 	@Override
 	public void doAction(BlockFace To) {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractWanderer#giveSimpleDirection()
+	 */
 	@Override
 	public Side giveSimpleDirection() {
 		return Side.LEFT;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Routing.AbstractWanderer#giveRouterDirection()
+	 */
 	@Override
 	public BlockFace giveRouterDirection() {
 		return DefaultRouterWanderer.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());

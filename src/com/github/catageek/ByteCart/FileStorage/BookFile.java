@@ -36,10 +36,21 @@ public final class BookFile implements BCFile {
 	private final int slot;
 
 
+	/**
+	 * @param inventory the inventory
+	 * @param index the slot index
+	 * @param binary true to set binary mode
+	 */
 	public BookFile(Inventory inventory, int index, boolean binary) {
 		this(inventory, index, binary,  ".BookFile");
 	}
 
+	/**
+	 * @param inventory the inventory
+	 * @param index the slot index
+	 * @param binary true to set binary mode
+	 * @param name the suffix of the author name, or null
+	 */
 	public BookFile(Inventory inventory, int index, boolean binary, String name) {
 		this.binarymode = binary;
 		this.container = inventory;
@@ -61,10 +72,17 @@ public final class BookFile implements BCFile {
 			this.author = this.book.getAuthor();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#getCapacity()
+	 */
+	@Override
 	public int getCapacity() {
 		return MAXSIZE;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#clear()
+	 */
 	@Override
 	public void clear() {
 		if (outputstream != null)
@@ -73,6 +91,9 @@ public final class BookFile implements BCFile {
 			book.setPages(new ArrayList<String>());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#isEmpty()
+	 */
 	@Override
 	public boolean isEmpty() {
 		if (outputstream != null)
@@ -81,6 +102,9 @@ public final class BookFile implements BCFile {
 			return ! book.hasPages() || book.getPage(1).length() == 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#getOutputStream()
+	 */
 	@Override
 	public OutputStream getOutputStream() throws IOException {
 		if (isClosed)
@@ -94,6 +118,9 @@ public final class BookFile implements BCFile {
 		return outputstream = new ItemStackMetaOutputStream(stack, bookoutputstream);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#getInputStream()
+	 */
 	@Override
 	public InputStream getInputStream() throws IOException {
 		if (isClosed)
@@ -105,6 +132,9 @@ public final class BookFile implements BCFile {
 		return new BookInputStream(book, binarymode);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Closeable#close()
+	 */
 	@Override
 	public void close() throws IOException {
 		if (outputstream != null){
@@ -117,6 +147,9 @@ public final class BookFile implements BCFile {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Flushable#flush()
+	 */
 	@Override
 	public void flush() throws IOException {
 		if (outputstream != null){
@@ -131,11 +164,17 @@ public final class BookFile implements BCFile {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#getContainer()
+	 */
 	@Override
 	public Inventory getContainer() {
 		return container;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#setDescription(java.lang.String)
+	 */
 	@Override
 	public void setDescription(String s) throws IOException {
 		if (isClosed)
@@ -148,6 +187,13 @@ public final class BookFile implements BCFile {
 			book.setTitle(s);
 	}
 
+	/**
+	 * Tell if a slot of an inventory contains a file in a book
+	 *
+	 * @param inventory the inventory
+	 * @param index the slot number
+	 * @return true if the slot contains a file and the author field begins with author configuration parameter
+	 */
 	public static boolean isBookFile(Inventory inventory, int index) {
 		ItemStack stack = inventory.getItem(index);
 		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta())
@@ -155,6 +201,9 @@ public final class BookFile implements BCFile {
 		return false;		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#getDescription()
+	 */
 	@Override
 	public String getDescription() throws IOException {
 		if (isClosed)

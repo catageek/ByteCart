@@ -1,5 +1,8 @@
 package com.github.catageek.ByteCart.HAL;
 
+/**
+ * A read-only registry
+ */
 public interface Registry {
 	/**
 	 *

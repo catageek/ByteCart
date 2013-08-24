@@ -14,6 +14,9 @@ import com.github.catageek.ByteCart.Storage.ExpirableMap;
 import com.github.catageek.ByteCart.ThreadManagement.Expirable;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * A cart counter
+ */
 final class BC7003 extends AbstractIC implements Triggable, Powerable {
 
 	final static private ExpirableMap<org.bukkit.Location, Integer> wavecount = new ExpirableMap<org.bukkit.Location, Integer>(400, false, "BC7003");
@@ -29,6 +32,9 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
+	 */
 	@Override
 	public void trigger() {
 
@@ -52,6 +58,9 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Powerable#power()
+	 */
 	@Override
 	public void power() {
 		// check if we are really powered
@@ -87,6 +96,10 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 
 	}
 
+	/**
+	 * increment the counter
+	 *
+	 */
 	final private void incrementWaveCount() {
 		synchronized(wavecount) {
 			if (!wavecount.contains(this.getLocation())) {
@@ -106,6 +119,11 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 
 	}
 
+	/**
+	 * decrement the counter
+	 *
+	 * @return true if the counter is strictly positive
+	 */
 	final private boolean decrementWaveCount() {
 		synchronized(wavecount) {
 			if (wavecount.contains(getLocation()) && wavecount.get(getLocation()) > 1)
@@ -125,6 +143,10 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 		}
 	}
 
+	/**
+	 * Add the lever behind the sign to give the red light signal
+	 *
+	 */
 	private final void AddOutputIO() {
 		// Declare red light signal = lever
 
@@ -138,6 +160,9 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 	}
 
 
+	/**
+	 * Runnable to remove the counter after a timeout
+	 */
 	final private class RemoveCount extends Expirable<org.bukkit.Location> {
 
 		public RemoveCount(long duration, boolean isSync, String name) {
@@ -150,21 +175,33 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getName()
+	 */
 	@Override
 	public final String getName() {
 		return "BC7003";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
 	@Override
 	public final String getFriendlyName() {
 		return "Cart counter";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#isTrain()
+	 */
 	@Override
 	public boolean isTrain() {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#wasTrain(org.bukkit.Location)
+	 */
 	@Override
 	public boolean wasTrain(org.bukkit.Location loc) {
 		return false;

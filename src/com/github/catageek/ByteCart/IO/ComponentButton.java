@@ -12,10 +12,16 @@ import org.bukkit.material.MaterialData;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * A button
+ */
 public class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 	
 	final static private Map<Location, Integer> ActivatedButtonMap = new ConcurrentHashMap<Location, Integer>();
 
+	/**
+	 * @param block the block containing the component
+	 */
 	protected ComponentButton(Block block) {
 		super(block);
 /*		if(ByteCart.debug)
@@ -23,6 +29,9 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 */
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.IO.OutputPin#write(boolean)
+	 */
 	@Override
 	public void write(boolean bit) {
 		final Block block = this.getBlock();
@@ -74,6 +83,9 @@ public class ComponentButton extends AbstractComponent implements OutputPin, Inp
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.IO.InputPin#read()
+	 */
 	@Override
 	public boolean read() {
 		MaterialData md = this.getBlock().getState().getData();

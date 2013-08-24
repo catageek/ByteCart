@@ -10,10 +10,16 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
 
 import com.github.catageek.ByteCart.Event.UpdaterMoveEvent;
 
+/**
+ * Launch an event when an updater moves
+ * This listener unregisters itself automatically if there is no updater
+ */
 public class ByteCartUpdaterMoveListener implements Listener {
 	
+	// flag for singleton
 	private static boolean exist = false;
 	
+	// A map with ephemeral elements and timers
 	private static UpdaterSet updaterset = new UpdaterSet();
 
 	@EventHandler(ignoreCancelled = true)
@@ -34,6 +40,7 @@ public class ByteCartUpdaterMoveListener implements Listener {
 		int id;
 		if (updaterset.isUpdater(id = event.getVehicle().getEntityId())) {
 			Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterMoveEvent(event));
+			// reset the timer
 			updaterset.getMapRoutes().reset(id);
 			return;
 		}
@@ -61,6 +68,11 @@ public class ByteCartUpdaterMoveListener implements Listener {
 		ByteCartUpdaterMoveListener.exist = exist;
 	}
 
+	/**
+	 * Add a vehicle id in the updater map
+	 *
+	 * @param id the vehicle id
+	 */
 	public static final void addUpdater(int id) {
 		updaterset.getMapRoutes().add(id);
 	}

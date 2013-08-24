@@ -22,11 +22,34 @@ import com.github.catageek.ByteCart.Util.DirectionRegistry;
  * such as DefaultRouterWanderer.
  *
  */
-abstract class AbstractWanderer {
+public abstract class AbstractWanderer {
 
+	/**
+	 * Method that must return the direction to take on a BC8XXX sign
+	 * 
+	 * @return the direction that the cart should take
+	 */
 	public abstract BlockFace giveRouterDirection();
+
+	/**
+	 * Method that must return the position of the lever
+	 * 
+	 * @return the position of the lever
+	 */
 	public abstract Side giveSimpleDirection();
+
+	/**
+	 * Method called when an updater meets a BC8XXX sign
+	 * 
+	 * @param To the direction where the cart goes
+	 */
 	public abstract void doAction(BlockFace To);
+
+	/**
+	 * Method called when an updater meets a BC9XXX sign
+	 * 
+	 * @param To the position of the lever
+	 */
 	public abstract void doAction(Side To);
 
 	private final BCSign bcsign;
@@ -36,6 +59,10 @@ abstract class AbstractWanderer {
 	private final int Region;
 	private final RoutingTable RoutingTable;
 
+	/**
+	 * @param bc the ic that triggers this wanderer
+	 * @param region the region where this wanderer is attached to
+	 */
 	protected AbstractWanderer(BCSign bc, int region) {
 		bcsign = bc;
 		SignAddress = bc.getSignAddress();
@@ -54,6 +81,11 @@ abstract class AbstractWanderer {
 		}
 	}
 
+	/**
+	 * Tells if we are at the border of a region
+	 * 
+	 * @return true if we just met a backbone router, or leave the backbone
+	 */
 	protected final boolean isAtBorder() {
 
 		if(ByteCart.debug)
@@ -69,6 +101,11 @@ abstract class AbstractWanderer {
 		return false;
 	}
 
+	/**
+	 * Get the direction where to go if we are at the border of a region or the backbone
+	 * 
+	 * @return the direction where we must go
+	 */
 	public final BlockFace manageBorder() {
 		if ((isAtBorder())) {
 			DirectionRegistry dir;
@@ -79,6 +116,13 @@ abstract class AbstractWanderer {
 		return null;
 	}
 
+	/**
+	 * Get a random route that is not from where we are coming
+	 * 
+	 * @param routingtable the routing table where to pick up a route
+	 * @param from the direction from where we are coming
+	 * @return the direction
+	 */
 	public static final BlockFace getRandomBlockFace(RoutingTable routingtable, BlockFace from) {
 
 		// selecting a random destination avoiding ring 0 or where we come from
@@ -91,47 +135,88 @@ abstract class AbstractWanderer {
 		return direction.getBlockFace();
 	}
 
+	/**
+	 * @return the routing table
+	 */
 	protected final RoutingTable getRoutingTable() {
 		return RoutingTable;
 	}
 
+	/**
+	 * @return the address on the sign
+	 */
 	protected final Address getSignAddress() {
 		return SignAddress;
 	}
 
+	/**
+	 * @return the direction from where we are coming
+	 */
 	public final DirectionRegistry getFrom() {
 		return From;
 	}
 
+	/**
+	 * @return the level of the sign
+	 */
 	public final Level getSignLevel() {
 		return this.getBcSign().getLevel();
 	}
 
+	/**
+	 * @return the Vehicle
+	 */
 	public final Vehicle getVehicle() {
 		return this.getBcSign().getVehicle();
 	}
 
+	/**
+	 * Tells if this updater must provide track numbers for this IC
+	 * 
+	 * @return true if this updater must provide track numbers
+	 */
 	protected final boolean isTrackNumberProvider() {
 		return IsTrackNumberProvider;
 	}
 
+	/**
+	 * Tells if we are about to make a U-turn
+	 * 
+	 * @param To the direction we want to go
+	 * @return true if we make a U-turn
+	 */
 	protected final boolean isSameTrack(BlockFace To) {
 		return getFrom().getBlockFace().equals(To);
 	}
 
+	/**
+	 * Get the region where this wanderer is attached to
+	 * 
+	 * @return the region number
+	 */
 	public final int getWandererRegion() {
 		return Region;
 	}
 
+	/**
+	 * Get the center of the IC that triggers this wanderer
+	 * 
+	 * @return the center
+	 */
 	public final Block getCenter() {
 		return this.getBcSign().getCenter();
 	}
 
+	/**
+	 * Get the name of the sign
+	 * 
+	 * @return the name
+	 */
 	public final String getFriendlyName() {
 		return this.getBcSign().getFriendlyName();
 	}
 	/**
-	 * @return the bcsign
+	 * @return the IC
 	 */
 	public BCSign getBcSign() {
 		return bcsign;

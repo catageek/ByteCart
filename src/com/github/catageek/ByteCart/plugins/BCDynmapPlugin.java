@@ -26,6 +26,9 @@ import com.github.catageek.ByteCart.Event.UpdaterSignInvalidateEvent;
 import com.github.catageek.ByteCart.HAL.IC;
 import com.github.catageek.ByteCart.Signs.BCSign;
 
+/**
+ * A Dynmap addon
+ */
 public final class BCDynmapPlugin implements Listener {
 
 	private static final String name = ByteCart.myPlugin.getConfig().getString("dynmap.layer", "ByteCart");
@@ -53,6 +56,15 @@ public final class BCDynmapPlugin implements Listener {
 
 	}
 
+	/**
+	 * Load the ByteCart icon
+	 *
+	 * @param markerapi dynmap marker API
+	 * @param id the id of the icon
+	 * @param label the label
+	 * @param file the file to load
+	 * @return the icon loaded
+	 */
 	private MarkerIcon loadIcon(MarkerAPI markerapi, String id, String label, String file) {
 		MarkerIcon icon = markerapi.getMarkerIcon(id);
 		if (icon == null) {
@@ -65,6 +77,11 @@ public final class BCDynmapPlugin implements Listener {
 		return icon;
 	}
 
+	/**
+	 * Updates the map if a station is updated
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onUpdaterSetStation(UpdaterSetStationEvent event) {
 		Block block = event.getIc().getBlock();
@@ -75,6 +92,11 @@ public final class BCDynmapPlugin implements Listener {
 		selectAndAddMarker(event.getIc().getFriendlyName(), block, address);
 	}
 
+	/**
+	 * Check that marker information about the station is correct, or fix it
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onUpdaterPassStation(UpdaterPassStationEvent event) {
 		Block block = event.getIc().getBlock();
@@ -89,11 +111,21 @@ public final class BCDynmapPlugin implements Listener {
 	}
 
 
+	/**
+	 * Delete the marker if the station sign is cleared
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onUpdaterClearStation(UpdaterClearStationEvent event) {
 		deleteMarker(event);
 	}
 
+	/**
+	 * Delete the marker
+	 *
+	 * @param event
+	 */
 	private void deleteMarker(UpdaterEvent event) {
 		Block block = event.getIc().getBlock();
 		Marker marker = markerset.findMarker(buildId(block));
@@ -101,6 +133,11 @@ public final class BCDynmapPlugin implements Listener {
 			marker.deleteMarker();
 	}
 
+	/**
+	 * Delete the marker if the sign is removed
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onSignRemove(SignRemoveEvent event) {
 		IC ic;
@@ -112,11 +149,21 @@ public final class BCDynmapPlugin implements Listener {
 			marker.deleteMarker();
 	}
 
+	/**
+	 * Delete the marker if invalid
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onUpdaterSignInvalidate(UpdaterSignInvalidateEvent event) {
 		deleteMarker(event);
 	}
 
+	/**
+	 * Create a marker for manually created signs
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onSignCreate(SignCreateEvent event) {
 		IC ic;
@@ -130,6 +177,13 @@ public final class BCDynmapPlugin implements Listener {
 		selectAndAddMarker(event.getStrings()[2], block, AddressFactory.getAddress(address));
 	}
 
+	/**
+	 * Register the marker with the right icon
+	 *
+	 * @param friendlyname the name to write
+	 * @param block the block
+	 * @param address the address to write
+	 */
 	private static void selectAndAddMarker(String friendlyname, Block block, Address address) {
 		MarkerIcon icon;
 		String label;
@@ -144,20 +198,49 @@ public final class BCDynmapPlugin implements Listener {
 		addMarker(label, block, icon);
 	}
 
+	/**
+	 * Create the marker using API
+	 *
+	 * @param label the label to write
+	 * @param block the block
+	 * @param markericon the icon to draw
+	 */
 	private static void addMarker(String label, Block block, MarkerIcon markericon) {
 		markerset.createMarker(buildId(block), label,
 				block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), markericon, true);
 	}
 
+	/**
+	 * Build a sting containing name and address
+	 *
+	 * @param address the address
+	 * @param friendlyname the name
+	 * @return a string containing "name (address)"
+	 */
 	private static String buildLabel(String address, String friendlyname) {
 		return friendlyname + " (" + address + ")";
 	}
 
 
+	/**
+	 * Get a string used as unique id for a marker
+	 *
+	 * @param block the block
+	 * @return A unique string for the block
+	 */
 	private static String buildId(Block block) {
 		return block.getLocation().toString();
 	}
 
+	/**
+	 * Check marker information consistency
+	 *
+	 * @param marker the marker to check
+	 * @param block the block to check against
+	 * @param address the address to check against
+	 * @param friendlyName the name to check against
+	 * @return true if information is matching
+	 */
 	private static boolean checkMarkerInformation(Marker marker, Block block, String address, String friendlyName) {
 		boolean ret = false;
 		ret &= (block.getX() == marker.getX());

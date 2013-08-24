@@ -15,6 +15,9 @@ import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 
+/**
+ * Main class
+ */
 public final class ByteCart extends JavaPlugin {
 
 	public static Logger log = Logger.getLogger("Minecraft");
@@ -27,6 +30,10 @@ public final class ByteCart extends JavaPlugin {
 	public int Lockduration;
 	private boolean keepitems;
 
+	/* (non-Javadoc)
+	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
+	 */
+	@Override
 	public void onEnable(){
 
 		myPlugin = this;
@@ -67,6 +74,10 @@ public final class ByteCart extends JavaPlugin {
 		log.info("[ByteCart] plugin has been enabled.");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
+	 */
+	@Override
 	public void onDisable(){ 
 		log.info("Your plugin has been disabled.");
 
@@ -75,6 +86,10 @@ public final class ByteCart extends JavaPlugin {
 
 	}
 
+	/**
+	 * Load the configuration file
+	 *
+	 */
 	protected final void loadConfig() {
 		debug = this.getConfig().getBoolean("debug", false);
 		keepitems = this.getConfig().getBoolean("keepitems", true);

@@ -8,6 +8,9 @@ import java.util.Map;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.DirectionRegistry;
 
+/**
+ * A map containing counters with id
+ */
 public final class Counter implements Serializable {
 
 	/**
@@ -19,23 +22,51 @@ public final class Counter implements Serializable {
 	public Counter() {
 	}
 
+	/**
+	 * Get a counter by its id
+	 * 
+	 * @param counter
+	 * @return the counter
+	 */
 	public int getCount(int counter) {
 		return this.map.containsKey(counter) ? this.map.get(counter) : 0;
 	}
 
+	/**
+	 * Increment the counter by 1
+	 * 
+	 * @param counter the counter id
+	 */
 	public void incrementCount(int counter) {
 		incrementCount(counter, 1);
 	}
 
+	/**
+	 * Add a value to a counter
+	 * 
+	 * @param counter the counter id
+	 * @param value the value to add
+	 */
 	public void incrementCount(int counter, int value) {
 		this.map.put(counter, getCount(counter) + value);
 	}
 
 
+	/**
+	 * Set the value of a counter
+	 * 
+	 * @param counter the counter id
+	 * @param amount the value to set
+	 */
 	public void setCount(int counter, int amount) {
 		this.map.put(counter, amount);
 	}
 
+	/**
+	 * Get the first empty counter id
+	 * 
+	 * @return the id
+	 */
 	public int firstEmpty() {
 		int i = 1;
 		while (getCount(i) != 0) {
@@ -44,14 +75,29 @@ public final class Counter implements Serializable {
 		return i;
 	}
 
+	/**
+	 * Reset a counter to zero
+	 * 
+	 * @param counter the id of the counter
+	 */
 	public void reset(int counter) {
 		this.map.remove(counter);
 	}
 
+	/**
+	 * Reset all counters to zero
+	 */
 	public void resetAll() {
 		this.map.clear();
 	}
 
+	/**
+	 * Tell if counters have reached the amount of 64 or more
+	 * 
+	 * @param start the first counter id
+	 * @param end the last counter id
+	 * @return true if the amont of all counters between start and end (inclusive) are equal or superior to 64
+	 */
 	public boolean isAllFull(int start, int end) {
 		Iterator<Integer> it = map.keySet().iterator();
 		int limit = 64;
@@ -63,6 +109,13 @@ public final class Counter implements Serializable {
 		return true;
 	}
 
+	/**
+	 * Get the ring number that has the minimum counter value and the direction is different from from parameter
+	 * 
+	 * @param routes the routing table
+	 * @param from the direction to exclude from the search
+	 * @return the ring number, or 0 if no result
+	 */
 	public int getMinimum(RoutingTable routes, DirectionRegistry from) {
 		Iterator<RouteNumber> it = routes.getOrderedRouteNumbers();
 		int min = 10000000;  //big value
@@ -90,6 +143,9 @@ public final class Counter implements Serializable {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public final String toString() {
 		Iterator<Integer> it = map.keySet().iterator(); 
@@ -102,6 +158,9 @@ public final class Counter implements Serializable {
 		return s;
 	}
 
+	/**
+	 * @return the number of counters the map can contain
+	 */
 	public int getCounterLength() {
 		return 32;
 	}

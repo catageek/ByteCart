@@ -10,12 +10,15 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * A treemap that can be saved (i.e externalized) as a binary stream
+ * 
+ * @param <K> the key type of the map
+ * @param <V> the value type of the map
+ */
 public final class ExternalizableTreeMap<K extends Externalizable, V extends Externalizable>
 	extends TreeMap<K, V> implements Externalizable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1074583778619610579L;
 
 	public ExternalizableTreeMap() {
@@ -34,6 +37,9 @@ public final class ExternalizableTreeMap<K extends Externalizable, V extends Ext
 		super(arg0);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void readExternal(ObjectInput s) throws IOException,
@@ -49,6 +55,9 @@ public final class ExternalizableTreeMap<K extends Externalizable, V extends Ext
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
+	 */
 	@Override
 	public void writeExternal(ObjectOutput s) throws IOException {
 		// Write out size (number of Mappings)

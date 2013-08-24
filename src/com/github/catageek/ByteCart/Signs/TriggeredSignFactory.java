@@ -12,14 +12,16 @@ import org.bukkit.material.Rails;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 
 
-// This class contains the method to instantiate any IC
+/**
+ * This class contains the method to instantiate any IC
+ */
 final public class TriggeredSignFactory {
 
 	/**
 	 * Check the sign and instantiate the IC object, or null
 	 * 
-	 * @param block
-	 * @param vehicle
+	 * @param block the sign block
+	 * @param vehicle the vehicle that triggered the sign
 	 * @return a Triggable representing the IC
 	 * @throws ClassNotFoundException
 	 * @throws IndexOutOfBoundsException

@@ -8,6 +8,9 @@ import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.HAL.VirtualRegistry;
 import com.github.catageek.ByteCart.Storage.Partitionable;
 
+/**
+ * A 4-bit registry with 1 cardinal direction per bit
+ */
 public final class DirectionRegistry implements Partitionable {
 	/**
 	 * 
@@ -24,16 +27,32 @@ public final class DirectionRegistry implements Partitionable {
 	public DirectionRegistry() {
 		this.registry = new VirtualRegistry(4);
 	}
+	/**
+	 * Build the registry with an initial value
+	 * 
+	 * @param value initial value
+	 */
 	public DirectionRegistry(int value) {
 		this();
 		this.registry.setAmount(value);
 	}
 
+	/**
+	 * Build the registry matching the blockface
+	 * 
+	 * @param b blockface
+	 */
 	public DirectionRegistry(BlockFace b) {
 		this();
 		this.setCardinal(b, true);
 	}
 
+	/**
+	 * Set a cardinal direction bit individually
+	 *
+	 * @param face the cardinal direction
+	 * @param value true or false
+	 */
 	public final void setCardinal(BlockFace face, boolean value) {
 		
 		switch(face) {
@@ -68,6 +87,11 @@ public final class DirectionRegistry implements Partitionable {
 		return BlockFace.SELF;
 	}
 
+	/**
+	 * Return the cardinal direction represented by this registry
+	 *
+	 * @return the direction, or self if there is no direction, or several directions are mixed
+	 */
 	public final BlockFace getBlockFace() {
 		switch(this.getAmount()) {
 		case 1:
@@ -82,25 +106,45 @@ public final class DirectionRegistry implements Partitionable {
 		return BlockFace.SELF;
 	}
 
+	/**
+	 * Get the value of the registry
+	 *
+	 * @param value the value
+	 */
 	public final void setAmount(int value) {
 		this.registry.setAmount(value);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Storage.Partitionable#getAmount()
+	 */
+	@Override
 	public final int getAmount() {
 		return this.registry.getAmount();
 	}
 	
+	/**
+	 * Return the registry
+	 *
+	 * @return the registry
+	 */
 	public final Registry getRegistry() {
 		RegistryOutput reg = new VirtualRegistry(4);
 		reg.setAmount(this.getAmount());
 		return reg;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return getAmount();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o == null)

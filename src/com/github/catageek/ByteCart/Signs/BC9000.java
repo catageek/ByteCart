@@ -8,6 +8,9 @@ import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterLocal;
 
 
+/**
+ * A simple intersection block with anticollision
+ */
 final class BC9000 extends AbstractSimpleCrossroad implements Subnet, Triggable {
 
 	private final int netmask;
@@ -18,6 +21,9 @@ final class BC9000 extends AbstractSimpleCrossroad implements Subnet, Triggable 
 		this.netmask = 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#manageUpdater(com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider)
+	 */
 	@Override
 	protected void manageUpdater(SimpleCollisionAvoider intersection) {
 		// it's an updater, so let it choosing direction
@@ -42,11 +48,17 @@ final class BC9000 extends AbstractSimpleCrossroad implements Subnet, Triggable 
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#getName()
+	 */
 	@Override
 	public String getName() {
 		return "BC9000";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
 	@Override
 	public String getFriendlyName() {
 		return "Collision avoider";

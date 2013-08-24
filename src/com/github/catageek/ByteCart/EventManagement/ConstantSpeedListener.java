@@ -16,9 +16,15 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.material.MaterialData;
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * Listener to maintain cart speed
+ */
 public final class ConstantSpeedListener implements Listener {
 
+	// We keep the speed of each cart in this map
 	private final Map<Integer, Double> speedmap = new HashMap<Integer, Double>();
+	
+	// empty Location
 	private Location location = new Location(null, 0, 0, 0);
 
 	@EventHandler(ignoreCancelled = true)

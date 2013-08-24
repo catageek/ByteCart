@@ -36,6 +36,10 @@ final class BC7005 extends AbstractTriggeredSign implements Triggable {
 		return "BC7005";
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
+	@Override
 	public String getFriendlyName() {
 		return "Eject";
 	}

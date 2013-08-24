@@ -4,16 +4,37 @@ import java.io.IOException;
 
 import org.bukkit.Location;
 import com.github.catageek.ByteCart.HAL.IC;
-import com.github.catageek.ByteCart.HAL.RegistryInput;
-import com.github.catageek.ByteCart.HAL.RegistryOutput;
 
+/**
+ * An IC that can be triggered by a cart should implement this
+ */
 public interface Triggable extends IC {
-	public RegistryInput getInput(int index);
-	public RegistryOutput getOutput(int index);
-	public void addInputRegistry(RegistryInput reg);
-	public void addOutputRegistry(RegistryOutput reg);
+	
+	/**
+	 * Method called when a cart is passing on the IC
+	 *
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public void trigger() throws ClassNotFoundException, IOException;
+	
+	/**
+	 * Tell if the cart that triggers this IC has the train bit set, i.e is the head of a train
+	 *
+	 * @return true if the train bit is set
+	 */
 	public boolean isTrain();
+	
+	/**
+	 * Tell if the IC was previously triggered by a cart with the train bit set
+	 * 
+	 * This method retrieves the persistent value stored in a map.
+	 * 
+	 * The value retrieved has a timeout, i.e the method will return false after a while.
+	 *
+	 * @param loc the location of the IC
+	 * @return true if a train is currently using the IC
+	 */
 	public boolean wasTrain(Location loc);
 	
 	/**

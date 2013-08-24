@@ -5,12 +5,24 @@ import org.bukkit.block.BlockState;
 
 import com.github.catageek.ByteCart.ByteCart;
 
+/**
+ * A sign
+ */
 public final class ComponentSign extends AbstractComponent {
 
+	/**
+	 * @param block the block containing the component
+	 */
 	public ComponentSign(Block block) {
 		super(block);
 	}
 
+	/**
+	 * Set a line of the sign
+	 *
+	 * @param line index of the line
+	 * @param s the text to write
+	 */
 	public void setLine(int line, String s) {
 		BlockState blockstate = this.getBlock().getState();
 
@@ -20,6 +32,12 @@ public final class ComponentSign extends AbstractComponent {
 		}
 	}
 
+	/**
+	 * Get a line of a sign
+	 *
+	 * @param line index of the line
+	 * @return the text
+	 */
 	public String getLine(int line) {
 		BlockState blockstate = this.getBlock().getState();
 		if (blockstate instanceof org.bukkit.block.Sign)

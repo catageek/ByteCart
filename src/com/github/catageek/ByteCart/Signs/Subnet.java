@@ -1,5 +1,7 @@
 package com.github.catageek.ByteCart.Signs;
 
-public interface Subnet extends BCSign {
-	public int getNetmask();
+/**
+ * An IC that defines a subnet should implement this
+ */
+public interface Subnet extends HasNetmask, BCSign {
 }

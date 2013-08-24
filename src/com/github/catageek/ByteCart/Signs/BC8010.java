@@ -21,7 +21,7 @@ import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBu
 import com.github.catageek.ByteCart.Event.SignPostRouteEvent;
 import com.github.catageek.ByteCart.Event.UpdaterPassRouterEvent;
 import com.github.catageek.ByteCart.Event.SignPreRouteEvent;
-import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
+import com.github.catageek.ByteCart.Routing.AbstractWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
@@ -32,6 +32,9 @@ import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 
+/**
+ * An IC at the entry of a L1 router
+ */
 public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable, HasRoutingTable {
 
 	private final BlockFace From;
@@ -66,6 +69,9 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
+	 */
 	@Override
 	public void trigger() throws ClassNotFoundException, IOException {
 
@@ -193,8 +199,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 
 	/**
 	 * Tells if this cart needs normal routing
-	 * @param id: id of the cart
-	 * @return: true if the cart needs normal routing
+	 * @return true if the cart needs normal routing
 	 */
 	protected boolean selectUpdater() {
 		// everything that is not an updater must be routed
@@ -202,6 +207,14 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		return ! UpdaterContentFactory.isRoutingTableExchange(getInventory());
 	}
 
+	/**
+	 * Compute the direction to take
+	 *
+	 * @param IPaddress the destination address
+	 * @param sign the BC sign
+	 * @param RoutingTable the routing table contained in the chest
+	 * @return the direction to destination, or to ring 0. If ring 0 does not exist, random direction
+	 */
 	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
 
 		DirectionRegistry face;
@@ -222,9 +235,14 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			return face.getBlockFace();
 
 		// If everything has failed, then we randomize output direction
-		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
+		return AbstractWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
 	}
 
+	/**
+	 * Try to send the cart to its return address
+	 *
+	 * @return true if success
+	 */
 	private boolean tryReturnCart() {
 		Address returnAddress = ReturnAddressFactory.getAddress(this.getInventory());
 		if (returnAddress != null && returnAddress.isReturnable()) {
@@ -234,48 +252,95 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		return false;
 	}
 
+	/**
+	 * Get the updater object
+	 *
+	 * @return the updater
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	protected final Updater getUpdater() throws ClassNotFoundException, IOException {
 		return UpdaterFactory.getUpdater(this, this.getInventory());
 	}
 
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCSign#getLevel()
+	 */
+	@Override
 	public Updater.Level getLevel() {
 		return Updater.Level.REGION;
 	}
 
+	/**
+	 * Return the direction from where the cart is coming
+	 *
+	 * @return the direction
+	 */
 	public final BlockFace getFrom() {
 		return From;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCSign#getSignAddress()
+	 */
+	@Override
 	public final Address getSignAddress() {
 		return Sign;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.HasRoutingTable#getRoutingTable()
+	 */
+	@Override
 	public final RoutingTable getRoutingTable() {
 		return RoutingTable;
 	}
 
+	/**
+	 * Tell if this IC will provide track numbers during configuration
+	 *
+	 * @return true if the IC provides track number
+	 */
 	public final boolean isTrackNumberProvider() {
 		return IsTrackNumberProvider;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCSign#getDestinationIP()
+	 */
+	@Override
 	public final String getDestinationIP() {
 		return destination.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCRouter#getOriginTrack()
+	 */
+	@Override
 	public final int getOriginTrack() {
 		return Sign.getTrack().getAmount();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.BCSign#getCenter()
+	 */
+	@Override
 	public final Block getCenter() {
 		return center;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getName()
+	 */
 	@Override
 	public String getName() {
 		return "BC8010";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
 	@Override
 	public String getFriendlyName() {
 		return "L1 Router";

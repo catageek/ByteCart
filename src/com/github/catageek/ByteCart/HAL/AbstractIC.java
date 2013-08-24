@@ -13,6 +13,9 @@ import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 // All ICs must inherit from this class
+/**
+ * An abstract class implementing common methods for all ICs
+ */
 abstract public class AbstractIC implements IC {
 	
 	final private Block Block;
@@ -20,9 +23,15 @@ abstract public class AbstractIC implements IC {
 	private static final Map<String,Boolean> icCache = new WeakHashMap<String, Boolean>();
 	private static org.bukkit.Location emptyLocation = new org.bukkit.Location(null, 0, 0, 0);
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getName()
+	 */
 	@Override
 	abstract public String getName();
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getFriendlyName()
+	 */
 	@Override
 	public String getFriendlyName() {
 		return ((Sign) this.getBlock().getState()).getLine(2);
@@ -41,18 +50,34 @@ abstract public class AbstractIC implements IC {
 		this.Location = block.getLocation();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#addInputRegistry(com.github.catageek.ByteCart.HAL.RegistryInput)
+	 */
+	@Override
 	public final void addInputRegistry(RegistryInput reg) {
 		this.input[this.input_args++] = reg;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#addOutputRegistry(com.github.catageek.ByteCart.HAL.RegistryOutput)
+	 */
+	@Override
 	public final void addOutputRegistry(RegistryOutput reg) {
 		this.output[this.output_args++] = reg;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getInput(int)
+	 */
+	@Override
 	public final RegistryInput getInput(int index) {
 		return input[index];
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getOutput(int)
+	 */
+	@Override
 	public final RegistryOutput getOutput(int index) {
 		return output[index];
 	}
@@ -88,6 +113,9 @@ abstract public class AbstractIC implements IC {
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getCardinal()
+	 */
 	@Override
 	public final BlockFace getCardinal() {
 		try {
@@ -100,26 +128,41 @@ abstract public class AbstractIC implements IC {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getBlock()
+	 */
 	@Override
 	public final Block getBlock() {
 		return Block;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getBuildPermission()
+	 */
 	@Override
 	public final String getBuildPermission() {
 		return "bytecart." + getName();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getTriggertax()
+	 */
 	@Override
 	public final int getTriggertax() {
 		return ByteCart.myPlugin.getConfig().getInt("usetax." + this.getName());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getBuildtax()
+	 */
 	@Override
 	public final int getBuildtax() {
 		return ByteCart.myPlugin.getConfig().getInt("buildtax." + this.getName());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.IC#getLocation()
+	 */
 	@Override
 	public org.bukkit.Location getLocation() {
 		return Location;

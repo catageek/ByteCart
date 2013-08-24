@@ -13,6 +13,9 @@ import org.bukkit.util.Vector;
 
 import com.github.catageek.ByteCart.Util.MathUtil;
 
+/**
+ * Listener to load chunks around moving carts
+ */
 public final class PreloadChunkListener implements Listener {
 
 	private final Vector NullVector = new Vector(0,0,0);
@@ -31,6 +34,11 @@ public final class PreloadChunkListener implements Listener {
 		}
 	}
 	
+	/**
+	 * We cancel this event if a cart is moving in the chunk or around
+	 *
+	 * @param event
+	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onChunkUnload(ChunkUnloadEvent event) {
 

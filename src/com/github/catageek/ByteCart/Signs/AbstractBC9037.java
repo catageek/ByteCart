@@ -35,7 +35,7 @@ abstract class AbstractBC9037 extends AbstractSimpleCrossroad implements Triggab
 
 	/**
 	 *
-	 * @return True if the sign uses the negated result of @{@link #isAddressInRange()}.
+	 * @return True if the sign uses the negated result of @{@link #isAddressMatching()}.
 	 */
 	protected abstract boolean negated();
 
@@ -92,6 +92,9 @@ abstract class AbstractBC9037 extends AbstractSimpleCrossroad implements Triggab
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#route()
+	 */
 	@Override
 	protected SimpleCollisionAvoider.Side route() {
 		if (this.isAddressMatching())

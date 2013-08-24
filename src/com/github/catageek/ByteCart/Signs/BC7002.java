@@ -10,6 +10,9 @@ import com.github.catageek.ByteCart.IO.OutputPinFactory;
 
 
 
+/**
+ * A cart detector
+ */
 final class BC7002 extends AbstractTriggeredSign implements Triggable {
 
 	BC7002(org.bukkit.block.Block block,
@@ -17,6 +20,9 @@ final class BC7002 extends AbstractTriggeredSign implements Triggable {
 		super(block, vehicle);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
+	 */
 	@Override
 	public void trigger() {
 		OutputPin[] lever = new OutputPin[1];
@@ -50,11 +56,17 @@ final class BC7002 extends AbstractTriggeredSign implements Triggable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getName()
+	 */
 	@Override
 	public final String getName() {
 		return "BC7002";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
+	 */
 	@Override
 	public final String getFriendlyName() {
 		return "Cart detector";
