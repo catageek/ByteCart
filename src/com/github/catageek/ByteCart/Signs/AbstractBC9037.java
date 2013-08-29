@@ -1,6 +1,11 @@
 package com.github.catageek.ByteCart.Signs;
 
+import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
+import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
+import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
+import com.github.catageek.ByteCart.HAL.RegistryBoth;
+import com.github.catageek.ByteCart.HAL.RegistryInput;
 
 
 
@@ -22,11 +27,10 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
  * - Example on-state with negated implementation and configuration from above:
  *   onState <=> !(AA.BB.CC <= IP <= XX.YY.ZZ)
  */
-abstract class AbstractBC9037 extends AbstractBC9000 implements Subnet, Triggable {
+abstract class AbstractBC9037 extends AbstractSimpleCrossroad implements Triggable {
 
 	AbstractBC9037(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.netmask = 8;
 	}
 
 	/**
@@ -37,8 +41,12 @@ abstract class AbstractBC9037 extends AbstractBC9000 implements Subnet, Triggabl
 
 	@Override
 	protected void addIO() {
-		// add input [0] to [5] from vehicle and 4th line
 		super.addIO();
+		// add input [0] to [2] from vehicle
+		addIOInv();
+		// add input [3], [4] and [5] from 4th line
+		this.addAddressAsInputs(AddressFactory.getAddress(getBlock(), 3));
+
 		// add input [6], [7] and [8] from 3th line
 		this.addAddressAsInputs(AddressFactory.getAddress(getBlock(), 2));
 	}
@@ -57,8 +65,7 @@ abstract class AbstractBC9037 extends AbstractBC9000 implements Subnet, Triggabl
 	 * The result is negated if said method returns true.
 	 *
 	 */
-	@Override
-	protected boolean isAddressMatching() {
+	private boolean isAddressMatching() {
 		try {
 			int startRegion = getInput(6).getAmount();
 			int region = getInput(0).getAmount();
@@ -83,5 +90,25 @@ abstract class AbstractBC9037 extends AbstractBC9000 implements Subnet, Triggabl
 			// There is no address on sign
 		}
 		return false;
+	}
+
+	@Override
+	protected SimpleCollisionAvoider.Side route() {
+		if (this.isAddressMatching())
+			return Side.RIGHT;
+		return Side.LEFT;
+	}
+
+	private void addAddressAsInputs(Address addr) {
+		if(addr.isValid()) {
+			RegistryInput region = addr.getRegion();
+			this.addInputRegistry(region);
+
+			RegistryInput track = addr.getTrack();
+			this.addInputRegistry(track);
+
+			RegistryBoth station = addr.getStation();
+			this.addInputRegistry(station);
+		}
 	}
 }

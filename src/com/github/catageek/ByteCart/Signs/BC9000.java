@@ -2,16 +2,15 @@ package com.github.catageek.ByteCart.Signs;
 
 import java.io.IOException;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
-import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.IO.OutputPin;
-import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterLocal;
-import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-final class BC9000 extends AbstractBC9000 implements Subnet, Triggable {
+final class BC9000 extends AbstractSimpleCrossroad implements Subnet, Triggable {
+
+	private final int netmask;
 
 	BC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
@@ -20,44 +19,27 @@ final class BC9000 extends AbstractBC9000 implements Subnet, Triggable {
 	}
 
 	@Override
-	protected SimpleCollisionAvoider.Side route() {
-		return SimpleCollisionAvoider.Side.LEFT;
-	}
-	
-	@Override
 	protected void manageUpdater(SimpleCollisionAvoider intersection) {
 		// it's an updater, so let it choosing direction
-		UpdaterLocal updater;
-		try {
-			updater = (UpdaterLocal) UpdaterFactory.getUpdater(this, this.getInventory());
-			// routing
-			intersection.WishToGo(route(), false);
+		super.manageUpdater(intersection);
 
-			// here we perform routes update
-			updater.leaveSubnet();
-			updater.save();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (ByteCart.myPlugin.getConfig().getBoolean("oldBC900behaviour", true)) {
+			UpdaterLocal updater;
+			try {
+				updater = (UpdaterLocal) UpdaterFactory.getUpdater(this, this.getInventory());
+
+				// here we perform routes update
+				updater.leaveSubnet();
+				updater.save();
+
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-	}
-
-	@Override
-	protected void addIO() {
-		// Output[0] = 2 bits registry representing levers on the left and on the right of the sign
-		OutputPin[] lever2 = new OutputPin[2];
-
-		// Left
-		lever2[0] = OutputPinFactory.getOutput(this.getBlock().getRelative(MathUtil.anticlockwise(this.getCardinal())));
-		// Right
-		lever2[1] = OutputPinFactory.getOutput(this.getBlock().getRelative(MathUtil.clockwise(this.getCardinal())));
-
-		PinRegistry<OutputPin> command1 = new PinRegistry<OutputPin>(lever2);
-
-		this.addOutputRegistry(command1);
 	}
 
 	@Override
@@ -68,5 +50,12 @@ final class BC9000 extends AbstractBC9000 implements Subnet, Triggable {
 	@Override
 	public String getFriendlyName() {
 		return "Collision avoider";
+	}
+
+	/**
+	 * @return the netmask
+	 */
+	public final int getNetmask() {
+		return netmask;
 	}
 }

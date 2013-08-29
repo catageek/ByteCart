@@ -20,6 +20,12 @@ mustProvideBooks: false
 # set to false to create a new ticket each time a player request one
 reusetickets: true
 
+# Set to true to enable the old behaviour of BC9000 i.e BC9000 as closing sign of subtrack
+# if false, BC9000 can be used anywhere without breaking updater configuration
+# if true, BC9000 can be used only to close subtrack.
+# default : true
+oldBC9000behaviour: false
+
 # Name to use as author of ticket book
 author: ByteCart
 

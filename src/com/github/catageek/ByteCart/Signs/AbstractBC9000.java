@@ -7,42 +7,31 @@ import org.bukkit.Bukkit;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.Address;
-import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
-import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.Event.SignPostSubnetEvent;
 import com.github.catageek.ByteCart.Event.SignPreSubnetEvent;
-import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.HAL.SubRegistry;
-import com.github.catageek.ByteCart.IO.OutputPin;
-import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
 import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
-import com.github.catageek.ByteCart.Util.MathUtil;
 
 
-abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,HasNetmask {
+abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,HasNetmask {
 
 	protected int netmask;
 
-	protected CollisionAvoiderBuilder builder;
 
-	private AddressRouted destination;
 
 	AbstractBC9000(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		builder = new SimpleCollisionAvoiderBuilder((Triggable) this, block.getRelative(this.getCardinal(), 3).getLocation());
-		/*		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : SimpleCollisionAvoiderBuilder(" + block.getRelative(this.getCardinal(), 3).getLocation()+")");
-		 */	}
+	}
 
+	@Override
 	public void trigger() {
 		try {
 
@@ -94,6 +83,7 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 
 	}
 
+	@Override
 	protected void manageUpdater(SimpleCollisionAvoider intersection) {
 		// it's an updater, so let it choosing direction
 		Updater updater;
@@ -114,6 +104,7 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 		}
 	}
 
+	@Override
 	protected SimpleCollisionAvoider.Side route() {
 		SignPreSubnetEvent event;
 		AddressRouted dst = this.getDestinationAddress();
@@ -147,10 +138,6 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 	}
 
 
-	public Updater.Level getLevel() {
-		return Updater.Level.LOCAL;
-	}
-
 	/**
 	 * Configures all IO ports of this sign.
 	 *
@@ -166,22 +153,12 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 	 * 0: left lever
 	 * 1: right lever
 	 */
+	@Override
 	protected void addIO() {
 		Address sign = this.getSignAddress();
 
-
-		// Output[0] = 2 bits registry representing levers on the left and on the right of the sign
-		OutputPin[] lever2 = new OutputPin[2];
-
-		// Left
-		lever2[0] = OutputPinFactory.getOutput(this.getBlock().getRelative(MathUtil.anticlockwise(this.getCardinal())));
-		// Right
-		lever2[1] = OutputPinFactory.getOutput(this.getBlock().getRelative(MathUtil.clockwise(this.getCardinal())));
-
-		PinRegistry<OutputPin> command1 = new PinRegistry<OutputPin>(lever2);
-
-		this.addOutputRegistry(command1);
-
+		super.addIO();
+		
 		// Input[0] = destination region taken from Inventory, slot #0
 
 
@@ -235,29 +212,10 @@ abstract class AbstractBC9000 extends AbstractTriggeredSign implements Subnet,Ha
 		}
 	}
 
-	public final Address getSignAddress() {
-		return AddressFactory.getAddress(getBlock(), 3);
-	}
-
+	@Override
 	public final int getNetmask() {
 		return netmask;
 	}
 
-	protected final AddressRouted getDestinationAddress() {
-		if (destination != null)
-			return destination;
-		return destination = AddressFactory.getAddress(this.getInventory());
-	}
 
-	@Override
-	public final String getDestinationIP() {
-		Address ip;
-		if ((ip = getDestinationAddress()) != null)
-			return ip.toString();
-		return "";
-	}
-
-	public final org.bukkit.block.Block getCenter() {
-		return this.getBlock();
-	}
 }
