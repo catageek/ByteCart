@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.Signs;
 
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -30,6 +31,21 @@ final public class ClickedSignFactory {
 
 		return null;
 
+	}
+	
+	/**
+	 * Get an IC with a code declared 3 blocks below the clicked sign
+	 *
+	 * @param block the sign clicked
+	 * @param player the player who clicked the sign
+	 * @return a Clickable IC, or null
+	 */
+	static final public Clickable getDownwardClickedIC(Block block, Player player) {
+		final Block relative = block.getRelative(BlockFace.DOWN, 3);
+		if (AbstractIC.checkEligibility(relative)) {
+			return ClickedSignFactory.getClickedIC(block, ((Sign) relative.getState()).getLine(1), player);
+		}
+		return null;
 	}
 
 
