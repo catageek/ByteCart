@@ -12,6 +12,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.util.Vector;
 
 import com.github.catageek.ByteCart.ByteCart;
 
@@ -129,5 +130,37 @@ public final class MathUtil {
 		return null;
 	}
 
+	public static double getSpeed(final Minecart minecart) {
 
+		final Vector velocity = minecart.getVelocity();
+
+		if (velocity.getX() > 0) {
+			return velocity.getX();
+		} else if (velocity.getX() < 0) {
+			return -velocity.getX();
+		} else if (velocity.getZ() > 0) {
+			return velocity.getZ();
+		} else if (velocity.getZ() < 0) {
+			return -velocity.getZ();
+		} else {
+			return 0;
+		}
+	}
+
+	public static void setSpeed(final Minecart minecart, final double speed) {
+
+		final Vector velocity = minecart.getVelocity();
+
+		if (velocity.getX() > 0) {
+			velocity.setX(speed);
+		} else if (velocity.getX() < 0) {
+			velocity.setX(-speed);
+		} else if (velocity.getZ() > 0) {
+			velocity.setZ(speed);
+		} else if (velocity.getZ() < 0) {
+			velocity.setZ(-speed);
+		}
+
+		minecart.setVelocity(velocity);
+	}
 }
