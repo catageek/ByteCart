@@ -1,5 +1,6 @@
 package com.github.catageek.ByteCart.Signs;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -33,7 +34,7 @@ final public class ClickedSignFactory {
 		return null;
 
 	}
-	
+
 	/**
 	 * Get an IC with a code declared 2 blocks behind the clicked sign
 	 *
@@ -42,12 +43,15 @@ final public class ClickedSignFactory {
 	 * @return a Clickable IC, or null
 	 */
 	static final public Clickable getBackwardClickedIC(Block block, Player player) {
-		BlockFace f = ((org.bukkit.material.Sign) block.getState().getData()).getFacing().getOppositeFace();
-		f = MathUtil.straightUp(f);
+		Material type = block.getState().getType();
+		if (type.equals(Material.SIGN_POST) || type.equals(Material.WALL_SIGN)) {
+			BlockFace f = ((org.bukkit.material.Sign) block.getState().getData()).getFacing().getOppositeFace();
+			f = MathUtil.straightUp(f);
 
-		final Block relative = block.getRelative(f, 2);
-		if (AbstractIC.checkEligibility(relative)) {
-			return ClickedSignFactory.getClickedIC(block, ((Sign) relative.getState()).getLine(1), player);
+			final Block relative = block.getRelative(f, 2);
+			if (AbstractIC.checkEligibility(relative)) {
+				return ClickedSignFactory.getClickedIC(block, ((Sign) relative.getState()).getLine(1), player);
+			}
 		}
 		return null;
 	}
