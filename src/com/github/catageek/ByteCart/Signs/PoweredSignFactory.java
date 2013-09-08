@@ -19,7 +19,7 @@ public class PoweredSignFactory {
 			// if there is really a BC sign post
 			// we extract its #
 			
-			return this.getPoweredIC(block, ((Sign) block.getState()).getLine(1));
+			return PoweredSignFactory.getPoweredIC(block, ((Sign) block.getState()).getLine(1));
 
 		
 		}
@@ -29,7 +29,10 @@ public class PoweredSignFactory {
 		
 	}
 
-	private Powerable getPoweredIC(Block block, String signString) {
+	static final public Powerable getPoweredIC(Block block, String signString) {
+
+		if (signString.length() < 7)
+			return null;
 
 		int ICnumber = Integer.parseInt(signString.substring(3, 7));
 /*		
@@ -46,6 +49,8 @@ public class PoweredSignFactory {
 					return (Powerable)(new BC7001(block, null));
 				case 7003:
 					return (Powerable)(new BC7003(block));
+				case 7004:
+					return (Powerable)(new BC7004(block, ((Sign) block.getState()).getLine(3)));
 				case 9001:
 					return (Powerable)(new BC9001(block, null));
 				

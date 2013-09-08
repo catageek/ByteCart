@@ -58,7 +58,7 @@ final public class ClickedSignFactory {
 
 
 
-	static final private Clickable getClickedIC(Block block, String signString, Player player) {
+	static final public Clickable getClickedIC(Block block, String signString, Player player) {
 
 		if (signString.length() < 7)
 			return null;

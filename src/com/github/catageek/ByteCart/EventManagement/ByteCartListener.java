@@ -167,7 +167,15 @@ public class ByteCartListener implements Listener {
 		AbstractIC.removeFromCache(event.getBlock());
 
 		try {
-			Triggable myIC = TriggeredSignFactory.getTriggeredIC(event.getBlock(), event.getLine(1), null);
+			IC myIC = TriggeredSignFactory.getTriggeredIC(event.getBlock(), event.getLine(1), null);
+			
+			if (myIC == null) {
+				myIC = ClickedSignFactory.getClickedIC(event.getBlock(), event.getLine(1), event.getPlayer());
+			}
+			
+			if (myIC == null) {
+				myIC = PoweredSignFactory.getPoweredIC(event.getBlock(), event.getLine(1));
+			}
 
 			if (myIC != null) {
 				Player player = event.getPlayer();
