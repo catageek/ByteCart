@@ -6,6 +6,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import com.github.catageek.ByteCart.HAL.AbstractIC;
+import com.github.catageek.ByteCart.Util.MathUtil;
 
 
 // This class contains the method to instantiate any IC
@@ -34,14 +35,17 @@ final public class ClickedSignFactory {
 	}
 	
 	/**
-	 * Get an IC with a code declared 3 blocks below the clicked sign
+	 * Get an IC with a code declared 2 blocks behind the clicked sign
 	 *
 	 * @param block the sign clicked
 	 * @param player the player who clicked the sign
 	 * @return a Clickable IC, or null
 	 */
-	static final public Clickable getDownwardClickedIC(Block block, Player player) {
-		final Block relative = block.getRelative(BlockFace.DOWN, 3);
+	static final public Clickable getBackwardClickedIC(Block block, Player player) {
+		BlockFace f = ((org.bukkit.material.Sign) block.getState().getData()).getFacing().getOppositeFace();
+		f = MathUtil.straightUp(f);
+
+		final Block relative = block.getRelative(f, 2);
 		if (AbstractIC.checkEligibility(relative)) {
 			return ClickedSignFactory.getClickedIC(block, ((Sign) relative.getState()).getLine(1), player);
 		}

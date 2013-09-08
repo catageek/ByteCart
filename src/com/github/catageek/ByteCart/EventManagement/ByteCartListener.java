@@ -271,14 +271,12 @@ public class ByteCartListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
-		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0 
-				|| (!AbstractIC.checkEligibility(event.getClickedBlock())
-						&& !AbstractIC.checkEligibility(event.getClickedBlock().getRelative(BlockFace.DOWN, 3))))
+		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0)
 			return;
 		Clickable myIC = ClickedSignFactory.getClickedIC(event.getClickedBlock(), event.getPlayer());
 
 		if (myIC == null)
-			myIC = ClickedSignFactory.getDownwardClickedIC(event.getClickedBlock(), event.getPlayer());
+			myIC = ClickedSignFactory.getBackwardClickedIC(event.getClickedBlock(), event.getPlayer());
 
 		if (myIC != null) {
 
