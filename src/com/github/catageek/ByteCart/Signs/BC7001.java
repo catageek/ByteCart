@@ -1,14 +1,8 @@
 package com.github.catageek.ByteCart.Signs;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.util.Vector;
 
@@ -143,42 +137,12 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 		// We need to find if a cart is stopped and set the member variable Vehicle
 		Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();
 
-		List<Entity> ent = Arrays.asList(this.getBlock().getChunk().getEntities());
-		/*
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: BC7001 : loading " + ent.size() + " entities.");
-		 */
-		for (ListIterator<Entity> it = ent.listIterator(); it.hasNext();) {
-			/*			
-			if(ByteCart.debug) {
-				ByteCart.log.info("ByteCart: BC7001 : examining entity at " + it.next().getLocation().toString());
-				it.previous();
-			}
-			 */
-			if (it.next() instanceof Minecart) {
-				it.previous();
+		bc = TriggeredSignFactory.getTriggeredIC(this.getBlock(),MathUtil.getVehicleByLocation(loc));
 
-				Location cartloc = ((Minecart) it.next()).getLocation();
-
-				if ( cartloc.getBlockX() == loc.getBlockX() && cartloc.getBlockZ() == loc.getBlockZ()) {
-					it.previous();
-
-					// found ! we instantiate a new IC with the vehicle we found
-					//bc7001 = new BC7001(this.getBlock(), (Vehicle) it.next());
-					bc = TriggeredSignFactory.getTriggeredIC(this.getBlock(), (Vehicle) it.next());
-					/*
-					if(ByteCart.debug)
-						ByteCart.log.info("ByteCart: BC7001 : cart on stop");
-					 */					
-					break;
-
-				}
-			}
-		}
-
-		bc.trigger();
-
-
+		if (bc != null)
+			bc.trigger();
+		else
+			this.trigger();
 	}
 
 	@Override

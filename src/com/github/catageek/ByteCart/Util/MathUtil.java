@@ -1,8 +1,17 @@
 package com.github.catageek.ByteCart.Util;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
+
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Minecart;
+import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.ByteCart;
 
@@ -93,4 +102,32 @@ public final class MathUtil {
 		}
 
 	}
+	
+	/**
+	 * Get the vehicle that is at specific location
+	 *
+	 * @param loc the location
+	 * @return the vehicle, or null
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public static org.bukkit.entity.Vehicle getVehicleByLocation(Location loc)
+			throws ClassNotFoundException, IOException {
+		List<Entity> ent = Arrays.asList(loc.getBlock().getChunk().getEntities());
+		for (ListIterator<Entity> it = ent.listIterator(); it.hasNext();) {
+			if (it.next() instanceof Minecart) {
+				it.previous();
+
+				Location cartloc = ((Minecart) it.next()).getLocation();
+
+				if ( cartloc.getBlockX() == loc.getBlockX() && cartloc.getBlockZ() == loc.getBlockZ()) {
+					it.previous();
+					return  (Vehicle) it.next();
+				}
+			}
+		}
+		return null;
+	}
+
+
 }
