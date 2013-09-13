@@ -20,6 +20,10 @@ mustProvideBooks: false
 # set to false to create a new ticket each time a player request one
 reusetickets: true
 
+# Set to true to drop items on the ground when removing carts with BC7008
+# Set to false to remove them. They will be lost forever.
+keepitems: true
+
 # Set to true to enable the old behaviour of BC9000 i.e BC9000 as closing sign of subtrack
 # if false, BC9000 can be used anywhere without breaking updater configuration
 # if true, BC9000 can be used only to close subtrack.

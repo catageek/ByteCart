@@ -25,6 +25,7 @@ public final class ByteCart extends JavaPlugin {
 	private CollisionAvoiderManager cam;
 	private IsTrainManager it;
 	public int Lockduration;
+	private boolean keepitems;
 
 	public void onEnable(){
 
@@ -76,6 +77,7 @@ public final class ByteCart extends JavaPlugin {
 
 	protected final void loadConfig() {
 		debug = this.getConfig().getBoolean("debug", false);
+		keepitems = this.getConfig().getBoolean("keepitems", true);
 
 		Lockduration = this.getConfig().getInt("Lockduration", 44);
 
@@ -135,5 +137,12 @@ public final class ByteCart extends JavaPlugin {
 	 */
 	private void setIt(IsTrainManager it) {
 		this.it = it;
+	}
+
+	/**
+	 * @return true if we must keep items while removing carts
+	 */
+	public boolean keepItems() {
+		return keepitems;
 	}
 }

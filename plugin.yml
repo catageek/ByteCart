@@ -17,6 +17,7 @@ permissions:
             bytecart.BC7005: true
             bytecart.BC7006: true
             bytecart.BC7007: true
+            bytecart.BC7008: true
             bytecart.BC7010: true
             bytecart.BC7011: true
             bytecart.BC7012: true
@@ -59,6 +60,7 @@ permissions:
             bytecart.BC7005: true
             bytecart.BC7006: true
             bytecart.BC7007: true
+            bytecart.BC7008: true
             bytecart.BC7010: true
             bytecart.BC7011: false
             bytecart.BC7012: true
@@ -91,6 +93,7 @@ permissions:
             bytecart.BC7005: true
             bytecart.BC7006: true
             bytecart.BC7007: true
+            bytecart.BC7008: true
             bytecart.BC7010: true
             bytecart.BC7011: false
             bytecart.BC7012: true
@@ -125,6 +128,8 @@ permissions:
     bytecart.BC7006:
         default: true
     bytecart.BC7007:
+        default: true
+    bytecart.BC7008:
         default: true
     bytecart.BC7010:
         default: true
@@ -205,7 +210,7 @@ commands:
     bcupdater:
         description: set a cart as Updater for ByteCart
         usage: |
-           Usage : /<command> (region|local) n
+           Usage : /<command> (region|local) n [new]
                      /<command> backbone
                      /<command> (reset_region|reset_local) n [full]
                      /<command> reset_backbone [full]
