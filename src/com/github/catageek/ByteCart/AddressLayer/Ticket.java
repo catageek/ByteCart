@@ -55,7 +55,7 @@ final class Ticket {
 	}
 
 	private final static boolean isTicket(ItemStack stack) {
-		if (stack != null && stack.getTypeId() == Material.WRITTEN_BOOK.getId() && stack.hasItemMeta()) {
+		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta()) {
 			String bookauthor = ((BookMeta) stack.getItemMeta()).getAuthor();
 			if (bookauthor.equals(ByteCart.myPlugin.getConfig().getString("author")))
 				return true;

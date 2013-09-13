@@ -50,7 +50,7 @@ abstract public class UpdaterContentFactory {
 
 	public static boolean isRoutingTableExchange(Inventory inv, Scope scope, String type) {
 		ItemStack stack = inv.getItem(0);
-		if (stack != null && stack.getTypeId() == Material.WRITTEN_BOOK.getId() && stack.hasItemMeta()) {
+		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta()) {
 			BookMeta book = (BookMeta) stack.getItemMeta();
 			String booktitle = book.getTitle();
 			String dot = "\\.";
