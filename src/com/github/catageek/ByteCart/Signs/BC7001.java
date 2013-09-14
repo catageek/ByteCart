@@ -1,9 +1,12 @@
 package com.github.catageek.ByteCart.Signs;
 
 import java.io.IOException;
+
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.Rails;
 import org.bukkit.util.Vector;
 
 import com.github.catageek.ByteCart.ByteCart;
@@ -135,7 +138,14 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 		Triggable bc = this;
 
 		// We need to find if a cart is stopped and set the member variable Vehicle
-		Location loc = this.getBlock().getRelative(BlockFace.UP, 2).getLocation();
+		org.bukkit.block.Block block = this.getBlock().getRelative(BlockFace.UP, 2);
+		Location loc = block.getLocation();
+		MaterialData rail;
+		
+		// if the rail is in slope, the cart is 1 block up
+		if ((rail = block.getState().getData()) instanceof Rails
+				&& ((Rails) rail).isOnSlope())
+			loc.add(0, 1, 0);
 
 		bc = TriggeredSignFactory.getTriggeredIC(this.getBlock(),MathUtil.getVehicleByLocation(loc));
 

@@ -3,8 +3,11 @@ package com.github.catageek.ByteCart.Signs;
 import java.io.IOException;
 
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.Rails;
 
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 
@@ -31,6 +34,14 @@ final public class TriggeredSignFactory {
 
 			return TriggeredSignFactory.getTriggeredIC(block, ((Sign) block.getState()).getLine(1), vehicle);
 		}
+
+		// Maybe the rail is in slope
+		Block block2 = block.getRelative(BlockFace.DOWN);
+		if (AbstractIC.checkEligibility(block2)) {
+			MaterialData rail = block.getRelative(BlockFace.UP).getState().getData();
+			if (rail instanceof Rails && ((Rails) rail).isOnSlope())
+				return TriggeredSignFactory.getTriggeredIC(block2, ((Sign) block2.getState()).getLine(1), vehicle);
+		}
 		// no BC sign post
 
 		return null;
@@ -52,7 +63,7 @@ final public class TriggeredSignFactory {
 
 		if (signString.length() < 7)
 			return null;
-		
+
 		int ICnumber;
 		try {
 			ICnumber = Integer.parseInt(signString.substring(3, 7));
