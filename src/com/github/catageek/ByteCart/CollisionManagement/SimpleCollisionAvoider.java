@@ -16,6 +16,8 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	private final Location loc1;
 
 	private Side state;
+	
+	private boolean reversed;
 
 	public enum Side {
 		RIGHT (3),
@@ -45,13 +47,14 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 
 		Lever1 = ic.getOutput(0);
 		Active = Lever1;
+		reversed = ic.isLeverReversed();
 		loc1 = ic.getLocation();
 		state = (Lever1.getAmount() == 0 ? Side.LEFT : Side.RIGHT);
 	}
 
 	public Side WishToGo(Side s, boolean isTrain) {
 
-		Side trueside = getTrueSide(s);
+		Side trueside = getActiveTrueSide(s);
 
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : WishToGo to side " + trueside + " and isTrain is " + isTrain);
@@ -73,14 +76,25 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	}
 
 	/**
-	 * Get the fixed side if it is the second lever
+	 * Get the fixed side of the active lever.
+	 * the second IC lever can be reversed
 	 * 
 	 * @param s the original side
 	 * @return the fixed side
 	 */
-	private Side getTrueSide(Side s) {
-		Side trueside = (Active == Lever2 ? s.opposite() : s);
-		return trueside;
+	private final Side getActiveTrueSide(Side s) {
+		if (Active != Lever2)
+			return s;
+		return getSecondLeverSide(s);
+	}
+
+	/**
+	 * Get the fixed side of the second lever
+	 * @param s the original side
+	 * @return the fixed side
+	 */
+	private final Side getSecondLeverSide(Side s) {
+		return reversed ? s : s.opposite();
 	}
 
 
@@ -96,7 +110,8 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		}
 		Lever2 = t.getOutput(0);
 		Active = Lever2;
-		Lever2.setAmount(getTrueSide(state).Value());
+		reversed ^= t.isLeverReversed();
+		Lever2.setAmount(getSecondLeverSide(state).Value());
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: Add and setting lever2 to " + Lever2.getAmount());
 	}
@@ -106,7 +121,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: Setting lever1 to " + Lever1.getAmount());
 		if (this.Lever2 != null) {
-			this.Lever2.setAmount(s.opposite().Value());
+			this.Lever2.setAmount(getSecondLeverSide(state).Value());
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart: Setting lever2 to " + Lever2.getAmount());
 		}
