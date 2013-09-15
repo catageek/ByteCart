@@ -22,6 +22,7 @@ public final class CollisionAvoiderManager {
 		cm = (T) this.getManager().get(loc);
 		if(cm != null) {
 			cm.Add(builder.getIc());
+			this.getManager().reset(loc);
 		}
 		else
 		{
