@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Rails;
@@ -37,7 +38,7 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 
 	@Override
 	public void trigger() {
-		
+
 		// add output occupied line = lever
 
 		OutputPin[] lever = new OutputPin[1];
@@ -69,9 +70,9 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 			if(this.getInput(0).getAmount() > 0) {
 				if (this.wasTrain(this.getLocation()))
 					ByteCart.myPlugin.getIsTrainManager().getMap().reset(this.getLocation());
-/*				if(ByteCart.debug)
+				/*				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : " + this.getVehicle() + " : isTrain() = " + this.isTrain());
-*/
+				 */
 				if (this.isTrain()) {
 					this.setWasTrain(this.getLocation(), true);
 				}
@@ -96,7 +97,8 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 
 				// if the cart is stopped, start it
 				if (this.getVehicle().getVelocity().equals(new Vector(0,0,0))) {
-
+					if (((Minecart) this.getVehicle()).getMaxSpeed() == 0)
+						((Minecart) this.getVehicle()).setMaxSpeed(0.4d);
 					this.getVehicle().setVelocity((new Vector(this.getCardinal().getModX(), this.getCardinal().getModY(), this.getCardinal().getModZ())).multiply(ByteCart.myPlugin.getConfig().getDouble("BC7001.startvelocity")));
 				}
 			}
@@ -109,6 +111,7 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 					// the lever is off
 					this.getOutput(0).setAmount(0);
 					this.getVehicle().setVelocity(new Vector(0,0,0));
+					((Minecart) this.getVehicle()).setMaxSpeed(0d);
 					ByteCart.myPlugin.getIsTrainManager().getMap().remove(getBlock().getRelative(getCardinal().getOppositeFace(), 2).getLocation());
 				}
 				else
@@ -141,7 +144,7 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 		org.bukkit.block.Block block = this.getBlock().getRelative(BlockFace.UP, 2);
 		Location loc = block.getLocation();
 		MaterialData rail;
-		
+
 		// if the rail is in slope, the cart is 1 block up
 		if ((rail = block.getState().getData()) instanceof Rails
 				&& ((Rails) rail).isOnSlope())
