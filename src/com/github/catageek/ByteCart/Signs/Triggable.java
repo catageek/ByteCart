@@ -15,4 +15,10 @@ public interface Triggable extends IC {
 	public void trigger() throws ClassNotFoundException, IOException;
 	public boolean isTrain();
 	public boolean wasTrain(Location loc);
+	
+	/**
+	 * Tell if the lever is negated
+	 * @return true if it is negated
+	 */
+	public boolean isLeverReversed();
 }

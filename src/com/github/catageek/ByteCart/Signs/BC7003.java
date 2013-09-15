@@ -169,6 +169,11 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 	public boolean wasTrain(org.bukkit.Location loc) {
 		return false;
 	}
+
+	@Override
+	public boolean isLeverReversed() {
+		return false;
+	}
 }
 
 

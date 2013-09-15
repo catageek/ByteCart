@@ -123,6 +123,14 @@ abstract class AbstractTriggeredSign extends AbstractIC {
 			ByteCart.myPlugin.getIsTrainManager().getMap().put(loc, true);
 
 	}
+	
+	/**
+	 * Default is lever not reversed
+	 * @return false
+	 */
+	public boolean isLeverReversed() {
+		return false;
+	}
 
 
 }

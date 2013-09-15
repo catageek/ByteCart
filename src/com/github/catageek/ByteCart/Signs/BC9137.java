@@ -31,4 +31,8 @@ final class BC9137 extends AbstractBC9037 {
 		return "Negated range matcher";
 	}
 
+	@Override
+	public boolean isLeverReversed() {
+		return true;
+	}
 }
