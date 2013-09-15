@@ -6,7 +6,7 @@ import com.github.catageek.ByteCart.Storage.ExpirableMap;
 
 public final class CollisionAvoiderManager {
 
-	private final ExpirableMap<Location, CollisionAvoider> manager = new ExpirableMap<Location, CollisionAvoider>(80, false, "CollisionAvoider");
+	private final ExpirableMap<Location, CollisionAvoider> manager = new ExpirableMap<Location, CollisionAvoider>(40, false, "CollisionAvoider");
 
 	/**
 	 * @return the manager
