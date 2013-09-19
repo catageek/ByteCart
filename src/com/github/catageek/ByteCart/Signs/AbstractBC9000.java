@@ -111,6 +111,7 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 		int ttl;
 		if (this.isAddressMatching() && (ttl = dst.getTTL()) != 0) {
 			dst.updateTTL(ttl -1);
+			dst.finalizeAddress();
 			event = new SignPreSubnetEvent(this, Side.RIGHT);
 		}
 		else
