@@ -27,6 +27,7 @@ permissions:
             bytecart.BC7016: true
             bytecart.BC7017: true
             bytecart.BC7018: true
+            bytecart.BC7019: true
             bytecart.BC7020: true
             bytecart.BC7021: true
             bytecart.BC8010: true
@@ -67,6 +68,7 @@ permissions:
             bytecart.BC7013: true
             bytecart.BC7014: true
             bytecart.BC7018: true
+            bytecart.BC7019: true
             bytecart.BC7020: true
             bytecart.BC7021: true
             bytecart.BC8010: false
@@ -100,6 +102,7 @@ permissions:
             bytecart.BC7013: true
             bytecart.BC7014: true
             bytecart.BC7018: true
+            bytecart.BC7019: true
             bytecart.BC7020: true
             bytecart.BC7021: true
             bytecart.BC8010: false
@@ -149,6 +152,8 @@ permissions:
         default: true
     bytecart.BC7018:
         default: true
+    bytecart.BC7019:
+        default: false
     bytecart.BC7020:
         default: true
     bytecart.BC7021:
