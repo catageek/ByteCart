@@ -3,7 +3,7 @@ author: catageek
 website: http://dev.bukkit.org/bukkit-plugins/bytecart/
 description: An automatic transit system
 main: com.github.catageek.ByteCart.ByteCart
-version: 2.5.1
+version: 2.6.1
 database: false
 softdepend: [dynmap]
 permissions:
