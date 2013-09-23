@@ -40,13 +40,13 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 		int mask = this.getNetmask();
 		if (mask < 8) {
 			Stack<Integer> end = this.getEnd();
-			if (to.equals(Side.RIGHT) && (end.isEmpty() || mask > end.peek())) {
+			if (to.equals(Side.LEVER_ON) && (end.isEmpty() || mask > end.peek())) {
 				end.push(mask);
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart : pushing mask " + mask + " on stack");
 			}
 			else
-				if (to.equals(Side.LEFT) && ! end.isEmpty()) {
+				if (to.equals(Side.LEVER_OFF) && ! end.isEmpty()) {
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart : popping mask " + end.peek() + " from stack");
 
@@ -86,8 +86,8 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 		int mask = this.getNetmask();
 		Stack<Integer> end = this.getEnd();
 		if ( mask < 8 && (end.isEmpty() || mask > end.peek()))
-			return Side.RIGHT;
-		return Side.LEFT;
+			return Side.LEVER_ON;
+		return Side.LEVER_OFF;
 	}
 
 	@Override

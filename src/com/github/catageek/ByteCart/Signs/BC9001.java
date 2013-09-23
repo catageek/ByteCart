@@ -88,7 +88,7 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 			try {
 				updater = UpdaterFactory.getUpdater(this, this.getInventory());
 				// here we perform routes update
-				updater.doAction(Side.LEFT);
+				updater.doAction(Side.LEVER_OFF);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -158,19 +158,19 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 		SignPostStationEvent event1;
 		// test if every destination field matches sign field
 		if (this.isAddressMatching()  && this.getInput(6).getAmount() == 0)
-			event = new SignPreStationEvent(this, Side.RIGHT); // power levers if matching
+			event = new SignPreStationEvent(this, Side.LEVER_ON); // power levers if matching
 		else
-			event = new SignPreStationEvent(this, Side.LEFT); // unpower levers if not matching
+			event = new SignPreStationEvent(this, Side.LEVER_OFF); // unpower levers if not matching
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		
-		if (event.getSide().equals(Side.RIGHT)  && this.getInput(6).getAmount() == 0) {
+		if (event.getSide().equals(Side.LEVER_ON)  && this.getInput(6).getAmount() == 0) {
 			this.getOutput(0).setAmount(3); // power levers if matching
-			event1 = new SignPostStationEvent(this, Side.RIGHT);
+			event1 = new SignPostStationEvent(this, Side.LEVER_ON);
 		}
 		else
 		{
 			this.getOutput(0).setAmount(0); // unpower levers if not matching
-			event1 = new SignPostStationEvent(this, Side.RIGHT);
+			event1 = new SignPostStationEvent(this, Side.LEVER_ON);
 		}
 		Bukkit.getServer().getPluginManager().callEvent(event1);
 		return null;

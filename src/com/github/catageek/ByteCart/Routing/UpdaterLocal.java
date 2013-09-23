@@ -157,7 +157,7 @@ public class UpdaterLocal implements Updater {
 
 		// we did not enter the subnet
 		int start;
-		if(to.Value() != Side.RIGHT.Value() && this.getNetmask() < 8) {
+		if(to.Value() != Side.LEVER_ON.Value() && this.getNetmask() < 8) {
 			// if we have the same sign as when entering the subnet, close the subnet
 			if (this.isExactSubnet((start = this.getFirstStationNumber()), this.getNetmask())) {
 				this.getSignAddress().setAddress(buildAddress(start));
@@ -242,9 +242,9 @@ public class UpdaterLocal implements Updater {
 				&& (! (this.getStart().empty() ^ this.getEnd().empty()))
 				&& ! this.isExactSubnet(this.getFirstStationNumber(), this.getNetmask())
 				&& this.getWandererRegion() == this.getCounter().getCount(counterSlot.REGION.slot))
-			return Side.RIGHT;
+			return Side.LEVER_ON;
 
-		return Side.LEFT;
+		return Side.LEVER_OFF;
 	}
 
 	@Override

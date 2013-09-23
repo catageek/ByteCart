@@ -40,7 +40,7 @@ public class DefaultRouterWanderer extends AbstractWanderer {
 	 */
 	@Override
 	public Side giveSimpleDirection() {
-		return Side.LEFT;
+		return Side.LEVER_OFF;
 	}
 
 	/* (non-Javadoc)

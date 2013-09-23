@@ -91,7 +91,7 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 	}
 
 	protected Side route() {
-		return SimpleCollisionAvoider.Side.LEFT;
+		return SimpleCollisionAvoider.Side.LEVER_OFF;
 	}
 	
 	public void trigger() {

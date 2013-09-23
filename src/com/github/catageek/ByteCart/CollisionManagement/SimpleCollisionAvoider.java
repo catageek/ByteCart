@@ -23,11 +23,11 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	private boolean reversed;
 
 	/**
-	 * Position of the T cross-roads. RIGHT means lever ON
+	 * Position of the T cross-roads.
 	 */
 	public enum Side {
-		RIGHT (3),
-		LEFT (0);
+		LEVER_ON (3),
+		LEVER_OFF (0);
 
 		private int Value;
 
@@ -40,9 +40,9 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		}
 
 		public Side opposite() {
-			if (this.equals(LEFT))
-				return RIGHT;
-			return LEFT;
+			if (this.equals(LEVER_OFF))
+				return LEVER_ON;
+			return LEVER_OFF;
 		}
 	}
 
@@ -55,7 +55,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 		Active = Lever1;
 		reversed = ic.isLeverReversed();
 		loc1 = ic.getLocation();
-		state = (Lever1.getAmount() == 0 ? Side.LEFT : Side.RIGHT);
+		state = (Lever1.getAmount() == 0 ? Side.LEVER_OFF : Side.LEVER_ON);
 	}
 
 	/**

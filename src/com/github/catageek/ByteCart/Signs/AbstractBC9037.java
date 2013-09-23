@@ -98,8 +98,8 @@ abstract class AbstractBC9037 extends AbstractSimpleCrossroad implements Triggab
 	@Override
 	protected SimpleCollisionAvoider.Side route() {
 		if (this.isAddressMatching())
-			return Side.RIGHT;
-		return Side.LEFT;
+			return Side.LEVER_ON;
+		return Side.LEVER_OFF;
 	}
 
 	private void addAddressAsInputs(Address addr) {
