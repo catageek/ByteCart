@@ -226,7 +226,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 				// trigger event
 				SignPreRouteEvent event = new SignPreRouteEvent(this, this.getRoutingTable().getDirectlyConnected(out));
 				Bukkit.getServer().getPluginManager().callEvent(event);
-				return out.getBlockFace();
+				return RoutingTable.getDirection(event.getTargetTrack()).getBlockFace();
 			}
 		}
 
