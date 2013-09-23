@@ -55,8 +55,16 @@ public class UpdaterLeaveSubnetEvent extends UpdaterEvent {
 	/**
 	 * @return the address of the new subnet
 	 */
+	@Deprecated
 	public Address getNewaddress() {
 		return newaddress;
+	}
+
+	/**
+	 * @return the address of the new subnet
+	 */
+	public String getNewAddress() {
+		return newaddress.toString();
 	}
 
 	/**

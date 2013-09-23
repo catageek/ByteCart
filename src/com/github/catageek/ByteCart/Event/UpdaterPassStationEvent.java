@@ -36,7 +36,15 @@ public class UpdaterPassStationEvent extends UpdaterEvent {
 	/**
 	 * @return The address of the station
 	 */
+	@Deprecated
 	public Address getAddress() {
 		return address;
+	}
+
+	/**
+	 * @return The address of the station
+	 */
+	public String getAddressString() {
+		return address.toString();
 	}
 }

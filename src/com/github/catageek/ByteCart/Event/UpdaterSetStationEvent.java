@@ -37,8 +37,15 @@ public class UpdaterSetStationEvent extends UpdaterClearStationEvent {
 	/**
 	 * @return the newAddress
 	 */
+	@Deprecated
 	public Address getNewAddress() {
 		return newAddress;
 	}
 
+	/**
+	 * @return the newAddress
+	 */
+	public String getAddress() {
+		return newAddress.toString();
+	}
 }

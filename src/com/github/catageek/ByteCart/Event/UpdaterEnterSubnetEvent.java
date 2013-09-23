@@ -57,6 +57,14 @@ public class UpdaterEnterSubnetEvent extends UpdaterEvent {
 	/**
 	 * @return the address of the subnet we are nested in
 	 */
+	public String getOldAddressString() {
+		return oldaddress.toString();
+	}
+
+	/**
+	 * @return the address of the subnet we are nested in
+	 */
+	@Deprecated
 	public Address getOldAddress() {
 		return oldaddress;
 	}
