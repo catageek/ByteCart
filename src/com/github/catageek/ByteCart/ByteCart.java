@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.catageek.ByteCart.AddressLayer.Resolver;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
 import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
 import com.github.catageek.ByteCart.EventManagement.ConstantSpeedListener;
@@ -27,6 +28,7 @@ public final class ByteCart extends JavaPlugin {
 	private IsTrainManager it;
 	public int Lockduration;
 	private boolean keepitems;
+	private Resolver resolver;
 
 	/* (non-Javadoc)
 	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
@@ -147,5 +149,21 @@ public final class ByteCart extends JavaPlugin {
 	 */
 	public boolean keepItems() {
 		return keepitems;
+	}
+
+	/**
+	 * @return the resolver registered
+	 */
+	public Resolver getResolver() {
+		return resolver;
+	}
+
+	/**
+	 * Set the resolver that will be used
+	 * 
+	 * @param resolver the resolver provided
+	 */
+	public void setResolver(Resolver resolver) {
+		this.resolver = resolver;
 	}
 }

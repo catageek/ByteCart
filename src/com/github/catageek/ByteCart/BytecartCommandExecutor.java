@@ -43,7 +43,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			} else {
 				Player player = (Player) sender;
 
-				if(args.length == 0 || args.length >= 3 || !AddressString.isAddress(args[0]))
+				if(args.length == 0 || args.length >= 3 || !AddressString.isResolvableAddressOrName(args[0]))
 					return false;
 
 				Address address = new AddressString(args[0]);
@@ -63,7 +63,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			} else {
 				Player player = (Player) sender;
 
-				if(args.length == 0 || args.length >= 3 || !AddressString.isAddress(args[0]))
+				if(args.length == 0 || args.length >= 3 || !AddressString.isResolvableAddressOrName(args[0]))
 					return false;
 
 				Address address = new AddressString(args[0]);
@@ -296,7 +296,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				return false;
 			}
 
-			if(!AddressString.isAddress(args[1])) {
+			if(!AddressString.isResolvableAddressOrName(args[1])) {
 				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
 				return false;
 			}
@@ -319,7 +319,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			isTrain = (args.length == 2 && args[1].equalsIgnoreCase("train"));
 		}
 
-		if(!AddressString.isAddress(addressString)) {
+		if(!AddressString.isResolvableAddressOrName(addressString)) {
 			sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
 			return false;
 		}
