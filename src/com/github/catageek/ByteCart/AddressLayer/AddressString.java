@@ -2,6 +2,7 @@ package com.github.catageek.ByteCart.AddressLayer;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.AddressLayer.Resolver;
 import com.github.catageek.ByteCartAPI.HAL.VirtualRegistry;
 
 

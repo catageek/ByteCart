@@ -6,18 +6,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.catageek.ByteCart.AddressLayer.Resolver;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
 import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
 import com.github.catageek.ByteCart.EventManagement.ConstantSpeedListener;
 import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
+import com.github.catageek.ByteCartAPI.ByteCartAPI;
+import com.github.catageek.ByteCartAPI.ByteCartPlugin;
+import com.github.catageek.ByteCartAPI.AddressLayer.Resolver;
 
 /**
  * Main class
  */
-public final class ByteCart extends JavaPlugin {
+public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 
 	public static Logger log = Logger.getLogger("Minecraft");
 	public static ByteCart myPlugin;
@@ -37,6 +39,8 @@ public final class ByteCart extends JavaPlugin {
 	public void onEnable(){
 
 		myPlugin = this;
+		
+		ByteCartAPI.setPlugin(this);
 
 		this.saveDefaultConfig();
 
@@ -72,6 +76,7 @@ public final class ByteCart extends JavaPlugin {
 		log.info("Your plugin has been disabled.");
 
 		myPlugin = null;
+		ByteCartAPI.setPlugin(null);
 		log = null;
 
 	}
