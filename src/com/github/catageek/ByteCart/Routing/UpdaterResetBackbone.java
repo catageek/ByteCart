@@ -1,7 +1,9 @@
 package com.github.catageek.ByteCart.Routing;
 
 import org.bukkit.block.BlockFace;
-import com.github.catageek.ByteCart.Signs.BCSign;
+
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Signs.BCSign;
 
 class UpdaterResetBackbone extends UpdaterBackBone implements Updater {
 

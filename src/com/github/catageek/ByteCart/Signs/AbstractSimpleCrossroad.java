@@ -1,21 +1,22 @@
 package com.github.catageek.ByteCart.Signs;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.HAL.RegistryBoth;
-import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
-import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
+import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Signs.BCSign;
 
 /**
  * An abstract class for T-intersection signs
@@ -91,7 +92,7 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 	}
 
 	protected Side route() {
-		return SimpleCollisionAvoider.Side.LEVER_OFF;
+		return Side.LEVER_OFF;
 	}
 	
 	public void trigger() {

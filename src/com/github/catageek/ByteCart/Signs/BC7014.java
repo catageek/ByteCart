@@ -3,12 +3,12 @@ package com.github.catageek.ByteCart.Signs;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
-import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 
 /**
  * A station field setter using a redstone signal strength

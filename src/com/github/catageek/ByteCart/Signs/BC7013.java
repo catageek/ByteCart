@@ -4,11 +4,11 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.HAL.RegistryInput;
 import com.github.catageek.ByteCart.HAL.SuperRegistry;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 
 /**
  * A ring field setter using redstone

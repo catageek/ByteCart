@@ -6,6 +6,8 @@ import java.util.Stack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+
 class LocalUpdaterContent extends UpdaterContent implements Serializable {
 
 	/**

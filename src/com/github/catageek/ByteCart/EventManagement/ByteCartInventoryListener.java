@@ -11,7 +11,7 @@ import org.bukkit.inventory.InventoryHolder;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.ModifiableRunnable;
-import com.github.catageek.ByteCart.Event.UpdaterCreateEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterCreateEvent;
 
 /**
  * Class implementing a listener and waiting for a player to right-click an inventory holder

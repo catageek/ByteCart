@@ -6,6 +6,7 @@ import org.bukkit.inventory.Inventory;
 import com.github.catageek.ByteCart.AddressLayer.AddressBook.Parameter;
 import com.github.catageek.ByteCart.FileStorage.BookFile;
 import com.github.catageek.ByteCart.FileStorage.BookProperties.Conf;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 
 /**
  * Factory to create address using various supports

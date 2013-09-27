@@ -2,7 +2,7 @@ package com.github.catageek.ByteCart.CollisionManagement;
 
 import org.bukkit.block.BlockFace;
 
-import com.github.catageek.ByteCart.HAL.RegistryOutput;
+import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
 
 /**
  * A router representation in the collision management layer

@@ -1,7 +1,7 @@
 package com.github.catageek.ByteCart.Signs;
 
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
-import com.github.catageek.ByteCart.HAL.RegistryInput;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 
 /**
  * A region field setter using redstone

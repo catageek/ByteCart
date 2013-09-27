@@ -3,9 +3,10 @@ package com.github.catageek.ByteCart.Routing;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 
-import com.github.catageek.ByteCart.AddressLayer.Address;
-import com.github.catageek.ByteCart.Event.UpdaterClearRingEvent;
-import com.github.catageek.ByteCart.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.Event.UpdaterClearRingEvent;
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Signs.BCSign;
 
 final class UpdaterResetRegion extends UpdaterRegion implements Updater {
 

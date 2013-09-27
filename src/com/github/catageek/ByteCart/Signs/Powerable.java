@@ -2,7 +2,7 @@ package com.github.catageek.ByteCart.Signs;
 
 import java.io.IOException;
 
-import com.github.catageek.ByteCart.HAL.IC;
+import com.github.catageek.ByteCartAPI.HAL.IC;
 
 /**
  * An IC that can be powered should implement this

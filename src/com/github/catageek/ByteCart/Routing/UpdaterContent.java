@@ -13,7 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 
 /**
  * A class to store data in books used by updater

@@ -4,8 +4,9 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import com.github.catageek.ByteCart.HAL.RegistryBoth;
-import com.github.catageek.ByteCart.HAL.VirtualRegistry;
+
+import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
+import com.github.catageek.ByteCartAPI.HAL.VirtualRegistry;
 
 /**
  * A time metric

@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.FileStorage;
 
 import java.io.OutputStream;
+
 import org.bukkit.inventory.ItemStack;
 
 /**

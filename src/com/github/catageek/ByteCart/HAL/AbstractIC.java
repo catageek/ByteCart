@@ -10,6 +10,9 @@ import org.bukkit.block.Sign;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.HAL.IC;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
+import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
 
 
 // All ICs must inherit from this class

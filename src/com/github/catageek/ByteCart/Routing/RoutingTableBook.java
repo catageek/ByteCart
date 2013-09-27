@@ -16,9 +16,9 @@ import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.FileStorage.BookFile;
-import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
 import com.github.catageek.ByteCart.Storage.ExternalizableTreeMap;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
+import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 
 /**
  * A routing table in a book

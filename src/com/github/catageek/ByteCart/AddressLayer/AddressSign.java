@@ -2,9 +2,10 @@ package com.github.catageek.ByteCart.AddressLayer;
 
 import org.bukkit.block.Block;
 
-import com.github.catageek.ByteCart.HAL.RegistryBoth;
 import com.github.catageek.ByteCart.IO.AbstractComponent;
 import com.github.catageek.ByteCart.IO.ComponentSign;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
 
 
 /**
@@ -90,7 +91,7 @@ final class AddressSign extends AbstractComponent implements Address {
 	 * @see com.github.catageek.ByteCart.AddressLayer.Address#setAddress(com.github.catageek.ByteCart.AddressLayer.Address, java.lang.String)
 	 */
 	@Override
-	public boolean setAddress(com.github.catageek.ByteCart.AddressLayer.Address a, String name) {
+	public boolean setAddress(com.github.catageek.ByteCartAPI.AddressLayer.Address a, String name) {
 		return this.setAddress(a.toString(), name);
 	}
 

@@ -10,19 +10,20 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.Event.UpdaterEnterSubnetEvent;
-import com.github.catageek.ByteCart.Event.UpdaterLeaveSubnetEvent;
-import com.github.catageek.ByteCart.Event.UpdaterPassStationEvent;
-import com.github.catageek.ByteCart.Event.UpdaterSetStationEvent;
-import com.github.catageek.ByteCart.Event.UpdaterSetSubnetEvent;
 import com.github.catageek.ByteCart.Signs.BC8010;
-import com.github.catageek.ByteCart.Signs.BCSign;
-import com.github.catageek.ByteCart.Signs.HasNetmask;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
 import com.github.catageek.ByteCart.Util.LogUtil;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
+import com.github.catageek.ByteCartAPI.Event.UpdaterEnterSubnetEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterLeaveSubnetEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterPassStationEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterSetStationEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterSetSubnetEvent;
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Signs.HasNetmask;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 
 public class UpdaterLocal implements Updater {
 

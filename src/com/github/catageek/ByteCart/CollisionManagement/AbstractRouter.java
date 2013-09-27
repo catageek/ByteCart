@@ -9,12 +9,12 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Signs.Triggable;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
 import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
 
 public abstract class AbstractRouter extends AbstractCollisionAvoider implements Router {
 
@@ -48,8 +48,8 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	 */
 	@Override
 	public final BlockFace WishToGo(BlockFace from, BlockFace to, boolean isTrain) {
-//		Side sfrom = getSide(from);
-//		Side sto = getSide(to);
+//		IntersectionSide sfrom = getSide(from);
+//		IntersectionSide sto = getSide(to);
 
 
 		if(ByteCart.debug)

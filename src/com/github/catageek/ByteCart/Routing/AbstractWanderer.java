@@ -7,13 +7,13 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.AddressLayer.Address;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.Routing.Updater.Level;
-import com.github.catageek.ByteCart.Routing.Updater.Scope;
 import com.github.catageek.ByteCart.Signs.BC8010;
-import com.github.catageek.ByteCart.Signs.BCSign;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
+import com.github.catageek.ByteCartAPI.Routing.Updater.Level;
+import com.github.catageek.ByteCartAPI.Routing.Updater.Scope;
+import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 
 /**
  * 

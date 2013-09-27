@@ -2,8 +2,9 @@ package com.github.catageek.ByteCart.Routing;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
-import com.github.catageek.ByteCart.HAL.RegistryBoth;
-import com.github.catageek.ByteCart.HAL.VirtualRegistry;
+
+import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
+import com.github.catageek.ByteCartAPI.HAL.VirtualRegistry;
 
 /**
  * A raw routing table entry, i.e a registry

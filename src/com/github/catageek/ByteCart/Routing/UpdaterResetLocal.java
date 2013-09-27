@@ -6,13 +6,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.AddressLayer.Address;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.Event.UpdaterClearStationEvent;
-import com.github.catageek.ByteCart.Event.UpdaterClearSubnetEvent;
-import com.github.catageek.ByteCart.Event.UpdaterSignInvalidateEvent;
-import com.github.catageek.ByteCart.Signs.BCSign;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
+import com.github.catageek.ByteCartAPI.Event.UpdaterClearStationEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterClearSubnetEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterSignInvalidateEvent;
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 
 final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 
@@ -82,12 +84,12 @@ final class UpdaterResetLocal extends UpdaterLocal implements Updater {
 	}
 
 	@Override
-	public Side giveSimpleDirection() {
+	public IntersectionSide.Side giveSimpleDirection() {
 		int mask = this.getNetmask();
 		Stack<Integer> end = this.getEnd();
 		if ( mask < 8 && (end.isEmpty() || mask > end.peek()))
-			return Side.LEVER_ON;
-		return Side.LEVER_OFF;
+			return IntersectionSide.Side.LEVER_ON;
+		return IntersectionSide.Side.LEVER_OFF;
 	}
 
 	@Override

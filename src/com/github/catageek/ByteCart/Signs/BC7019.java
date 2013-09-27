@@ -5,11 +5,11 @@ package com.github.catageek.ByteCart.Signs;
 
 import java.util.Random;
 
-import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressString;
-import com.github.catageek.ByteCart.HAL.RegistryBoth;
-import com.github.catageek.ByteCart.HAL.RegistryInput;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 
 /**
  * Gives random address to a cart

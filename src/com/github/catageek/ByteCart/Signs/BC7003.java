@@ -5,14 +5,14 @@ import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.HAL.RegistryOutput;
-import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.InputFactory;
+import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
 import com.github.catageek.ByteCart.ThreadManagement.Expirable;
 import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
 
 /**
  * A cart counter

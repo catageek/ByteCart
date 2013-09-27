@@ -5,7 +5,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.bukkit.block.BlockFace;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
+
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 
 
 /**

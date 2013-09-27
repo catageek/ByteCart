@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 
-import com.github.catageek.ByteCart.Event.UpdaterMoveEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterMoveEvent;
 
 /**
  * Launch an event when an updater moves

@@ -1,5 +1,10 @@
 package com.github.catageek.ByteCart.HAL;
 
+import com.github.catageek.ByteCartAPI.HAL.Registry;
+import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
+import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
+
 /**
  * A restricted view of a registry
  * 

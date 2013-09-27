@@ -2,6 +2,7 @@ package com.github.catageek.ByteCart.FileStorage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.ByteCart;

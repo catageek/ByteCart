@@ -12,8 +12,8 @@ import org.bukkit.util.Vector;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.InputFactory;
+import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;

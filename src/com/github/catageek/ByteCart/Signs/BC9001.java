@@ -7,21 +7,21 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.Event.SignPostStationEvent;
-import com.github.catageek.ByteCart.Event.SignPreStationEvent;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
-import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.InputFactory;
+import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
-import com.github.catageek.ByteCart.Routing.Updater;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
+import com.github.catageek.ByteCartAPI.Event.SignPostStationEvent;
+import com.github.catageek.ByteCartAPI.Event.SignPreStationEvent;
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Signs.Subnet;
 
 
 /**
@@ -88,7 +88,7 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 			try {
 				updater = UpdaterFactory.getUpdater(this, this.getInventory());
 				// here we perform routes update
-				updater.doAction(Side.LEVER_OFF);
+				updater.doAction(IntersectionSide.Side.LEVER_OFF);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -153,7 +153,7 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 	 * @see com.github.catageek.ByteCart.Signs.AbstractBC9000#route()
 	 */
 	@Override
-	protected SimpleCollisionAvoider.Side route() {
+	protected Side route() {
 		SignPreStationEvent event;
 		SignPostStationEvent event1;
 		// test if every destination field matches sign field

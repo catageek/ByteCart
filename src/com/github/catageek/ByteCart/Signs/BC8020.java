@@ -5,13 +5,14 @@ import java.io.IOException;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
-import com.github.catageek.ByteCart.Routing.Updater;
-import com.github.catageek.ByteCart.Routing.Updater.Scope;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Routing.Updater.Scope;
+import com.github.catageek.ByteCartAPI.Signs.BCRouter;
 
 
 

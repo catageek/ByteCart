@@ -3,7 +3,7 @@ package com.github.catageek.ByteCart.IO;
 import org.bukkit.block.Block;
 import org.bukkit.material.RedstoneWire;
 
-import com.github.catageek.ByteCart.HAL.RegistryInput;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 
 
 /**

@@ -2,8 +2,9 @@ package com.github.catageek.ByteCart.Routing;
 
 
 import org.bukkit.block.BlockFace;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.Signs.BCSign;
+
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
+import com.github.catageek.ByteCartAPI.Signs.BCSign;
 
 /**
  * 

@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 
 /**
  * The content of a routing table entry

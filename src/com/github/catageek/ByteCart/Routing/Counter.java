@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 
 /**
  * A map containing counters with id

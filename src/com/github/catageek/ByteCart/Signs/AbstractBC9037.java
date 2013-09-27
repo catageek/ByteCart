@@ -1,11 +1,10 @@
 package com.github.catageek.ByteCart.Signs;
 
-import com.github.catageek.ByteCart.AddressLayer.Address;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
-import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider.Side;
-import com.github.catageek.ByteCart.HAL.RegistryBoth;
-import com.github.catageek.ByteCart.HAL.RegistryInput;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
+import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
+import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 
 
 
@@ -96,10 +95,10 @@ abstract class AbstractBC9037 extends AbstractSimpleCrossroad implements Triggab
 	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#route()
 	 */
 	@Override
-	protected SimpleCollisionAvoider.Side route() {
+	protected IntersectionSide.Side route() {
 		if (this.isAddressMatching())
-			return Side.LEVER_ON;
-		return Side.LEVER_OFF;
+			return IntersectionSide.Side.LEVER_ON;
+		return IntersectionSide.Side.LEVER_OFF;
 	}
 
 	private void addAddressAsInputs(Address addr) {

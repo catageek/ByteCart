@@ -3,9 +3,10 @@ package com.github.catageek.ByteCart.CollisionManagement;
 import org.bukkit.Location;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.HAL.RegistryOutput;
 import com.github.catageek.ByteCart.Signs.Triggable;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
+import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
+import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
 
 /**
  * A collision avoider for T cross-roads
@@ -18,44 +19,21 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	private RegistryOutput Lever1 = null, Lever2 = null, Active = null;
 	private final Location loc1;
 
-	private Side state;
+	private IntersectionSide.Side state;
 	
 	private boolean reversed;
 
-	/**
-	 * Position of the T cross-roads.
-	 */
-	public enum Side {
-		LEVER_ON (3),
-		LEVER_OFF (0);
-
-		private int Value;
-
-		Side(int b) {
-			Value = b;
-		}
-
-		public int Value() {
-			return Value;
-		}
-
-		public Side opposite() {
-			if (this.equals(LEVER_OFF))
-				return LEVER_ON;
-			return LEVER_OFF;
-		}
-	}
 
 	public SimpleCollisionAvoider(Triggable ic, org.bukkit.Location loc) {
 		super(loc);
 		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: new SimpleCollisionAvoider() at " + loc);
+			ByteCart.log.info("ByteCart: new IntersectionSide() at " + loc);
 
 		Lever1 = ic.getOutput(0);
 		Active = Lever1;
 		reversed = ic.isLeverReversed();
 		loc1 = ic.getLocation();
-		state = (Lever1.getAmount() == 0 ? Side.LEVER_OFF : Side.LEVER_ON);
+		state = (Lever1.getAmount() == 0 ? IntersectionSide.Side.LEVER_OFF : IntersectionSide.Side.LEVER_ON);
 	}
 
 	/**
@@ -65,9 +43,9 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	 * @param isTrain true if it is a train
 	 * @return the direction actually taken
 	 */
-	public Side WishToGo(Side s, boolean isTrain) {
+	public IntersectionSide.Side WishToGo(IntersectionSide.Side s, boolean isTrain) {
 
-		Side trueside = getActiveTrueSide(s);
+		IntersectionSide.Side trueside = getActiveTrueSide(s);
 
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : WishToGo to side " + trueside + " and isTrain is " + isTrain);
@@ -95,7 +73,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	 * @param s the original side
 	 * @return the fixed side
 	 */
-	private final Side getActiveTrueSide(Side s) {
+	private final IntersectionSide.Side getActiveTrueSide(IntersectionSide.Side s) {
 		if (Active != Lever2)
 			return s;
 		return getSecondLeverSide(s);
@@ -106,7 +84,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	 * @param s the original side
 	 * @return the fixed side
 	 */
-	private final Side getSecondLeverSide(Side s) {
+	private final IntersectionSide.Side getSecondLeverSide(IntersectionSide.Side s) {
 		return reversed ? s : s.opposite();
 	}
 
@@ -137,7 +115,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	 *
 	 * @param s the side of the lever of the IC that created this collision avoider
 	 */
-	private void Set(Side s) {
+	private void Set(IntersectionSide.Side s) {
 		this.Lever1.setAmount(s.Value());
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: Setting lever1 to " + Lever1.getAmount());
