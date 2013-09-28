@@ -54,12 +54,12 @@ public class AddressString extends AbstractAddress implements Address {
 	 * @return true if the address is in the valid format or a resolvable name
 	 */
 	static public boolean isResolvableAddressOrName(String s) {
-		if(! (s.matches("([0-9]{1,4}\\.){2,2}[0-9]{1,3}"))
-				|| ! isResolvableName(s)) {
-			return false;
+		if((s.matches("([0-9]{1,4}\\.){2,2}[0-9]{1,3}"))
+				|| isResolvableName(s)) {
+			return true;
 		}
 
-		return true;
+		return false;
 
 	}
 
