@@ -13,7 +13,7 @@ import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
-import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * A cart spawner

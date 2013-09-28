@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.material.Button;
 
-import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * this call represents a thread that powers off a button

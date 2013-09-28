@@ -14,7 +14,6 @@ import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
-import com.github.catageek.ByteCart.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
@@ -22,6 +21,7 @@ import com.github.catageek.ByteCartAPI.Event.SignPostStationEvent;
 import com.github.catageek.ByteCartAPI.Event.SignPreStationEvent;
 import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.Subnet;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 
 /**

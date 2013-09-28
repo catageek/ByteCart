@@ -11,8 +11,8 @@ import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
 import com.github.catageek.ByteCart.ThreadManagement.Expirable;
-import com.github.catageek.ByteCart.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * A cart counter

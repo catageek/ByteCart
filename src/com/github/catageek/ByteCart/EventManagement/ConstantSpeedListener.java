@@ -15,7 +15,7 @@ import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.material.MaterialData;
 
-import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * Listener to maintain cart speed

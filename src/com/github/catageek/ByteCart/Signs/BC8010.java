@@ -21,7 +21,6 @@ import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
-import com.github.catageek.ByteCart.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.SignPostRouteEvent;
 import com.github.catageek.ByteCartAPI.Event.SignPreRouteEvent;
@@ -29,6 +28,7 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterPassRouterEvent;
 import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.BCRouter;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 
 

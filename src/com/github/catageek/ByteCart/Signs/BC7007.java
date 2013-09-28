@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.bukkit.entity.Minecart;
 
-import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * An unbooster

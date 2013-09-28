@@ -11,7 +11,7 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.util.Vector;
 
-import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * Listener to load chunks around moving carts

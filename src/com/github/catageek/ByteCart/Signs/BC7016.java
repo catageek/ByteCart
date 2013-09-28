@@ -4,8 +4,8 @@ import com.github.catageek.ByteCart.AddressLayer.ReturnAddressFactory;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
-import com.github.catageek.ByteCart.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * A return address checker

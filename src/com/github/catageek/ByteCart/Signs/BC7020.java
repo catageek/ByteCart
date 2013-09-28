@@ -4,7 +4,7 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
-import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * Power the lever on the train including wagons

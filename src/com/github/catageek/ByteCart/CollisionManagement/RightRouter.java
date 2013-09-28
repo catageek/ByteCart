@@ -2,8 +2,8 @@ package com.github.catageek.ByteCart.CollisionManagement;
 
 import org.bukkit.block.BlockFace;
 
-import com.github.catageek.ByteCart.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * A router where the cart turns right

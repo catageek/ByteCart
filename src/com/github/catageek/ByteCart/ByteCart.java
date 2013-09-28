@@ -184,4 +184,8 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	public void setResolver(Resolver resolver) {
 		this.resolver = resolver;
 	}
+	
+	public final Logger getLog() {
+		return log;
+	}
 }

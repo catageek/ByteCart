@@ -16,7 +16,7 @@ import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
-import com.github.catageek.ByteCart.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * this IC represents a stop/start block

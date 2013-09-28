@@ -5,8 +5,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.material.Lever;
 import org.bukkit.material.MaterialData;
 
-import com.github.catageek.ByteCart.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
  * A lever

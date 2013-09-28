@@ -13,8 +13,8 @@ import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
 import com.github.catageek.ByteCart.Signs.Triggable;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
-import com.github.catageek.ByteCart.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 public abstract class AbstractRouter extends AbstractCollisionAvoider implements Router {
 
