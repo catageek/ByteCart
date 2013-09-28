@@ -53,7 +53,7 @@ public abstract class AbstractWanderer {
 	public abstract void doAction(Side To);
 
 	private final BCSign bcsign;
-	private final Address SignAddress;
+	private Address SignAddress;
 	private final DirectionRegistry From;
 	private final int Region;
 
@@ -121,6 +121,15 @@ public abstract class AbstractWanderer {
 	protected final Address getSignAddress() {
 		return SignAddress;
 	}
+	
+	/**
+	 * Set the member variable SignAddress
+	 * 
+	 * @param signAddress
+	 */
+	protected final void setSignAddress(Address signAddress) {
+		SignAddress = signAddress;
+	}
 
 	/**
 	 * @return the direction from where we are coming
@@ -182,7 +191,7 @@ public abstract class AbstractWanderer {
 	/**
 	 * @return the IC
 	 */
-	public BCSign getBcSign() {
+	public final BCSign getBcSign() {
 		return bcsign;
 	}
 
