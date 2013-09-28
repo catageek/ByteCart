@@ -56,7 +56,6 @@ public abstract class AbstractWanderer {
 	private final Address SignAddress;
 	private final DirectionRegistry From;
 	private final int Region;
-	private final RoutingTable RoutingTable;
 
 	/**
 	 * @param bc the ic that triggers this wanderer
@@ -70,11 +69,9 @@ public abstract class AbstractWanderer {
 		if (bc instanceof BC8010) {
 			BC8010 ic = (BC8010) bc;
 			From = new DirectionRegistry(ic.getFrom());
-			RoutingTable = ic.getRoutingTable();
 		}
 		else {
 			From = null;
-			RoutingTable = null;
 		}
 	}
 
@@ -98,20 +95,6 @@ public abstract class AbstractWanderer {
 		return false;
 	}
 
-	/**
-	 * Get the direction where to go if we are at the border of a region or the backbone
-	 * 
-	 * @return the direction where we must go
-	 */
-	public final BlockFace manageBorder() {
-		if ((isAtBorder())) {
-			DirectionRegistry dir;
-			if ((dir = this.getRoutingTable().getDirection(this.getWandererRegion())) != null)
-				return dir.getBlockFace();
-			return getFrom().getBlockFace();
-		}
-		return null;
-	}
 
 	/**
 	 * Get a random route that is not from where we are coming
@@ -130,13 +113,6 @@ public abstract class AbstractWanderer {
 		}
 
 		return direction.getBlockFace();
-	}
-
-	/**
-	 * @return the routing table
-	 */
-	protected final RoutingTable getRoutingTable() {
-		return RoutingTable;
 	}
 
 	/**

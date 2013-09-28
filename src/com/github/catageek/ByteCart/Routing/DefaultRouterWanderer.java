@@ -14,7 +14,7 @@ import com.github.catageek.ByteCartAPI.Signs.BCSign;
  * Wanderers implementors may extends this class and overrides its methods
  *
  */
-public class DefaultRouterWanderer extends AbstractWanderer {
+public class DefaultRouterWanderer extends AbstractUpdater {
 
 	public DefaultRouterWanderer(BCSign bc, int region) {
 		super(bc, region);
