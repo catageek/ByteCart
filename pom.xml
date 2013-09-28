@@ -25,6 +25,10 @@
 			<name>bytecart.catageek.info API Snapshots</name>
 			<url>http://bytecart.catageek.info/mavenAPI/repositories/snapshots/</url>
 		</repository>
+		<repository>
+			<id>Plugin Metrics</id>
+			<url>http://repo.mcstats.org/content/repositories/public</url>
+		</repository>
 	</repositories>
 
 	<distributionManagement>
@@ -100,6 +104,7 @@
 						<artifactSet>
 							<includes>
 								<include>com.github.catageek:ByteCartAPI:jar:*</include>
+								<include>org.mcstats.bukkit:metrics-lite:jar:*</include>
 							</includes>
 						</artifactSet>
 						<filters>
@@ -107,6 +112,12 @@
 								<artifact>com.github.catageek:ByteCartAPI:jar:*</artifact>
 								<includes>
 									<include>**</include>
+								</includes>
+							</filter>
+							<filter>
+								<artifact>org.mcstats.bukkit:metrics-lite:jar:*</artifact>
+								<includes>
+									<include>org/mcstats/*</include>
 								</includes>
 							</filter>
 						</filters>
@@ -174,6 +185,12 @@
 			<groupId>com.github.catageek</groupId>
 			<artifactId>ByteCartAPI</artifactId>
 			<version>${bytecartapi.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mcstats.bukkit</groupId>
+			<artifactId>metrics-lite</artifactId>
+			<version>R6</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
