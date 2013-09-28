@@ -7,12 +7,19 @@ import java.io.IOException;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
+import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
+import com.github.catageek.ByteCart.AddressLayer.AddressString;
+import com.github.catageek.ByteCart.AddressLayer.TicketFactory;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
+import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
@@ -21,13 +28,12 @@ import com.github.catageek.ByteCartAPI.Util.MathUtil;
 final class BC7004 extends AbstractIC implements Powerable {
 
 	private final String type;
+	private final String address;
 
-	/**
-	 * @param block
-	 */
-	public BC7004(org.bukkit.block.Block block, String type) {
+	public BC7004(org.bukkit.block.Block block, String type, String address) {
 		super(block);
 		this.type = type;
+		this.address = address;
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +65,15 @@ final class BC7004 extends AbstractIC implements Powerable {
 			org.bukkit.Location loc = rail.getLocation();
 			// check that it is a track, and no cart is there
 			if (rail.getType().equals(Material.RAILS) && MathUtil.getVehicleByLocation(loc) == null) {
-				block.getWorld().spawnEntity(loc, getType());
+				Entity entity = block.getWorld().spawnEntity(loc, getType());
+				// put a ticket in the inventory if necessary
+				if (entity instanceof InventoryHolder && AddressString.isResolvableAddressOrName(address)) {
+					Inventory inv = ((InventoryHolder) entity).getInventory();
+					TicketFactory.getOrCreateTicket(inv);
+					Address dst = AddressFactory.getAddress(inv);
+					dst.setAddress(address);
+					dst.finalizeAddress();
+				}
 			}
 		}
 	}

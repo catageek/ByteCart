@@ -64,7 +64,8 @@ public class PoweredSignFactory {
 				case 7003:
 					return (Powerable)(new BC7003(block));
 				case 7004:
-					return (Powerable)(new BC7004(block, ((Sign) block.getState()).getLine(3)));
+					return (Powerable)(new BC7004(block, ((Sign) block.getState()).getLine(3),
+							((Sign) block.getState()).getLine(2)));
 				case 9001:
 					return (Powerable)(new BC9001(block, null));
 				
