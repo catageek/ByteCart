@@ -55,7 +55,6 @@ public abstract class AbstractWanderer {
 	private final BCSign bcsign;
 	private final Address SignAddress;
 	private final DirectionRegistry From;
-	private final boolean IsTrackNumberProvider;
 	private final int Region;
 	private final RoutingTable RoutingTable;
 
@@ -71,12 +70,10 @@ public abstract class AbstractWanderer {
 		if (bc instanceof BC8010) {
 			BC8010 ic = (BC8010) bc;
 			From = new DirectionRegistry(ic.getFrom());
-			IsTrackNumberProvider = ic.isTrackNumberProvider();
 			RoutingTable = ic.getRoutingTable();
 		}
 		else {
 			From = null;
-			IsTrackNumberProvider = false;
 			RoutingTable = null;
 		}
 	}
@@ -168,15 +165,6 @@ public abstract class AbstractWanderer {
 	 */
 	public final Vehicle getVehicle() {
 		return this.getBcSign().getVehicle();
-	}
-
-	/**
-	 * Tells if this updater must provide track numbers for this IC
-	 * 
-	 * @return true if this updater must provide track numbers
-	 */
-	protected final boolean isTrackNumberProvider() {
-		return IsTrackNumberProvider;
 	}
 
 	/**

@@ -7,6 +7,7 @@ import java.util.Set;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Signs.BC8010;
 import com.github.catageek.ByteCartAPI.Routing.Updater.Level;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
@@ -17,6 +18,13 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		super(bc, rte.getRegion());
 		Routes = rte;
 		counter = rte.getCounter();
+
+		if (bc instanceof BC8010) {
+			BC8010 ic = (BC8010) bc;
+			IsTrackNumberProvider = ic.isTrackNumberProvider();
+		}
+		else
+			IsTrackNumberProvider = false;
 	}
 
 
@@ -24,6 +32,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 	abstract protected int getTrackNumber();
 
 	protected UpdaterContent Routes;
+	private final boolean IsTrackNumberProvider;
 	private Counter counter;
 	abstract protected BlockFace selectDirection();
 
@@ -170,5 +179,14 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Tells if this updater must provide track numbers for this IC
+	 * 
+	 * @return true if this updater must provide track numbers
+	 */
+	protected final boolean isTrackNumberProvider() {
+		return IsTrackNumberProvider;
 	}
 }
