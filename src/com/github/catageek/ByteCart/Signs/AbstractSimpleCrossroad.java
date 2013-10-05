@@ -9,7 +9,7 @@ import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoiderBu
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.OutputPin;
 import com.github.catageek.ByteCart.IO.OutputPinFactory;
-import com.github.catageek.ByteCart.Routing.WandererContentFactory;
+import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
 import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;

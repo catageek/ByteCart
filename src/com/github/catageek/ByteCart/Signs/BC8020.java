@@ -8,7 +8,7 @@ import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
-import com.github.catageek.ByteCart.Routing.WandererContentFactory;
+import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Routing.Updater.Scope;

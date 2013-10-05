@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.bukkit.inventory.Inventory;
 
+import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Routing.Updater.Level;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;

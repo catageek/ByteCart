@@ -1,4 +1,4 @@
-package com.github.catageek.ByteCart.Routing;
+package com.github.catageek.ByteCart.Wanderer;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import com.github.catageek.ByteCart.Routing.Counter;
 import com.github.catageek.ByteCartAPI.Routing.Updater;
 
 public class WandererContent  implements Serializable {
@@ -24,7 +25,7 @@ public class WandererContent  implements Serializable {
 	private long creationtime = Calendar.getInstance().getTimeInMillis();
 	private int lastrouterid;
 
-	WandererContent(Inventory inv, Updater.Level level, int region, Player player) {
+	public WandererContent(Inventory inv, Updater.Level level, int region, Player player) {
 		this.Region = region;
 		this.Level = level;
 		this.inventory = inv;
@@ -79,7 +80,7 @@ public class WandererContent  implements Serializable {
 	 * 
 	 * @return the region
 	 */
-	int getRegion() {
+	public int getRegion() {
 		return Region;
 	}
 
@@ -88,7 +89,7 @@ public class WandererContent  implements Serializable {
 	 * 
 	 * @return the ring id
 	 */
-	int getCurrent() {
+	public int getCurrent() {
 		return Current;
 	}
 
@@ -97,7 +98,7 @@ public class WandererContent  implements Serializable {
 	 * 
 	 * @param current the ring id
 	 */
-	void setCurrent(int current) {
+	public void setCurrent(int current) {
 		Current = current;
 	}
 
@@ -125,7 +126,7 @@ public class WandererContent  implements Serializable {
 	/**
 	 * @return the creationtime
 	 */
-	long getCreationtime() {
+	public long getCreationtime() {
 		return creationtime;
 	}
 
@@ -140,7 +141,7 @@ public class WandererContent  implements Serializable {
 	/**
 	 * @return the player
 	 */
-	Player getPlayer() {
+	public Player getPlayer() {
 		return Bukkit.getPlayer(player);
 	}
 
@@ -150,7 +151,7 @@ public class WandererContent  implements Serializable {
 	 * 
 	 * @return the id
 	 */
-	final int getLastrouterid() {
+	public final int getLastrouterid() {
 		return lastrouterid;
 	}
 
@@ -159,7 +160,7 @@ public class WandererContent  implements Serializable {
 	 * 
 	 * @param lastrouterid the id to store
 	 */
-	final void setLastrouterid(int lastrouterid) {
+	public final void setLastrouterid(int lastrouterid) {
 		this.lastrouterid = lastrouterid;
 	}
 

@@ -1,4 +1,4 @@
-package com.github.catageek.ByteCart.Routing;
+package com.github.catageek.ByteCart.Wanderer;
 
 import java.util.Random;
 
@@ -7,6 +7,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Signs.BC8010;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;

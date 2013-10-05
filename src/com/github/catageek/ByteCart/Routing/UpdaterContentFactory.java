@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.FileStorage.BookFile;
 import com.github.catageek.ByteCart.Util.LogUtil;
+import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.Routing.Updater.Level;
 import com.github.catageek.ByteCartAPI.Routing.Updater.Scope;
 

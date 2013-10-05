@@ -1,8 +1,9 @@
-package com.github.catageek.ByteCart.Routing;
+package com.github.catageek.ByteCart.Wanderer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

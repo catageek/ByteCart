@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Signs.BC8010;
+import com.github.catageek.ByteCart.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
 import com.github.catageek.ByteCartAPI.Signs.HasNetmask;

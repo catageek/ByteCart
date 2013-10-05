@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart.Routing;
 import java.util.Stack;
 
 import org.bukkit.Bukkit;
+
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.Util.LogUtil;
