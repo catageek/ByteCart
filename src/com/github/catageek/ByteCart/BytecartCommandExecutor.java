@@ -18,6 +18,7 @@ import com.github.catageek.ByteCart.AddressLayer.AddressString;
 import com.github.catageek.ByteCart.EventManagement.ByteCartInventoryListener;
 import com.github.catageek.ByteCart.EventManagement.ByteCartUpdaterMoveListener;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
+import com.github.catageek.ByteCart.Routing.WandererContentFactory;
 import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
 import com.github.catageek.ByteCart.Signs.BC7017;
@@ -162,7 +163,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				Player player = (Player) sender;
 
 				if (args.length == 1 && args[0].equalsIgnoreCase("remove")) {
-					UpdaterContentFactory.mustRemove = true;
+					WandererContentFactory.mustRemove = true;
 					return true;
 				}
 

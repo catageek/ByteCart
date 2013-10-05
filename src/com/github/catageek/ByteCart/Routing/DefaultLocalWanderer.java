@@ -280,7 +280,7 @@ class DefaultLocalWanderer extends AbstractWanderer {
 
 	public void save() {
 		try {
-			UpdaterContentFactory.<LocalUpdaterContent>saveRoutingTableExchange(getContent());
+			UpdaterContentFactory.<LocalUpdaterContent>saveContent(getContent());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

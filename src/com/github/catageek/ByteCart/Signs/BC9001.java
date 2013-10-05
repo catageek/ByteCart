@@ -12,7 +12,7 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
-import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
+import com.github.catageek.ByteCart.Routing.WandererContentFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
@@ -59,7 +59,7 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 
 			triggerBC7003();
 
-			if (! UpdaterContentFactory.isRoutingTableExchange(getInventory())) {
+			if (! WandererContentFactory.isWanderer(getInventory())) {
 
 				// if this is a cart in a train
 				if (this.wasTrain(this.getLocation())) {

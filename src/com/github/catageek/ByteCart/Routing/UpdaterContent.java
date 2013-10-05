@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -19,65 +18,33 @@ import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 /**
  * A class to store data in books used by updater
  */
-public class UpdaterContent implements Serializable {
+public class UpdaterContent extends WandererContent implements Serializable {
+
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -9068486630910859194L;
+	private static final long serialVersionUID = 848098890652934583L;
 
 	private Map<Integer, Metric> tablemap = new HashMap<Integer, Metric>();
-
-	private transient Inventory inventory = null;
-	private String player;
-
-	private Counter counter;
-
-	private long creationtime = Calendar.getInstance().getTimeInMillis();
-	private long expirationtime = ByteCart.myPlugin.getConfig().getInt("updater.timeout", 60) * 60000 + creationtime;
-	private long lastrouterseen;
-	private int lastrouterid;
-
-	/**
-	 * Set the counter instance
-	 * 
-	 * @param counter the counter instance to set
-	 */
-	final void setCounter(Counter counter) {
-		this.counter = counter;
-	}
-
-	public UpdaterContent() {
-	}
-
-	private Updater.Level Level;
-
-	private int Region;
-
-	/**
-	 * Set the level of the updater
-	 * 
-	 * @param level the level to store
-	 */
-	final void setLevel(Updater.Level level) {
-		Level = level;
-	}
-
-	/**
-	 * Set the region of the updater
-	 * 
-	 * @param region the region to set
-	 */
-	final void setRegion(int region) {
-		Region = region;
-	}
-
-	//internal variable used by updaters
-	private int Current = -2;
-
 	private boolean fullreset = false;
-
 	private boolean isnew = false;
+	private long lastrouterseen;
+	private long expirationtime;
+
+
+	public UpdaterContent(Inventory inv, Updater.Level level, int region, Player player
+			, boolean isfullreset) {
+		this(inv, level, region, player, isfullreset, false);
+	}
+	
+	public UpdaterContent(Inventory inv, Updater.Level level, int region, Player player
+			, boolean isfullreset, boolean isnew) {
+		super(inv, level, region, player);
+		this.fullreset = isfullreset;
+		this.isnew = isnew;
+		expirationtime = ByteCart.myPlugin.getConfig().getInt("updater.timeout", 60) * 60000 + getCreationtime();
+	}
 
 	/**
 	 * Get the metric value of a ring of the IGP exchange packet
@@ -181,78 +148,38 @@ public class UpdaterContent implements Serializable {
 		}
 	}
 
-	public UpdaterContent(Inventory inv, Updater.Level level, int region, Player player
-			, boolean isfullreset) {
-		this(inv, level, region, player, isfullreset, false);
-	}
-	public UpdaterContent(Inventory inv, Updater.Level level, int region, Player player
-			, boolean isfullreset, boolean isnew) {
-		this.Region = region;
-		this.Level = level;
-		this.inventory = inv;
-		this.player = player.getName();
-		counter = new Counter();
-		this.fullreset = isfullreset;
-		this.isnew = isnew;
+	/**
+	 * Set the timestamp field to now
+	 */
+	void seenTimestamp() {
+		this.lastrouterseen = Calendar.getInstance().getTimeInMillis();
 	}
 
 	/**
-	 * Get the level of the updater
+	 * Get the time difference between now and the last time we called seenTimestamp()
 	 * 
-	 * @return the level
+	 * @return the time difference, or -1 if seenTimestamp() was never called
 	 */
-	public Updater.Level getLevel() {
-		return Level;
+	public int getInterfaceDelay() {
+		if (lastrouterseen != 0)
+			return (int) ((Calendar.getInstance().getTimeInMillis() - lastrouterseen) / 1000);
+		return -1;
 	}
 
 	/**
-	 * Get the region of the updater
-	 * 
-	 * @return the region
+	 * @return the fullreset
 	 */
-	int getRegion() {
-		return Region;
+	boolean isFullreset() {
+		return fullreset;
 	}
 
 	/**
-	 * Get the ring id where the updater thinks it is in
-	 * 
-	 * @return the ring id
+	 * @return the isnew
 	 */
-	int getCurrent() {
-		return Current;
+	boolean isNew() {
+		return isnew;
 	}
-
-	/**
-	 * Set the ring id where the updater thinks it is in
-	 * 
-	 * @param current the ring id
-	 */
-	void setCurrent(int current) {
-		Current = current;
-	}
-
-	/**
-	 * @return the counter
-	 */
-	public Counter getCounter() {
-		return counter;
-	}
-
-	/**
-	 * @return the inventory
-	 */
-	public Inventory getInventory() {
-		return inventory;
-	}
-
-	/**
-	 * @param inventory the inventory to set
-	 */
-	public void setInventory(Inventory inventory) {
-		this.inventory = inventory;
-	}
-
+	
 	/**
 	 * Update the expiration time to have twice the spent time left
 	 */
@@ -267,13 +194,6 @@ public class UpdaterContent implements Serializable {
 			setExpirationTime(update);
 	}
 	
-	/**
-	 * Set the timestamp field to now
-	 */
-	void seenTimestamp() {
-		this.lastrouterseen = Calendar.getInstance().getTimeInMillis();
-	}
-
 	/**
 	 * Return the expiration time
 	 * 
@@ -290,70 +210,5 @@ public class UpdaterContent implements Serializable {
 	 */
 	private void setExpirationTime(long lastupdate) {
 		this.expirationtime = lastupdate;
-	}
-
-	/**
-	 * @return the creationtime
-	 */
-	long getCreationtime() {
-		return creationtime;
-	}
-
-	/**
-	 * @param creationtime the creationtime to set
-	 */
-	@SuppressWarnings("unused")
-	private void setCreationtime(long creationtime) {
-		this.creationtime = creationtime;
-	}
-
-	/**
-	 * Get the time difference between now and the last time we called seenTimestamp()
-	 * 
-	 * @return the time difference, or -1 if seenTimestamp() was never called
-	 */
-	public int getInterfaceDelay() {
-		if (lastrouterseen != 0)
-			return (int) ((Calendar.getInstance().getTimeInMillis() - lastrouterseen) / 1000);
-		return -1;
-	}
-
-	/**
-	 * @return the player
-	 */
-	Player getPlayer() {
-		return Bukkit.getPlayer(player);
-	}
-
-	/**
-	 * @return the fullreset
-	 */
-	boolean isFullreset() {
-		return fullreset;
-	}
-
-	/**
-	 * @return the isnew
-	 */
-	boolean isNew() {
-		return isnew;
-	}
-
-	/**
-	 * Get the id previously stored
-	 * 
-	 * @return the id
-	 */
-	final int getLastrouterid() {
-		return lastrouterid;
-	}
-
-	/**
-	 * Store an id in the updater book
-	 * 
-	 * @param lastrouterid the id to store
-	 */
-	final void setLastrouterid(int lastrouterid) {
-		this.lastrouterid = lastrouterid;
 	}
 }

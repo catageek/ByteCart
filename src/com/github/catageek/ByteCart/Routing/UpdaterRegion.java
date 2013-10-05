@@ -86,7 +86,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Updater {
 					" If this is not a new network (i.e. you have already used bcupdater)" +
 					", you should start from anywhere but here";
 			LogUtil.sendError(this.getRoutes().getPlayer(), error);
-			UpdaterContentFactory.deleteRoutingTableExchange(this.getRoutes().getInventory());
+			WandererContentFactory.deleteContent(this.getRoutes().getInventory());
 			return true;
 		}
 		return (track == -1 && current != -2) 

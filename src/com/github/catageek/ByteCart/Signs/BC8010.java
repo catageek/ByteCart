@@ -19,7 +19,7 @@ import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBu
 import com.github.catageek.ByteCart.Routing.AbstractWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
-import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
+import com.github.catageek.ByteCart.Routing.WandererContentFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.SignPostRouteEvent;
@@ -204,7 +204,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	protected boolean selectUpdater() {
 		// everything that is not an updater must be routed
 		//return ! ByteCart.myPlugin.getUm().isUpdater(id);
-		return ! UpdaterContentFactory.isRoutingTableExchange(getInventory());
+		return ! WandererContentFactory.isWanderer(getInventory());
 	}
 
 	/**

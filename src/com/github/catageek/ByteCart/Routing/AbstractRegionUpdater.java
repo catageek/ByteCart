@@ -110,7 +110,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		this.getRoutes().seenTimestamp();
 
 		try {
-			UpdaterContentFactory.<UpdaterContent>saveRoutingTableExchange(Routes);
+			UpdaterContentFactory.<UpdaterContent>saveContent(Routes);
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

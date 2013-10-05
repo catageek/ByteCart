@@ -8,7 +8,7 @@ import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
-import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
+import com.github.catageek.ByteCart.Routing.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Routing.Updater.Scope;
@@ -32,8 +32,8 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 	 */
 	@Override
 	protected boolean selectUpdater() {
-		return (! UpdaterContentFactory.isRoutingTableExchange(this.getInventory()))
-				|| UpdaterContentFactory.isRoutingTableExchange(this.getInventory(), Scope.LOCAL);
+		return (! WandererContentFactory.isWanderer(this.getInventory()))
+				|| WandererContentFactory.isWanderer(this.getInventory(), Scope.LOCAL);
 	}
 
 	/* (non-Javadoc)
