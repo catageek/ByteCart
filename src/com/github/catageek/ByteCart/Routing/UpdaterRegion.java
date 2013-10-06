@@ -10,10 +10,10 @@ import com.github.catageek.ByteCart.Util.LogUtil;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSetRingEvent;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
-class UpdaterRegion extends AbstractRegionUpdater implements Updater {
+class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 
 	UpdaterRegion(BCSign bc, UpdaterContent rte) {
 		super(bc, rte);

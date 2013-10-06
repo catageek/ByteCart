@@ -13,8 +13,8 @@ import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Wanderer.WandererContent;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 /**
  * A class to store data in books used by updater
@@ -34,12 +34,12 @@ public class UpdaterContent extends WandererContent implements Serializable {
 	private long expirationtime;
 
 
-	public UpdaterContent(Inventory inv, Updater.Level level, int region, Player player
+	public UpdaterContent(Inventory inv, Wanderer.Level level, int region, Player player
 			, boolean isfullreset) {
 		this(inv, level, region, player, isfullreset, false);
 	}
 	
-	public UpdaterContent(Inventory inv, Updater.Level level, int region, Player player
+	public UpdaterContent(Inventory inv, Wanderer.Level level, int region, Player player
 			, boolean isfullreset, boolean isnew) {
 		super(inv, level, region, player);
 		this.fullreset = isfullreset;

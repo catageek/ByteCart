@@ -5,10 +5,10 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.UpdaterClearRingEvent;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
-final class UpdaterResetRegion extends UpdaterRegion implements Updater {
+final class UpdaterResetRegion extends UpdaterRegion implements Wanderer {
 
 	UpdaterResetRegion(BCSign bc, UpdaterContent rte) {
 		super(bc, rte);

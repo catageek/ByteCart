@@ -11,8 +11,8 @@ import org.bukkit.inventory.Inventory;
 import com.github.catageek.ByteCart.FileStorage.BookFile;
 import com.github.catageek.ByteCart.Util.LogUtil;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
-import com.github.catageek.ByteCartAPI.Routing.Updater.Level;
-import com.github.catageek.ByteCartAPI.Routing.Updater.Scope;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Level;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 
 public abstract class UpdaterContentFactory {
 
@@ -31,7 +31,7 @@ public abstract class UpdaterContentFactory {
 
 	public static void createRoutingTableExchange(Inventory inv, int region, Level level, Player player
 			, boolean isfullreset, boolean isnew) throws IOException {
-		WandererContentFactory.createWanderer(inv, region, level, player, "Updater", level.type);
+		WandererContentFactory.createWanderer(inv, region, level, player, "Wanderer", level.type);
 		UpdaterContent rte;
 		if (level.scope.equals(Scope.LOCAL))
 			rte = new LocalUpdaterContent(inv, level, region, player, isfullreset);
@@ -52,7 +52,7 @@ public abstract class UpdaterContentFactory {
 		long creation = rte.getCreationtime();
 		long expiration = rte.getExpirationTime();
 		if (creation != expiration && Calendar.getInstance().getTimeInMillis() > expiration) {
-			LogUtil.sendSuccess(rte.getPlayer(), "ByteCart : Updater created " + (new Date(rte.getCreationtime())).toString() + " expired");
+			LogUtil.sendSuccess(rte.getPlayer(), "ByteCart : Wanderer created " + (new Date(rte.getCreationtime())).toString() + " expired");
 			WandererContentFactory.deleteContent(rte.getInventory());
 			return;
 		}

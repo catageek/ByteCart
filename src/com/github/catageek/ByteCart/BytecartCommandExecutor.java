@@ -25,7 +25,7 @@ import com.github.catageek.ByteCart.Util.LogUtil;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 /**
  * The command executor
@@ -169,7 +169,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 				int region = 0;
 
-				if(args.length == 0 || args.length > 4 || !Updater.Level.isMember(args[0].toLowerCase()))
+				if(args.length == 0 || args.length > 4 || !Wanderer.Level.isMember(args[0].toLowerCase()))
 					return false;
 
 
@@ -211,14 +211,14 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				final class Execute implements ModifiableRunnable<Inventory> {
 
 					private final Player player;
-					private final Updater.Level level;
+					private final Wanderer.Level level;
 					private final int region;
 					private Inventory inventory;
 					private boolean isfullreset;
 					private boolean isnew;
 
 
-					public Execute(Player player, Updater.Level level, int region, boolean isfullreset, boolean isnew) {
+					public Execute(Player player, Wanderer.Level level, int region, boolean isfullreset, boolean isnew) {
 						this.player = player;
 						this.level = level;
 						this.region = region;
@@ -259,7 +259,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				LogUtil.sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
 
 				new ByteCartInventoryListener(ByteCart.myPlugin, player
-						,new Execute(player, Updater.Level.valueOf(args[0].toUpperCase()), region
+						,new Execute(player, Wanderer.Level.valueOf(args[0].toUpperCase()), region
 								,full_reset, isnew)
 				,true);
 			}

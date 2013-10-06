@@ -8,7 +8,7 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.HAL.SubRegistry;
-import com.github.catageek.ByteCart.Routing.UpdaterFactory;
+import com.github.catageek.ByteCart.Routing.WandererFactory;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
@@ -16,9 +16,9 @@ import com.github.catageek.ByteCartAPI.Event.SignPostSubnetEvent;
 import com.github.catageek.ByteCartAPI.Event.SignPreSubnetEvent;
 import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.HasNetmask;
 import com.github.catageek.ByteCartAPI.Signs.Subnet;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 
 /**
@@ -96,9 +96,9 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 	@Override
 	protected void manageUpdater(SimpleCollisionAvoider intersection) {
 		// it's an updater, so let it choosing direction
-		Updater updater;
+		Wanderer updater;
 		try {
-			updater = UpdaterFactory.getUpdater(this, this.getInventory());
+			updater = WandererFactory.getWanderer(this, this.getInventory());
 
 			// routing
 			Side to = intersection.WishToGo(updater.giveSimpleDirection(), false);

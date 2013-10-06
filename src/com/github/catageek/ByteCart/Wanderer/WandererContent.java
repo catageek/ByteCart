@@ -1,6 +1,5 @@
 package com.github.catageek.ByteCart.Wanderer;
 
-import java.io.Serializable;
 import java.util.Calendar;
 
 import org.bukkit.Bukkit;
@@ -8,10 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.Routing.Counter;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Wanderer.InventoryContent;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
-public class WandererContent  implements InventoryContent, Serializable {
+public class WandererContent  implements InventoryContent {
 
 	/**
 	 * 
@@ -26,7 +25,7 @@ public class WandererContent  implements InventoryContent, Serializable {
 	private long creationtime = Calendar.getInstance().getTimeInMillis();
 	private int lastrouterid;
 
-	public WandererContent(Inventory inv, Updater.Level level, int region, Player player) {
+	public WandererContent(Inventory inv, Wanderer.Level level, int region, Player player) {
 		this.Region = region;
 		this.Level = level;
 		this.inventory = inv;
@@ -42,7 +41,7 @@ public class WandererContent  implements InventoryContent, Serializable {
 		this.counter = counter;
 	}
 
-	private Updater.Level Level;
+	private Wanderer.Level Level;
 
 	private int Region;
 
@@ -51,7 +50,7 @@ public class WandererContent  implements InventoryContent, Serializable {
 	 * 
 	 * @param level the level to store
 	 */
-	final void setLevel(Updater.Level level) {
+	final void setLevel(Wanderer.Level level) {
 		Level = level;
 	}
 
@@ -72,7 +71,7 @@ public class WandererContent  implements InventoryContent, Serializable {
 	 * 
 	 * @return the level
 	 */
-	public Updater.Level getLevel() {
+	public Wanderer.Level getLevel() {
 		return Level;
 	}
 

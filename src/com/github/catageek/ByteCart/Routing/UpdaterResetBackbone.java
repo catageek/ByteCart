@@ -2,10 +2,10 @@ package com.github.catageek.ByteCart.Routing;
 
 import org.bukkit.block.BlockFace;
 
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
-class UpdaterResetBackbone extends UpdaterBackBone implements Updater {
+class UpdaterResetBackbone extends UpdaterBackBone implements Wanderer {
 
 	UpdaterResetBackbone(BCSign bc, UpdaterContent rte) {
 		super(bc, rte);

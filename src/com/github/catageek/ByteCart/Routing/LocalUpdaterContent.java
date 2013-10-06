@@ -6,7 +6,7 @@ import java.util.Stack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 class LocalUpdaterContent extends UpdaterContent implements Serializable {
 
@@ -19,7 +19,7 @@ class LocalUpdaterContent extends UpdaterContent implements Serializable {
 	private Stack<Integer> End;
 
 
-	LocalUpdaterContent(Inventory inv, Updater.Level level, int region, Player player, boolean isfullreset) {
+	LocalUpdaterContent(Inventory inv, Wanderer.Level level, int region, Player player, boolean isfullreset) {
 		super(inv, level, region, player, isfullreset);
 		setStart(new Stack<Integer>());
 		setEnd(new Stack<Integer>());

@@ -12,16 +12,16 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
-import com.github.catageek.ByteCart.Routing.UpdaterFactory;
+import com.github.catageek.ByteCart.Routing.WandererFactory;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
 import com.github.catageek.ByteCartAPI.Event.SignPostStationEvent;
 import com.github.catageek.ByteCartAPI.Event.SignPreStationEvent;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.Subnet;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 
 /**
@@ -84,9 +84,9 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 			}
 			
 			// it's an updater, so let it choosing direction
-			Updater updater;
+			Wanderer updater;
 			try {
-				updater = UpdaterFactory.getUpdater(this, this.getInventory());
+				updater = WandererFactory.getWanderer(this, this.getInventory());
 				// here we perform routes update
 				updater.doAction(IntersectionSide.Side.LEVER_OFF);
 			} catch (ClassNotFoundException e) {

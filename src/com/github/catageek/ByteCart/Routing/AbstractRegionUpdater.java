@@ -8,9 +8,9 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Signs.BC8010;
-import com.github.catageek.ByteCartAPI.Routing.Updater.Level;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Level;
 
 abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 
@@ -59,7 +59,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 
 				// Storing the route from where we arrive
 				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : Updater : storing ring " + current + " direction " + getFrom().ToString());
+					ByteCart.log.info("ByteCart : Wanderer : storing ring " + current + " direction " + getFrom().ToString());
 
 				getRoutingTable().setEntry(current, getFrom(), new Metric(0));
 				Routes.updateTimestamp();

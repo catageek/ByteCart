@@ -19,16 +19,16 @@ import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBu
 import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
-import com.github.catageek.ByteCart.Routing.UpdaterFactory;
+import com.github.catageek.ByteCart.Routing.WandererFactory;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.SignPostRouteEvent;
 import com.github.catageek.ByteCartAPI.Event.SignPreRouteEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterPassRouterEvent;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.BCRouter;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 
 
@@ -161,7 +161,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			}
 
 			// it's an updater, so let it choosing direction
-			Updater updater = getUpdater();
+			Wanderer updater = getUpdater();
 
 			// routing normally
 			to = router.WishToGo(From, updater.giveRouterDirection(), isTrain);
@@ -259,8 +259,8 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	protected final Updater getUpdater() throws ClassNotFoundException, IOException {
-		return UpdaterFactory.getUpdater(this, this.getInventory());
+	protected final Wanderer getUpdater() throws ClassNotFoundException, IOException {
+		return WandererFactory.getWanderer(this, this.getInventory());
 	}
 
 
@@ -268,8 +268,8 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 * @see com.github.catageek.ByteCart.Signs.BCSign#getLevel()
 	 */
 	@Override
-	public Updater.Level getLevel() {
-		return Updater.Level.REGION;
+	public Wanderer.Level getLevel() {
+		return Wanderer.Level.REGION;
 	}
 
 	/**

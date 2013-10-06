@@ -14,9 +14,9 @@ import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
 import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 /**
  * An abstract class for T-intersection signs
@@ -154,8 +154,8 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 	 * @see com.github.catageek.ByteCart.Signs.BCSign#getLevel()
 	 */
 	@Override
-	public Updater.Level getLevel() {
-		return Updater.Level.LOCAL;
+	public Wanderer.Level getLevel() {
+		return Wanderer.Level.LOCAL;
 	}
 
 	/* (non-Javadoc)

@@ -10,9 +10,9 @@ import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
-import com.github.catageek.ByteCartAPI.Routing.Updater.Scope;
 import com.github.catageek.ByteCartAPI.Signs.BCRouter;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 
 
 
@@ -65,8 +65,8 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 	 * @see com.github.catageek.ByteCart.Signs.BC8010#getLevel()
 	 */
 	@Override
-	public Updater.Level getLevel() {
-		return Updater.Level.BACKBONE;
+	public Wanderer.Level getLevel() {
+		return Wanderer.Level.BACKBONE;
 	}
 
 	/* (non-Javadoc)

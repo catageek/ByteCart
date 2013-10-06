@@ -14,10 +14,10 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterLeaveSubnetEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterPassStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSetStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSetSubnetEvent;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
-public class UpdaterLocal extends DefaultLocalWanderer implements Updater {
+public class UpdaterLocal extends DefaultLocalWanderer implements Wanderer {
 
 	protected UpdaterLocal(BCSign bc, UpdaterContent rte) {
 		super(bc, rte);

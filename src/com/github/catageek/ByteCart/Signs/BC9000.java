@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
-import com.github.catageek.ByteCart.Routing.UpdaterFactory;
+import com.github.catageek.ByteCart.Routing.WandererFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterLocal;
 import com.github.catageek.ByteCartAPI.Signs.Subnet;
 
@@ -33,7 +33,7 @@ final class BC9000 extends AbstractSimpleCrossroad implements Subnet, Triggable 
 		if (ByteCart.myPlugin.getConfig().getBoolean("oldBC900behaviour", true)) {
 			UpdaterLocal updater;
 			try {
-				updater = (UpdaterLocal) UpdaterFactory.getUpdater(this, this.getInventory());
+				updater = (UpdaterLocal) WandererFactory.getWanderer(this, this.getInventory());
 
 				// here we perform routes update
 				updater.leaveSubnet();

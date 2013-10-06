@@ -4,10 +4,10 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
-import com.github.catageek.ByteCartAPI.Routing.Updater;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
-class UpdaterBackBone extends AbstractRegionUpdater implements Updater {
+class UpdaterBackBone extends AbstractRegionUpdater implements Wanderer {
 
 	UpdaterBackBone(BCSign bc, UpdaterContent rte) {
 		super(bc, rte);

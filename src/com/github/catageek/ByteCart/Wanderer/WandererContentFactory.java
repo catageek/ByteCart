@@ -12,8 +12,8 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.FileStorage.BCFile;
 import com.github.catageek.ByteCart.FileStorage.BookFile;
-import com.github.catageek.ByteCartAPI.Routing.Updater.Level;
-import com.github.catageek.ByteCartAPI.Routing.Updater.Scope;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Level;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 
 abstract public class WandererContentFactory {
 
