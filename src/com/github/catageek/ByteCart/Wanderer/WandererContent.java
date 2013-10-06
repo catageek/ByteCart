@@ -9,8 +9,9 @@ import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.Routing.Counter;
 import com.github.catageek.ByteCartAPI.Routing.Updater;
+import com.github.catageek.ByteCartAPI.Wanderer.InventoryContent;
 
-public class WandererContent  implements Serializable {
+public class WandererContent  implements InventoryContent, Serializable {
 
 	/**
 	 * 

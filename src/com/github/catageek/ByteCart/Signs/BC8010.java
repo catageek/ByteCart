@@ -16,10 +16,10 @@ import com.github.catageek.ByteCart.AddressLayer.ReturnAddressFactory;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.Router;
 import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBuilder;
+import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
 import com.github.catageek.ByteCart.Routing.UpdaterFactory;
-import com.github.catageek.ByteCart.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.SignPostRouteEvent;
@@ -235,7 +235,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			return face.getBlockFace();
 
 		// If everything has failed, then we randomize output direction
-		return AbstractWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
+		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
 	}
 
 	/**
