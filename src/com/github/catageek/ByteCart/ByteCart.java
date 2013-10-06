@@ -12,7 +12,9 @@ import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
 import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
 import com.github.catageek.ByteCart.EventManagement.ConstantSpeedListener;
 import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
+import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
+import com.github.catageek.ByteCart.Wanderer.BCWandererManager;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.ByteCartPlugin;
@@ -29,6 +31,7 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	private PreloadChunkListener preloadchunklistener;
 	private ConstantSpeedListener constantspeedlistener;
 	private CollisionAvoiderManager cam;
+	private BCWandererManager wf;
 	private IsTrainManager it;
 	public int Lockduration;
 	private boolean keepitems;
@@ -49,11 +52,15 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 		this.loadConfig();
 
 		this.setCam(new CollisionAvoiderManager());
+		this.setWf(new BCWandererManager());
 		this.setIt(new IsTrainManager());
 
 		getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
 
 
+		// register updater factory
+		this.getWandererManager().register(new UpdaterFactory(), "Updater");
+		
 		getCommand("mego").setExecutor(new BytecartCommandExecutor());
 		getCommand("sendto").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcreload").setExecutor(new BytecartCommandExecutor());
@@ -187,5 +194,19 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	
 	public final Logger getLog() {
 		return log;
+	}
+
+	/**
+	 * @return the wf
+	 */
+	public BCWandererManager getWandererManager() {
+		return wf;
+	}
+
+	/**
+	 * @param wf the wf to set
+	 */
+	private void setWf(BCWandererManager wf) {
+		this.wf = wf;
 	}
 }

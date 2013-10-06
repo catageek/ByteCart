@@ -19,7 +19,6 @@ import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBu
 import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Routing.RoutingTable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
-import com.github.catageek.ByteCart.Routing.WandererFactory;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.SignPostRouteEvent;
@@ -260,7 +259,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 * @throws IOException
 	 */
 	protected final Wanderer getUpdater() throws ClassNotFoundException, IOException {
-		return WandererFactory.getWanderer(this, this.getInventory());
+		return ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
 	}
 
 

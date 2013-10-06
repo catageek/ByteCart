@@ -12,7 +12,6 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
-import com.github.catageek.ByteCart.Routing.WandererFactory;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
@@ -86,7 +85,7 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 			// it's an updater, so let it choosing direction
 			Wanderer updater;
 			try {
-				updater = WandererFactory.getWanderer(this, this.getInventory());
+				updater = ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
 				// here we perform routes update
 				updater.doAction(IntersectionSide.Side.LEVER_OFF);
 			} catch (ClassNotFoundException e) {

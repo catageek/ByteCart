@@ -10,8 +10,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.FileStorage.BCFile;
 import com.github.catageek.ByteCart.FileStorage.BookFile;
+import com.github.catageek.ByteCartAPI.Wanderer.InventoryContent;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Level;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 
@@ -33,38 +35,58 @@ abstract public class WandererContentFactory {
 	}
 
 	public static boolean isWanderer(Inventory inv) {
-		return isWanderer(inv, (Scope) null, null, null);
+		String prefix = getType(inv);
+		if (prefix != null)
+			return ByteCart.myPlugin.getWandererManager().isWandererType(prefix);
+		
+		return false;
+	}
+
+	static String getType(Inventory inv) {
+		ItemStack stack = inv.getItem(0);
+		String prefix = null;
+		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta()) {
+			BookMeta book = (BookMeta) stack.getItemMeta();
+			String booktitle = book.getTitle();
+			int index = booktitle.indexOf(".");
+			if (index > 0)
+				prefix = booktitle.substring(0, index);
+		}
+		return prefix;
 	}
 
 	public static boolean isWanderer(Inventory inv, Scope scope) {
 		return isWanderer(inv, scope, null, null);
 	}
 
-	public static boolean isWanderer(Inventory inv, Level level, String nameprefix) {
-		return isWanderer(inv, level.scope, level.type, nameprefix);
+	public static boolean isWanderer(Inventory inv, Level level, String type) {
+		return isWanderer(inv, level.scope, level.type, type);
 	}
 
-	public static boolean isWanderer(Inventory inv, String type, Level level) {
-		return isWanderer(inv, level.scope, type, null);
-	}
-
-	private static boolean isWanderer(Inventory inv, Scope scope, String type, String titleprefix) {
+	private static boolean isWanderer(Inventory inv, Scope scope, String suffix, String type) {
 		ItemStack stack = inv.getItem(0);
 		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta()) {
-			BookMeta book = (BookMeta) stack.getItemMeta();
-			String booktitle = book.getTitle();
-			String dot = "\\.";
-			StringBuilder match = new StringBuilder();
+			final BookMeta book = (BookMeta) stack.getItemMeta();
+			final String booktitle = book.getTitle();
+			final String dot = "\\.";
+			final StringBuilder match = new StringBuilder();
 
-			match.append("^").append(titleprefix).append(dot);
+			match.append("^");
+
+			final String alphanums = "[a-zA-Z]{1,}";
+			
+			if (type != null)
+				match.append(type).append(dot);
+			else
+				match.append(alphanums).append(dot);
 
 			if (scope != null)
 				match.append(scope.name).append(dot);
 			else
-				match.append("[a-zA-Z]{1,}").append(dot);
+				match.append(alphanums).append(dot);
 
-			if (type != null)
-				match.append(type).append(dot);
+			if (suffix != null)
+				match.append(suffix).append(dot);
 
 			match.append(".*");
 			if (BookFile.isBookFile(inv, 0) 
@@ -90,7 +112,7 @@ abstract public class WandererContentFactory {
 		mustRemove = false;
 	}
 
-	public static <T extends WandererContent> void saveContent(T rte)
+	public static <T extends InventoryContent> void saveContent(T rte)
 			throws IOException, ClassNotFoundException {
 		Inventory inv = rte.getInventory();
 
