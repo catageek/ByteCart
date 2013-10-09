@@ -1,13 +1,22 @@
 package com.github.catageek.ByteCart.Wanderer;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Stack;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import com.github.catageek.ByteCart.Routing.Counter;
+import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Routing.BCCounter;
+import com.github.catageek.ByteCart.Routing.Metric;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Wanderer.InventoryContent;
+import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
+import com.github.catageek.ByteCartAPI.Wanderer.RoutingTable;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 public class WandererContent  implements InventoryContent {
@@ -20,24 +29,36 @@ public class WandererContent  implements InventoryContent {
 	private transient Inventory inventory = null;
 	private String player;
 
-	private Counter counter;
+	private BCCounter counter;
 
 	private long creationtime = Calendar.getInstance().getTimeInMillis();
 	private int lastrouterid;
+	private Stack<Integer> Start;
+	private Stack<Integer> End;
+
+	//internal variable used by updaters
+	private int Current = -2;
+
+	private long expirationtime;
+
+	protected Map<Integer, Metric> tablemap = new HashMap<Integer, Metric>();
+
 
 	public WandererContent(Inventory inv, Wanderer.Level level, int region, Player player) {
 		this.Region = region;
 		this.Level = level;
 		this.inventory = inv;
 		this.player = player.getName();
-		counter = new Counter();
+		counter = new BCCounter();
+		setStart(new Stack<Integer>());
+		setEnd(new Stack<Integer>());
 	}
 	/**
 	 * Set the counter instance
 	 * 
 	 * @param counter the counter instance to set
 	 */
-	final void setCounter(Counter counter) {
+	final void setCounter(BCCounter counter) {
 		this.counter = counter;
 	}
 
@@ -62,9 +83,6 @@ public class WandererContent  implements InventoryContent {
 	final void setRegion(int region) {
 		Region = region;
 	}
-
-	//internal variable used by updaters
-	private int Current = -2;
 
 	/**
 	 * Get the level of the updater
@@ -105,7 +123,7 @@ public class WandererContent  implements InventoryContent {
 	/**
 	 * @return the counter
 	 */
-	public Counter getCounter() {
+	public BCCounter getCounter() {
 		return counter;
 	}
 
@@ -123,9 +141,6 @@ public class WandererContent  implements InventoryContent {
 		this.inventory = inventory;
 	}
 
-	/**
-	 * @return the creationtime
-	 */
 	public long getCreationtime() {
 		return creationtime;
 	}
@@ -164,4 +179,126 @@ public class WandererContent  implements InventoryContent {
 		this.lastrouterid = lastrouterid;
 	}
 
+	/**
+	 * @return the start
+	 */
+	public Stack<Integer> getStart() {
+		return Start;
+	}
+	
+	/**
+	 * @return the end
+	 */
+	public Stack<Integer> getEnd() {
+		return End;
+	}
+	
+	/**
+	 * @param start the start to set
+	 */
+	void setStart(Stack<Integer> start) {
+		Start = start;
+	}
+
+
+	/**
+	 * @param end the end to set
+	 */
+	void setEnd(Stack<Integer> end) {
+		End = end;
+	}
+	/**
+	 * Update the expiration time to have twice the spent time left
+	 */
+	public void updateTimestamp() {
+		long initial;
+		long expiration;
+		if ((initial = this.getCreationtime()) == (expiration = this.getExpirationTime()))
+			return;
+		long last = Calendar.getInstance().getTimeInMillis();
+		long update = last + ((last - initial) << 1);
+		if (update > expiration)
+			setExpirationTime(update);
+	}
+
+	public long getExpirationTime() {
+		return expirationtime;
+	}
+	/**
+	 * Set the expiration time
+	 * 
+	 * @param lastupdate the lastupdate to set
+	 */
+	protected void setExpirationTime(long lastupdate) {
+		this.expirationtime = lastupdate;
+	}
+	/**
+	 * Insert an entry in the IGP packet
+	 * 
+	 * @param number the ring id
+	 * @param metric the metric value
+	 */
+	public void setRoute(int number, int metric) {
+		tablemap.put(number, new Metric(metric));
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : setting metric of ring " + number + " to " + metric);
+	}
+	/**
+	 * Get the metric value of a ring of the IGP exchange packet
+	 * 
+	 * @param entry the ring id
+	 * @return the metric
+	 */
+	public int getMetric(int entry) {
+		return tablemap.get(entry).value();
+	}
+	/**
+	 * Get the ring that has the minimum metric in the IGP packet
+	 * 
+	 * @param routingTable the routing table
+	 * @param from the direction to exclude from the search
+	 * @return the ring id, or -1
+	 */
+	public int getMinDistanceRing(RoutingTable routingTable, DirectionRegistry from) {
+		Iterator<RouteValue> it = routingTable.getOrderedRouteNumbers();
+	
+		if (! it.hasNext())
+			return -1;
+	
+		//skip ring 0
+		it.next();
+	
+		int route;
+		int min = 10000, ret = -1; // big value
+	
+		while (it.hasNext()) {
+			route = it.next().value();
+			if (routingTable.getDirection(route).getAmount() != from.getAmount()) {
+				if (! this.hasRouteTo(route)) {
+					if(ByteCart.debug)
+						ByteCart.log.info("ByteCart : found ring " + route + " was never visited");
+					return route;
+				}
+	
+				else {
+					if (getMetric(route) < min) {
+						min = getMetric(route);
+						ret = route;
+					}
+				}
+			}
+		}
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : minimum found ring " + ret + " with " + min);
+		return ret;
+	}
+	/**
+	 * Tells if the IGP packet has data on a ring
+	 * 
+	 * @param ring the ring id
+	 * @return true if there is data on this ring
+	 */
+	public boolean hasRouteTo(int ring) {
+		return tablemap.containsKey(ring);
+	}
 }

@@ -33,7 +33,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 
 	protected UpdaterContent Routes;
 	private final boolean IsTrackNumberProvider;
-	private Counter counter;
+	private BCCounter counter;
 	abstract protected BlockFace selectDirection();
 
 	/**
@@ -110,7 +110,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		this.getRoutes().seenTimestamp();
 
 		try {
-			UpdaterContentFactory.<UpdaterContent>saveContent(Routes);
+			UpdaterContentFactory.saveContent(Routes);
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -141,7 +141,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		return Routes;
 	}
 
-	protected final Counter getCounter() {
+	protected final BCCounter getCounter() {
 		return counter;
 	}
 

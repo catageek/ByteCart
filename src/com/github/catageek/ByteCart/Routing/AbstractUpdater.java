@@ -9,7 +9,7 @@ import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 
 abstract class AbstractUpdater extends AbstractWanderer {
 
-	private final RoutingTable RoutingTable;
+	private final RoutingTableWritable RoutingTable;
 
 	protected AbstractUpdater(BCSign bc, int region) {
 		super(bc, region);
@@ -42,7 +42,7 @@ abstract class AbstractUpdater extends AbstractWanderer {
 	/**
 	 * @return the routing table
 	 */
-	protected final RoutingTable getRoutingTable() {
+	protected final RoutingTableWritable getRoutingTable() {
 		return RoutingTable;
 	}	
 }

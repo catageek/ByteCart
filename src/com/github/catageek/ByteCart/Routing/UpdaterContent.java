@@ -2,9 +2,7 @@ package com.github.catageek.ByteCart.Routing;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -14,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Wanderer.WandererContent;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 /**
@@ -27,13 +26,9 @@ public class UpdaterContent extends WandererContent implements Serializable {
 	 */
 	private static final long serialVersionUID = 848098890652934583L;
 
-	private Map<Integer, Metric> tablemap = new HashMap<Integer, Metric>();
 	private boolean fullreset = false;
 	private boolean isnew = false;
 	private long lastrouterseen;
-	private long expirationtime;
-
-
 	public UpdaterContent(Inventory inv, Wanderer.Level level, int region, Player player
 			, boolean isfullreset) {
 		this(inv, level, region, player, isfullreset, false);
@@ -44,80 +39,7 @@ public class UpdaterContent extends WandererContent implements Serializable {
 		super(inv, level, region, player);
 		this.fullreset = isfullreset;
 		this.isnew = isnew;
-		expirationtime = ByteCart.myPlugin.getConfig().getInt("updater.timeout", 60) * 60000 + getCreationtime();
-	}
-
-	/**
-	 * Get the metric value of a ring of the IGP exchange packet
-	 * 
-	 * @param entry the ring id
-	 * @return the metric
-	 */
-	int getMetric(int entry) {
-		return tablemap.get(entry).value();
-	}
-
-	/**
-	 * Tells if the IGP packet has data on a ring
-	 * 
-	 * @param ring the ring id
-	 * @return true if there is data on this ring
-	 */
-	boolean hasRouteTo(int ring) {
-		return tablemap.containsKey(ring);
-	}
-
-	/**
-	 * Insert an entry in the IGP packet
-	 * 
-	 * @param number the ring id
-	 * @param metric the metric value
-	 */
-	void setRoute(int number, Metric metric) {
-		tablemap.put(number, metric);
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : setting metric of ring " + number + " to " + metric.value());
-	}
-
-	/**
-	 * Get the ring that has the minimum metric in the IGP packet
-	 * 
-	 * @param routes the routing table
-	 * @param from the direction to exclude from the search
-	 * @return the ring id, or -1
-	 */
-	int getMinDistanceRing(RoutingTable routes, DirectionRegistry from) {
-		Iterator<RouteNumber> it = routes.getOrderedRouteNumbers();
-
-		if (! it.hasNext())
-			return -1;
-
-		//skip ring 0
-		it.next();
-
-		int route;
-		int min = 10000, ret = -1; // big value
-
-		while (it.hasNext()) {
-			route = it.next().value();
-			if (routes.getDirection(route).getAmount() != from.getAmount()) {
-				if (! this.hasRouteTo(route)) {
-					if(ByteCart.debug)
-						ByteCart.log.info("ByteCart : found ring " + route + " was never visited");
-					return route;
-				}
-
-				else {
-					if (getMetric(route) < min) {
-						min = getMetric(route);
-						ret = route;
-					}
-				}
-			}
-		}
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart : minimum found ring " + ret + " with " + min);
-		return ret;
+		this.setExpirationTime(ByteCart.myPlugin.getConfig().getInt("updater.timeout", 60) * 60000 + getCreationtime());
 	}
 
 	/**
@@ -135,15 +57,15 @@ public class UpdaterContent extends WandererContent implements Serializable {
 	 * @param table the routing table
 	 * @param direction the direction to exclude
 	 */
-	void putRoutes(RoutingTable table, DirectionRegistry direction) {
+	void putRoutes(RoutingTableWritable table, DirectionRegistry direction) {
 		tablemap.clear();
-		Iterator<RouteNumber> it = table.getOrderedRouteNumbers();
+		Iterator<RouteValue> it = table.getOrderedRouteNumbers();
 		while (it.hasNext()) {
 			int i = it.next().value();
 			if( table.getDirection(i) != null && table.getDirection(i).getAmount() != direction.getAmount()) {
-				tablemap.put(i, table.getMinMetric(i));
+				tablemap.put(i, new Metric(table.getMinMetric(i)));
 				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : Route exchange : give ring " + i + " with metric " + table.getMinMetric(i).value() + " to " + table.getDirection(i).getBlockFace());
+					ByteCart.log.info("ByteCart : Route exchange : give ring " + i + " with metric " + table.getMinMetric(i) + " to " + table.getDirection(i).getBlockFace());
 			}
 
 		}
@@ -179,37 +101,5 @@ public class UpdaterContent extends WandererContent implements Serializable {
 	 */
 	boolean isNew() {
 		return isnew;
-	}
-	
-	/**
-	 * Update the expiration time to have twice the spent time left
-	 */
-	void updateTimestamp() {
-		long initial;
-		long expiration;
-		if ((initial = this.getCreationtime()) == (expiration = this.getExpirationTime()))
-			return;
-		long last = Calendar.getInstance().getTimeInMillis();
-		long update = last + ((last - initial) << 1);
-		if (update > expiration)
-			setExpirationTime(update);
-	}
-	
-	/**
-	 * Return the expiration time
-	 * 
-	 * @return the expiration time
-	 */
-	long getExpirationTime() {
-		return expirationtime;
-	}
-
-	/**
-	 * Set the expiration time
-	 * 
-	 * @param lastupdate the lastupdate to set
-	 */
-	private void setExpirationTime(long lastupdate) {
-		this.expirationtime = lastupdate;
 	}
 }

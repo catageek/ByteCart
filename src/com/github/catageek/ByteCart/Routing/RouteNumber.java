@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
+
 
 
 
@@ -12,7 +14,7 @@ import java.io.ObjectOutput;
  * A track number on 11 bits (from 0 to 2047)
  */
 final class RouteNumber extends RoutingTableContent<RouteNumber>
-implements Comparable<RouteNumber>, Externalizable {
+implements Comparable<RouteNumber>, Externalizable, RouteValue {
 
 	
 	private static final int rlength = 11;

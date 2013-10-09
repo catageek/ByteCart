@@ -76,4 +76,9 @@ public class BCWandererManager implements WandererManager {
 	public boolean isWandererType(String type) {
 		return map.containsKey(type);
 	}
+
+	public void saveContent(InventoryContent rte) throws ClassNotFoundException, IOException {
+
+		WandererContentFactory.saveContent(rte);
+	}
 }

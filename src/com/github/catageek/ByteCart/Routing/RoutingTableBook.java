@@ -19,16 +19,17 @@ import com.github.catageek.ByteCart.FileStorage.BookFile;
 import com.github.catageek.ByteCart.Storage.ExternalizableTreeMap;
 import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
 
 /**
  * A routing table in a book
  */
 final class RoutingTableBook extends AbstractRoutingTable implements
-RoutingTable, Externalizable {
+RoutingTableWritable, Externalizable {
 
 	private boolean wasModified = false;
 
-	private ExternalizableTreeMap<RouteNumber,RouteProperty> map = new ExternalizableTreeMap<RouteNumber,RouteProperty>();
+	private ExternalizableTreeMap<RouteNumber, RouteProperty> map = new ExternalizableTreeMap<RouteNumber,RouteProperty>();
 
 	private static final long serialVersionUID = -7013741680310224056L;
 	private Inventory inventory;
@@ -50,7 +51,7 @@ RoutingTable, Externalizable {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.Routing.RoutingTable#clear(boolean)
+	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#clear(boolean)
 	 */
 	@Override
 	public void clear(boolean fullreset) {
@@ -74,11 +75,12 @@ RoutingTable, Externalizable {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.Routing.RoutingTable#getRouteNumbers()
+	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#getRouteNumbers()
 	 */
 	@Override
-	public final Iterator<RouteNumber> getOrderedRouteNumbers() {
-		Iterator<RouteNumber> it = ((SortedSet<RouteNumber>) map.keySet()).iterator();
+	public final <T extends RouteValue> Iterator<T> getOrderedRouteNumbers() {
+		@SuppressWarnings("unchecked")
+		Iterator<T> it = ((SortedSet<T>) map.keySet()).iterator();
 		return it;
 	}
 
@@ -104,14 +106,14 @@ RoutingTable, Externalizable {
 	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getMinMetric(int)
 	 */
 	@Override
-	public Metric getMinMetric(int entry) {
+	public int getMinMetric(int entry) {
 		SortedMap<Metric, PartitionedHashSet<DirectionRegistry>> smap;
 		RouteNumber route = new RouteNumber(entry);
 		if (map.containsKey(route) && (smap = map.get(route).getMap()) != null
 				&& ! smap.isEmpty()) {
-			return smap.firstKey();
+			return smap.firstKey().value();
 		}
-		return null;
+		return -1;
 	}
 
 	/* (non-Javadoc)
@@ -167,7 +169,7 @@ RoutingTable, Externalizable {
 			set = pmap.firstEntry().getValue();
 			if (! set.isEmpty())
 				return set.toArray(new DirectionRegistry[set.size()])[0];
-			throw new AssertionError("Set<DirectionRegistry> in RoutingTable is empty.");
+			throw new AssertionError("Set<DirectionRegistry> in RoutingTableWritable is empty.");
 		}
 		return null;
 	}
@@ -254,7 +256,7 @@ RoutingTable, Externalizable {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.Routing.RoutingTable#serialize()
+	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#serialize()
 	 */
 	@Override
 	public void serialize() throws IOException {
@@ -278,7 +280,7 @@ RoutingTable, Externalizable {
 	@Override
 	public void readExternal(ObjectInput in) throws IOException,
 	ClassNotFoundException {
-		this.map = (ExternalizableTreeMap<RouteNumber,RouteProperty>) in.readObject();
+		this.map = (ExternalizableTreeMap<RouteNumber, RouteProperty>) in.readObject();
 	}
 
 	/* (non-Javadoc)
@@ -290,7 +292,7 @@ RoutingTable, Externalizable {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.Routing.RoutingTable#size()
+	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#size()
 	 */
 	@Override
 	public int size() {

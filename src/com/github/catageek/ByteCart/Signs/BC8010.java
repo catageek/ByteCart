@@ -17,7 +17,7 @@ import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.Router;
 import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
-import com.github.catageek.ByteCart.Routing.RoutingTable;
+import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
@@ -38,7 +38,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 
 	private final BlockFace From;
 	private final Address Sign;
-	private final RoutingTable RoutingTable;
+	private final RoutingTableWritable RoutingTable;
 	private AddressRouted destination;
 	private final Block center;
 	protected boolean IsTrackNumberProvider;
@@ -140,7 +140,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart : region " + region);
 					try {
-						direction = RoutingTable.getDirection(region).getBlockFace();
+						direction = RoutingTableWritable.getDirection(region).getBlockFace();
 					} catch (NullPointerException e) {
 						// this region does not exist
 						direction = From;
@@ -211,10 +211,10 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 *
 	 * @param IPaddress the destination address
 	 * @param sign the BC sign
-	 * @param RoutingTable the routing table contained in the chest
+	 * @param RoutingTableWritable the routing table contained in the chest
 	 * @return the direction to destination, or to ring 0. If ring 0 does not exist, random direction
 	 */
-	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
+	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTableWritable RoutingTable) {
 
 		DirectionRegistry face;
 		// same region : lookup destination track
@@ -292,7 +292,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 * @see com.github.catageek.ByteCart.Signs.HasRoutingTable#getRoutingTable()
 	 */
 	@Override
-	public final RoutingTable getRoutingTable() {
+	public final RoutingTableWritable getRoutingTable() {
 		return RoutingTable;
 	}
 

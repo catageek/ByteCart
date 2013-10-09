@@ -11,7 +11,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 /**
  * The metric component of a routing table entry
  */
-final class Metric implements Comparable<Metric>, Externalizable {
+public final class Metric implements Comparable<Metric>, Externalizable {
 
 	/**
 	 * 
@@ -26,7 +26,7 @@ final class Metric implements Comparable<Metric>, Externalizable {
 		this(m.delay.getValue());
 	}
 
-	Metric(int delay) {
+	public Metric(int delay) {
 		this.delay = new Delay(delay);
 	}
 
@@ -41,7 +41,7 @@ final class Metric implements Comparable<Metric>, Externalizable {
 	/**
 	 * @return the value
 	 */
-	int value() {
+	public int value() {
 		return delay.getValue();
 	}
 

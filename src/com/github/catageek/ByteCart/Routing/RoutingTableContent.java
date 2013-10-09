@@ -46,7 +46,7 @@ abstract class RoutingTableContent<T extends RoutingTableContent<T>> implements 
 	/**
 	 * @return the value stored
 	 */
-	final int value() {
+	public final int value() {
 		return data.getAmount();
 	}
 

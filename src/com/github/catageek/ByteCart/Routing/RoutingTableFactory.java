@@ -18,18 +18,18 @@ public final class RoutingTableFactory {
 	 * Get a routing table
 	 * 
 	 * @param inv the inventory to open
-	 * @return the RoutingTable object
+	 * @return the RoutingTableWritable object
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	static public RoutingTable getRoutingTable(Inventory inv) throws IOException, ClassNotFoundException {
+	static public RoutingTableWritable getRoutingTable(Inventory inv) throws IOException, ClassNotFoundException {
 		RoutingTableBook rt;
 		
 		// If upgrading from ByteCart 1.x, cleaning routing table
 		if (! inv.contains(Material.WRITTEN_BOOK))
 			inv.clear();
 		
-		try (BookFile file = new BookFile(inv, 0, true, "RoutingTable")) {
+		try (BookFile file = new BookFile(inv, 0, true, "RoutingTableWritable")) {
 			if (file.isEmpty())
 				return new RoutingTableBook(inv);
 			ObjectInputStream ois = new ObjectInputStream(file.getInputStream());

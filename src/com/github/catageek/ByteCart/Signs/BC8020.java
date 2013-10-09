@@ -7,7 +7,7 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.Routing.DefaultRouterWanderer;
-import com.github.catageek.ByteCart.Routing.RoutingTable;
+import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Signs.BCRouter;
@@ -37,10 +37,10 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 	}
 
 	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.Signs.BC8010#SelectRoute(com.github.catageek.ByteCart.AddressLayer.AddressRouted, com.github.catageek.ByteCart.AddressLayer.Address, com.github.catageek.ByteCart.Routing.RoutingTable)
+	 * @see com.github.catageek.ByteCart.Signs.BC8010#SelectRoute(com.github.catageek.ByteCart.AddressLayer.AddressRouted, com.github.catageek.ByteCart.AddressLayer.Address, com.github.catageek.ByteCart.Routing.RoutingTableWritable)
 	 */
 	@Override
-	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTable RoutingTable) {
+	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTableWritable RoutingTable) {
 
 		try {
 			if (IPaddress.getTTL() != 0) {

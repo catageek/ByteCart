@@ -7,11 +7,13 @@ import java.util.Map;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Wanderer.Counter;
+import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
 
 /**
  * A map containing counters with id
  */
-public final class Counter implements Serializable {
+public final class BCCounter implements Serializable, Counter {
 
 	/**
 	 * 
@@ -19,7 +21,7 @@ public final class Counter implements Serializable {
 	private static final long serialVersionUID = 6858180714411403984L;
 	private final Map<Integer, Integer> map = new HashMap<Integer,Integer>();
 
-	public Counter() {
+	public BCCounter() {
 	}
 
 	/**
@@ -116,8 +118,8 @@ public final class Counter implements Serializable {
 	 * @param from the direction to exclude from the search
 	 * @return the ring number, or 0 if no result
 	 */
-	public int getMinimum(RoutingTable routes, DirectionRegistry from) {
-		Iterator<RouteNumber> it = routes.getOrderedRouteNumbers();
+	public int getMinimum(RoutingTableWritable routes, DirectionRegistry from) {
+		Iterator<RouteValue> it = routes.getOrderedRouteNumbers();
 		int min = 10000000;  //big value
 		int index = -1;
 		while (it.hasNext()) {

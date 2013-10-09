@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
 
 /**
  * An abstract class for routing tables 
@@ -34,8 +35,7 @@ public abstract class AbstractRoutingTable {
 			if (interfacedelay > 0)
 				computedmetric += interfacedelay;			
 			int routermetric = this.getMetric(ring, from);
-			Metric m;
-			boolean directlyconnected = (m = this.getMinMetric(ring)) != null && m.value() == 0;
+			boolean directlyconnected = (this.getMinMetric(ring) == 0);
 			
 			if ( ! directlyconnected && (routermetric > computedmetric || routermetric < 0)) {
 				this.setEntry(ring, from, new Metric(computedmetric));
@@ -128,9 +128,9 @@ public abstract class AbstractRoutingTable {
 	 * Get the minimum metric for a specific entry
 	 * 
 	 * @param entry the track number
-	 * @return the minimum metric recorded
+	 * @return the minimum metric recorded, or -1
 	 */
-	abstract public Metric getMinMetric(int entry);
+	abstract public int getMinMetric(int entry);
 
 	/**
 	 * Store a line in the routing table
@@ -154,7 +154,7 @@ public abstract class AbstractRoutingTable {
 	 * 
 	 * @return an iterator
 	 */
-	abstract protected Iterator<RouteNumber> getOrderedRouteNumbers();
+	abstract protected <T extends RouteValue> Iterator<T> getOrderedRouteNumbers();
 
 	/**
 	 * Get a set of track numbers that are seen in a direction, but not directly connected

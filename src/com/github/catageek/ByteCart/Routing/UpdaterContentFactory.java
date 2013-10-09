@@ -34,18 +34,18 @@ public abstract class UpdaterContentFactory {
 		WandererContentFactory.createWanderer(inv, region, level, player, "Updater", level.type);
 		UpdaterContent rte;
 		if (level.scope.equals(Scope.LOCAL))
-			rte = new LocalUpdaterContent(inv, level, region, player, isfullreset);
+			rte = new UpdaterContent(inv, level, region, player, isfullreset);
 		else
 			rte = new UpdaterContent(inv, level, region, player, isfullreset, isnew);
 		try {
-			UpdaterContentFactory.saveContent(rte);
+			saveContent(rte);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public static <T extends UpdaterContent> void saveContent(T rte)
+
+	public static void saveContent(UpdaterContent rte)
 			throws IOException, ClassNotFoundException {
 
 		// delete content if expired
@@ -59,4 +59,5 @@ public abstract class UpdaterContentFactory {
 
 		WandererContentFactory.saveContent(rte);
 	}
+
 }
