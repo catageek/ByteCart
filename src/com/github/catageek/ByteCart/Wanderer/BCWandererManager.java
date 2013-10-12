@@ -81,4 +81,9 @@ public class BCWandererManager implements WandererManager {
 
 		WandererContentFactory.saveContent(rte);
 	}
+
+	@Override
+	public void unregister(String name) {
+		map.remove(name);
+	}
 }

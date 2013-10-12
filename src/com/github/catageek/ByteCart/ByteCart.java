@@ -59,8 +59,9 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 
 
 		// register updater factory
-		this.getWandererManager().register(new UpdaterFactory(), "Updater");
-		
+		if (! this.getWandererManager().isWandererType("Updater"))
+			this.getWandererManager().register(new UpdaterFactory(), "Updater");
+
 		getCommand("mego").setExecutor(new BytecartCommandExecutor());
 		getCommand("sendto").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcreload").setExecutor(new BytecartCommandExecutor());
@@ -191,7 +192,7 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	public void setResolver(Resolver resolver) {
 		this.resolver = resolver;
 	}
-	
+
 	public final Logger getLog() {
 		return log;
 	}

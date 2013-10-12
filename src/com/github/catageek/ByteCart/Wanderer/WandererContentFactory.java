@@ -19,8 +19,6 @@ import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 
 abstract public class WandererContentFactory {
 
-	public static boolean mustRemove = false;
-
 	public static WandererContent getWandererContent(Inventory inv)
 			throws IOException, ClassNotFoundException {
 		WandererContent rte = null;
@@ -93,9 +91,7 @@ abstract public class WandererContentFactory {
 			match.append(".*");
 			if (BookFile.isBookFile(inv, 0) 
 					&& booktitle.matches(match.toString())) {
-				if (! mustRemove)
 					return true;
-				deleteContent(inv);
 			}
 		}
 		return false;
@@ -111,7 +107,6 @@ abstract public class WandererContentFactory {
 			file.setDescription(match.toString());
 			file.flush();
 		}
-		mustRemove = false;
 	}
 
 	public static <T extends InventoryContent> void saveContent(T rte)

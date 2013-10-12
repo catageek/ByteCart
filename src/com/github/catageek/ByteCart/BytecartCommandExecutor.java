@@ -18,11 +18,11 @@ import com.github.catageek.ByteCart.AddressLayer.AddressString;
 import com.github.catageek.ByteCart.EventManagement.ByteCartInventoryListener;
 import com.github.catageek.ByteCart.EventManagement.ByteCartUpdaterMoveListener;
 import com.github.catageek.ByteCart.Routing.UpdaterContentFactory;
+import com.github.catageek.ByteCart.Routing.UpdaterFactory;
 import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
 import com.github.catageek.ByteCart.Signs.BC7017;
 import com.github.catageek.ByteCart.Util.LogUtil;
-import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
@@ -163,7 +163,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				Player player = (Player) sender;
 
 				if (args.length == 1 && args[0].equalsIgnoreCase("remove")) {
-					WandererContentFactory.mustRemove = true;
+					ByteCart.myPlugin.getWandererManager().unregister("Updater");
 					return true;
 				}
 
@@ -179,6 +179,10 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 				boolean full_reset = false;
 				boolean isnew = false;
+				
+				if (! ByteCart.myPlugin.getWandererManager().isWandererType("Updater"))
+					ByteCart.myPlugin.getWandererManager().register(new UpdaterFactory(), "Updater");
+
 				if (args.length >= 2){
 
 					if (! args[0].equalsIgnoreCase("region")
