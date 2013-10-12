@@ -82,12 +82,12 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 				return;
 			}
 			
-			// it's an updater, so let it choosing direction
-			Wanderer updater;
+			// it's an wanderer
+			Wanderer wanderer;
 			try {
-				updater = ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
-				// here we perform routes update
-				updater.doAction(IntersectionSide.Side.LEVER_OFF);
+				wanderer = ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
+				// here we perform wanderer action
+				wanderer.doAction(IntersectionSide.Side.LEVER_OFF);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

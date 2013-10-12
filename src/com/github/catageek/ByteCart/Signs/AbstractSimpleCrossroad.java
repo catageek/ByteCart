@@ -86,7 +86,7 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 	}
 
 
-	protected void manageUpdater(SimpleCollisionAvoider intersection) {
+	protected void manageWanderer(SimpleCollisionAvoider intersection) {
 		// routing
 		intersection.WishToGo(route(), false);
 	}
@@ -123,7 +123,7 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 				return;
 			}
 
-			manageUpdater(intersection);
+			manageWanderer(intersection);
 
 		}
 		catch (ClassCastException e) {

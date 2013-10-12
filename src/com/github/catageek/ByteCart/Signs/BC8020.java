@@ -31,7 +31,7 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 	 * @see com.github.catageek.ByteCart.Signs.BC8010#selectUpdater()
 	 */
 	@Override
-	protected boolean selectUpdater() {
+	protected boolean selectWanderer() {
 		return (! WandererContentFactory.isWanderer(this.getInventory()))
 				|| WandererContentFactory.isWanderer(this.getInventory(), Scope.LOCAL);
 	}

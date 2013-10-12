@@ -68,7 +68,7 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 				return;
 			}
 
-			manageUpdater(intersection);
+			manageWanderer(intersection);
 
 		}
 		catch (ClassCastException e) {
@@ -93,17 +93,17 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#manageUpdater(com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider)
 	 */
 	@Override
-	protected void manageUpdater(SimpleCollisionAvoider intersection) {
+	protected void manageWanderer(SimpleCollisionAvoider intersection) {
 		// it's an updater, so let it choosing direction
-		Wanderer updater;
+		Wanderer wanderer;
 		try {
-			updater = ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
+			wanderer = ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
 
 			// routing
-			Side to = intersection.WishToGo(updater.giveSimpleDirection(), false);
+			Side to = intersection.WishToGo(wanderer.giveSimpleDirection(), false);
 
 			// here we perform routes update
-			updater.doAction(to);
+			wanderer.doAction(to);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

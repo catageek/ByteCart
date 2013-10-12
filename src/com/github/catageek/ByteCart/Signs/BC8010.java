@@ -84,13 +84,8 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 
 			// Here begins the triggered action
 
-			// is this an updater who needs special routing ? no then routing normally
-			if(selectUpdater()) {
-				//				UpdaterManager um = ByteCart.myPlugin.getUm();
-
-				// non updater carts case
-				//				if (! um.isUpdater(vehicle.getEntityId())) {
-				//				if (! RoutingTableExchangeFactory.isRoutingTableExchange(getInventory(), Sign.getRegion().getAmount(), this.getLevel())) {
+			// is this an wanderer who needs special routing ? no then routing normally
+			if(selectWanderer()) {
 
 				// if this is a cart in a train
 				if (this.wasTrain(this.getLocation())) {
@@ -133,23 +128,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 				}
 
 				direction = this.SelectRoute(destination, Sign, RoutingTable);
-				/*			}
-							else {
-					// is an updater (this code is executed only by BC8020)
-					int region = RoutingTableExchangeFactory.getRoutingTableExchange(getInventory(), Sign.getRegion().getAmount(), this.getLevel()).;
-					if(ByteCart.debug)
-						ByteCart.log.info("ByteCart : region " + region);
-					try {
-						direction = RoutingTableWritable.getDirection(region).getBlockFace();
-					} catch (NullPointerException e) {
-						// this region does not exist
-						direction = From;
-						// remove the cart as updater
-						//um.getMapRoutes().remove(vehicle.getEntityId());
-						RoutingTableExchangeFactory.deleteRoutingTableExchange(getInventory());
-					}
-				}
-				 */
+
 				// trigger event
 				BlockFace bdest = router.WishToGo(From, direction, isTrain);
 				int ring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(bdest));
@@ -159,18 +138,20 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 				return;
 			}
 
-			// it's an updater, so let it choosing direction
-			Wanderer updater = getUpdater();
+			// it's a wanderer, so let it choosing direction
+			Wanderer wanderer = getWanderer();
 
 			// routing normally
-			to = router.WishToGo(From, updater.giveRouterDirection(), isTrain);
+			to = router.WishToGo(From, wanderer.giveRouterDirection(), isTrain);
 
-			int nextring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(to));
-			UpdaterPassRouterEvent event = new UpdaterPassRouterEvent(updater, to, nextring);
-			Bukkit.getServer().getPluginManager().callEvent(event);
+			if (WandererContentFactory.isWanderer(getInventory(), null, "Updater")) {
+				int nextring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(to));
+				UpdaterPassRouterEvent event = new UpdaterPassRouterEvent(wanderer, to, nextring);
+				Bukkit.getServer().getPluginManager().callEvent(event);
+			}
 
 			// here we perform routes update
-			updater.doAction(to);
+			wanderer.doAction(to);
 
 		}
 		catch (ClassCastException e) {
@@ -200,9 +181,8 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 * Tells if this cart needs normal routing
 	 * @return true if the cart needs normal routing
 	 */
-	protected boolean selectUpdater() {
-		// everything that is not an updater must be routed
-		//return ! ByteCart.myPlugin.getUm().isUpdater(id);
+	protected boolean selectWanderer() {
+		// everything that is not an wanderer must be routed
 		return ! WandererContentFactory.isWanderer(getInventory());
 	}
 
@@ -252,13 +232,13 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	}
 
 	/**
-	 * Get the updater object
+	 * Get the wanderer object
 	 *
-	 * @return the updater
+	 * @return the wanderer
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	protected final Wanderer getUpdater() throws ClassNotFoundException, IOException {
+	protected final Wanderer getWanderer() throws ClassNotFoundException, IOException {
 		return ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
 	}
 

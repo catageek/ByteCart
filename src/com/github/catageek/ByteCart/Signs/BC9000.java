@@ -25,9 +25,9 @@ final class BC9000 extends AbstractSimpleCrossroad implements Subnet, Triggable 
 	 * @see com.github.catageek.ByteCart.Signs.AbstractSimpleCrossroad#manageUpdater(com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider)
 	 */
 	@Override
-	protected void manageUpdater(SimpleCollisionAvoider intersection) {
+	protected void manageWanderer(SimpleCollisionAvoider intersection) {
 		// it's an updater, so let it choosing direction
-		super.manageUpdater(intersection);
+		super.manageWanderer(intersection);
 
 		if (ByteCart.myPlugin.getConfig().getBoolean("oldBC900behaviour", true)) {
 			UpdaterLocal updater;
