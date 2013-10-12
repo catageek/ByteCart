@@ -64,6 +64,8 @@ abstract public class WandererContentFactory {
 	}
 
 	private static boolean isWanderer(Inventory inv, Scope scope, String suffix, String type) {
+		if (! isWanderer(inv))
+			return false;
 		ItemStack stack = inv.getItem(0);
 		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta()) {
 			final BookMeta book = (BookMeta) stack.getItemMeta();
