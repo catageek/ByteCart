@@ -27,4 +27,8 @@ final class UpdaterSet {
 	void addUpdater(int id) {
 		this.updateSet.add(id);
 	}
+	
+	void clear() {
+		updateSet.clear();
+	}
 }

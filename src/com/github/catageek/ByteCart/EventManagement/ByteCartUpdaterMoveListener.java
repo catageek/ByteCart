@@ -67,10 +67,14 @@ public class ByteCartUpdaterMoveListener implements Listener {
 		}
 
 		if (updaterset.getMap().isEmpty()) {
-			HandlerList.unregisterAll(this);
-			updaterset = null;
-			setExist(false);
+			removeListener();
 		}
+	}
+
+	private void removeListener() {
+		HandlerList.unregisterAll(this);
+		updaterset = null;
+		setExist(false);
 	}
 
 	/**
@@ -96,5 +100,10 @@ public class ByteCartUpdaterMoveListener implements Listener {
 	 */
 	public static final void addUpdater(int id) {
 		updaterset.getMap().add(id);
+	}
+
+	public static final void clearUpdaters() {
+		if (updaterset != null)
+			updaterset.getMap().clear();
 	}
 }

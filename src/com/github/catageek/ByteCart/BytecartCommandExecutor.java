@@ -164,6 +164,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 				if (args.length == 1 && args[0].equalsIgnoreCase("remove")) {
 					ByteCart.myPlugin.getWandererManager().unregister("Updater");
+					ByteCartUpdaterMoveListener.clearUpdaters();
 					return true;
 				}
 

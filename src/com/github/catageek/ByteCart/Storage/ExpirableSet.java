@@ -2,6 +2,7 @@ package com.github.catageek.ByteCart.Storage;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import com.github.catageek.ByteCart.ThreadManagement.Expirable;
@@ -88,5 +89,15 @@ public final class ExpirableSet<K> extends Expirable<K> {
 	 */
 	public boolean isEmpty() {
 		return Set.isEmpty();
+	}
+	
+	/**
+	 * Empty the set
+	 */
+	public void clear() {
+		Iterator<K> it = Set.iterator();
+		while (it.hasNext())
+			this.cancel(it.next());
+		Set.clear();
 	}
 }
