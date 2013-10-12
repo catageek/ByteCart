@@ -1,7 +1,8 @@
-package com.github.catageek.ByteCart.Routing;
+package com.github.catageek.ByteCart.Updaters;
 
 import org.bukkit.block.BlockFace;
 
+import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Signs.BC8010;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;

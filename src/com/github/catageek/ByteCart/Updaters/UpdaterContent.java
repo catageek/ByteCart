@@ -1,4 +1,4 @@
-package com.github.catageek.ByteCart.Routing;
+package com.github.catageek.ByteCart.Updaters;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Routing.Metric;
+import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Wanderer.WandererContent;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
@@ -47,7 +49,7 @@ public class UpdaterContent extends WandererContent implements Serializable {
 	 * 
 	 * @return the set
 	 */
-	Set<Entry<Integer,Metric>> getEntrySet() {
+	public Set<Entry<Integer,Metric>> getEntrySet() {
 		return tablemap.entrySet();
 	}
 

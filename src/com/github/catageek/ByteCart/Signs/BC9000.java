@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
-import com.github.catageek.ByteCart.Routing.UpdaterLocal;
+import com.github.catageek.ByteCart.Updaters.UpdaterLocal;
 import com.github.catageek.ByteCartAPI.Signs.Subnet;
 
 

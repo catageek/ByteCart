@@ -7,6 +7,7 @@ import java.util.Set;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Updaters.UpdaterContent;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
 
