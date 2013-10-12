@@ -52,6 +52,14 @@ public final class ExpirableSet<K> extends Expirable<K> {
 		super.reset(key, key, Set);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCart.ThreadManagement.Expirable#reset(long, java.lang.Object, java.lang.Object[])
+	 */
+	@Override
+	public void reset(long duration, K key, Object...objects) {
+		super.reset(duration, key, key, Set);
+	}
+	
 	/**
 	 * Remove the element from the set
 	 *

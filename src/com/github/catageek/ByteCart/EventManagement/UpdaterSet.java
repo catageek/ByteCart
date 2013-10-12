@@ -16,7 +16,7 @@ final class UpdaterSet {
 
 	private final ExpirableSet<Integer> updateSet;
 
-	ExpirableSet<Integer> getMapRoutes() {
+	ExpirableSet<Integer> getMap() {
 		return updateSet;
 	}
 	

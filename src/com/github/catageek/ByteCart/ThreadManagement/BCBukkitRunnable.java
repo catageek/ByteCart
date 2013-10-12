@@ -27,12 +27,13 @@ final class BCBukkitRunnable<K> {
 	}
 
 	/**
-	 * Schedule or reschedule an Expirable task with the timeout delay
+	 * Schedule or reschedule an Expirable task with a specific timeout delay
 	 *
+	 * @param duration the timeout to set
 	 * @param objects arguments to pass to the abstract Expirable.expire() method
 	 * @return the BukkitTask scheduled
 	 */
-	BukkitTask renewTaskLater(Object...objects) {
+	BukkitTask renewTaskLater(long duration, Object...objects) {
 		BukkitTask task;
 		Map<K,BukkitTask> map = Expirable.getThreadMap();
 		synchronized(map) {
@@ -47,9 +48,9 @@ final class BCBukkitRunnable<K> {
 
 
 				if (old.isSync())
-					task = runnable.runTaskLater(ByteCart.myPlugin, Expirable.getDuration());
+					task = runnable.runTaskLater(ByteCart.myPlugin, duration);
 				else
-					task = runnable.runTaskLaterAsynchronously(ByteCart.myPlugin, Expirable.getDuration());
+					task = runnable.runTaskLaterAsynchronously(ByteCart.myPlugin, duration);
 				old.cancel();
 			}
 
@@ -59,6 +60,16 @@ final class BCBukkitRunnable<K> {
 		return task;
 	}
 
+	/**
+	 * Schedule or reschedule an Expirable task with the default timeout delay
+	 *
+	 * @param objects arguments to pass to the abstract Expirable.expire() method
+	 * @return the BukkitTask scheduled
+	 */
+	BukkitTask renewTaskLater(Object...objects) {
+		return renewTaskLater(Expirable.getDuration(), objects);
+	}
+	
 	/**
 	 * Cancel the task
 	 *

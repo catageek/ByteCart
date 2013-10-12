@@ -36,6 +36,11 @@ public abstract class Expirable<K> {
 			(new BCBukkitRunnable<K>(this, key)).renewTaskLater(objects);
 	}
 
+	public void reset(long duration, K key, Object...objects) {
+		if (duration != 0)
+			(new BCBukkitRunnable<K>(this, key)).renewTaskLater(duration, objects);
+	}
+
 	public final void cancel(K key) {
 		if (Duration != 0)
 			(new BCBukkitRunnable<K>(this, key)).cancel();
