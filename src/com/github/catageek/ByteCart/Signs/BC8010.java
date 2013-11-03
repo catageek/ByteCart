@@ -144,7 +144,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			// routing normally
 			to = router.WishToGo(From, wanderer.giveRouterDirection(), isTrain);
 
-			if (WandererContentFactory.isWanderer(getInventory(), null, "Updater")) {
+			if (WandererContentFactory.isWanderer(getInventory(), "Updater")) {
 				int nextring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(to));
 				UpdaterPassRouterEvent event = new UpdaterPassRouterEvent(wanderer, to, nextring);
 				Bukkit.getServer().getPluginManager().callEvent(event);

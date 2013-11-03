@@ -61,6 +61,10 @@ abstract public class WandererContentFactory {
 		return isWanderer(inv, level.scope, level.type, type);
 	}
 
+	public static boolean isWanderer(Inventory inv, String type) {
+		return isWanderer(inv, null, null, type);
+	}
+
 	private static boolean isWanderer(Inventory inv, Scope scope, String suffix, String type) {
 		if (! isWanderer(inv))
 			return false;
