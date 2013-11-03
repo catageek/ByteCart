@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.catageek</groupId>
 	<artifactId>ByteCart</artifactId>
-	<version>2.7.1-SNAPSHOT</version>
+	<version>2.7.1</version>
 	<name>ByteCart</name>
 
 	<repositories>
@@ -167,8 +167,8 @@
 	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkit.version>1.6.4-R0.1-SNAPSHOT</bukkit.version>
-		<bytecartapi.version>2.6.1</bytecartapi.version>
+		<bukkit.version>1.6.4-R2.0</bukkit.version>
+		<bytecartapi.version>2.7.1</bytecartapi.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -190,8 +190,7 @@
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
 			<artifactId>metrics-lite</artifactId>
-			<version>R6</version>
-			<scope>compile</scope>
+			<version>R7</version>
 		</dependency>
 	</dependencies>
 </project>
