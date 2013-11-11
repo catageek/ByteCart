@@ -29,7 +29,7 @@ final class BC9000 extends AbstractSimpleCrossroad implements Subnet, Triggable 
 		// it's an updater, so let it choosing direction
 		super.manageWanderer(intersection);
 
-		if (ByteCart.myPlugin.getConfig().getBoolean("oldBC900behaviour", true)) {
+		if (ByteCart.myPlugin.getConfig().getBoolean("oldBC9000behaviour", true)) {
 			UpdaterLocal updater;
 			try {
 				updater = (UpdaterLocal) ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
