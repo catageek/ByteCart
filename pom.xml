@@ -155,8 +155,8 @@
 	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkit.version>1.6.4-R2.0</bukkit.version>
-		<bytecartapi.version>2.7.2</bytecartapi.version>
+		<bukkit.version>1.7.2-R0.2</bukkit.version>
+		<bytecartapi.version>2.7.3</bytecartapi.version>
 	</properties>
 	<dependencies>
 		<dependency>
