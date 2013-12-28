@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.catageek</groupId>
 	<artifactId>ByteCart</artifactId>
-	<version>2.7.2</version>
+	<version>2.7.3-SNAPSHOT</version>
 	<name>ByteCart</name>
 
 	<repositories>
@@ -75,28 +75,6 @@
 					</dependencies>
 				</plugin>
 				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>1.8</version>
-					<executions>
-						<execution>
-							<id>add-resource</id>
-							<phase>generate-resources</phase>
-							<goals>
-								<goal>add-resource</goal>
-							</goals>
-							<configuration>
-								<resources>
-									<resource>
-										<directory>src/com/github/catageek/ByteCart/plugins/resources</directory>
-										<targetPath>com/github/catageek/ByteCart/plugins/resources</targetPath>
-									</resource>
-								</resources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-shade-plugin</artifactId>
 					<version>2.1</version>
@@ -149,6 +127,16 @@
 					<include>config.yml</include>
 				</includes>
 			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<targetPath>com/github/catageek/ByteCart/plugins/resources</targetPath>							
+				<directory>${basedir}/src/com/github/catageek/ByteCart/plugins/resources</directory>
+				<includes>
+					<include>bc2.png</include>
+					<include>error.png</include>
+				</includes>
+			</resource>
+			
 		</resources>
 	</build>
 
