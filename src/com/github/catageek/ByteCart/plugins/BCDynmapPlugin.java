@@ -45,7 +45,16 @@ public final class BCDynmapPlugin implements Listener {
 			throw new MissingResourceException("Dynmap API could not be loaded", MarkerAPI.class.getName(), "dynmap");
 
 		defaulticon = loadIcon(markerapi,"bytecart_station", "station", "resources/bc2.png");
+		
+		if (defaulticon == null) {
+			throw new MissingResourceException("Station icon could not be loaded", MarkerAPI.class.getName(), "station");		
+		}
+		
 		erroricon = loadIcon(markerapi,"bytecart_error", "error", "resources/error.png");
+
+		if (erroricon == null) {
+			throw new MissingResourceException("Error icon could not be loaded", MarkerAPI.class.getName(), "error");		
+		}
 
 		markerset = markerapi.getMarkerSet(name);
 		if (markerset == null) {
