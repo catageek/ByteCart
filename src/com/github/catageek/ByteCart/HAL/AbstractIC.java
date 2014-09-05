@@ -50,7 +50,12 @@ abstract public class AbstractIC implements IC {
 
 	public AbstractIC(Block block) {
 		this.Block = block;
-		this.Location = block.getLocation();
+		if (block != null) {
+			this.Location = block.getLocation();
+		}
+		else {
+			this.Location = new org.bukkit.Location(null, 0, 0, 0);
+		}
 	}
 
 	/* (non-Javadoc)

@@ -68,10 +68,15 @@ TTL.value: 64
 # initial speed of minecarts
 BC7001.startvelocity: 2
 
-# Address where empty carts (not storage carts)
+# Address where empty carts or empty storage carts
 # will be routed.
 # Default : 0.0.0
 EmptyCartsDefaultRoute: 0.0.0
+
+# Address where players with no ticket
+# will be routed.
+# Default : 0.0.0
+PlayersNoTicketDefaultRoute: 0.0.0
 
 # error messages
 Error.SetAddress: Error - too few/many items in inventory
