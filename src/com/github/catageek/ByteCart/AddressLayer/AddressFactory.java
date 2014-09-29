@@ -19,16 +19,27 @@ import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 public class AddressFactory {
 
 	/**
-	 * Creates an address with a ticket as support
+	 * Get an address with a ticket as support
 	 *
 	 * @param inv the inventory containing the ticket
-	 * @return the address
+	 * @return the address or null if there is no ticket
 	 */
 	@SuppressWarnings("unchecked")
 	public final static <T extends Address> T getAddress(Inventory inv){
 		int slot;
 		if ((slot = Ticket.getTicketslot(inv)) != -1)
 			return (T) new AddressBook(new Ticket(new BookFile(inv, slot, false, "ticket"), Conf.NETWORK), Parameter.DESTINATION);
+		return null;
+	}
+
+	/**
+	 * Creates a ticket with default address
+	 *
+	 * @param inv the inventory containing the ticket
+	 * @return the address
+	 */
+	@SuppressWarnings("unchecked")
+	public final static <T extends Address> T getDefaultTicket(Inventory inv){
 		Address destination;
 		if (inv.getHolder() instanceof Player) {
 			destination = new AddressString(ByteCart.myPlugin.getConfig().getString("PlayersNoTicketDefaultRoute", "0.0.0"));

@@ -49,6 +49,9 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		From = this.getCardinal().getOppositeFace();
 		// reading destination address of the cart
 		destination = AddressFactory.getAddress(this.getInventory());
+		if (destination == null) {
+			destination = AddressFactory.getDefaultTicket(this.getInventory());
+		}
 		// reading address written on BC8010 sign
 		Sign = AddressFactory.getAddress(this.getBlock(),3);
 		// Center of the router, at sign level
