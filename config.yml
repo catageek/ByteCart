@@ -24,6 +24,10 @@ reusetickets: true
 # Set to false to remove them. They will be lost forever.
 keepitems: true
 
+# Minecraft 1.8 has a bug that removes all brackets in signs 
+# Set to true to fix brackets in signs if your signs are broken 
+FixBroken18: false
+
 # Set to true to enable the old behaviour of BC9000 i.e BC9000 as closing sign of subtrack
 # if false, BC9000 can be used anywhere without breaking updater configuration
 # if true, BC9000 can be used only to close subtrack.

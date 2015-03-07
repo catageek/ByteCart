@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.IO.ComponentSign;
 import com.github.catageek.ByteCartAPI.HAL.IC;
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
@@ -106,7 +107,20 @@ abstract public class AbstractIC implements IC {
 		if ((ret = icCache.get(s = b.getLocation(emptyLocation).toString())) != null)
 			return ret;
 		
-		icCache.put(s, ret = AbstractIC.checkEligibility(((Sign) b.getState()).getLine(1)));
+		String line_content = ((Sign) b.getState()).getLine(1);
+
+		if (ByteCart.myPlugin.getConfig().getBoolean("FixBroken18", false)) {
+			if (ret = AbstractIC.checkLooseEligibility(line_content)) {
+				(new ComponentSign(b)).setLine(1,"["+line_content+"]");
+			}
+			else {
+				ret = AbstractIC.checkEligibility(line_content);
+			}
+		}
+		else {
+			ret = AbstractIC.checkEligibility(line_content);
+		}
+		icCache.put(s, ret);
 		return ret;
 	}
 
@@ -120,7 +134,17 @@ abstract public class AbstractIC implements IC {
 		
 	}
 
-	
+
+	static public final boolean checkLooseEligibility(String s){
+		
+		if(! (s.matches("^BC[0-9]{4,4}$"))) {
+			return false;
+		}
+		
+		return true;
+		
+	}
+
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.HAL.IC#getCardinal()
 	 */
