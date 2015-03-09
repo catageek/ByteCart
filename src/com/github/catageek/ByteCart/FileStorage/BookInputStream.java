@@ -1,8 +1,7 @@
 package com.github.catageek.ByteCart.FileStorage;
 
 import java.io.ByteArrayInputStream;
-import java.util.Iterator;
-
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.Util.Base64;
@@ -38,10 +37,9 @@ class BookInputStream extends ByteArrayInputStream {
 		int len =  book.getPageCount() << BookFile.PAGELOG;
 		StringBuilder sb = new StringBuilder(len);
 
-		Iterator<String> it = book.getPages().iterator();
-
-		while (it.hasNext())
-			sb.append(it.next());
+		for (int i = 1; i <= book.getPageCount(); ++i) {
+			sb.append(ChatColor.stripColor(book.getPage(i)));
+		}
 
 		sb.trimToSize();
 		if (binary)

@@ -1,7 +1,7 @@
 package com.github.catageek.ByteCart.Routing;
 
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
 import com.github.catageek.ByteCartAPI.HAL.VirtualRegistry;

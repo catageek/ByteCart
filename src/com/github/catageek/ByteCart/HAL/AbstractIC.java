@@ -10,6 +10,7 @@ import org.bukkit.block.Sign;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.IO.ComponentSign;
+import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.HAL.IC;
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
@@ -152,7 +153,11 @@ abstract public class AbstractIC implements IC {
 	public final BlockFace getCardinal() {
 		try {
 			BlockFace f = ((org.bukkit.material.Sign) this.getBlock().getState().getData()).getFacing().getOppositeFace();
-			return MathUtil.straightUp(f);
+			f = MathUtil.straightUp(f);
+			if (f == BlockFace.UP) {
+				ByteCart.log.severe("ByteCart: Tilted sign found at " + this.getLocation() + ". Please straight it up in the axis of the track");
+			}
+			return f;
 		}
 		catch (ClassCastException e) {
 			// this is not a sign

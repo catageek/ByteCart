@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -60,6 +61,15 @@ public final class BookFile implements BCFile {
 			inventory.setItem(index, (stack = new ItemStack(Material.WRITTEN_BOOK)));
 		}
 		this.book = (BookMeta) (stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK));
+		
+		// fix corrupted books in MC 1.8
+		try {
+			List<String> test = this.book.getPages();
+		}
+		catch(NullPointerException e) {
+			inventory.setItem(index, (stack = new ItemStack(Material.WRITTEN_BOOK)));
+			this.book = (BookMeta) (stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK));
+		}
 		
 		if (! this.book.hasAuthor() || ! this.book.getAuthor().startsWith(prefix)) {
 			if (name != null && name.length() != 0)

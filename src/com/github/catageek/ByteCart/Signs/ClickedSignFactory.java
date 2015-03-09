@@ -1,11 +1,13 @@
 package com.github.catageek.ByteCart.Signs;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 

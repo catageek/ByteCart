@@ -172,7 +172,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 
 			// update track counter if we have entered a new one
 			if (current > 0 && isNew) {
-				this.getCounter().incrementCount(current, new Random().nextInt(this.getRoutingTable().size()) +1 );
+				this.getCounter().incrementCount(current, new Random().nextInt(this.getRoutingTable().size() + 1) + 1 );
 			}
 
 			routeUpdates(To);
