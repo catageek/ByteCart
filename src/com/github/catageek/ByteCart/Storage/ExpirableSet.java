@@ -100,4 +100,8 @@ public final class ExpirableSet<K> extends Expirable<K> {
 			this.cancel(it.next());
 		Set.clear();
 	}
+	
+	public Iterator<K> getIterator() {
+		return Set.iterator();
+	}
 }

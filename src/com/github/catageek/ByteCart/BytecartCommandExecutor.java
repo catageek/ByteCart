@@ -157,16 +157,17 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 
 		if (cmd.getName().equalsIgnoreCase("bcupdater")) {
+
+			if (args.length == 1 && args[0].equalsIgnoreCase("remove")) {
+				ByteCart.myPlugin.getWandererManager().unregister("Updater");
+				ByteCartUpdaterMoveListener.clearUpdaters();
+				return true;
+			}
+
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("This command can only be run by a player.");
 			} else {
 				Player player = (Player) sender;
-
-				if (args.length == 1 && args[0].equalsIgnoreCase("remove")) {
-					ByteCart.myPlugin.getWandererManager().unregister("Updater");
-					ByteCartUpdaterMoveListener.clearUpdaters();
-					return true;
-				}
 
 				int region = 0;
 

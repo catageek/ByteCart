@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.util.MissingResourceException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.dynmap.DynmapCommonAPI;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
@@ -20,8 +22,11 @@ import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.SignCreateEvent;
 import com.github.catageek.ByteCartAPI.Event.SignRemoveEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterClearStationEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterCreateEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterMoveEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterPassStationEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterRemoveEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSetStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSignInvalidateEvent;
 import com.github.catageek.ByteCartAPI.HAL.IC;
@@ -36,6 +41,7 @@ public final class BCDynmapPlugin implements Listener {
 	static MarkerSet markerset;
 	private static MarkerIcon defaulticon;
 	private static MarkerIcon erroricon;
+	private static MarkerIcon updatericon;
 
 	public BCDynmapPlugin() {
 		DynmapCommonAPI api = (DynmapCommonAPI) Bukkit.getPluginManager().getPlugin("dynmap");
@@ -56,11 +62,18 @@ public final class BCDynmapPlugin implements Listener {
 			throw new MissingResourceException("Error icon could not be loaded", MarkerAPI.class.getName(), "error");		
 		}
 
+		updatericon = loadIcon(markerapi,"bytecart_updater", "updater", "resources/updater.png");
+
+		if (updatericon == null) {
+			throw new MissingResourceException("Updater icon could not be loaded", MarkerAPI.class.getName(), "updater");		
+		}
+
 		markerset = markerapi.getMarkerSet(name);
 		if (markerset == null) {
 			markerset = markerapi.createMarkerSet(name, name, null, true);
 			markerset.addAllowedMarkerIcon(defaulticon);
 			markerset.addAllowedMarkerIcon(erroricon);
+			markerset.addAllowedMarkerIcon(updatericon);
 			markerset.setDefaultMarkerIcon(defaulticon);
 		}
 
@@ -186,6 +199,49 @@ public final class BCDynmapPlugin implements Listener {
 			marker.deleteMarker();
 		selectAndAddMarker(event.getStrings()[2], block, AddressFactory.getAddress(address));
 	}
+	
+	/**
+	 * Create a marker for new updaters
+	 *
+	 * @param event
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onUpdaterCreate(UpdaterCreateEvent event) {
+		Marker marker = markerset.findMarker(String.valueOf(event.getVehicleId()));
+		if (marker != null) {
+			marker.deleteMarker();
+		}
+		addMarker(String.valueOf(event.getVehicleId()), "Updater", event.getLocation(), updatericon);
+	}	
+
+	/**
+	 * Move a marker of updater
+	 *
+	 * @param event
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onUpdaterMove(UpdaterMoveEvent event) {
+		VehicleMoveEvent mve = event.getEvent();
+		int id = mve.getVehicle().getEntityId();
+		Location loc = mve.getTo();
+		Marker marker = markerset.findMarker(String.valueOf(id));
+		if (marker != null) {
+			marker.setLocation(loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ());
+		}
+	}	
+
+	/**
+	 * Delete a marker of updater
+	 *
+	 * @param event
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onUpdaterRemove(UpdaterRemoveEvent event) {
+		Marker marker = markerset.findMarker(String.valueOf(event.getVehicleId()));
+		if (marker != null) {
+			marker.deleteMarker();
+		}
+	}	
 
 	/**
 	 * Register the marker with the right icon
@@ -205,7 +261,7 @@ public final class BCDynmapPlugin implements Listener {
 			icon = erroricon;
 			label = "Error setting address for " + friendlyname;
 		}
-		addMarker(label, block, icon);
+		addMarker(label, block.getLocation(), icon);
 	}
 
 	/**
@@ -215,9 +271,21 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param block the block
 	 * @param markericon the icon to draw
 	 */
-	private static void addMarker(String label, Block block, MarkerIcon markericon) {
-		markerset.createMarker(buildId(block), label,
-				block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), markericon, true);
+	private static void addMarker(String label, Location loc, MarkerIcon markericon) {
+		addMarker(loc.toString(), label,
+				loc, markericon);
+	}
+
+	/**
+	 * Create the marker using API
+	 *
+	 * @param label the label to write
+	 * @param block the block
+	 * @param markericon the icon to draw
+	 */
+	private static void addMarker(String key, String label, Location loc, MarkerIcon markericon) {
+		markerset.createMarker(key, label,
+				loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ(), markericon, true);
 	}
 
 	/**

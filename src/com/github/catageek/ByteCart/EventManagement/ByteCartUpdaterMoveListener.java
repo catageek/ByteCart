@@ -10,12 +10,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import com.github.catageek.ByteCart.Updaters.UpdaterContentFactory;
+import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.Event.UpdaterMoveEvent;
+import com.github.catageek.ByteCartAPI.Event.UpdaterRemoveEvent;
 
 /**
  * Launch an event when an updater moves
@@ -44,17 +47,19 @@ public class ByteCartUpdaterMoveListener implements Listener {
 		if(from_x == to_x && from_z == to_z)
 			return;	// no boundary crossed, resumed
 
-		Vehicle v;
-		if (updaterset.isUpdater((v = event.getVehicle()).getEntityId())) {
-			Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterMoveEvent(event));
-			// reset the timer
-			if (v instanceof InventoryHolder) {
-				Inventory inv = ((InventoryHolder) v).getInventory();
+		Vehicle v = event.getVehicle();
+		// reset the timer
+		if (v instanceof InventoryHolder) {
+			Inventory inv = ((InventoryHolder) v).getInventory();
+			if (WandererContentFactory.isWanderer(inv, "Updater")) {
+				Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterMoveEvent(event));
 				try {
 					long duration = UpdaterContentFactory.getUpdaterContent(inv).getExpirationTime()
 							- Calendar.getInstance().getTimeInMillis();
-					if (duration < 1000)
+					if (duration < 1000) {
 						updaterset.getMap().reset(duration/50, v.getEntityId());
+						Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterRemoveEvent(v.getEntityId()));
+					}
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -62,8 +67,8 @@ public class ByteCartUpdaterMoveListener implements Listener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
 			return;
+			}
 		}
 
 		if (updaterset.getMap().isEmpty()) {
@@ -71,6 +76,22 @@ public class ByteCartUpdaterMoveListener implements Listener {
 		}
 	}
 
+	/**
+	 * Detect a destroyed updater
+	 *
+	 * @param event
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onVehicleDestroy(VehicleDestroyEvent event) {
+		Vehicle v = event.getVehicle();
+		if (v instanceof InventoryHolder) {
+			Inventory inv = ((InventoryHolder) v).getInventory();
+			if (WandererContentFactory.isWanderer(inv, "Updater")) {
+				Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterRemoveEvent(v.getEntityId()));
+			}
+		}
+	}
+	
 	private void removeListener() {
 		HandlerList.unregisterAll(this);
 		updaterset = null;
@@ -104,6 +125,6 @@ public class ByteCartUpdaterMoveListener implements Listener {
 
 	public static final void clearUpdaters() {
 		if (updaterset != null)
-			updaterset.getMap().clear();
+			updaterset.clear();
 	}
 }

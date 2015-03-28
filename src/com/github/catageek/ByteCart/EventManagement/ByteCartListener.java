@@ -25,7 +25,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
-
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.Signs.Clickable;
@@ -170,7 +169,6 @@ public class ByteCartListener implements Listener {
 
 
 	}
-
 
 	/**
 	 * Detect if we create a sign
