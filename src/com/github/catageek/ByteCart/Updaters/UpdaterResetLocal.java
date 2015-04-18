@@ -61,26 +61,28 @@ final class UpdaterResetLocal extends UpdaterLocal implements Wanderer {
 		if (getContent().getCurrent() != getContent().getRegion())
 			return;
 
-		if (address.isValid() && this.getContent().isFullreset()) {
-			if (this.getNetmask() == 8) {
-				UpdaterClearStationEvent event = new UpdaterClearStationEvent(this, address);
-				Bukkit.getServer().getPluginManager().callEvent(event);
-			}
-			else {
-				UpdaterClearSubnetEvent event = new UpdaterClearSubnetEvent(this, address, 256 >> this.getNetmask());
-				Bukkit.getServer().getPluginManager().callEvent(event);
+		if (address.isValid()) {
+			if (this.getContent().isFullreset()) {
+				if (this.getNetmask() == 8) {
+					UpdaterClearStationEvent event = new UpdaterClearStationEvent(this, address);
+					Bukkit.getServer().getPluginManager().callEvent(event);
+				}
+				else {
+					UpdaterClearSubnetEvent event = new UpdaterClearSubnetEvent(this, address, 256 >> this.getNetmask());
+					Bukkit.getServer().getPluginManager().callEvent(event);
+				}
+				address.remove();
+				if (ByteCart.debug)
+					ByteCart.log.info("ByteCart: removing address");
 			}
 		}
 		else {
 			UpdaterSignInvalidateEvent event = new UpdaterSignInvalidateEvent(this);
 			Bukkit.getServer().getPluginManager().callEvent(event);
-			if (! this.getContent().isFullreset())
-				return;
+			address.remove();
+			if (ByteCart.debug)
+				ByteCart.log.info("ByteCart: removing invalid address");
 		}
-		address.remove();
-		if (ByteCart.debug)
-			ByteCart.log.info("ByteCart: removing address");
-
 	}
 
 	@Override
