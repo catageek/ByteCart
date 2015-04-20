@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Signs.BC9001;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
@@ -64,7 +65,7 @@ final class UpdaterResetLocal extends UpdaterLocal implements Wanderer {
 		if (address.isValid()) {
 			if (this.getContent().isFullreset()) {
 				if (this.getNetmask() == 8) {
-					UpdaterClearStationEvent event = new UpdaterClearStationEvent(this, address);
+					UpdaterClearStationEvent event = new UpdaterClearStationEvent(this, address, ((BC9001)this.getBcSign()).getStationName());
 					Bukkit.getServer().getPluginManager().callEvent(event);
 				}
 				else {

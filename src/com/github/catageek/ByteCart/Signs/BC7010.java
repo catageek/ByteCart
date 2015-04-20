@@ -56,7 +56,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 
 		boolean isTrain = getIsTrain();
 
-		this.setAddress(address, this.getNameToWrite(), isTrain);
+		this.setAddress(address.toString(), this.getNameToWrite(), isTrain);
 
 		// if this is the first car of a train
 		// we save the state during 2 s
@@ -110,7 +110,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	 * @param name the destination name
 	 * @return true if success, false otherwise
 	 */
-	public final boolean setAddress(Address SignAddress, String name){
+	public final boolean setAddress(String SignAddress, String name){
 		return setAddress(SignAddress, name, false);
 	}
 
@@ -122,7 +122,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	 * @param train true if it is a train head
 	 * @return true if success, false otherwise
 	 */
-	public final boolean setAddress(Address SignAddress, String name, boolean train){
+	public final boolean setAddress(String SignAddress, String name, boolean train){
 		Player player = null;
 
 		if (this.getInventory().getHolder() instanceof Player)
@@ -135,7 +135,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 
 		AddressRouted IPaddress = getTargetAddress();
 
-		if (IPaddress == null || !IPaddress.setAddress(SignAddress, name)) {
+		if (IPaddress == null || !IPaddress.setAddress(SignAddress)) {
 
 			if (this.getInventory().getHolder() instanceof Player) {
 				((Player) this.getInventory().getHolder()).sendMessage(ChatColor.GREEN+"[Bytecart] " + ChatColor.RED + ByteCart.myPlugin.getConfig().getString("Error.SetAddress") );

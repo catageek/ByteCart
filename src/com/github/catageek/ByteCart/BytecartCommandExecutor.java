@@ -47,13 +47,16 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				if(args.length == 0 || args.length >= 3 || !AddressString.isResolvableAddressOrName(args[0]))
 					return false;
 
-				Address address = new AddressString(args[0]);
-
 				boolean isTrain  = false;
 				if (args.length == 2 && args[1].equalsIgnoreCase("train"))
 					isTrain   = true;
 
-				(new BC7010(player.getLocation().getBlock(), player)).setAddress(address, null, isTrain);
+				if(!AddressString.isResolvableAddressOrName(args[0])) {
+					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid destination supplied.");
+					return false;
+				}
+
+				(new BC7010(player.getLocation().getBlock(), player)).setAddress(args[0], null, isTrain);
 			}
 			return true;
 		}
@@ -67,7 +70,12 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				if(args.length == 0 || args.length >= 3 || !AddressString.isResolvableAddressOrName(args[0]))
 					return false;
 
-				Address address = new AddressString(args[0]);
+				if(!AddressString.isResolvableAddressOrName(args[0])) {
+					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid destination supplied.");
+					return false;
+				}
+
+				Address address = new AddressString(args[0], false);
 
 				boolean isTrain  = false;
 				if (args.length == 2 && args[1].equalsIgnoreCase("train"))
@@ -88,7 +96,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 					}
 
 					public void run() {
-						if ((new BC7011(player.getLocation().getBlock(), ((org.bukkit.entity.Vehicle) inventory.getHolder()))).setAddress(address, null, this.istrain)) {
+						if ((new BC7011(player.getLocation().getBlock(), ((org.bukkit.entity.Vehicle) inventory.getHolder()))).setAddress(address.toString(), null, this.istrain)) {
 							LogUtil.sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " " + address);
 							LogUtil.sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.GetTTL") + AddressFactory.<AddressRouted>getAddress(inventory).getTTL());
 						}
@@ -294,7 +302,6 @@ public class BytecartCommandExecutor implements CommandExecutor {
 	 */
 	protected boolean bcticket(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player;
-		Address destination;
 		String addressString;
 		boolean isTrain = false;
 
@@ -331,10 +338,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			return false;
 		}
 
-		destination = new AddressString(addressString);
-		destination.setTrain(isTrain);
-
-		(new BC7010(player.getLocation().getBlock(), player)).setAddress(destination, null);
+		(new BC7010(player.getLocation().getBlock(), player)).setAddress(addressString, null, isTrain);
 
 		player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + "Ticket created successfully.");
 

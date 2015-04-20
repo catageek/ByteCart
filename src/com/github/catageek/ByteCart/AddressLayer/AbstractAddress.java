@@ -85,7 +85,7 @@ abstract class AbstractAddress implements Address {
 	 * @see com.github.catageek.ByteCart.AddressLayer.Address#setAddress(com.github.catageek.ByteCart.AddressLayer.Address, java.lang.String)
 	 */
 	@Override
-	public boolean setAddress(Address a, String name) {
+	public boolean setAddress(String a, String name) {
 		return this.setAddress(a);
 	}
 	
@@ -94,15 +94,7 @@ abstract class AbstractAddress implements Address {
 	 */
 	@Override
 	public boolean setAddress(String s) {
-		return setAddress(AddressFactory.getAddress(s));
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.AddressLayer.Address#setAddress(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public boolean setAddress(String s, String name) {
-		return setAddress(s);
+		return setAddress(AddressFactory.getUnresolvedAddress(s));
 	}
 	
 	/* (non-Javadoc)

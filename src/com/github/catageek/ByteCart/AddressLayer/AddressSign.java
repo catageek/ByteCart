@@ -28,7 +28,7 @@ final class AddressSign extends AbstractComponent implements Address {
 		
 		super(block);
 		
-		this.Address = new AddressString((new ComponentSign(block)).getLine(ligne));
+		this.Address = new AddressString((new ComponentSign(block)).getLine(ligne), false);
 		
 /*
 			if(ByteCart.debug)
@@ -85,14 +85,6 @@ final class AddressSign extends AbstractComponent implements Address {
 	@Override
 	public boolean isTrain() {
 		throw new UnsupportedOperationException();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.AddressLayer.Address#setAddress(com.github.catageek.ByteCart.AddressLayer.Address, java.lang.String)
-	 */
-	@Override
-	public boolean setAddress(com.github.catageek.ByteCartAPI.AddressLayer.Address a, String name) {
-		return this.setAddress(a.toString(), name);
 	}
 
 	/* (non-Javadoc)

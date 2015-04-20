@@ -62,7 +62,7 @@ final class BC7019 extends BC7010 implements Triggable {
 		
 		sb.append(newRegion).append(dot).append(newTrack).append(dot).append(newStation);
 
-		return new AddressString(sb.toString());
+		return new AddressString(sb.toString(), false);
 	}
 
 

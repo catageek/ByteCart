@@ -73,14 +73,6 @@ final class ReturnAddressBook implements Returnable {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.AddressLayer.Address#setAddress(com.github.catageek.ByteCart.AddressLayer.Address, java.lang.String)
-	 */
-	@Override
-	public boolean setAddress(Address a, String name) {
-		return address.setAddress(a, name);
-	}
-
-	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.AddressLayer.Address#setTrain(boolean)
 	 */
 	@Override

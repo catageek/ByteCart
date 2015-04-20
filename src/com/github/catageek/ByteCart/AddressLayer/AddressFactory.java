@@ -40,15 +40,15 @@ public class AddressFactory {
 	 */
 	@SuppressWarnings("unchecked")
 	public final static <T extends Address> T getDefaultTicket(Inventory inv){
-		Address destination;
+		String destination;
 		if (inv.getHolder() instanceof Player) {
-			destination = new AddressString(ByteCart.myPlugin.getConfig().getString("PlayersNoTicketDefaultRoute", "0.0.0"));
+			destination = ByteCart.myPlugin.getConfig().getString("PlayersNoTicketDefaultRoute", "0.0.0");
 			if ((new BC7010(null,(Player)inv.getHolder())).setAddress(destination,"No ticket found !")) {
 				return (T) new AddressBook(new Ticket(new BookFile(inv, Ticket.getTicketslot(inv), false, "ticket"), Conf.NETWORK), Parameter.DESTINATION);
 			}
 		}
 		else if (inv.getHolder() instanceof Vehicle) {
-			destination = new AddressString(ByteCart.myPlugin.getConfig().getString("EmptyCartsDefaultRoute", "0.0.0"));
+			destination = ByteCart.myPlugin.getConfig().getString("EmptyCartsDefaultRoute", "0.0.0");
 			if ((new BC7011(null,(Vehicle)inv.getHolder())).setAddress(destination,"No ticket found !")) {
 				return (T) new AddressBook(new Ticket(new BookFile(inv, Ticket.getTicketslot(inv), false, "ticket"), Conf.NETWORK), Parameter.DESTINATION);
 			}
@@ -70,10 +70,24 @@ public class AddressFactory {
 	/**
 	 * Creates an address with a string as internal support
 	 *
+	 * The address is resolved.
+	 *
 	 * @param s the address in the form aa.bb.cc
 	 * @return the address
 	 */
 	public final static Address getAddress(String s){
-		return new AddressString(s);
+		return new AddressString(s, true);
+	}
+
+	/**
+	 * Creates an address with a string as internal support
+	 *
+	 * The address is not resolved.
+	 *
+	 * @param s the address in the form aa.bb.cc
+	 * @return the address
+	 */
+	public final static Address getUnresolvedAddress(String s){
+		return new AddressString(s, false);
 	}
 }

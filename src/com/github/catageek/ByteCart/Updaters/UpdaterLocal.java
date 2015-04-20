@@ -5,7 +5,9 @@ import java.util.Stack;
 import org.bukkit.Bukkit;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.Signs.BC9001;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
+import com.github.catageek.ByteCart.IO.ComponentSign;
 import com.github.catageek.ByteCart.Util.LogUtil;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
@@ -28,8 +30,14 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 	public void doAction(Side to) {
 
 		if (this.getNetmask() == 8) {
+			// Erase default name "Station"
+			// TODO : added 04/2015, to be removed
+			if (((BC9001)this.getBcSign()).getStationName().equals("Station")) {
+				(new ComponentSign(this.getCenter())).setLine(2, "");
+			}
+
 			//it's a station, launch event
-			UpdaterPassStationEvent event = new UpdaterPassStationEvent(this, this.getSignAddress());
+			UpdaterPassStationEvent event = new UpdaterPassStationEvent(this, this.getSignAddress(), ((BC9001)this.getBcSign()).getStationName());
 			Bukkit.getServer().getPluginManager().callEvent(event);
 		}
 
@@ -72,7 +80,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 					Bukkit.getServer().getPluginManager().callEvent(event);
 				}
 				else {
-					UpdaterSetStationEvent event = new UpdaterSetStationEvent(this, old, reloadAddress);
+					UpdaterSetStationEvent event = new UpdaterSetStationEvent(this, old, reloadAddress, ((BC9001)this.getBcSign()).getStationName());
 					Bukkit.getServer().getPluginManager().callEvent(event);
 				}
 

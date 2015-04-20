@@ -27,7 +27,7 @@ public class AddressString extends AbstractAddress implements Address {
 	 * 
 	 * @param s the string containing the address or a name to resolve to an address
 	 */
-	public AddressString(String s) {
+	public AddressString(String s, boolean resolve) {
 
 		if (isAddress(s)) {
 			this.String = s;
@@ -35,7 +35,12 @@ public class AddressString extends AbstractAddress implements Address {
 		}
 
 		if (isResolvableName(s)) {
-			this.String = resolver.resolve(s);
+			if (resolve) {
+				this.String = resolver.resolve(s);
+			}
+			else {
+				this.String = s;
+			}
 			return;
 		}
 

@@ -57,7 +57,6 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 
 		getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
 
-
 		// register updater factory
 		if (! this.getWandererManager().isWandererType("Updater"))
 			this.getWandererManager().register(new UpdaterFactory(), "Updater");

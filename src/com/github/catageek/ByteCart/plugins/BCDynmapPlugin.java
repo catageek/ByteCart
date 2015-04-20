@@ -31,6 +31,7 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterSetStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSignInvalidateEvent;
 import com.github.catageek.ByteCartAPI.HAL.IC;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Signs.Station;
 
 /**
  * A Dynmap addon
@@ -112,7 +113,7 @@ public final class BCDynmapPlugin implements Listener {
 		if (marker != null)
 			marker.deleteMarker();
 		Address address = event.getNewAddress();
-		selectAndAddMarker(event.getIc().getFriendlyName(), block, address);
+		selectAndAddMarker(event.getName(), block, address);
 	}
 
 	/**
@@ -130,7 +131,7 @@ public final class BCDynmapPlugin implements Listener {
 				return;
 			marker.deleteMarker();
 		}
-		selectAndAddMarker(event.getIc().getFriendlyName(), block, address);
+		selectAndAddMarker(event.getName(), block, address);
 	}
 
 
@@ -190,14 +191,14 @@ public final class BCDynmapPlugin implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onSignCreate(SignCreateEvent event) {
 		IC ic;
-		if (! ((ic = event.getIc()).getName().equals("BC9001")))
+		if (! ((ic = event.getIc()) instanceof Station))
 			return;
 		Block block = ic.getBlock();
 		String address = event.getStrings()[3];
 		Marker marker = markerset.findMarker(buildId(block));
 		if (marker != null)
 			marker.deleteMarker();
-		selectAndAddMarker(event.getStrings()[2], block, AddressFactory.getAddress(address));
+		selectAndAddMarker(((Station) ic).getStationName(), block, AddressFactory.getAddress(address));
 	}
 	
 	/**
@@ -296,6 +297,9 @@ public final class BCDynmapPlugin implements Listener {
 	 * @return a string containing "name (address)"
 	 */
 	private static String buildLabel(String address, String friendlyname) {
+		if (friendlyname.equals("")) {
+			return address;
+		}
 		return friendlyname + " (" + address + ")";
 	}
 

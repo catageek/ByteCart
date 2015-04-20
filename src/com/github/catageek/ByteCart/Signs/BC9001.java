@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import com.github.catageek.ByteCart.ByteCart;
@@ -18,7 +19,7 @@ import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
 import com.github.catageek.ByteCartAPI.Event.SignPostStationEvent;
 import com.github.catageek.ByteCartAPI.Event.SignPreStationEvent;
-import com.github.catageek.ByteCartAPI.Signs.Subnet;
+import com.github.catageek.ByteCartAPI.Signs.Station;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
@@ -26,7 +27,7 @@ import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 /**
  * A station sign
  */
-final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggable {
+public final class BC9001 extends AbstractBC9000 implements Station, Powerable, Triggable {
 
 
 	BC9001(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
@@ -183,13 +184,7 @@ final class BC9001 extends AbstractBC9000 implements Subnet, Powerable, Triggabl
 		return "BC9001";
 	}
 
-	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
-	 */
-	@Override
-	public final String getFriendlyName() {
-		String s;
-		return (s = super.getFriendlyName()).equals("") ? "Station" : s;
+	public final String getStationName() {
+		return ((Sign)this.getBlock().getState()).getLine(2);
 	}
-
 }

@@ -111,14 +111,6 @@ final class AddressBook implements AddressRouted {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.github.catageek.ByteCart.AddressLayer.Address#setAddress(com.github.catageek.ByteCart.AddressLayer.Address, java.lang.String)
-	 */
-	@Override
-	public boolean setAddress(Address a, String name) {
-		return setAddress(a.toString(), name);
-	}
-
-	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.AddressLayer.Address#setTrain(boolean)
 	 */
 	@Override
@@ -176,7 +168,7 @@ final class AddressBook implements AddressRouted {
 	 */
 	private Address getAddress() {
 		String defaultaddr = ByteCart.myPlugin.getConfig().getString("EmptyCartsDefaultRoute", "0.0.0");
-		return new AddressString(ticket.getString(parameter, defaultaddr));
+		return new AddressString(ticket.getString(parameter, defaultaddr),true);
 	}
 
 	/* (non-Javadoc)
