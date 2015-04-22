@@ -24,7 +24,6 @@ import com.github.catageek.ByteCart.Updaters.UpdaterContentFactory;
 import com.github.catageek.ByteCart.Updaters.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.LogUtil;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
-import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 /**
@@ -44,19 +43,24 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			} else {
 				Player player = (Player) sender;
 
-				if(args.length == 0 || args.length >= 3 || !AddressString.isResolvableAddressOrName(args[0]))
+				if(args.length == 0)
 					return false;
-
+				String host_or_address;
 				boolean isTrain  = false;
-				if (args.length == 2 && args[1].equalsIgnoreCase("train"))
+				if (args[args.length-1].equalsIgnoreCase("train")) {
 					isTrain   = true;
+					host_or_address = concat(args, 0, 1);
+				}
+				else {
+					host_or_address = concat(args, 0, 0);
+				}
 
-				if(!AddressString.isResolvableAddressOrName(args[0])) {
+				if(!AddressString.isResolvableAddressOrName(host_or_address)) {
 					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid destination supplied.");
 					return false;
 				}
 
-				(new BC7010(player.getLocation().getBlock(), player)).setAddress(args[0], null, isTrain);
+				(new BC7010(player.getLocation().getBlock(), player)).setAddress(host_or_address, null, isTrain);
 			}
 			return true;
 		}
@@ -67,37 +71,40 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			} else {
 				Player player = (Player) sender;
 
-				if(args.length == 0 || args.length >= 3 || !AddressString.isResolvableAddressOrName(args[0]))
+				if(args.length == 0)
 					return false;
+				final String host_or_address;
+				boolean isTrain  = false;
+				if (args[args.length-1].equalsIgnoreCase("train")) {
+					isTrain   = true;
+					host_or_address = concat(args, 0, 1);
+				}
+				else {
+					host_or_address = concat(args, 0, 0);
+				}
 
-				if(!AddressString.isResolvableAddressOrName(args[0])) {
+				if(!AddressString.isResolvableAddressOrName(host_or_address)) {
 					sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid destination supplied.");
 					return false;
 				}
 
-				Address address = new AddressString(args[0], false);
-
-				boolean isTrain  = false;
-				if (args.length == 2 && args[1].equalsIgnoreCase("train"))
-					isTrain   = true;
-
 				final class Execute implements ModifiableRunnable<Inventory> {
 
 					private final Player player;
-					private final Address address;
+					private final String address;
 					private Inventory inventory;
 					private boolean istrain;
 
 
-					public Execute(Player player, Address address, boolean isTrain) {
+					public Execute(Player player, String host_or_address, boolean isTrain) {
 						this.player = player;
-						this.address = address;
+						this.address = host_or_address;
 						this.istrain = isTrain;
 					}
 
 					public void run() {
-						if ((new BC7011(player.getLocation().getBlock(), ((org.bukkit.entity.Vehicle) inventory.getHolder()))).setAddress(address.toString(), null, this.istrain)) {
-							LogUtil.sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " " + address);
+						if ((new BC7011(player.getLocation().getBlock(), ((org.bukkit.entity.Vehicle) inventory.getHolder()))).setAddress(address, null, this.istrain)) {
+							LogUtil.sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " " + host_or_address);
 							LogUtil.sendSuccess(player, ByteCart.myPlugin.getConfig().getString("Info.GetTTL") + AddressFactory.<AddressRouted>getAddress(inventory).getTTL());
 						}
 						else
@@ -120,7 +127,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 
 
 				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
-				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, address, isTrain), false);
+				new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, host_or_address, isTrain), false);
 			}
 			return true;
 		}
@@ -306,18 +313,19 @@ public class BytecartCommandExecutor implements CommandExecutor {
 		boolean isTrain = false;
 
 		if (!(sender instanceof Player)) {
-			if(args.length < 2) {
+			if(args.length < 2)
 				return false;
+			String host_or_address;
+			if (args[args.length-1].equalsIgnoreCase("train")) {
+				isTrain   = true;
+				host_or_address = concat(args, 1, 1);
 			}
-
-			if(!AddressString.isResolvableAddressOrName(args[1])) {
-				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "No valid address supplied.");
-				return false;
+			else {
+				host_or_address = concat(args, 1, 0);
 			}
 
 			player = Bukkit.getServer().getPlayer(args[0]);
-			addressString = args[1];
-			isTrain = (args.length == 3 && args[2].equalsIgnoreCase("train"));
+			addressString = host_or_address;
 
 			if(player == null) {
 				sender.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Can't find player "+args[0]+".");
@@ -328,9 +336,17 @@ public class BytecartCommandExecutor implements CommandExecutor {
 				return false;
 			}
 
+			String host_or_address;
+			if (args[args.length-1].equalsIgnoreCase("train")) {
+				isTrain   = true;
+				host_or_address = concat(args, 0, 1);
+			}
+			else {
+				host_or_address = concat(args, 0, 0);
+			}
+
 			player = (Player) sender;
-			addressString = args[0];
-			isTrain = (args.length == 2 && args[1].equalsIgnoreCase("train"));
+			addressString = host_or_address;
 		}
 
 		if(!AddressString.isResolvableAddressOrName(addressString)) {
@@ -345,4 +361,15 @@ public class BytecartCommandExecutor implements CommandExecutor {
 		return true;
 	}
 
+	private String concat(String[] s, int first, int omitted) {
+		if (s.length <= first) {
+			return "";
+		}
+		String ret = s[first];
+		for (int i = first + 1; i < s.length - omitted; ++i) {
+			ret += " ";
+			ret += s[i];
+		}
+		return ret;
+	}
 }
