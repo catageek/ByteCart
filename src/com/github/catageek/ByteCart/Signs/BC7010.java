@@ -143,7 +143,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 			return false;
 		}
 		if (this.getInventory().getHolder() instanceof Player) {
-			this.infoPlayer(IPaddress);
+			this.infoPlayer(SignAddress);
 		}
 		IPaddress.initializeTTL();
 
@@ -168,10 +168,10 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	/**
 	 * Send message to player in the chat window
 	 *
-	 * @param address the address got by the player
+	 * @param signAddress the address got by the player
 	 */
-	protected void infoPlayer(Address address) {
-		((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " (" + ChatColor.RED + address + ")");
+	protected void infoPlayer(String signAddress) {
+		((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress") + " " + ChatColor.RED + signAddress);
 		if (this.getVehicle() == null  && ! ByteCart.myPlugin.getConfig().getBoolean("usebooks"))
 			((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetAddress2") );
 	}

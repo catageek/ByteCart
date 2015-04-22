@@ -301,7 +301,7 @@ final class Ticket {
 		StringBuilder build = new StringBuilder(ByteCart.myPlugin.getConfig().getString("title"));
 		if (name != null)
 			build.append(" ").append(name);
-		build.append(" (").append(s).append(")");
+		build.append(" ").append(s);
 		try {
 			properties.getFile().setDescription(build.toString());
 		} catch (IOException e) {

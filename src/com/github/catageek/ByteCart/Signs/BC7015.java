@@ -66,7 +66,7 @@ final class BC7015 extends BC7011 implements Triggable {
 	 * @see com.github.catageek.ByteCart.Signs.BC7010#infoPlayer(com.github.catageek.ByteCart.AddressLayer.Address)
 	 */
 	@Override
-	protected void infoPlayer(Address address) {
-		((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetReturnAddress") + " (" + ChatColor.RED + address + ")");
+	protected void infoPlayer(String address) {
+		((Player) this.getInventory().getHolder()).sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.SetReturnAddress") + " " + ChatColor.RED + address);
 	}
 }
