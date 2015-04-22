@@ -16,6 +16,7 @@ import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.Updaters.UpdaterFactory;
 import com.github.catageek.ByteCart.Wanderer.BCWandererManager;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
+import com.github.catageek.ByteCart.plugins.BCHostnameResolutionPlugin;
 import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.ByteCartPlugin;
 import com.github.catageek.ByteCartAPI.AddressLayer.Resolver;
@@ -28,6 +29,7 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	public static Logger log = Logger.getLogger("Minecraft");
 	public static ByteCart myPlugin;
 	public static boolean debug;
+	private BCHostnameResolutionPlugin hostnamePlugin;
 	private PreloadChunkListener preloadchunklistener;
 	private ConstantSpeedListener constantspeedlistener;
 	private CollisionAvoiderManager cam;
@@ -84,6 +86,13 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 			}
 		}
 
+		if (this.getConfig().getBoolean("hostname_resolution", true)) {
+			hostnamePlugin = new BCHostnameResolutionPlugin();
+			hostnamePlugin.onLoad();
+			ByteCartAPI.setResolver(hostnamePlugin);
+			getServer().getPluginManager().registerEvents(hostnamePlugin, this);
+			getCommand("host").setExecutor(hostnamePlugin);
+		}
 
 		log.info("[ByteCart] plugin has been enabled.");
 	}

@@ -6,6 +6,17 @@ debug: false
 # set false to disable metrics stats submission
 metrics: true 
 
+# set false to disable hostname resolution
+hostname_resolution: true
+
+# the name of the database
+# default : BCHostnames
+database: BCHostnames
+
+# choose the sql database type.
+# default: sqllite
+sql: mysql 
+
 # set false if you don't want to load chunks automatically around a moving cart
 loadchunks: true
 
