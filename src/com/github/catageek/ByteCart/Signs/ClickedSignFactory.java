@@ -1,13 +1,11 @@
 package com.github.catageek.ByteCart.Signs;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
@@ -58,7 +56,7 @@ final public class ClickedSignFactory {
 
 			final Block relative = block.getRelative(f, 2);
 			if (AbstractIC.checkEligibility(relative)) {
-				return ClickedSignFactory.getClickedIC(block, ((Sign) relative.getState()).getLine(1), player);
+				return ClickedSignFactory.getClickedIC(relative, ((Sign) relative.getState()).getLine(1), player);
 			}
 		}
 		return null;
