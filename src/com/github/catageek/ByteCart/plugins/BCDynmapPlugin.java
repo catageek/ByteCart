@@ -198,7 +198,7 @@ public final class BCDynmapPlugin implements Listener {
 		Marker marker = markerset.findMarker(buildId(block));
 		if (marker != null)
 			marker.deleteMarker();
-		selectAndAddMarker(((Station) ic).getStationName(), block, AddressFactory.getAddress(address));
+		selectAndAddMarker(event.getStrings()[2], block, AddressFactory.getAddress(address));
 	}
 	
 	/**

@@ -257,8 +257,8 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 		if (event.getIc() instanceof Station) {
 			try {
 				Station station = (Station) event.getIc();
-				String ip = station.getSignAddress().toString();
-				String name = station.getStationName();
+				String ip = event.getStrings()[3];
+				String name = event.getStrings()[2];
 				Player player = event.getPlayer();
 				if (! ip.equals("") && ! name.equals("")) {
 					name = Normalizer.normalize(name, Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
