@@ -336,11 +336,9 @@ public final class BCDynmapPlugin implements Listener {
 	 * Search for stations that do not exist anymore and
 	 * remove corresponding markers.
 	 * 
-	 * The search method is run asynchronously
-	 *
 	 */
 	public static void removeObsoleteMarkers() {
 		if (markerset != null)
-			Bukkit.getScheduler().runTaskAsynchronously(ByteCart.myPlugin, new searchObsoleteMarkers());
+			Bukkit.getScheduler().runTask(ByteCart.myPlugin, new searchObsoleteMarkers());
 	}
 }
