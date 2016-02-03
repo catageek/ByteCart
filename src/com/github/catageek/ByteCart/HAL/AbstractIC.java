@@ -10,7 +10,6 @@ import org.bukkit.block.Sign;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.IO.ComponentSign;
-import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.HAL.IC;
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;

@@ -256,7 +256,6 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 	public void onSignCreate(SignCreateEvent event) {
 		if (event.getIc() instanceof Station) {
 			try {
-				Station station = (Station) event.getIc();
 				String ip = event.getStrings()[3];
 				String name = event.getStrings()[2];
 				Player player = event.getPlayer();

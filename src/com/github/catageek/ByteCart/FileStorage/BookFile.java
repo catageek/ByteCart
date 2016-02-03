@@ -123,7 +123,6 @@ public final class BookFile implements BCFile {
 		if (outputstream != null)
 			return outputstream;
 
-		@SuppressWarnings("resource")
 		BookOutputStream bookoutputstream = binarymode ? new Base64BookOutputStream(book) : new BookOutputStream(book);
 		return outputstream = new ItemStackMetaOutputStream(stack, bookoutputstream);
 	}
