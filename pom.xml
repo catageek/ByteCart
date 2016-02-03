@@ -3,7 +3,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.catageek</groupId>
 	<artifactId>ByteCart</artifactId>
-	<version>2.9.4</version>
 	<name>ByteCart</name>
 
 	<repositories>
@@ -178,4 +177,5 @@
 			<version>R7</version>
 		</dependency>
 	</dependencies>
+	<version>3.0.0-SNAPSHOT</version>
 </project>
