@@ -119,11 +119,11 @@ public final class BCCounter implements Serializable, Counter {
 	 * @return the ring number, or 0 if no result
 	 */
 	public int getMinimum(RoutingTableWritable routes, DirectionRegistry from) {
-		Iterator<RouteValue> it = routes.getOrderedRouteNumbers();
+		Iterator<Integer> it = routes.getOrderedRouteNumbers();
 		int min = 10000000;  //big value
 		int index = -1;
 		while (it.hasNext()) {
-			int ring = it.next().value();
+			int ring = it.next();
 			
 			if (ring == 0)
 				continue;
@@ -133,7 +133,7 @@ public final class BCCounter implements Serializable, Counter {
 
 			int value;
 			if((value = map.get(ring)) < min
-					&& routes.getDirection(ring).getAmount() != from.getAmount()
+					&& routes.getDirection(ring) != from.getBlockFace()
 					&& ring != 0) {
 				min = value;
 				index  = ring;

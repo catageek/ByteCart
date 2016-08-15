@@ -1,6 +1,8 @@
 package com.github.catageek.ByteCart.Signs;
 
 import java.io.IOException;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -64,7 +66,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			Inventory ChestInventory = ((InventoryHolder) blockstate).getInventory();
 
 			// Converting inventory in routing table
-			RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory);
+			RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory, 0);
 		}
 		else {
 			RoutingTable = null;
@@ -134,7 +136,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 
 				// trigger event
 				BlockFace bdest = router.WishToGo(From, direction, isTrain);
-				int ring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(bdest));
+				int ring = this.getRoutingTable().getDirectlyConnected(bdest);
 				SignPostRouteEvent event = new SignPostRouteEvent(this, ring);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -148,7 +150,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			to = router.WishToGo(From, wanderer.giveRouterDirection(), isTrain);
 
 			if (WandererContentFactory.isWanderer(getInventory(), "Updater")) {
-				int nextring = this.getRoutingTable().getDirectlyConnected(new DirectionRegistry(to));
+				int nextring = this.getRoutingTable().getDirectlyConnected(to);
 				UpdaterPassRouterEvent event = new UpdaterPassRouterEvent(wanderer, to, nextring);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 			}
@@ -199,22 +201,22 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 */
 	protected BlockFace SelectRoute(AddressRouted IPaddress, Address sign, RoutingTableWritable RoutingTable) {
 
-		DirectionRegistry face;
+		BlockFace face;
 		// same region : lookup destination track
 		if (IPaddress != null && IPaddress.getRegion().getAmount() == sign.getRegion().getAmount() && IPaddress.getTTL() != 0) {
 			int destination = this.destination.getTrack().getAmount();
-			DirectionRegistry out = RoutingTable.getDirection(destination);
+			BlockFace out = RoutingTable.getAllowedDirection(destination);
 			if (out != null) {
 				// trigger event
 				SignPreRouteEvent event = new SignPreRouteEvent(this, this.getRoutingTable().getDirectlyConnected(out));
 				Bukkit.getServer().getPluginManager().callEvent(event);
-				return RoutingTable.getDirection(event.getTargetTrack()).getBlockFace();
+				return RoutingTable.getDirection(event.getTargetTrack());
 			}
 		}
 
 		// If not in same region, or if TTL is 0, or the ring does not exist then we lookup track 0
-		if ((face = RoutingTable.getDirection(0)) != null)
-			return face.getBlockFace();
+		if ((face = RoutingTable.getAllowedDirection(0)) != null)
+			return face;
 
 		// If everything has failed, then we randomize output direction
 		return AbstractWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());

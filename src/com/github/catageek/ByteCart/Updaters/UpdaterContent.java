@@ -61,13 +61,13 @@ public class UpdaterContent extends WandererContent implements Serializable {
 	 */
 	void putRoutes(RoutingTableWritable table, DirectionRegistry direction) {
 		tablemap.clear();
-		Iterator<RouteValue> it = table.getOrderedRouteNumbers();
+		Iterator<Integer> it = table.getOrderedRouteNumbers();
 		while (it.hasNext()) {
-			int i = it.next().value();
-			if( table.getDirection(i) != null && table.getDirection(i).getAmount() != direction.getAmount()) {
+			int i = it.next();
+			if( table.getDirection(i) != null && table.getDirection(i) != direction.getBlockFace()) {
 				tablemap.put(i, new Metric(table.getMinMetric(i)));
 				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart : Route exchange : give ring " + i + " with metric " + table.getMinMetric(i) + " to " + table.getDirection(i).getBlockFace());
+					ByteCart.log.info("ByteCart : Route exchange : give ring " + i + " with metric " + table.getMinMetric(i) + " to " + table.getDirection(i));
 			}
 
 		}

@@ -1,9 +1,9 @@
 package com.github.catageek.ByteCart.Routing;
 
 import java.io.IOException;
+import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.Updaters.UpdaterContent;
-import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Wanderer.RoutingTable;
 
 
@@ -19,7 +19,7 @@ public interface RoutingTableWritable extends RoutingTable {
 	 * @param direction the direction to associate
 	 * @param metric the metric to associate
 	 */
-	public void setEntry(int entry, DirectionRegistry direction, Metric metric);
+	public void setEntry(int entry, BlockFace direction, int metric);
 	
 	/**
 	 * Remove a line from the routing table
@@ -27,7 +27,7 @@ public interface RoutingTableWritable extends RoutingTable {
 	 * @param entry the track number
 	 * @param from the direction to remove
 	 */
-	public void removeEntry(int entry, DirectionRegistry from);
+	public void removeEntry(int entry, BlockFace from);
 	
 	/**
 	 * Performs the IGP protocol to update the routing table
@@ -35,7 +35,7 @@ public interface RoutingTableWritable extends RoutingTable {
 	 * @param neighbour the IGP packet received
 	 * @param from the direction from where we received it
 	 */
-	public void Update(UpdaterContent neighbour, DirectionRegistry from);
+	public void Update(UpdaterContent neighbour, BlockFace from);
 	
 	/**
 	 * Clear the routing table

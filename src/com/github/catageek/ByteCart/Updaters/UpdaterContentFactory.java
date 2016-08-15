@@ -19,11 +19,13 @@ public abstract class UpdaterContentFactory {
 	public static UpdaterContent getUpdaterContent(Inventory inv)
 			throws IOException, ClassNotFoundException {
 		UpdaterContent rte = null;
-		try (BookFile file = new BookFile(inv, 0, true)) {
-			if (! file.isEmpty()) {
-				ObjectInputStream ois = new ObjectInputStream(file.getInputStream());
-				rte = (UpdaterContent) ois.readObject();
-			}
+		BookFile file = BookFile.getFrom(inv, 0, true, "Updater");
+		if (file == null) {
+			return null;
+		}
+		if (! file.isEmpty()) {
+			ObjectInputStream ois = new ObjectInputStream(file.getInputStream());
+			rte = (UpdaterContent) ois.readObject();
 		}
 		rte.setInventory(inv);
 		return rte;

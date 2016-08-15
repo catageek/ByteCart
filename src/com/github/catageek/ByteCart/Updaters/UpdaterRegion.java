@@ -44,7 +44,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 			if(ByteCart.debug)
 				ByteCart.log.info("ByteCart : trying ring " + current);
 			if (! this.getRoutingTable().isEmpty(current)
-					&& ! this.getRoutingTable().isDirectlyConnected(current, getFrom())) {
+					&& ! this.getRoutingTable().isDirectlyConnected(current, getFrom().getBlockFace())) {
 				this.getCounter().incrementCount(current);
 				current = -1;
 			}
@@ -58,7 +58,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 		if (current > 0  && current < getTrackNumber()) {
 			// current < sign => reset counter, clear route and write sign
 			this.getCounter().reset(getTrackNumber());
-			this.getRoutingTable().removeEntry(getTrackNumber(), getFrom());
+			this.getRoutingTable().removeEntry(getTrackNumber(), getFrom().getBlockFace());
 			this.getSignAddress().setAddress(this.getAddress(current));
 			this.getSignAddress().finalizeAddress();
 			if(ByteCart.debug)
@@ -93,7 +93,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 		return (track == -1 && current != -2) 
 				|| (track != -1 && current != -2 && getCounter().getCount(track) == 0)
 				|| (current >= 0 && current != track)
-				|| (track > 0 && ! this.getRoutingTable().isDirectlyConnected(track, getFrom()));
+				|| (track > 0 && ! this.getRoutingTable().isDirectlyConnected(track, getFrom().getBlockFace()));
 	}
 
 	protected BlockFace selectDirection() {
@@ -128,7 +128,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 				if((min = this.getCounter().getMinimum(this.getRoutingTable(), this.getFrom())) != -1) {
 					if (ByteCart.debug)
 						ByteCart.log.info("ByteCart : selectDirection() : minimum counter " + min);
-					return this.getRoutingTable().getDirection(min).getBlockFace();
+					return this.getRoutingTable().getDirection(min);
 				}
 			}
 		}

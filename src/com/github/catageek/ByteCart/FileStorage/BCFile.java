@@ -1,6 +1,5 @@
 package com.github.catageek.ByteCart.FileStorage;
 
-import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +10,7 @@ import org.bukkit.inventory.Inventory;
 /**
  * Represents a file with various operations
  */
-public interface BCFile extends Closeable, Flushable {
+public interface BCFile extends Flushable {
 
 	/**
 	 * Get the capacity, in bytes, of the file
@@ -72,4 +71,10 @@ public interface BCFile extends Closeable, Flushable {
 	 * @throws IOException
 	 */
 	String getDescription() throws IOException;
+
+	/**
+	 * Get all the pages in one string
+	 * @return all the pages
+	 */
+	String getPages();
 }

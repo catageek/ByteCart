@@ -11,7 +11,9 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
@@ -19,7 +21,6 @@ import com.github.catageek.ByteCart.FileStorage.BookFile;
 import com.github.catageek.ByteCart.Storage.ExternalizableTreeMap;
 import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
-import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
 
 /**
  * A routing table in a book
@@ -78,17 +79,19 @@ RoutingTableWritable, Externalizable {
 	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#getRouteNumbers()
 	 */
 	@Override
-	public final <T extends RouteValue> Iterator<T> getOrderedRouteNumbers() {
-		@SuppressWarnings("unchecked")
-		Iterator<T> it = ((SortedSet<T>) map.keySet()).iterator();
-		return it;
+	public final Iterator<Integer> getOrderedRouteNumbers() {
+		TreeSet<Integer> newmap = new TreeSet<Integer>();
+		for(RouteNumber key : map.keySet()) {
+			newmap.add(key.value());
+		}
+		return ((SortedSet<Integer>) newmap).iterator();
 	}
 
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getMetric(int, com.github.catageek.ByteCart.Util.DirectionRegistry)
 	 */
 	@Override
-	public int getMetric(int entry, DirectionRegistry direction) {
+	public int getMetric(int entry, BlockFace direction) {
 		SortedMap<Metric, PartitionedHashSet<DirectionRegistry>> smap;
 		RouteNumber route = new RouteNumber(entry);
 		if (map.containsKey(route) && (smap = map.get(route).getMap()) != null
@@ -96,7 +99,7 @@ RoutingTableWritable, Externalizable {
 			Iterator<Metric> it = smap.keySet().iterator();
 			Metric d;
 			while (it.hasNext())
-				if (smap.get((d = it.next())).contains(direction))
+				if (smap.get((d = it.next())).contains(new DirectionRegistry(direction)))
 					return d.value();
 		}
 		return -1;
@@ -126,6 +129,10 @@ RoutingTableWritable, Externalizable {
 		RouteProperty smap;
 		PartitionedHashSet<DirectionRegistry> set;
 
+		if (metric.value() < this.getMetric(entry, direction.getBlockFace())) {
+			this.removeEntry(entry, direction.getBlockFace());
+		}
+
 		if ((smap = map.get(route)) == null) {
 			smap = new RouteProperty();
 			map.put(route, smap);
@@ -139,14 +146,27 @@ RoutingTableWritable, Externalizable {
 		}
 		wasModified |= set.add(direction);
 	}
+	
+	private RoutingTableBookJSON convertToJSON() {
+		final RoutingTableBookJSON jtable = new RoutingTableBookJSON();
+		jtable.setInventory(this.inventory, 0);
+		for (Entry<RouteNumber, RouteProperty> entry : map.entrySet()) {
+			for (Entry<Metric, PartitionedHashSet<DirectionRegistry>> routemap : entry.getValue().getMap().entrySet()) {
+				for (DirectionRegistry route : routemap.getValue()) {
+					jtable.setEntry(entry.getKey().value(), route.getBlockFace(), routemap.getKey().value());
+				}
+			}
+		}
+		return jtable;
+	}
 
 
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#setEntry(int, com.github.catageek.ByteCart.Util.DirectionRegistry, com.github.catageek.ByteCart.Routing.Metric)
 	 */
 	@Override
-	public void setEntry(int entry, DirectionRegistry direction, Metric metric) {
-		setMapEntry(entry, direction, metric);
+	public void setEntry(int entry, BlockFace direction, int metric) {
+		setMapEntry(entry, new DirectionRegistry(direction), new Metric(metric));
 	}
 
 	/* (non-Javadoc)
@@ -161,24 +181,38 @@ RoutingTableWritable, Externalizable {
 	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getDirection(int)
 	 */
 	@Override
-	public DirectionRegistry getDirection(int entry) {
+	public BlockFace getDirection(int entry) {
 		RouteNumber route = new RouteNumber(entry);
 		Set<DirectionRegistry> set;
 		TreeMap<Metric, PartitionedHashSet<DirectionRegistry>> pmap;
 		if (map.containsKey(route) && (pmap = map.get(route).getMap()) != null && ! pmap.isEmpty()) {
 			set = pmap.firstEntry().getValue();
 			if (! set.isEmpty())
-				return set.toArray(new DirectionRegistry[set.size()])[0];
+				return set.toArray(new DirectionRegistry[set.size()])[0].getBlockFace();
 			throw new AssertionError("Set<DirectionRegistry> in RoutingTableWritable is empty.");
 		}
 		return null;
+	}
+
+	@Override
+	public BlockFace getAllowedDirection(int entry) {
+		return getDirection(entry);
+	}
+
+	@Override
+	public Boolean isAllowedDirection(BlockFace direction) {
+		return true;
+	}
+
+	@Override
+	public void allowDirection(BlockFace direction, Boolean enable) {
 	}
 
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getDirectlyConnectedList(com.github.catageek.ByteCart.Util.DirectionRegistry)
 	 */
 	@Override
-	public Set<Integer> getDirectlyConnectedList(DirectionRegistry direction) {
+	public Set<Integer> getDirectlyConnectedList(BlockFace direction) {
 		SortedMap<Integer, Metric> list = new TreeMap<Integer, Metric>();
 		Iterator<Entry<RouteNumber, RouteProperty>> it = map.entrySet().iterator();
 		Entry<RouteNumber, RouteProperty> entry;
@@ -190,7 +224,7 @@ RoutingTableWritable, Externalizable {
 			entry = it.next();
 			if ((smap = entry.getValue().getMap()) != null && smap.containsKey(zero)
 					&& ! (set = smap.get(zero)).isEmpty()
-					&& set.contains(direction)) {
+					&& set.contains(new DirectionRegistry(direction))) {
 				// just extract the connected route
 				list.put(entry.getKey().value(), zero);
 			}
@@ -203,7 +237,7 @@ RoutingTableWritable, Externalizable {
 	 */
 	@Override
 	protected Set<Integer> getNotDirectlyConnectedList(
-			DirectionRegistry direction) {
+			BlockFace direction) {
 		SortedMap<Integer, Metric> list = new TreeMap<Integer, Metric>();
 		Iterator<Entry<RouteNumber, RouteProperty>> it = map.entrySet().iterator();
 		Entry<RouteNumber, RouteProperty> entry;
@@ -218,13 +252,13 @@ RoutingTableWritable, Externalizable {
 			if ((smap = entry.getValue().getMap()) == null
 					|| ! (smap = entry.getValue().getMap()).containsKey(zero)
 					|| ! (! (set = smap.get(zero)).isEmpty()
-							&& set.contains(direction))) {
+							&& set.contains(new DirectionRegistry(direction)))) {
 				// extract routes going to directions with distance > 0
 				smap = smap.tailMap(one);
 				Iterator<Metric> it2 = smap.keySet().iterator();
 				while (it2.hasNext()) {
 					Metric d = it2.next();
-					if (smap.get(d).contains(direction)) {
+					if (smap.get(d).contains(new DirectionRegistry(direction))) {
 						list.put(entry.getKey().value(), d);
 						break;
 					}
@@ -238,7 +272,7 @@ RoutingTableWritable, Externalizable {
 	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#removeEntry(int, com.github.catageek.ByteCart.Util.DirectionRegistry)
 	 */
 	@Override
-	public void removeEntry(int entry, DirectionRegistry from) {
+	public void removeEntry(int entry, BlockFace from) {
 		RouteNumber route = new RouteNumber(entry);
 		TreeMap<Metric,PartitionedHashSet<DirectionRegistry>> smap;
 		Set<DirectionRegistry> set;
@@ -246,7 +280,7 @@ RoutingTableWritable, Externalizable {
 		if (map.containsKey(route) && (smap = map.get(route).getMap()) != null) {
 			Iterator<Metric> it = smap.keySet().iterator();
 			while (it.hasNext()) {
-				wasModified |= (set = smap.get(it.next())).remove(from);
+				wasModified |= (set = smap.get(it.next())).remove(new DirectionRegistry(from));
 				if (set.isEmpty())
 					it.remove();
 				if (smap.isEmpty())
@@ -260,17 +294,8 @@ RoutingTableWritable, Externalizable {
 	 */
 	@Override
 	public void serialize() throws IOException {
-		if (! wasModified)
-			return;
-		try (BookFile file = new BookFile(inventory, 0, true)) {
-			file.clear();
-			ObjectOutputStream oos = new ObjectOutputStream(file.getOutputStream());
-			oos.writeObject(this);
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : serialize() : object written, now closing");
-			oos.flush();
-			wasModified = false;
-		}
+		this.convertToJSON().serialize();
+		wasModified = false;	
 	}
 
 	/* (non-Javadoc)

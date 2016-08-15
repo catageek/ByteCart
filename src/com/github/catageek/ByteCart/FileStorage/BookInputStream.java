@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.BookMeta;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.Base64;
 
 /**
@@ -16,7 +17,7 @@ class BookInputStream extends ByteArrayInputStream {
 	 * @param binary set binary mode
 	 */
 	BookInputStream(BookMeta book, boolean binary) {
-		super(readPages(book, binary));
+		super(readPagesAsBytes(book, binary));
 	}
 
 	/**
@@ -33,8 +34,29 @@ class BookInputStream extends ByteArrayInputStream {
 	 * @param binary binary mode
 	 * @return the array of bytes
 	 */
-	private static byte[] readPages(BookMeta book, boolean binary) {
-		int len =  book.getPageCount() << BookFile.PAGELOG;
+	public static String readPages(BookMeta book, boolean binary) {
+		String sb = getRawPages(book);
+		if (binary)
+			return new String(Base64.decodeFast(sb));
+		return sb;
+	}
+
+	/**
+	 * Copy all pages of a book in a array of bytes
+	 *
+	 * @param book the book
+	 * @param binary binary mode
+	 * @return the array of bytes
+	 */
+	private static byte[] readPagesAsBytes(BookMeta book, boolean binary) {
+		String sb = getRawPages(book);
+		if (binary)
+			return Base64.decodeFast(sb);
+		return sb.getBytes();
+	}
+
+	private static String getRawPages(BookMeta book) {
+		int len =  book.getPageCount() * BookFile.PAGESIZE;
 		StringBuilder sb = new StringBuilder(len);
 
 		for (int i = 1; i <= book.getPageCount(); ++i) {
@@ -42,8 +64,6 @@ class BookInputStream extends ByteArrayInputStream {
 		}
 
 		sb.trimToSize();
-		if (binary)
-			return Base64.decodeFast(sb.toString());
-		return sb.toString().getBytes();
+		return sb.toString();
 	}
 }

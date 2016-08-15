@@ -260,7 +260,7 @@ public class WandererContent  implements InventoryContent {
 	 * @return the ring id, or -1
 	 */
 	public int getMinDistanceRing(RoutingTable routingTable, DirectionRegistry from) {
-		Iterator<RouteValue> it = routingTable.getOrderedRouteNumbers();
+		Iterator<Integer> it = routingTable.getOrderedRouteNumbers();
 	
 		if (! it.hasNext())
 			return -1;
@@ -272,8 +272,8 @@ public class WandererContent  implements InventoryContent {
 		int min = 10000, ret = -1; // big value
 	
 		while (it.hasNext()) {
-			route = it.next().value();
-			if (routingTable.getDirection(route).getAmount() != from.getAmount()) {
+			route = it.next();
+			if (routingTable.getDirection(route) != from.getBlockFace()) {
 				if (! this.hasRouteTo(route)) {
 					if(ByteCart.debug)
 						ByteCart.log.info("ByteCart : found ring " + route + " was never visited");

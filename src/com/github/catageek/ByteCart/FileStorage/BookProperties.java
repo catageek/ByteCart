@@ -150,7 +150,6 @@ public final class BookProperties implements Closeable, Flushable {
 	public void close() throws IOException {
 		if(isClosed)
 			throw new IOException("Property file has been already closed");
-		file.close();
 		isClosed = true;
 	}
 

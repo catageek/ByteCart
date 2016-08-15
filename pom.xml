@@ -78,6 +78,7 @@
 							<includes>
 								<include>com.github.catageek:ByteCartAPI:jar:*</include>
 								<include>org.mcstats.bukkit:metrics-lite:jar:*</include>
+								<include>com.google.code.gson:gson:jar:*</include>
 							</includes>
 						</artifactSet>
 						<filters>
@@ -91,6 +92,12 @@
 								<artifact>org.mcstats.bukkit:metrics-lite:jar:*</artifact>
 								<includes>
 									<include>org/mcstats/*</include>
+								</includes>
+							</filter>
+							<filter>
+								<artifact>com.google.code.gson:gson:jar:*</artifact>
+								<includes>
+									<include>**</include>
 								</includes>
 							</filter>
 						</filters>
@@ -152,7 +159,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<bukkit.version>1.8-R0.1-SNAPSHOT</bukkit.version>
-		<bytecartapi.version>2.8.3</bytecartapi.version>
+		<bytecartapi.version>3.0.0-SNAPSHOT</bytecartapi.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -169,13 +176,18 @@
 			<groupId>com.github.catageek</groupId>
 			<artifactId>ByteCartAPI</artifactId>
 			<version>${bytecartapi.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
 			<artifactId>metrics-lite</artifactId>
 			<version>R7</version>
 		</dependency>
+		    <!--  Gson: Java to Json conversion -->
+		    <dependency>
+		      <groupId>com.google.code.gson</groupId>
+		      <artifactId>gson</artifactId>
+		      <version>2.5</version>
+		    </dependency>
 	</dependencies>
 	<version>3.0.0-SNAPSHOT</version>
 </project>

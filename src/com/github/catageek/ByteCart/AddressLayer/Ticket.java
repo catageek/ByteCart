@@ -73,12 +73,7 @@ final class Ticket {
 	 * @return true if it is a ticket
 	 */
 	private final static boolean isTicket(ItemStack stack) {
-		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta()) {
-			String bookauthor = ((BookMeta) stack.getItemMeta()).getAuthor();
-			if (bookauthor.equals(ByteCart.myPlugin.getConfig().getString("author")))
-				return true;
-		}
-		return false;
+		return BookFile.isBookFile(stack, "ticket");
 	}
 
 	/**
@@ -177,9 +172,6 @@ final class Ticket {
 		if (slot == -1)
 			return;
 		
-		ItemStack stack = getBookStack(ByteCart.myPlugin.getConfig().getString("author"),
-				ByteCart.myPlugin.getConfig().getString("title"));
-
 		// swap with an existing book if needed
 		int existingticket = Ticket.getTicketslot(inv);
 		if (existingticket != -1 && existingticket != slot) {
@@ -187,31 +179,15 @@ final class Ticket {
 			slot = existingticket;
 		}
 
-		inv.setItem(slot, stack);
+
+		try {
+			BookFile bookfile = BookFile.create(inv, slot, false, "ticket");
+			bookfile.setDescription(ByteCart.myPlugin.getConfig().getString("title"));
+			bookfile.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-
-	/**
-	 * Return an ItemStack containing a ticket
-	 *
-	 * @param author the name of the author
-	 * @param title the name of the ticket
-	 * @return the ItemStack
-	 */
-	private static ItemStack getBookStack(String author, String title) {
-		ItemStack stack;
-		/*
-		 * Here we create a ticket in slot, replacing empty book if needed
-		 */
-		BookMeta book;
-
-		book = (BookMeta) Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
-		book.setAuthor(author);
-		book.setTitle(title);
-		stack = new ItemStack(Material.WRITTEN_BOOK);
-		stack.setItemMeta(book);
-		return stack;
-	}
-
 
 	/**
 	 * Tell if a book_and_quill is empty

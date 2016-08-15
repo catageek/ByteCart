@@ -22,12 +22,10 @@ import com.github.catageek.ByteCart.ByteCart;
 public final class BookFile implements BCFile {
 
 	// log2 of length of a page in bytes
-	static final int PAGELOG = 8;
-	static final int PAGESIZE = 1 << PAGELOG;
+	static final int PAGESIZE = 155;
 	static final int MAXPAGE = 20;
 	static final int MAXSIZE = MAXPAGE * PAGESIZE;
 	private static final String prefix = ByteCart.myPlugin.getConfig().getString("author");
-	private final String author;
 	private BookMeta book;
 	private ItemStack stack;
 	private ItemStackMetaOutputStream outputstream;
@@ -41,45 +39,62 @@ public final class BookFile implements BCFile {
 	 * @param inventory the inventory
 	 * @param index the slot index
 	 * @param binary true to set binary mode
-	 */
-	public BookFile(Inventory inventory, int index, boolean binary) {
-		this(inventory, index, binary,  ".BookFile");
-	}
-
-	/**
-	 * @param inventory the inventory
-	 * @param index the slot index
-	 * @param binary true to set binary mode
 	 * @param name the suffix of the author name, or null
 	 */
-	public BookFile(Inventory inventory, int index, boolean binary, String name) {
+	private BookFile(Inventory inventory, int index, boolean binary) {
 		this.binarymode = binary;
 		this.container = inventory;
 		this.slot = index;
 		this.stack = inventory.getItem(index);
-		if (stack == null || ! stack.getType().equals(Material.WRITTEN_BOOK)) {
-			inventory.setItem(index, (stack = new ItemStack(Material.WRITTEN_BOOK)));
+		this.book = (BookMeta) stack.getItemMeta();		
+	}
+	
+	static public BookFile getFrom(Inventory inventory, int index, boolean binary, String name) {
+		ItemStack mystack = inventory.getItem(index);
+		if (mystack == null || ! mystack.getType().equals(Material.WRITTEN_BOOK)) {
+			return null;
 		}
-		this.book = (BookMeta) (stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK));
-		
+		BookMeta mybook = null;
+		if (mystack.hasItemMeta()) {
+			mybook = (BookMeta) mystack.getItemMeta();
+		}
+		else {
+			return null;
+		}
+		if ( ! mybook.hasAuthor() || ! mybook.getAuthor().startsWith(prefix)) {
+			return null;
+		}
+		if (name != null && ! mybook.getAuthor().equals(prefix + "." + name)) {
+			return null;
+		}
+		BookFile bookfile = new BookFile(inventory, index, binary);
 		// fix corrupted books in MC 1.8
 		try {
-			List<String> test = this.book.getPages();
+			List<String> test = mybook.getPages();
 		}
 		catch(NullPointerException e) {
-			inventory.setItem(index, (stack = new ItemStack(Material.WRITTEN_BOOK)));
-			this.book = (BookMeta) (stack.hasItemMeta() ? stack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK));
+			inventory.clear(index);
+			bookfile = create(inventory, index, binary, name);
 		}
-		
-		if (! this.book.hasAuthor() || ! this.book.getAuthor().startsWith(prefix)) {
-			if (name != null && name.length() != 0)
-				this.author = prefix + "." + name;
-			else
-				this.author = prefix;
-			this.book.setAuthor(author);
+		return bookfile;		
+	}
+	
+	static public BookFile create(Inventory inventory, int index, boolean binary, String name) {
+		ItemStack mystack = inventory.getItem(index);
+		if (mystack == null || ! mystack.getType().equals(Material.WRITTEN_BOOK)) {
+			mystack = new ItemStack(Material.WRITTEN_BOOK);
 		}
-		else
-			this.author = this.book.getAuthor();
+		final BookMeta mybook = (BookMeta) Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
+		if (name != null) {
+			final String myauthor = prefix + "." + name;
+			mybook.setAuthor(myauthor);
+		}
+		else {
+			mybook.setAuthor(prefix);
+		}
+		mystack.setItemMeta(mybook);
+		inventory.setItem(index, mystack);
+		return new BookFile(inventory, index, binary);
 	}
 
 	/* (non-Javadoc)
@@ -112,6 +127,10 @@ public final class BookFile implements BCFile {
 			return ! book.hasPages() || book.getPage(1).length() == 0;
 	}
 
+	@Override
+	public String getPages() {
+		return BookInputStream.readPages(book, binarymode);		
+	}
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#getOutputStream()
 	 */
@@ -139,21 +158,6 @@ public final class BookFile implements BCFile {
 			return new BookInputStream(outputstream);
 		}
 		return new BookInputStream(book, binarymode);
-	}
-
-	/* (non-Javadoc)
-	 * @see java.io.Closeable#close()
-	 */
-	@Override
-	public void close() throws IOException {
-		if (outputstream != null){
-			if (isClosed)
-				throw new IOException("Book File has already been closed");
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : BookFile : closing");
-			isClosed = true;
-		}
-
 	}
 
 	/* (non-Javadoc)
@@ -201,12 +205,23 @@ public final class BookFile implements BCFile {
 	 *
 	 * @param inventory the inventory
 	 * @param index the slot number
+	 * @param suffix suffix of the author name
 	 * @return true if the slot contains a file and the author field begins with author configuration parameter
 	 */
-	public static boolean isBookFile(Inventory inventory, int index) {
-		ItemStack stack = inventory.getItem(index);
+	public static boolean isBookFile(Inventory inventory, int index, String suffix) {
+		return isBookFile(inventory.getItem(index), suffix);
+	}
+
+	/**
+	 * Tell if an ItemStack contains a file in a book
+	 *
+	 * @param stack the ItemStack
+	 * @param suffix suffix of the author name
+	 * @return true if the slot contains a file and the author field begins with author configuration parameter
+	 */
+	public static boolean isBookFile(ItemStack stack, String suffix) {
 		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta())
-			return ((BookMeta) stack.getItemMeta()).getAuthor().startsWith(prefix);
+			return ((BookMeta) stack.getItemMeta()).getAuthor().equals(prefix + "." + suffix);
 		return false;		
 	}
 
@@ -222,5 +237,18 @@ public final class BookFile implements BCFile {
 		}
 		else
 			return book.getTitle();
+	}
+	
+	public static ItemStack sign(ItemStack mystack, String name) {
+		if (mystack  == null || mystack.getType() != Material.BOOK_AND_QUILL) {
+			return null;
+		}
+		mystack.setType(Material.WRITTEN_BOOK);
+		final BookMeta mybook = (BookMeta) mystack.getItemMeta();
+		if (name != null)
+			mybook.setAuthor(BookFile.prefix + "." + "name");
+		else
+			mybook.setAuthor(BookFile.prefix);
+		return mystack;
 	}
 }

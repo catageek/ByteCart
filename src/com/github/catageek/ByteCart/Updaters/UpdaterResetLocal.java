@@ -101,16 +101,16 @@ final class UpdaterResetLocal extends UpdaterLocal implements Wanderer {
 		if (this.getSignAddress().isValid()
 				&& this.getSignAddress().getRegion().getAmount() != getWandererRegion()) {
 			// case this is not the right region
-			DirectionRegistry dir = RoutingTable.getDirection(getWandererRegion());
+			BlockFace dir = RoutingTable.getDirection(getWandererRegion());
 			if (dir != null)
-				return dir.getBlockFace();
+				return dir;
 			return this.getFrom().getBlockFace();
 		}
 		// the route where we went the lesser
 		int preferredroute = this.getContent().getMinDistanceRing(RoutingTable, getFrom());
-		DirectionRegistry dir;
+		BlockFace dir;
 		if ((dir = RoutingTable.getDirection(preferredroute)) != null)
-			return dir.getBlockFace();
+			return dir;
 		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getFrom().getBlockFace());
 	}
 }

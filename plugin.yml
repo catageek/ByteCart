@@ -51,6 +51,8 @@ permissions:
             bytecart.bcticket: true
             bytecart.bcback: true
             bytecart.bcdmapsync: true
+            bytecart.bcedit: true
+            bytecart.bcsign: true
             bytecart.host.list: true
             bytecart.host.manager: true
 
@@ -207,6 +209,10 @@ permissions:
         default: true
     bytecart.bcdmapsync:
         default: false
+    bytecart.bcedit:
+        default: false
+    bytecart.bcsign:
+        default: false
     bytecart.host.user:
         default: true
     bytecart.host.list:
@@ -267,4 +273,14 @@ commands:
                    /<command> [lookup] hostname|ip
                    /<command> list [page]
         permission: bytecart.host.user
+        permission-message: You don't have permission <permission>
+    bcedit:
+        description: edit a routing table book
+        usage: "Usage : /<command>"
+        permission: bytecart.bcedit
+        permission-message: You don't have permission <permission>
+    bcsign:
+        description: sign a routing table book
+        usage: "Usage : /<command>"
+        permission: bytecart.bcsign
         permission-message: You don't have permission <permission>

@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Updaters.DefaultRouterWanderer;
@@ -45,14 +46,14 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 		try {
 			if (IPaddress.getTTL() != 0) {
 				// lookup destination region
-				return RoutingTable.getDirection(IPaddress.getRegion().getAmount()).getBlockFace();
+				return RoutingTable.getDirection(IPaddress.getRegion().getAmount());
 			}
 		} catch (NullPointerException e) {
 		}
 
 		// if TTL reached end of life and is not returnable, then we lookup region 0
 		try {
-			return RoutingTable.getDirection(0).getBlockFace();
+			return RoutingTable.getDirection(0);
 		} catch (NullPointerException e) {
 		}
 

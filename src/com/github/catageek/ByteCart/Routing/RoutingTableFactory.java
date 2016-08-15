@@ -2,11 +2,12 @@ package com.github.catageek.ByteCart.Routing;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
-import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.FileStorage.BookFile;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 
 /**
@@ -22,21 +23,30 @@ public final class RoutingTableFactory {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	static public RoutingTableWritable getRoutingTable(Inventory inv) throws IOException, ClassNotFoundException {
-		RoutingTableBook rt;
-		
-		// If upgrading from ByteCart 1.x, cleaning routing table
-		if (! inv.contains(Material.WRITTEN_BOOK))
-			inv.clear();
-		
-		try (BookFile file = new BookFile(inv, 0, true, "RoutingTableWritable")) {
-			if (file.isEmpty())
-				return new RoutingTableBook(inv);
+	static public RoutingTableWritable getRoutingTable(Inventory inv, int slot) throws ClassNotFoundException, IOException, JsonSyntaxException {
+		BookFile file = BookFile.getFrom(inv, slot, true, ".BookFile");
+		RoutingTableBook rt = null;
+		if (file != null && ! file.isEmpty()) {
 			ObjectInputStream ois = new ObjectInputStream(file.getInputStream());
 			rt = (RoutingTableBook) ois.readObject();
+			rt.setInventory(inv);
+			return rt;
 		}
-		rt.setInventory(inv);
-		return rt;
+	
+		file = BookFile.getFrom(inv, slot, false, "RoutingTable");
+		if (file == null || file.isEmpty()) {
+			if (inv.getItem(slot) == null) {
+				return new RoutingTableBookJSON(inv, slot);
+			}
+			throw new IOException("Slot " + slot + " is not empty.");
+		}
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		RoutingTableBookJSON rtj = gson.fromJson(file.getPages(), RoutingTableBookJSON.class);
+		rtj.setInventory(inv, slot);
+		return rtj;
 	}
-
+	
+	static public Boolean isRoutingTable(Inventory inv, int slot) {
+		return BookFile.isBookFile(inv, slot, "RoutingTable");
+	}
 }

@@ -26,9 +26,12 @@ public class AddressFactory {
 	 */
 	@SuppressWarnings("unchecked")
 	public final static <T extends Address> T getAddress(Inventory inv){
-		int slot;
-		if ((slot = Ticket.getTicketslot(inv)) != -1)
-			return (T) new AddressBook(new Ticket(new BookFile(inv, slot, false, "ticket"), Conf.NETWORK), Parameter.DESTINATION);
+		int slot = Ticket.getTicketslot(inv);
+		if (slot != -1) {
+			BookFile bookfile = BookFile.getFrom(inv, slot, false, "ticket");
+			if (bookfile != null)
+				return (T) new AddressBook(new Ticket(bookfile, Conf.NETWORK), Parameter.DESTINATION);
+		}
 		return null;
 	}
 
@@ -44,13 +47,13 @@ public class AddressFactory {
 		if (inv.getHolder() instanceof Player) {
 			destination = ByteCart.myPlugin.getConfig().getString("PlayersNoTicketDefaultRoute", "0.0.0");
 			if ((new BC7010(null,(Player)inv.getHolder())).setAddress(destination,"No ticket found !")) {
-				return (T) new AddressBook(new Ticket(new BookFile(inv, Ticket.getTicketslot(inv), false, "ticket"), Conf.NETWORK), Parameter.DESTINATION);
+				return (T) new AddressBook(new Ticket(BookFile.getFrom(inv, Ticket.getTicketslot(inv), false, "ticket"), Conf.NETWORK), Parameter.DESTINATION);
 			}
 		}
 		else if (inv.getHolder() instanceof Vehicle) {
 			destination = ByteCart.myPlugin.getConfig().getString("EmptyCartsDefaultRoute", "0.0.0");
 			if ((new BC7011(null,(Vehicle)inv.getHolder())).setAddress(destination,"No ticket found !")) {
-				return (T) new AddressBook(new Ticket(new BookFile(inv, Ticket.getTicketslot(inv), false, "ticket"), Conf.NETWORK), Parameter.DESTINATION);
+				return (T) new AddressBook(new Ticket(BookFile.getFrom(inv, Ticket.getTicketslot(inv), false, "ticket"), Conf.NETWORK), Parameter.DESTINATION);
 			}
 		}
 		return null;

@@ -5,7 +5,6 @@ import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Signs.BC8010;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
-import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 
 abstract class AbstractUpdater extends AbstractWanderer {
@@ -32,9 +31,9 @@ abstract class AbstractUpdater extends AbstractWanderer {
 	 */
 	public final BlockFace manageBorder() {
 		if ((isAtBorder())) {
-			DirectionRegistry dir;
+			BlockFace dir;
 			if ((dir = this.getRoutingTable().getDirection(this.getWandererRegion())) != null)
-				return dir.getBlockFace();
+				return dir;
 			return getFrom().getBlockFace();
 		}
 		return null;

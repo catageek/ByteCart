@@ -78,12 +78,12 @@ class BookOutputStream extends ByteArrayOutputStream {
 
 		// loop for full pages
 		for (i = 0; i < count; i++) {
-			strings[i] = sb.substring(i << BookFile.PAGELOG, j << BookFile.PAGELOG);
+			strings[i] = sb.substring(i * BookFile.PAGESIZE, j * BookFile.PAGESIZE);
 			j++;
 		}
 
 		// last page
-		strings[count] = sb.substring(i << BookFile.PAGELOG);
+		strings[count] = sb.substring(i * BookFile.PAGESIZE);
 
 		this.book.setPages(strings);
 		

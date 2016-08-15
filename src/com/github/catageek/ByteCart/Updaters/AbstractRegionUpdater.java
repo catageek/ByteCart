@@ -45,7 +45,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 	 */
 	protected final void routeUpdates(BlockFace To) {
 		if(isRouteConsumer()) {
-			Set<Integer> connected = getRoutingTable().getDirectlyConnectedList(getFrom());
+			Set<Integer> connected = getRoutingTable().getDirectlyConnectedList(getFrom().getBlockFace());
 			int current = getCurrent();
 
 			current = (current == -2 ? 0 : current); 
@@ -56,21 +56,21 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 
 				Iterator<Integer> it = connected.iterator();
 				while (it.hasNext()) {
-					getRoutingTable().removeEntry(it.next(), getFrom());
+					getRoutingTable().removeEntry(it.next(), getFrom().getBlockFace());
 				}
 
 				// Storing the route from where we arrive
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart : Wanderer : storing ring " + current + " direction " + getFrom().ToString());
 
-				getRoutingTable().setEntry(current, getFrom(), new Metric(0));
+				getRoutingTable().setEntry(current, getFrom().getBlockFace(), 0);
 				Routes.updateTimestamp();
 
 			}
 
 			// loading received routes in router if coming from another router
 			if (this.getRoutes().getLastrouterid() != this.getCenter().hashCode())
-				getRoutingTable().Update(getRoutes(), getFrom());
+				getRoutingTable().Update(getRoutes(), getFrom().getBlockFace());
 
 
 			// preparing the routes to send

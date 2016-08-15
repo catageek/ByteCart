@@ -8,7 +8,6 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Updaters.UpdaterContent;
-import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
 
 /**
@@ -23,7 +22,7 @@ public abstract class AbstractRoutingTable {
 	 * @param neighbour the IGP packet received
 	 * @param from the direction from where we received it
 	 */
-	public void Update(UpdaterContent neighbour, DirectionRegistry from) {
+	public void Update(UpdaterContent neighbour, BlockFace from) {
 		// Djikstra algorithm
 		// search for better routes in the received ones
 		int interfacedelay = neighbour.getInterfaceDelay();
@@ -39,9 +38,9 @@ public abstract class AbstractRoutingTable {
 			boolean directlyconnected = (this.getMinMetric(ring) == 0);
 			
 			if ( ! directlyconnected && (routermetric > computedmetric || routermetric < 0)) {
-				this.setEntry(ring, from, new Metric(computedmetric));
+				this.setEntry(ring, from, computedmetric);
 				if(ByteCart.debug) {
-					ByteCart.log.info("ByteCart : Update : ring = " + ring + ", metric = " + computedmetric + ", direction " + from.ToString());
+					ByteCart.log.info("ByteCart : Update : ring = " + ring + ", metric = " + computedmetric + ", direction " + from);
 				}
 				neighbour.updateTimestamp();
 			}
@@ -54,7 +53,7 @@ public abstract class AbstractRoutingTable {
 			if(!neighbour.hasRouteTo(route = it.next())) {
 				this.removeEntry(route, from);
 				if(ByteCart.debug) {
-					ByteCart.log.info("ByteCart : Remove : ring = " + route + " from " + from.ToString());
+					ByteCart.log.info("ByteCart : Remove : ring = " + route + " from " + from);
 				}
 				neighbour.updateTimestamp();
 			}
@@ -68,7 +67,7 @@ public abstract class AbstractRoutingTable {
 	 * @param direction the direction
 	 * @return true if the track is directly connected at this direction
 	 */
-	public final boolean isDirectlyConnected(int ring, DirectionRegistry direction) {
+	public final boolean isDirectlyConnected(int ring, BlockFace direction) {
 		if (this.getDirection(ring) != null)
 			return this.getMetric(ring, direction) == 0;
 		return false;
@@ -81,7 +80,7 @@ public abstract class AbstractRoutingTable {
 	 * @param direction the direction
 	 * @return the track number
 	 */
-	public final int getDirectlyConnected(DirectionRegistry direction) {
+	public final int getDirectlyConnected(BlockFace direction) {
 		Set<Integer> rings = getDirectlyConnectedList(direction);
 		return rings.size() == 1 ? rings.iterator().next() : -1 ;
 	}
@@ -99,7 +98,7 @@ public abstract class AbstractRoutingTable {
 			case SOUTH:
 			case WEST:
 
-				if (this.getDirectlyConnectedList(new DirectionRegistry(face)).isEmpty())
+				if (this.getDirectlyConnectedList(face).isEmpty())
 					return face;
 			default:
 				break;
@@ -114,7 +113,7 @@ public abstract class AbstractRoutingTable {
 	 * @param direction the direction
 	 * @return a list of track numbers
 	 */
-	abstract public Set<Integer> getDirectlyConnectedList(DirectionRegistry direction);
+	abstract public Set<Integer> getDirectlyConnectedList(BlockFace direction);
 
 	/**
 	 * Get the metric associated with this entry and this direction
@@ -123,7 +122,7 @@ public abstract class AbstractRoutingTable {
 	 * @param direction the direction
 	 * @return the metric
 	 */
-	abstract public int getMetric(int entry, DirectionRegistry direction);
+	abstract public int getMetric(int entry, BlockFace direction);
 	
 	/**
 	 * Get the minimum metric for a specific entry
@@ -140,7 +139,7 @@ public abstract class AbstractRoutingTable {
 	 * @param direction the direction to associate
 	 * @param metric the metric to associate
 	 */
-	abstract public void setEntry(int entry, DirectionRegistry direction, Metric metric);
+	abstract public void setEntry(int entry, BlockFace direction, int metric);
 
 	/**
 	 * Tells if there is no record for an entry
@@ -155,7 +154,7 @@ public abstract class AbstractRoutingTable {
 	 * 
 	 * @return an iterator
 	 */
-	abstract protected <T extends RouteValue> Iterator<T> getOrderedRouteNumbers();
+	abstract protected Iterator<Integer> getOrderedRouteNumbers();
 
 	/**
 	 * Get a set of track numbers that are seen in a direction, but not directly connected
@@ -163,7 +162,7 @@ public abstract class AbstractRoutingTable {
 	 * @param direction the direction
 	 * @return a set of track numbers
 	 */
-	abstract protected Set<Integer> getNotDirectlyConnectedList(DirectionRegistry direction);
+	abstract protected Set<Integer> getNotDirectlyConnectedList(BlockFace direction);
 
 	/**
 	 * Remove a line from the routing table
@@ -171,7 +170,7 @@ public abstract class AbstractRoutingTable {
 	 * @param entry the track number
 	 * @param from the direction to remove
 	 */
-	abstract public void removeEntry(int entry, DirectionRegistry from);
+	abstract public void removeEntry(int entry, BlockFace from);
 
 	/**
 	 * Return the best direction matching the entry
@@ -179,5 +178,5 @@ public abstract class AbstractRoutingTable {
 	 * @param entry the track number
 	 * @return the direction
 	 */
-	abstract public DirectionRegistry getDirection(int entry);
+	abstract public BlockFace getDirection(int entry);
 }

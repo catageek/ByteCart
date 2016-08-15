@@ -22,12 +22,15 @@ abstract public class WandererContentFactory {
 	public static WandererContent getWandererContent(Inventory inv)
 			throws IOException, ClassNotFoundException {
 		WandererContent rte = null;
-		try (BookFile file = new BookFile(inv, 0, true)) {
-			if (! file.isEmpty()) {
-				ObjectInputStream ois = new ObjectInputStream(file.getInputStream());
-				rte = (WandererContent) ois.readObject();
-			}
+		BookFile file = BookFile.getFrom(inv, 0, true, null);
+		if (file == null) {
+			throw new IOException("Book not found");
 		}
+		if (! file.isEmpty()) {
+			ObjectInputStream ois = new ObjectInputStream(file.getInputStream());
+			rte = (WandererContent) ois.readObject();
+		}
+		
 		rte.setInventory(inv);
 		return rte;
 	}
@@ -93,7 +96,7 @@ abstract public class WandererContentFactory {
 				match.append(suffix).append(dot);
 
 			match.append(".*");
-			if (BookFile.isBookFile(inv, 0) 
+			if (BookFile.isBookFile(inv, 0, type) 
 					&& booktitle.matches(match.toString())) {
 					return true;
 			}
@@ -103,26 +106,28 @@ abstract public class WandererContentFactory {
 
 	public static void createWanderer(Inventory inv, int region, Level level, Player player
 			, String name, String type) throws IOException {
-		try (BCFile file = new BookFile(inv, 0, true, name)) {
-			String dot = ".";
-			StringBuilder match = new StringBuilder();
-			match.append(name).append(dot).append(level.scope.name);
-			match.append(dot).append(type).append(dot);
-			file.setDescription(match.toString());
-			file.flush();
-		}
+		BCFile file = BookFile.create(inv, 0, true, name);
+		String dot = ".";
+		StringBuilder match = new StringBuilder();
+		match.append(name).append(dot).append(level.scope.name);
+		match.append(dot).append(type).append(dot);
+		file.setDescription(match.toString());
+		file.flush();
+		
 	}
 
 	public static <T extends InventoryContent> void saveContent(T rte)
 			throws IOException, ClassNotFoundException {
 		Inventory inv = rte.getInventory();
 
-		try (BCFile file = new BookFile(inv, 0, true)) {
-			file.clear();
-			ObjectOutputStream oos = new ObjectOutputStream(file.getOutputStream());
-			oos.writeObject(rte);
-			oos.flush();
+		BCFile file = BookFile.getFrom(inv, 0, true, null);
+		if (file == null) {
+			throw new IOException("No book found");
 		}
+		file.clear();
+		ObjectOutputStream oos = new ObjectOutputStream(file.getOutputStream());
+		oos.writeObject(rte);
+		oos.flush();	
 	}
 
 	public static void deleteContent(Inventory inv) {
