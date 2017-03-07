@@ -46,7 +46,13 @@ public final class BCDynmapPlugin implements Listener {
 
 	public BCDynmapPlugin() {
 		DynmapCommonAPI api = (DynmapCommonAPI) Bukkit.getPluginManager().getPlugin("dynmap");
-		MarkerAPI markerapi = api.getMarkerAPI();
+
+		MarkerAPI markerapi = null;
+		try {
+			markerapi = api.getMarkerAPI();
+		} catch (NullPointerException e) {
+			throw new MissingResourceException("Dynmap plugin is not present, please install it or set dynmap = false in config file", MarkerAPI.class.getName(), "dynmap");
+		}
 
 		if (markerapi == null)
 			throw new MissingResourceException("Dynmap API could not be loaded", MarkerAPI.class.getName(), "dynmap");
