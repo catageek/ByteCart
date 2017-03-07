@@ -3,19 +3,15 @@
 # set true if you want a lot debug messages on the console
 debug: false
 
-# set false to disable metrics stats submission
-metrics: true 
-
 # set false to disable hostname resolution
 hostname_resolution: true
 
-# the name of the database
+# the name of the database for hostname resolution
 # default : BCHostnames
 database: BCHostnames
 
-# choose the sql database type.
-# default: sqllite
-sql: mysql 
+# choose the sql database type for hostname resolution: mysql or sqllite
+sql: sqllite
 
 # set false if you don't want to load chunks automatically around a moving cart
 loadchunks: true
@@ -42,7 +38,7 @@ FixBroken18: false
 # Set to true to enable the old behaviour of BC9000 i.e BC9000 as closing sign of subtrack
 # if false, BC9000 can be used anywhere without breaking updater configuration
 # if true, BC9000 can be used only to close subtrack.
-# default : true
+# default : false
 oldBC9000behaviour: false
 
 # Name to use as author of ticket book
@@ -74,8 +70,8 @@ buildtax.BC9004: 0
 buildtax.BC9008: 0
 buildtax.BC9016: 0
 
-# initial value of time-to-live stack (slot #4)
-# number of routers that a storagecart may use
+# initial value of time-to-live
+# number of routers that a cart may cross
 # before going to recycling center.
 # this is to prevent loops.
 TTL.value: 64

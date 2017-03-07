@@ -1,13 +1,10 @@
 package com.github.catageek.ByteCart;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.MetricsLite;
-
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
 import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
 import com.github.catageek.ByteCart.EventManagement.ConstantSpeedListener;
@@ -74,16 +71,6 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 		if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
 			log.info("[ByteCart] loading dynmap plugin.");
 			getServer().getPluginManager().registerEvents(new BCDynmapPlugin(), this);
-		}
-
-		if (this.getConfig().getBoolean("metrics", true)) {
-			try {
-				MetricsLite metrics = new MetricsLite(this);
-				metrics.start();
-				log.info("[ByteCart] Submitting stats to MCStats.");
-			} catch (IOException e) {
-				// Failed to submit the stats :-(
-			}
 		}
 
 		if (this.getConfig().getBoolean("hostname_resolution", true)) {
