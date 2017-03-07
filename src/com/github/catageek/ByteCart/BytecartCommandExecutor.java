@@ -299,62 +299,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 			BCDynmapPlugin.removeObsoleteMarkers();
 			return true;
 		}
-
-
-		if (cmd.getName().equalsIgnoreCase("bcedit")) {
-			if (!(sender instanceof Player)) {
-				sender.sendMessage("This command can only be run by a player.");
-			} else {
-				final Player player = (Player) sender;
-				final PlayerInventory inv = player.getInventory();
-				if (! RoutingTableFactory.isRoutingTable(inv, player.getInventory().getHeldItemSlot())) {
-					LogUtil.sendError(player, "You must hold a routing table book in your hand.");
-					return false;
-				}
-				final ItemStack stack = player.getItemInHand();
-				stack.setType(Material.BOOK_AND_QUILL);
-				inv.setItemInHand(stack);
-				player.updateInventory();
-				return true;
-			}
-		}
-
-		if (cmd.getName().equalsIgnoreCase("bcsign")) {
-			final PlayerInventory inv;
-			if (!(sender instanceof Player)) {
-				sender.sendMessage("This command can only be run by a player.");
-			} else {
-				final Player player = (Player) sender;
-				final ItemStack oldstack = player.getItemInHand();
-				final ItemStack stack = oldstack.clone();
-				if (BookFile.sign(stack, "RoutingTable") == null) {
-					LogUtil.sendError(player, "You must hold a routing table book in your hand.");
-					return false;					
-				}
-				inv = player.getInventory();
-				inv.setItemInHand(stack);
-				try {
-					final RoutingTableWritable rt = RoutingTableFactory.getRoutingTable(player.getInventory(), player.getInventory().getHeldItemSlot());
-					if (rt == null) {
-						LogUtil.sendError(player, "Error");
-						inv.setItemInHand(oldstack);
-						return true;
-					}
-				}
-				catch(JsonSyntaxException e) {
-					LogUtil.sendError(player, e.getLocalizedMessage());
-					inv.setItemInHand(oldstack);
-					return true;
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				player.updateInventory();
-				return true;
-			}
-		}
-		
+	
 		return false;
 	}
 
