@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
@@ -62,7 +63,12 @@ public final class ConstantSpeedListener implements Listener {
 
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
-		speedmap.remove(event.getVehicle().getEntityId());
+		Entity passenger = event.getVehicle().getPassenger();
+		if (passenger != null && passenger.getEntityId() == event.getEntity().getEntityId())
+			event.setCollisionCancelled(true);
+		else {
+			speedmap.remove(event.getVehicle().getEntityId());
+		}
 	}
 
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.MONITOR)
