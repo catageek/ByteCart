@@ -11,14 +11,22 @@
 			<url>file://${basedir}/lib</url>
 		</repository>
 		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
 			<id>repobcapi-rel</id>
 			<name>bytecart.catageek.info API Releases</name>
-			<url>http://bytecart.catageek.info/mavenAPI/repositories/releases/</url>
+			<url>http://catageek.free.fr/bytecart/maven/repositories/releases/</url>
 		</repository>
 		<repository>
 			<id>repobcapi-snap</id>
 			<name>bytecart.catageek.info API Snapshots</name>
-			<url>http://bytecart.catageek.info/mavenAPI/repositories/snapshots/</url>
+			<url>http://catageek.free.fr/bytecart/maven/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>dynmap-repo</id>
+			<url>http://repo.mikeprimm.com/</url>
 		</repository>
 		<repository>
 			<id>Plugin Metrics</id>
@@ -29,17 +37,17 @@
 	<distributionManagement>
 		<site>
 			<id>website</id>
-			<url>ftp://bytecart.catageek.info/bytecart/maven/</url>
+			<url>ftp://catageek.free.fr/bytecart/maven/</url>
 		</site>
 		<repository>
 			<id>repobc-rel</id>
 			<name>bytecart.catageek.info Releases</name>
-			<url>ftp://bytecart.catageek.info/bytecart/maven/repositories/releases/</url>
+			<url>ftp://catageek.free.fr/bytecart/maven/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>repobc-snap</id>
 			<name>bytecart.catageek.info Snapshots</name>
-			<url>ftp://bytecart.catageek.info/bytecart/maven/repositories/snapshots/</url>
+			<url>ftp://catageek.free.fr/bytecart/maven/repositories/snapshots/</url>
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 	</distributionManagement>
@@ -168,8 +176,8 @@
 			<version>${bukkit.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>external-lib</groupId>
-			<artifactId>dynmap</artifactId>
+			<groupId>us.dynmap</groupId>
+			<artifactId>dynmap-api</artifactId>
 			<version>2.1</version>
 		</dependency>
 		<dependency>
