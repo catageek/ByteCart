@@ -1,9 +1,6 @@
 package com.github.catageek.ByteCart.Signs;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.TreeMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -26,7 +23,6 @@ import com.github.catageek.ByteCartAPI.Event.SignPostRouteEvent;
 import com.github.catageek.ByteCartAPI.Event.SignPreRouteEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterPassRouterEvent;
 import com.github.catageek.ByteCartAPI.Signs.BCRouter;
-import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;

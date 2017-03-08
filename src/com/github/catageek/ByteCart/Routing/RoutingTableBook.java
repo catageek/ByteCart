@@ -4,7 +4,6 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -17,7 +16,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.FileStorage.BookFile;
 import com.github.catageek.ByteCart.Storage.ExternalizableTreeMap;
 import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
@@ -28,6 +26,7 @@ import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 final class RoutingTableBook extends AbstractRoutingTable implements
 RoutingTableWritable, Externalizable {
 
+	@SuppressWarnings("unused")
 	private boolean wasModified = false;
 
 	private ExternalizableTreeMap<RouteNumber, RouteProperty> map = new ExternalizableTreeMap<RouteNumber,RouteProperty>();

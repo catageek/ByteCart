@@ -14,7 +14,6 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterClearStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterClearSubnetEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSignInvalidateEvent;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
-import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 final class UpdaterResetLocal extends UpdaterLocal implements Wanderer {

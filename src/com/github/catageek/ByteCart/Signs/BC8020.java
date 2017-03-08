@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Updaters.DefaultRouterWanderer;

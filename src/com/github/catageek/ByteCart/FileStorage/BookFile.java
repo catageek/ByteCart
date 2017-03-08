@@ -70,6 +70,7 @@ public final class BookFile implements BCFile {
 		BookFile bookfile = new BookFile(inventory, index, binary);
 		// fix corrupted books in MC 1.8
 		try {
+			@SuppressWarnings("unused")
 			List<String> test = mybook.getPages();
 		}
 		catch(NullPointerException e) {

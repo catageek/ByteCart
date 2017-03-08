@@ -14,7 +14,6 @@ import com.github.catageek.ByteCart.Routing.Metric;
 import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Wanderer.WandererContent;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
-import com.github.catageek.ByteCartAPI.Wanderer.RouteValue;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 /**

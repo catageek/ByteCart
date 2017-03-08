@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.BookMeta;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.Base64;
 
 /**

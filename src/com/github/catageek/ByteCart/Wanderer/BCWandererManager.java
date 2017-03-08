@@ -7,7 +7,6 @@ import java.util.Map;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCartAPI.Wanderer.WandererManager;
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.Wanderer.InventoryContent;
 import com.github.catageek.ByteCartAPI.Wanderer.WandererFactory;
 

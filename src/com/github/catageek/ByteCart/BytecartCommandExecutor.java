@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,18 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.BookMeta;
-
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.AddressLayer.AddressString;
 import com.github.catageek.ByteCart.EventManagement.ByteCartInventoryListener;
 import com.github.catageek.ByteCart.EventManagement.ByteCartUpdaterMoveListener;
-import com.github.catageek.ByteCart.FileStorage.BookFile;
-import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
-import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
 import com.github.catageek.ByteCart.Signs.BC7017;
@@ -32,7 +24,6 @@ import com.github.catageek.ByteCart.Updaters.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.LogUtil;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
-import com.google.gson.JsonSyntaxException;
 
 /**
  * The command executor
