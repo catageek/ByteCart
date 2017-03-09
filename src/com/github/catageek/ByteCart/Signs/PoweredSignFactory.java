@@ -59,6 +59,7 @@ public class PoweredSignFactory {
 			// then we instantiate accordingly
 			switch (ICnumber) {
 
+				case 7000:
 				case 7001:
 					return (Powerable)(new BC7001(block, null));
 				case 7003:
