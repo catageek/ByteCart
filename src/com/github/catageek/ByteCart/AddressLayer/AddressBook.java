@@ -150,7 +150,7 @@ final class AddressBook implements AddressRouted {
 	 */
 	@Override
 	public void initializeTTL() {
-		this.ticket.resetValue(Parameter.TTL, "64");
+		this.ticket.resetValue(Parameter.TTL, ByteCart.myPlugin.getConfig().getString("TTL.value"));
 	}
 
 	/* (non-Javadoc)
