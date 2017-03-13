@@ -56,22 +56,20 @@ public final class ConstantSpeedListener implements Listener {
 			speedmap.remove(id);
 	}
 
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.MONITOR)
+	@EventHandler (ignoreCancelled = false, priority = EventPriority.MONITOR)
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
 		speedmap.remove(event.getVehicle().getEntityId());
 	}
 
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.MONITOR)
+	@EventHandler (ignoreCancelled = false, priority = EventPriority.MONITOR)
 	public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
 		Entity passenger = event.getVehicle().getPassenger();
-		if (passenger != null && passenger.getEntityId() == event.getEntity().getEntityId())
-			event.setCollisionCancelled(true);
-		else {
+		if (passenger == null || passenger.getEntityId() != event.getEntity().getEntityId()) {
 			speedmap.remove(event.getVehicle().getEntityId());
 		}
 	}
 
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.MONITOR)
+	@EventHandler (ignoreCancelled = false, priority = EventPriority.MONITOR)
 	public void onVehicleBlockCollision(VehicleBlockCollisionEvent event) {
 		speedmap.remove(event.getVehicle().getEntityId());
 	}
