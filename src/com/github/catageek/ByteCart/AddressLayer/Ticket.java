@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.ByteCart;
@@ -48,10 +49,9 @@ final class Ticket {
 		if (inv.contains(Material.WRITTEN_BOOK)) {
 
 			// priority given to book in hand
-			if (inv.getHolder() instanceof Player) {
-				Player player = (Player) inv.getHolder();
-				if (isTicket(player.getItemInHand())) {
-					return player.getInventory().getHeldItemSlot();
+			if (inv instanceof PlayerInventory) {
+				if (isTicket(((PlayerInventory) inv).getItemInMainHand())) {
+					return ((PlayerInventory) inv).getHeldItemSlot();
 				}
 			}
 
@@ -90,10 +90,9 @@ final class Ticket {
 				&& inv.contains(Material.BOOK_AND_QUILL)) {
 
 			// priority given to book in hand
-			if (inv.getHolder() instanceof Player) {
-				Player player = (Player) inv.getHolder();
-				if (isEmptyBook(stack = player.getItemInHand())) {
-					return player.getInventory().getHeldItemSlot();
+			if (inv instanceof PlayerInventory) {
+				if (isEmptyBook(stack = ((PlayerInventory) inv).getItemInMainHand())) {
+					return ((PlayerInventory) inv).getHeldItemSlot();
 				}
 			}
 
