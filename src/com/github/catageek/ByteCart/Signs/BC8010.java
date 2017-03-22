@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.Signs;
 
 import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -15,8 +16,8 @@ import com.github.catageek.ByteCart.AddressLayer.ReturnAddressFactory;
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.CollisionManagement.Router;
 import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBuilder;
-import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
+import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.SignPostRouteEvent;

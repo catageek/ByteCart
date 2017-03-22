@@ -6,7 +6,6 @@ import java.util.Calendar;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Vehicle;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -33,6 +32,7 @@ public class ByteCartUpdaterMoveListener implements Listener {
 	private static UpdaterSet updaterset = new UpdaterSet();
 
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onVehicleMoveEvent(VehicleMoveEvent event) {
 
 		Location loc = event.getFrom();
@@ -52,13 +52,13 @@ public class ByteCartUpdaterMoveListener implements Listener {
 		if (v instanceof InventoryHolder) {
 			Inventory inv = ((InventoryHolder) v).getInventory();
 			if (WandererContentFactory.isWanderer(inv, "Updater")) {
-				Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterMoveEvent(event));
+				Bukkit.getServer().getPluginManager().callEvent(new UpdaterMoveEvent(event));
 				try {
 					long duration = UpdaterContentFactory.getUpdaterContent(inv).getExpirationTime()
 							- Calendar.getInstance().getTimeInMillis();
 					if (duration < 1000) {
 						updaterset.getMap().reset(duration/50, v.getEntityId());
-						Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterRemoveEvent(v.getEntityId()));
+						Bukkit.getServer().getPluginManager().callEvent(new UpdaterRemoveEvent(v.getEntityId()));
 					}
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -82,12 +82,13 @@ public class ByteCartUpdaterMoveListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
 		Vehicle v = event.getVehicle();
 		if (v instanceof InventoryHolder) {
 			Inventory inv = ((InventoryHolder) v).getInventory();
 			if (WandererContentFactory.isWanderer(inv, "Updater")) {
-				Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterRemoveEvent(v.getEntityId()));
+				Bukkit.getServer().getPluginManager().callEvent(new UpdaterRemoveEvent(v.getEntityId()));
 			}
 		}
 	}

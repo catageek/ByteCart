@@ -18,10 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import code.husky.Database;
-import code.husky.mysql.MySQL;
-import code.husky.sqlite.SQLite;
-
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.AddressLayer.Resolver;
@@ -31,6 +27,10 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterClearStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterPassStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSetStationEvent;
 import com.github.catageek.ByteCartAPI.Signs.Station;
+
+import code.husky.Database;
+import code.husky.mysql.MySQL;
+import code.husky.sqlite.SQLite;
 
 public final class BCHostnameResolutionPlugin implements Resolver,Listener,CommandExecutor {
 	private String database = ByteCart.myPlugin.getConfig().getString("database","BCHostnames");
@@ -253,6 +253,7 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 	}
 
 	@EventHandler
+	@SuppressWarnings("ucd")
 	public void onSignCreate(SignCreateEvent event) {
 		if (event.getIc() instanceof Station) {
 			try {
@@ -273,6 +274,7 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 	}
 
 	@EventHandler
+	@SuppressWarnings("ucd")
 	public void onSignRemove(SignRemoveEvent event) {
 		if (event.getIc() instanceof Station) {
 			try {
@@ -289,6 +291,7 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 	}
 
 	@EventHandler
+	@SuppressWarnings("ucd")
 	public void onUpdaterSetStation(UpdaterSetStationEvent event) {
 		try {
 			String ip = event.getNewAddress().toString();
@@ -308,6 +311,7 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 	}
 
 	@EventHandler
+	@SuppressWarnings("ucd")
 	public void onUpdaterClearStation(UpdaterClearStationEvent event) {
 		try {
 			String name = event.getName();
@@ -325,6 +329,7 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 	}
 
 	@EventHandler
+	@SuppressWarnings("ucd")
 	public void onUpdaterPassStation(UpdaterPassStationEvent event) {
 		try {
 			String name = event.getName();
@@ -342,6 +347,7 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 		}
 	}
 
+	@Override
 	public String resolve(String name) {
 		name = Normalizer.normalize(name, Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
 		try {

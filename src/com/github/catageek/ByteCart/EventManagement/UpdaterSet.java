@@ -3,7 +3,6 @@ package com.github.catageek.ByteCart.EventManagement;
 import java.util.Iterator;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Storage.ExpirableSet;
@@ -37,7 +36,7 @@ final class UpdaterSet {
 	void clear() {
 		Iterator<Integer> it = updateSet.getIterator();
 		while (it.hasNext()) {
-			Bukkit.getServer().getPluginManager().callEvent((Event) new UpdaterRemoveEvent(it.next()));
+			Bukkit.getServer().getPluginManager().callEvent(new UpdaterRemoveEvent(it.next()));
 		}
 		updateSet.clear();
 	}

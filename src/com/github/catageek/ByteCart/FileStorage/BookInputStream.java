@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.FileStorage;
 
 import java.io.ByteArrayInputStream;
+
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.BookMeta;
 

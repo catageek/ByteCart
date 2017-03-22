@@ -6,6 +6,7 @@ import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.UpdaterClearRingEvent;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 final class UpdaterResetRegion extends UpdaterRegion implements Wanderer {
@@ -25,7 +26,7 @@ final class UpdaterResetRegion extends UpdaterRegion implements Wanderer {
 		BlockFace face;
 		if ((face = manageBorder()) != null)
 			return face;
-		return DefaultRouterWanderer.getRandomBlockFace(getRoutingTable(), getFrom().getBlockFace());
+		return AbstractWanderer.getRandomBlockFace(getRoutingTable(), getFrom().getBlockFace());
 	}
 
 

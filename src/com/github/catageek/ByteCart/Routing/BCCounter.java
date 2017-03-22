@@ -29,6 +29,7 @@ public final class BCCounter implements Serializable, Counter {
 	 * @param counter
 	 * @return the counter
 	 */
+	@Override
 	public int getCount(int counter) {
 		return this.map.containsKey(counter) ? this.map.get(counter) : 0;
 	}
@@ -48,6 +49,7 @@ public final class BCCounter implements Serializable, Counter {
 	 * @param counter the counter id
 	 * @param value the value to add
 	 */
+	@Override
 	public void incrementCount(int counter, int value) {
 		this.map.put(counter, getCount(counter) + value);
 	}
@@ -59,6 +61,7 @@ public final class BCCounter implements Serializable, Counter {
 	 * @param counter the counter id
 	 * @param amount the value to set
 	 */
+	@Override
 	public void setCount(int counter, int amount) {
 		this.map.put(counter, amount);
 	}
@@ -88,6 +91,7 @@ public final class BCCounter implements Serializable, Counter {
 	/**
 	 * Reset all counters to zero
 	 */
+	@Override
 	public void resetAll() {
 		this.map.clear();
 	}
@@ -99,6 +103,7 @@ public final class BCCounter implements Serializable, Counter {
 	 * @param end the last counter id
 	 * @return true if the amont of all counters between start and end (inclusive) are equal or superior to 64
 	 */
+	@Override
 	public boolean isAllFull(int start, int end) {
 		Iterator<Integer> it = map.keySet().iterator();
 		int limit = 64;

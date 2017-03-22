@@ -19,6 +19,7 @@ final class BC7019 extends BC7010 implements Triggable {
 	BC7019(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 		this.StorageCartAllowed = true;
+		this.addIO();
 	}
 
 	/* (non-Javadoc)

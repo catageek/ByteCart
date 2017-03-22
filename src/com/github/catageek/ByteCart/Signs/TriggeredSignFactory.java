@@ -75,70 +75,70 @@ final public class TriggeredSignFactory {
 
 			case 7000:
 			case 7001:
-				return (Triggable)(new BC7001(block, vehicle));
+				return (new BC7001(block, vehicle));
 			case 7002:
-				return (Triggable)(new BC7002(block, vehicle));
+				return (new BC7002(block, vehicle));
 			case 7003:
-				return (Triggable)(new BC7003(block));
+				return (new BC7003(block));
 			case 7005:
-				return (Triggable)(new BC7005(block, vehicle));
+				return (new BC7005(block, vehicle));
 			case 7006:
-				return (Triggable)(new BC7006(block, vehicle));
+				return (new BC7006(block, vehicle));
 			case 7007:
-				return (Triggable)(new BC7007(block, vehicle));
+				return (new BC7007(block, vehicle));
 			case 7008:
-				return (Triggable)(new BC7008(block, vehicle));
+				return (new BC7008(block, vehicle));
 			case 7009:
-				return (Triggable)(new BC7009(block, vehicle));
+				return (new BC7009(block, vehicle));
 			case 7010:
-				return (Triggable)(new BC7010(block, vehicle));
+				return (new BC7010(block, vehicle));
 			case 7011:
-				return (Triggable)(new BC7011(block, vehicle));
+				return (new BC7011(block, vehicle));
 			case 7012:
-				return (Triggable)(new BC7012(block, vehicle));
+				return (new BC7012(block, vehicle));
 			case 7013:
-				return (Triggable)(new BC7013(block, vehicle));
+				return (new BC7013(block, vehicle));
 			case 7014:
-				return (Triggable)(new BC7014(block, vehicle));
+				return (new BC7014(block, vehicle));
 			case 7015:
-				return (Triggable)(new BC7015(block, vehicle));
+				return (new BC7015(block, vehicle));
 			case 7016:
-				return (Triggable)(new BC7016(block, vehicle));
+				return (new BC7016(block, vehicle));
 			case 7017:
-				return (Triggable)(new BC7017(block, vehicle));
+				return (new BC7017(block, vehicle));
 			case 7018:
-				return (Triggable)(new BC7018(block, vehicle));
+				return (new BC7018(block, vehicle));
 			case 7019:
-				return (Triggable)(new BC7019(block, vehicle));
+				return (new BC7019(block, vehicle));
 			case 7020:
-				return (Triggable)(new BC7020(block, vehicle));
+				return (new BC7020(block, vehicle));
 			case 7021:
-				return (Triggable)(new BC7021(block, vehicle));
+				return (new BC7021(block, vehicle));
 
 			case 8010:
-				return (Triggable)(new BC8010(block, vehicle));
+				return (new BC8010(block, vehicle));
 
 			case 8020:
-				return (Triggable)(new BC8020(block, vehicle));
+				return (new BC8020(block, vehicle));
 
 			case 9000:
-				return (Triggable)(new BC9000(block, vehicle));
+				return (new BC9000(block, vehicle));
 			case 9001:
-				return (Triggable)(new BC9001(block, vehicle));
+				return (new BC9001(block, vehicle));
 			case 9002:
-				return (Triggable)(new BC9002(block, vehicle));
+				return (new BC9002(block, vehicle));
 			case 9004:
-				return (Triggable)(new BC9004(block, vehicle));
+				return (new BC9004(block, vehicle));
 			case 9008:
-				return (Triggable)(new BC9008(block, vehicle));
+				return (new BC9008(block, vehicle));
 			case 9016:
-				return (Triggable)(new BC9016(block, vehicle));
+				return (new BC9016(block, vehicle));
 			case 9032:
-				return (Triggable)(new BC9032(block, vehicle));
+				return (new BC9032(block, vehicle));
 			case 9064:
-				return (Triggable)(new BC9064(block, vehicle));
+				return (new BC9064(block, vehicle));
 			case 9128:
-				return (Triggable)(new BC9128(block, vehicle));
+				return (new BC9128(block, vehicle));
 			case 9037:
 				return (new BC9037(block, vehicle));
 			case 9137:

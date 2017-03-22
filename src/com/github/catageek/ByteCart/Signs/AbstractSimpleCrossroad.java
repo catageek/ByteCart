@@ -30,7 +30,7 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 	AbstractSimpleCrossroad(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		builder = new SimpleCollisionAvoiderBuilder((Triggable) this, block.getRelative(this.getCardinal(), 3).getLocation());
+		builder = new SimpleCollisionAvoiderBuilder(this, block.getRelative(this.getCardinal(), 3).getLocation());
 	}
 
 	/* (non-Javadoc)
@@ -95,6 +95,7 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 		return Side.LEVER_OFF;
 	}
 	
+	@Override
 	public void trigger() {
 		try {
 

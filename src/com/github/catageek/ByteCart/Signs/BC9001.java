@@ -184,6 +184,7 @@ public final class BC9001 extends AbstractBC9000 implements Station, Powerable, 
 		return "BC9001";
 	}
 
+	@Override
 	public final String getStationName() {
 		return ((Sign)this.getBlock().getState()).getLine(2);
 	}

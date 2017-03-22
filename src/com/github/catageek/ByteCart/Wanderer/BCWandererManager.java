@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.bukkit.inventory.Inventory;
 
-import com.github.catageek.ByteCartAPI.Wanderer.WandererManager;
 import com.github.catageek.ByteCartAPI.Wanderer.InventoryContent;
 import com.github.catageek.ByteCartAPI.Wanderer.WandererFactory;
+import com.github.catageek.ByteCartAPI.Wanderer.WandererManager;
 
 public class BCWandererManager implements WandererManager {
 
@@ -20,6 +20,7 @@ public class BCWandererManager implements WandererManager {
 	 * @param wanderer the wanderer class implementing the wanderer
 	 * @param type the name that will reference this type of wanderer
 	 */
+	@Override
 	public boolean register(WandererFactory factory, String type) {
 		if (map.containsKey(type))
 			return false;
@@ -34,6 +35,7 @@ public class BCWandererManager implements WandererManager {
 	 * @param type the name of the type of wanderer previously registered
 	 * @param suffix a suffix to add to book title
 	 */
+	@Override
 	public boolean create(InventoryContent ivc, String type, String suffix) {
 		if (! map.containsKey(type))
 			return false;
@@ -60,6 +62,7 @@ public class BCWandererManager implements WandererManager {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
+	@Override
 	public WandererFactory getFactory(Inventory inv) throws ClassNotFoundException, IOException {
 		if (WandererContentFactory.isWanderer(inv)
 				&& WandererContentFactory.getWandererContent(inv) != null)
@@ -77,6 +80,7 @@ public class BCWandererManager implements WandererManager {
 		return map.containsKey(type);
 	}
 
+	@Override
 	public void saveContent(InventoryContent rte) throws ClassNotFoundException, IOException {
 
 		WandererContentFactory.saveContent(rte);

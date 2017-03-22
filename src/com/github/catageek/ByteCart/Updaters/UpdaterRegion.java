@@ -11,6 +11,7 @@ import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSetRingEvent;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
@@ -96,6 +97,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 				|| (track > 0 && ! this.getRoutingTable().isDirectlyConnected(track, getFrom().getBlockFace()));
 	}
 
+	@Override
 	protected BlockFace selectDirection() {
 		BlockFace face;
 		if ((face = manageBorder()) != null)
@@ -134,7 +136,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 		}
 		if (ByteCart.debug)
 			ByteCart.log.info("ByteCart : selectDirection() : default ");
-		return DefaultRouterWanderer.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
+		return AbstractWanderer.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
 	}
 
 	@Override

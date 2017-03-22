@@ -113,6 +113,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onUpdaterSetStation(UpdaterSetStationEvent event) {
 		Block block = event.getIc().getBlock();
 		Marker marker = markerset.findMarker(buildId(block));
@@ -128,6 +129,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onUpdaterPassStation(UpdaterPassStationEvent event) {
 		Block block = event.getIc().getBlock();
 		Address address = event.getAddress();
@@ -147,6 +149,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onUpdaterClearStation(UpdaterClearStationEvent event) {
 		deleteMarker(event);
 	}
@@ -169,6 +172,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onSignRemove(SignRemoveEvent event) {
 		IC ic;
 		if (! ((ic = event.getIc()) instanceof BCSign))
@@ -185,6 +189,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onUpdaterSignInvalidate(UpdaterSignInvalidateEvent event) {
 		deleteMarker(event);
 	}
@@ -195,6 +200,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onSignCreate(SignCreateEvent event) {
 		IC ic;
 		if (! ((ic = event.getIc()) instanceof Station))
@@ -213,6 +219,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onUpdaterCreate(UpdaterCreateEvent event) {
 		Marker marker = markerset.findMarker(String.valueOf(event.getVehicleId()));
 		if (marker != null) {
@@ -227,6 +234,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onUpdaterMove(UpdaterMoveEvent event) {
 		VehicleMoveEvent mve = event.getEvent();
 		int id = mve.getVehicle().getEntityId();
@@ -243,6 +251,7 @@ public final class BCDynmapPlugin implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onUpdaterRemove(UpdaterRemoveEvent event) {
 		Marker marker = markerset.findMarker(String.valueOf(event.getVehicleId()));
 		if (marker != null) {

@@ -18,6 +18,7 @@ public abstract class AbstractComponent implements Component {
 	/**
 	 * @return the block
 	 */
+	@Override
 	public Block getBlock() {
 		return block;
 	}

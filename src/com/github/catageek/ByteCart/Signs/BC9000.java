@@ -67,6 +67,7 @@ final class BC9000 extends AbstractSimpleCrossroad implements Subnet, Triggable 
 	/**
 	 * @return the netmask
 	 */
+	@Override
 	public final int getNetmask() {
 		return netmask;
 	}

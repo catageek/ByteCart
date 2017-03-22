@@ -25,11 +25,7 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 		super(block);
 	}
 
-	BC7003(org.bukkit.block.Block block, RegistryOutput io) {
-		this(block);
-		// forcing output[0] to be the one in parameter
-		this.addOutputRegistry(io);
-	}
+	
 
 
 	/* (non-Javadoc)

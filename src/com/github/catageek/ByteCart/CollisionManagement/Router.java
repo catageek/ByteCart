@@ -27,6 +27,7 @@ public interface Router extends CollisionAvoider {
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.CollisionManagement.CollisionAvoider#getSecondpos()
 	 */
+	@Override
 	public int getSecondpos() ;
 	
 	/**

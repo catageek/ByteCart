@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart.Updaters;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 class UpdaterResetBackbone extends UpdaterBackBone implements Wanderer {
@@ -23,7 +24,7 @@ class UpdaterResetBackbone extends UpdaterBackBone implements Wanderer {
 		BlockFace face;
 		if ((face = manageBorder()) != null)
 			return face;
-		return DefaultRouterWanderer.getRandomBlockFace(getRoutingTable(), getFrom().getBlockFace());
+		return AbstractWanderer.getRandomBlockFace(getRoutingTable(), getFrom().getBlockFace());
 	}
 
 

@@ -40,6 +40,7 @@ public final class PreloadChunkListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@SuppressWarnings("ucd")
 	public void onChunkUnload(ChunkUnloadEvent event) {
 
 

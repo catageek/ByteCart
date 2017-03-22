@@ -109,15 +109,7 @@ public final class BookProperties implements Closeable, Flushable {
 		return Properties.getProperty(key, defaultvalue);
 	}
 
-	/**
-	 * Get a property value as an integer
-	 *
-	 * @param key the property key
-	 * @return the value
-	 */
-	public int getInt(String key) {
-		return Integer.parseInt(Properties.getProperty(key));
-	}
+	
 
 	/**
 	 * Get a property value as an integer or a default value

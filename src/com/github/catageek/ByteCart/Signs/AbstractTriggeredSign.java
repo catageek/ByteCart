@@ -148,6 +148,7 @@ abstract class AbstractTriggeredSign extends AbstractIC implements Triggable {
 	 * Default is lever not reversed
 	 * @return false
 	 */
+	@Override
 	public boolean isLeverReversed() {
 		return false;
 	}

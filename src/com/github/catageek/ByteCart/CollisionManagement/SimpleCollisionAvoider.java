@@ -5,8 +5,8 @@ import org.bukkit.Location;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Signs.Triggable;
 import com.github.catageek.ByteCart.Storage.ExpirableMap;
-import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
+import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
 
 /**
  * A collision avoider for T cross-roads

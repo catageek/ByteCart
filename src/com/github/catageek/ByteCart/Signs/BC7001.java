@@ -85,6 +85,7 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 				final BC7001 myBC7001 = this;
 
 				ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new Runnable() {
+					@Override
 					public void run() {
 
 						// we set busy

@@ -14,6 +14,7 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterClearStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterClearSubnetEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSignInvalidateEvent;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 final class UpdaterResetLocal extends UpdaterLocal implements Wanderer {
@@ -110,6 +111,6 @@ final class UpdaterResetLocal extends UpdaterLocal implements Wanderer {
 		BlockFace dir;
 		if ((dir = RoutingTable.getDirection(preferredroute)) != null)
 			return dir;
-		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getFrom().getBlockFace());
+		return AbstractWanderer.getRandomBlockFace(RoutingTable, getFrom().getBlockFace());
 	}
 }

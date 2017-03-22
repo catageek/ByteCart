@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
 import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
 import com.github.catageek.ByteCart.EventManagement.ConstantSpeedListener;
@@ -175,6 +176,7 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	/**
 	 * @return the resolver registered
 	 */
+	@Override
 	public Resolver getResolver() {
 		return resolver;
 	}
@@ -184,10 +186,12 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	 * 
 	 * @param resolver the resolver provided
 	 */
+	@Override
 	public void setResolver(Resolver resolver) {
 		this.resolver = resolver;
 	}
 
+	@Override
 	public final Logger getLog() {
 		return log;
 	}
@@ -195,6 +199,7 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	/**
 	 * @return the wf
 	 */
+	@Override
 	public BCWandererManager getWandererManager() {
 		return wf;
 	}

@@ -46,9 +46,7 @@ RoutingTableWritable, Externalizable {
 	public RoutingTableBook() {
 	}
 
-	RoutingTableBook(Inventory inv) {
-		this.inventory = inv;
-	}
+	
 
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#clear(boolean)

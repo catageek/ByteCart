@@ -5,9 +5,9 @@ import java.util.Stack;
 import org.bukkit.Bukkit;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.Signs.BC9001;
 import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.IO.ComponentSign;
+import com.github.catageek.ByteCart.Signs.BC9001;
 import com.github.catageek.ByteCart.Util.LogUtil;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
@@ -121,6 +121,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 		save();
 	}
 
+	@Override
 	public final void leaveSubnet() {
 		super.leaveSubnet();
 		if(!this.getStart().empty() && ! this.getEnd().empty()) {

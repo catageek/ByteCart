@@ -47,6 +47,7 @@ final class BC7006 extends AbstractTriggeredSign implements Triggable {
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.HAL.AbstractIC#getFriendlyName()
 	 */
+	@Override
 	public String getFriendlyName() {
 		return "Booster";
 	}

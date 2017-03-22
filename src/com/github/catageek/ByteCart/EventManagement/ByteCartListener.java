@@ -25,6 +25,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
+
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
 import com.github.catageek.ByteCart.Signs.Clickable;
@@ -57,6 +58,7 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onVehicleMove(VehicleMoveEvent event) {
 
 		Location loc = event.getFrom();
@@ -125,6 +127,7 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onVehicleCreate(VehicleCreateEvent event) {
 
 		Player player;
@@ -176,6 +179,7 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onSignChange(SignChangeEvent event) {
 
 		if (! AbstractIC.checkEligibility(event.getLine(1)))
@@ -223,11 +227,13 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+	@SuppressWarnings("ucd")
 	public void onBlockBreak(BlockBreakEvent event) {
 		removeSignIfNeeded(event.getBlock(), event.getPlayer());
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+	@SuppressWarnings("ucd")
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		removeSignIfNeeded(event.getBlock(), event.getEntity());
 	}
@@ -238,6 +244,7 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+	@SuppressWarnings("ucd")
 	public void onEntityExplode(EntityExplodeEvent event) {
 		Entity entity = event.getEntity();
 		Iterator<Block> it = event.blockList().iterator();
@@ -251,6 +258,7 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onBlockPhysics(BlockPhysicsEvent event) {
 
 		if (event.getChangedType() != Material.REDSTONE_WIRE || ! AbstractIC.checkEligibility(event.getBlock().getRelative(BlockFace.DOWN)))
@@ -314,6 +322,7 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
+	@SuppressWarnings("ucd")
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
 		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0)

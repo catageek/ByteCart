@@ -12,6 +12,7 @@ import com.github.catageek.ByteCartAPI.Wanderer.WandererFactory;
 
 public final class UpdaterFactory implements WandererFactory {
 
+	@Override
 	public Wanderer getWanderer(BCSign bc, Inventory inv) throws ClassNotFoundException, IOException {
 		UpdaterContent rte;
 		if (WandererContentFactory.isWanderer(inv, Level.REGION, "Updater")

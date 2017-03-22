@@ -88,6 +88,7 @@ public class WandererContent  implements InventoryContent {
 	 * 
 	 * @return the level
 	 */
+	@Override
 	public Wanderer.Level getLevel() {
 		return Level;
 	}
@@ -97,6 +98,7 @@ public class WandererContent  implements InventoryContent {
 	 * 
 	 * @return the region
 	 */
+	@Override
 	public int getRegion() {
 		return Region;
 	}
@@ -106,6 +108,7 @@ public class WandererContent  implements InventoryContent {
 	 * 
 	 * @return the ring id
 	 */
+	@Override
 	public int getCurrent() {
 		return Current;
 	}
@@ -115,6 +118,7 @@ public class WandererContent  implements InventoryContent {
 	 * 
 	 * @param current the ring id
 	 */
+	@Override
 	public void setCurrent(int current) {
 		Current = current;
 	}
@@ -122,6 +126,7 @@ public class WandererContent  implements InventoryContent {
 	/**
 	 * @return the counter
 	 */
+	@Override
 	public BCCounter getCounter() {
 		return counter;
 	}
@@ -129,6 +134,7 @@ public class WandererContent  implements InventoryContent {
 	/**
 	 * @return the inventory
 	 */
+	@Override
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -155,6 +161,7 @@ public class WandererContent  implements InventoryContent {
 	/**
 	 * @return the player
 	 */
+	@Override
 	public Player getPlayer() {
 		return Bukkit.getPlayer(player);
 	}
@@ -181,6 +188,7 @@ public class WandererContent  implements InventoryContent {
 	/**
 	 * @return the start
 	 */
+	@Override
 	public Stack<Integer> getStart() {
 		return Start;
 	}
@@ -188,6 +196,7 @@ public class WandererContent  implements InventoryContent {
 	/**
 	 * @return the end
 	 */
+	@Override
 	public Stack<Integer> getEnd() {
 		return End;
 	}
@@ -237,6 +246,7 @@ public class WandererContent  implements InventoryContent {
 	 * @param number the ring id
 	 * @param metric the metric value
 	 */
+	@Override
 	public void setRoute(int number, int metric) {
 		tablemap.put(number, new Metric(metric));
 		if(ByteCart.debug)
@@ -248,6 +258,7 @@ public class WandererContent  implements InventoryContent {
 	 * @param entry the ring id
 	 * @return the metric
 	 */
+	@Override
 	public int getMetric(int entry) {
 		return tablemap.get(entry).value();
 	}
@@ -258,6 +269,7 @@ public class WandererContent  implements InventoryContent {
 	 * @param from the direction to exclude from the search
 	 * @return the ring id, or -1
 	 */
+	@Override
 	public int getMinDistanceRing(RoutingTable routingTable, DirectionRegistry from) {
 		Iterator<Integer> it = routingTable.getOrderedRouteNumbers();
 	
@@ -297,6 +309,7 @@ public class WandererContent  implements InventoryContent {
 	 * @param ring the ring id
 	 * @return true if there is data on this ring
 	 */
+	@Override
 	public boolean hasRouteTo(int ring) {
 		return tablemap.containsKey(ring);
 	}

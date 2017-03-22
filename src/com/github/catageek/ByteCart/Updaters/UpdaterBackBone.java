@@ -5,6 +5,7 @@ import org.bukkit.block.BlockFace;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Signs.BCSign;
+import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
 class UpdaterBackBone extends AbstractRegionUpdater implements Wanderer {
@@ -14,12 +15,13 @@ class UpdaterBackBone extends AbstractRegionUpdater implements Wanderer {
 	}
 
 
+	@Override
 	protected BlockFace selectDirection() {
 		BlockFace face;
 		if ((face = manageBorder()) != null)
 			return face;
 
-		return DefaultRouterWanderer.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
+		return AbstractWanderer.getRandomBlockFace(this.getRoutingTable(), this.getFrom().getBlockFace());
 	}
 
 	@Override

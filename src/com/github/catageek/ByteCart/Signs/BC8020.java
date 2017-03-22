@@ -7,10 +7,10 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
-import com.github.catageek.ByteCart.Updaters.DefaultRouterWanderer;
 import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Signs.BCRouter;
+import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 
@@ -57,7 +57,7 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 		}
 
 		// If everything has failed, then we randomize output direction
-		return DefaultRouterWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
+		return AbstractWanderer.getRandomBlockFace(RoutingTable, getCardinal().getOppositeFace());
 
 	}
 
