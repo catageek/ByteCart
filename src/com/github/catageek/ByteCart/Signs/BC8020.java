@@ -24,7 +24,7 @@ final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTabl
 
 	BC8020(Block block, org.bukkit.entity.Vehicle vehicle) throws ClassNotFoundException, IOException {
 		super(block, vehicle);
-		this.IsTrackNumberProvider = true;
+		this.IsTrackNumberProvider = false;
 	}
 
 	/* (non-Javadoc)

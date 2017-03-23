@@ -92,7 +92,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 			return true;
 		}
 		return (track == -1 && current != -2) 
-				|| (track != -1 && current != -2 && getCounter().getCount(track) == 0)
+				|| (track > 0 && current != -2 && getCounter().getCount(track) == 0)
 				|| (current >= 0 && current != track)
 				|| (track > 0 && ! this.getRoutingTable().isDirectlyConnected(track, getFrom().getBlockFace()));
 	}
@@ -146,11 +146,10 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 		int current = getCurrent();
 		boolean isNew = (current < 0);
 
-		if (getRoutes() != null) {
+		UpdaterSetRingEvent event = null;
 
-			UpdaterSetRingEvent event = null;
-
-			if(isTrackNumberProvider() && ! getSignAddress().isValid()) {
+		if (isTrackNumberProvider()) {
+			if (! getSignAddress().isValid()) {
 				// if there is no address on the sign
 				// we provide one
 				current = setSign(current);
@@ -166,19 +165,20 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 				if (old != current)
 					Bukkit.getServer().getPluginManager().callEvent(event);
 			}
-
-
-			setCurrent(current);
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : Update() : current is " + current);
-
-			// update track counter if we have entered a new one
-			if (current > 0 && isNew) {
-				this.getCounter().incrementCount(current, new Random().nextInt(this.getRoutingTable().size() + 1) + 1 );
-			}
-
-			routeUpdates(To);
+		} else {
+			current = 0;
 		}
+
+		setCurrent(current);
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart : Update() : current is " + current);
+
+		// update track counter if we have entered a new one
+		if (current > 0 && isNew) {
+			this.getCounter().incrementCount(current, new Random().nextInt(this.getRoutingTable().size() + 1) + 1 );
+		}
+
+		routeUpdates(To);
 	}
 
 
