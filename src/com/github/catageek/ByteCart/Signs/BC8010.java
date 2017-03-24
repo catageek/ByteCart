@@ -65,6 +65,13 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			// Converting inventory in routing table
 			RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory, 0);
 		}
+		else if ((blockstate = center.getRelative(BlockFace.DOWN, 2).getState()) instanceof InventoryHolder) {
+			// Loading inventory of chest above router
+			Inventory ChestInventory = ((InventoryHolder) blockstate).getInventory();
+
+			// Converting inventory in routing table
+			RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory, 0);			
+		}
 		else {
 			RoutingTable = null;
 		}

@@ -123,6 +123,7 @@ class UpdaterRegion extends AbstractRegionUpdater implements Wanderer {
 					}
 				} catch (NullPointerException e) {
 					LogUtil.sendError(this.getRoutes().getPlayer(), "ByteCart : Chest expected at position " + this.getCenter().getRelative(BlockFace.UP, 5).getLocation());
+					LogUtil.sendError(this.getRoutes().getPlayer(), "ByteCart : or at position " + this.getCenter().getRelative(BlockFace.DOWN, 2).getLocation());
 					throw e;
 				}
 
