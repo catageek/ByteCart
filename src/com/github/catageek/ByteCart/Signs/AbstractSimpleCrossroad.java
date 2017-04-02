@@ -45,12 +45,14 @@ abstract class AbstractSimpleCrossroad extends AbstractTriggeredSign implements 
 	 */
 	protected void addIO() {
 		// Output[0] = 2 bits registry representing levers on the left and on the right of the sign
-		OutputPin[] lever2 = new OutputPin[2];
+		OutputPin[] lever2 = new OutputPin[3];
 
 		// Left
 		lever2[0] = OutputPinFactory.getOutput(this.getBlock().getRelative(MathUtil.anticlockwise(this.getCardinal())));
 		// Right
 		lever2[1] = OutputPinFactory.getOutput(this.getBlock().getRelative(MathUtil.clockwise(this.getCardinal())));
+		// Back
+		lever2[2] = OutputPinFactory.getOutput(this.getBlock().getRelative(this.getCardinal()));
 
 		PinRegistry<OutputPin> command1 = new PinRegistry<OutputPin>(lever2);
 
