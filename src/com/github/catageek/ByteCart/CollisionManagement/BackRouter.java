@@ -11,8 +11,8 @@ import org.bukkit.block.BlockFace;
 public final class BackRouter extends AbstractRouter implements
 		Router {
 
-	public BackRouter(BlockFace from, org.bukkit.Location loc) {
-		super(from, loc);
+	public BackRouter(BlockFace from, org.bukkit.Location loc, boolean b) {
+		super(from, loc, b);
 		FromTo.put(Side.BACK, Side.BACK);
 
 		Set<Side> left = EnumSet.of(Side.BACK, Side.LEFT);

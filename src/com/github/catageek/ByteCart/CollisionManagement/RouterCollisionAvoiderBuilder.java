@@ -9,17 +9,20 @@ import com.github.catageek.ByteCart.Signs.Triggable;
  */
 public class RouterCollisionAvoiderBuilder extends AbstractCollisionAvoiderBuilder implements CollisionAvoiderBuilder {
 
-	public RouterCollisionAvoiderBuilder(Triggable ic, Location loc) {
+	private boolean IsOldVersion;
+
+	public RouterCollisionAvoiderBuilder(Triggable ic, Location loc, boolean isOldVersion) {
 		super(ic, loc);
+		this.IsOldVersion = isOldVersion;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderBuilder#getCollisionAvoider()
 	 */
-	@Override
 	@SuppressWarnings("unchecked")
+	@Override
 	public <T extends CollisionAvoider> T getCollisionAvoider() {
-		return (T) new StraightRouter (this.ic.getCardinal().getOppositeFace(), this.loc);
+		return (T) new StraightRouter (this.ic.getCardinal().getOppositeFace(), this.loc, this.IsOldVersion);
 	}
 
 

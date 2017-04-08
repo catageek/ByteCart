@@ -13,8 +13,8 @@ import com.github.catageek.ByteCartAPI.Util.MathUtil;
 public final class LeftRouter extends AbstractRouter implements
 		Router {
 
-	public LeftRouter(BlockFace from, org.bukkit.Location loc) {
-		super(from, loc);
+	public LeftRouter(BlockFace from, org.bukkit.Location loc, boolean b) {
+		super(from, loc, b);
 		FromTo.put(Side.BACK, Side.LEFT);
 		
 		Set<Side> left = EnumSet.of(Side.LEFT, Side.STRAIGHT, Side.RIGHT);

@@ -11,8 +11,8 @@ import com.github.catageek.ByteCartAPI.Util.MathUtil;
 public final class RightRouter extends AbstractRouter implements
 		Router {
 
-	public RightRouter(BlockFace from, org.bukkit.Location loc) {
-		super(from, loc);
+	public RightRouter(BlockFace from, org.bukkit.Location loc, boolean b) {
+		super(from, loc, b);
 		
 		FromTo.put(Side.BACK, Side.RIGHT);
 		FromTo.put(Side.LEFT, Side.LEFT);

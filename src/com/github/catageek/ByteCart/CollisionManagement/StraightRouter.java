@@ -1,5 +1,6 @@
 package com.github.catageek.ByteCart.CollisionManagement;
 
+import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
@@ -9,8 +10,8 @@ import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
  */
 public class StraightRouter extends AbstractRouter implements Router {
 
-	public StraightRouter(BlockFace from, org.bukkit.Location loc) {
-		super(from, loc);
+	public StraightRouter(BlockFace from, org.bukkit.Location loc, boolean isOldVersion) {
+		super(from, loc, isOldVersion);
 
 		FromTo.put(Side.BACK, Side.STRAIGHT);
 		FromTo.put(Side.LEFT, Side.LEFT);

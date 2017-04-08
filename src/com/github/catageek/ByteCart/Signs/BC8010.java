@@ -41,6 +41,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	private AddressRouted destination;
 	private final Block center;
 	protected boolean IsTrackNumberProvider;
+	private boolean IsOldVersion = true;
 
 	BC8010(Block block, org.bukkit.entity.Vehicle vehicle) throws ClassNotFoundException, IOException {
 		super(block, vehicle);
@@ -56,25 +57,33 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		// Center of the router, at sign level
 		center = this.getBlock().getRelative(this.getCardinal(), 6).getRelative(MathUtil.clockwise(this.getCardinal()));
 
-		BlockState blockstate;
+		this.RoutingTable = loadChest();
+	}
 
+	protected RoutingTableWritable loadChest() throws ClassNotFoundException, IOException {
+		BlockState blockstate;
 		if ((blockstate = center.getRelative(BlockFace.UP, 5).getState()) instanceof InventoryHolder) {
 			// Loading inventory of chest above router
 			Inventory ChestInventory = ((InventoryHolder) blockstate).getInventory();
 
 			// Converting inventory in routing table
-			RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory, 0);
+			return RoutingTableFactory.getRoutingTable(ChestInventory, 0);
 		}
 		else if ((blockstate = center.getRelative(BlockFace.DOWN, 2).getState()) instanceof InventoryHolder) {
 			// Loading inventory of chest above router
 			Inventory ChestInventory = ((InventoryHolder) blockstate).getInventory();
 
 			// Converting inventory in routing table
-			RoutingTable = RoutingTableFactory.getRoutingTable(ChestInventory, 0);			
+			return RoutingTableFactory.getRoutingTable(ChestInventory, 0);
 		}
 		else {
-			RoutingTable = null;
+			return null;
 		}
+	}
+
+	public BC8010(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle, boolean isOldVersion) throws ClassNotFoundException, IOException {
+		this(block, vehicle);
+		this.IsOldVersion = isOldVersion;
 	}
 
 	/* (non-Javadoc)
@@ -83,7 +92,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	@Override
 	public void trigger() throws ClassNotFoundException, IOException {
 
-		CollisionAvoiderBuilder builder = new RouterCollisionAvoiderBuilder(this, center.getLocation());
+		CollisionAvoiderBuilder builder = new RouterCollisionAvoiderBuilder(this, center.getLocation(), this.IsOldVersion);
 
 		try {
 
