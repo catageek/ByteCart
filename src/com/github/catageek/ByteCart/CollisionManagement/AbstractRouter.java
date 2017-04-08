@@ -116,6 +116,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 
 			// activate secondary levers
 			ca.getOutput(1).setAmount(ca.getSecondpos());
+			ca.getOutput(2).setAmount(ca.getSecondpos());
 
 			//activate primary levers
 			ca.route(from);
@@ -269,22 +270,43 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 
 		// Secondary output to make U-turn
 		OutputPin[] secondary = new OutputPin[8];
+		// Alternate secondary output to make U-turn (for new BC8011 router)
+		OutputPin[] altsecond = new OutputPin[8];
 
 		for (int i=0; i<7; i++) {
 			// the first is Back
+			altsecond[i] = OutputPinFactory.getOutput(center.getRelative(f, 3).getRelative(g, 1));
 			secondary[i++] = OutputPinFactory.getOutput(center.getRelative(f, 4).getRelative(g, 2));
+			altsecond[i] = OutputPinFactory.getOutput(center.getRelative(f, 5).getRelative(g, 1));
 			secondary[i] = OutputPinFactory.getOutput(center.getRelative(f, 6));
 			f = g;
 			g = MathUtil.clockwise(g);			
 		}
 
-		checkIOPresence(secondary);
+		checkIOPresence(secondary, altsecond);
 
 		RegistryOutput second = new PinRegistry<OutputPin>(secondary);
+		RegistryOutput altsec = new PinRegistry<OutputPin>(altsecond);
 
 		// output[1] is second and third levers
 		this.addOutputRegistry(second);
+		// output[2] is alternate second and third levers
+		this.addOutputRegistry(altsec);
 
+	}
+
+	/**
+	 * Check if there are levers as expected
+	 * 
+	 * @param secondary an array of levers
+	 * @param altsecond alternative array of levers
+	 */
+	private void checkIOPresence(OutputPin[] secondary, OutputPin[] altsecond) {
+		for (int i = 0; i < secondary.length; i++)
+			if (secondary[i] == null && altsecond[i] == null) {
+				ByteCart.log.log(java.util.logging.Level.SEVERE, "ByteCart : Lever missing or wrongly positioned in router " + this.getLocation());
+				throw new NullPointerException();
+			}
 	}
 
 	/**
