@@ -1,0 +1,225 @@
+v3.0.0 - March, 24 2017
+Features
+- Routing tables are now in JSON. Open the book in the chest of the router to see what how routes are registered. You must run bcupdater in each region to change automatically the format
+- Add an alternate position for chest above router: they can be put 2 blocks under the level of BC signs, at the centre of the router
+- BC7000 and BC7001 are now synonym. The sample world contains both types, I did not want to fix this
+- Update to dynmap-2.4 and remove Metrics plugin
+
+Bug fix
+- Constant speed did not work since Bukkit-1.9.4 since Bukkit change the way the passenger collide with vehicles.
+- Region updaters could be locked in ring 0 when meeting a backbone router at the edge of the region
+- An address was written on BC8020 sign in contact with a region. This is no more the case, address field is blank
+- TTL value in configuration file was ignored
+
+v2.9.4 - January, 25 2016
+- BC7011 and BC7019 have no effect on updaters. Fix issue #38
+
+v2.9.3 - November, 30 2015
+- Fix bcdmapsync command running asynchronously and causing exception.
+
+v2.9.2 - May, 30 2015
+- Fix station information missing in station directory and dynmap when creating a BC9001 sign.
+
+v2.9.1 - April, 22 2015
+- Stations may have names useable in tickets or signs, with automatic resolution to address
+- Updaters can manage station name database using the 3rd line of BC9001 during configuration
+- 'host' command added, with permissions 'bytecart.host.manager', 'bytecart.host.user' and 'bytecart.host.list'
+- sql backend may be sqllite (default) or external mysql database
+- Station names are displayed on dynmap (the layer must be regenerated)
+- Clickable signs can now be activated by clicking on the opposite side.
+
+v2.8.2 - March, 28 2015
+- Updaters have now an icon and can be followed on dynmap.
+
+v2.8.1 - March, 9 2015
+- Upgrade to MC Spigot 1.8
+
+v2.7.5 - September, 29 2014
+- Fix bug in 2.7.4. 'PlayersNoTicketDefaultRoute' is effective only with BC8010/BC8020 signs.
+
+v2.7.4 - September, 5 2014
+- Add 'PlayersNoTicketDefaultRoute' parameter to config.yml
+- Make storage cart with no ticket go to EmptyCartsDefaultRoute
+- Upgrade dynmap to 1.9.4
+
+v2.7.3 - December, 28 2013
+- Fix dynmap icons not included in jar and add errors if not found
+- Upgrade bukkit to 1.7.2-R0.2 and dynmap to 1.9.1
+
+v2.7.2 - November, 11 2013
+- Fix IllegalStateException when updater pass on a BC8010 or BC8020 sign with no address written on line 4
+- Fix CastException when an updater that is not local passes on a BC9000 sign
+
+v2.7.1 - November, 3 2013
+- Fix NullPointerException when an updater enter a router
+- Upgrade to Bukkit-1.6.4-R2.0
+
+v2.6.1 - October, 15 2013
+- Make BC7004 sign (cart spawner) put a ticket in inventory if the 3rd line of the sign contains an address
+- Add BC7009 sign: a load balancer
+- Fix router not taking route alteration requested by event suscribers
+- Re-add mcstats metrics submission that were removed in previous release
+- Refactor a lot of code to create the API
+
+v2.5.1 - September, 22 2013
+- Add BC7019 sign: a random destination sign. minimum address on 3rd line, maximum address on 4th line.
+- fix bug that prevent TTL decrementation in subtracks
+
+v2.4.1 - September, 15 2013
+- Add BC7008 sign: a cart destroyer
+- Add "brakes" to cart when stopped on BC7001 sign
+- Fix various bug in collision management layer of T intersection
+- Add possibility to put signs under rails on slope
+
+v2.3.1 - September, 8 2013
+- Add possibility to split BC7010 in 2 parts
+- Add BC7004 sign: a cart spawner
+- Add BC7005 sign: an eject sign
+- Add BC7006 and BC7007 signs: a booster and an unbooster
+
+v2.2.1 - August, 29 2013
+- Make BC9000 neutral to bcupdater: BC9000 can not close subtrack. Must set 'oldBC9000behaviour: false' in config.yml
+- Add 'oldBC9000behaviour' parameter in configuration file to keep old behaviour (this is the default)
+- Add anticollision feature to BC9037 and BC9137.
+
+v2.1.2 - August, 12 2013
+- Fix bug with NumberFormatException triggered when breaking some signs in the world
+
+v2.1.1 - August, 11 2013
+- Add /bcdmapsync command to remove obsolete markers in dynmap
+- Fix bug making dynmap loading after ByteCart
+- Fix bug with derailed carts keeping speed on ground when using constant speed
+
+For craftbukkit-1.5.2-R1.0
+
+v2.0.6 - August, 12 2013
+- Fix bug with NumberFormatException triggered when breaking some signs in the world
+
+v2.0.5 - August, 11 2013
+- Fix bug with reset_local updaters in infinite loops in subrings
+
+v2.0.3 - june, 30 2013
+- Add feature to make carts keeping constant speed. No more boosters are needed. Set "constantspeed = true" in config to enable.
+- Add submission of statistics to mcstats.org. to disable, set "metrics = false" in config file.
+- Make TTL decrease when entering subrings to avoid infinite loops. When TTL reaches zero, the cart cannot enter the subring.
+- Make players obey to TTL rules. Before, players would not get a TTL value and TTL was not checked during trip.
+
+v2.0.2 - june, 15 2013
+- Upgrade to bukkit release 1.5.2-R1.0
+
+v2.0.1 - june, 2 2013
+- Fix BC7015 sign removing train keyword in ticket.
+- Add possibility for BC7013, BC7014 and BC7015 to set keyword 'train' on the 1st line.
+- Add BC7018 sign to remove ticket(s) from inventory. This sign is also clickable for players.
+- Enable closing subnets with the same type of sign as the one use to open it in replacement of BC9000 sign.
+- Invert lever interaction of BC9000 sign to comply with other BC90XX signs. This breaks previous BC9000 usage, see known caveats instructions below.
+- Create BC9032, BC9064 and BC9128 subnet signs.
+- Performance optimization
+- Better randomization of updater algorithm
+
+v2.0.0 - may, 26 2013
+- Drop legacy storage, now using books internally to store binary data
+- Raise address limitations to new values (max address is now 2047.2047.255)
+- Use distance between routers to compute best path
+- Remove train option coded in address, now train option must be set with the keyword "train" on the first line of the sign, and parameter 'train' in tickets. Address 1.1.33 is no more a train with destination 1.1.1, but destination 1.1.33.
+- Persistance data used by updaters has moved from memory to book storage to enable inter-server configuration
+- Improve updater algorithm, with timeout set dynamically
+- Add information messages in chat window when necessary
+- Add more control on sensitive commands to ensure proper use
+- Add safety option 'new' to bcupdater to be used when performing initial configuration
+- Add option 'full' to reset updater to reset to factory default. Without this option, all user-made (and possibly unstable) configuration is kept.
+
+v1.5.5 - may, 14 2013
+- Make ring number persistent across reset if possible
+- Fix NullPointerException when an updater stays more than 1 hour
+- Fix NullPointerException when breaking a sign
+
+v1.5.2 - may, 10 2013
+- Fix BC9001 sign not displaying station name when arriving
+- Fix NullPointerException when looking for an empty Book&Quill
+
+v1.5.1 - may, 8 2013
+- Fix reset updater to detect and delete "error" dynmap markers when performing a reset operation
+
+v1.5.0 - may, 5 2013
+- Craftbukkit v1.5.2-R0.1 compatibility
+- Dynmap support, add parameter dynmap.layer in config file
+- Add events to API, change some methods
+- add configuration parameter updater.timeout to set updater timeout (default to 1 hour after last address update)
+
+v1.4.4 - apr, 26 2013
+- Add methods to event API to prepare BCProtect plugin release.
+
+v1.4.3 - apr, 15 2013
+- Fix ticket #18 that caused an OutOfBoundsException when launching an updater.
+
+v1.4.2 - apr, 15 2013
+- Fix ticket #17 that prevented station sign activated by button to work properly.
+- Allow tilted sign. Log a warning if a sign is at 45° which is not allowed.
+
+v1.4.1 - apr, 13 2013
+- Adapt bcticket usage for command block. Player name can be specified as command argument.
+- Compatibility with bukkit-1.5.1-R0.2
+
+v1.4.0 - apr, 4 2013
+- Add compatibility with hoppers
+- Add BC9037 and BC9137 signs to select cart in an address range
+
+v1.3.5 - may, 10 2013
+- Fix BC9001 sign not displaying station name when arriving
+- Fix NullPointerException when looking for an empty Book&Quill
+
+v1.3.4 - mar, 3 2013
+- New bcback command to set the return address of the ticket in player's inventory as destination address
+- New reusetickets configuration parameter to avoid filling inventory with tickets (default : true)
+- Carts with expired TTL will now return to sender through return address (if set) instead of going to garbage collector
+- All sentences are now in english by default
+- Improved logging if something is wrong with router to help admins to fix it
+- 'Return' sign BC7017 now respect train status bit and does not drop it anymore
+
+v1.3.3 - mar, 1 2013
+- Fix bug on region updater that caused OutOfBoundException when 'bcupdater region' was never executed on a region (issue #5). Do not affect networks that were successfully configured with v1.2.1 or older versions.
+
+v1.3.2 - feb, 24 2013
+- Add 'mustProvidebooks' parameter in config file. When set to true, players must provide empty books to have tickets. When set to false, tickets will be generated automatically with BC701X signs. By default, tickets contained in storage carts will be reused when possible. Players will always have a new ticket.
+- Ticket held in hand has priority when travelling. Otherwise, tickets are taken in order of inventory slots. A new ticket will always take the priority by replacing the current ticket and put it somewhere.
+- Fix bug with TTL at 0 when a player cross a router
+- Add possibility to add destination name in ticket title, taken from the 3rd line of all signs giving or modifying tickets
+
+v1.3.1 - feb, 14 2013
+- Add BC7015 sign to set a return address (on 4th line of the sign) for a cart
+- Add BC7016 sign to test if a return address exists in a cart and activate a lever
+- Add BC7017 sign to put return address as destination address and reset TTL
+- Add bcsign command to create ticket as signed books. Only signed books will be used as address storage now.
+- Add 'author' and 'title' parameter in config file to set author and title of tickets.
+
+v1.2.4 - feb, 12 2013
+- fix NullPointerException bug when setting an address with an empty book is in inventory
+
+v1.2.3 - feb, 9 2013
+- fix recurrent bug on permissions
+
+v1.2.2 - feb, 8 2013
+- fix bug with sign permissions
+
+v1.2.1-R0.2 - feb, 8 2013
+- Add UpdaterMoveEvent
+
+v1.2.1-R0.1 - feb, 5 2013
+- Add Event API
+
+v1.2.1 - jan, 31 2013
+- Update to Bukkit-1.4.7-R1.0
+
+v1.2.0-R0.2 - jan, 27 2013
+- Add BC7012, BC7013, BC7014, BC7020 and BC7021 signs.
+
+v1.2.0 - jan, 20 2013
+- Add book as destination address storage feature
+
+v1.1.0 - jan, 20 2013
+- Add 'bcupdater remove' command to make all bcupdaters normal carts and stop update process
+- Add 'loadchunks' parameter in configuration file. Set to false to prevent automatic chunk loading (default : true)
+- Remove the tax annoucement on sign build if the tax is 0
+- Improve local updater path algorithm, and fix reset updaters path algoritthm.
+
