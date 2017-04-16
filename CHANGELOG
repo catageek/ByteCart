@@ -1,3 +1,7 @@
+v3.1.0 - April, 16 2017
+- Add a new router with no visible redstone dust. Use BC8011 (or BC8021 for backbone) signs
+- for all BC9XXXX signs, detect a lever on the downface just behind the sign, remove the need of a side lever with visible redstone dust
+
 v3.0.0 - March, 24 2017
 Features
 - Routing tables are now in JSON. Open the book in the chest of the router to see what how routes are registered. You must run bcupdater in each region to change automatically the format
