@@ -33,9 +33,8 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	public AbstractRouter(BlockFace from, org.bukkit.Location loc, boolean isOldVersion) {
 		super(loc);
 		this.setFrom(from);
-		this.addIO(from, loc.getBlock());
 		this.IsOldVersion = isOldVersion;
-
+		this.addIO(from, loc.getBlock());
 	}
 
 	/* (non-Javadoc)
