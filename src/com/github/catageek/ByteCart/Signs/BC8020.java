@@ -19,11 +19,16 @@ import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 /**
  * An IC at the entry of a L2 router
  */
-final class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTable {
+class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTable {
 
 
 	BC8020(Block block, org.bukkit.entity.Vehicle vehicle) throws ClassNotFoundException, IOException {
 		super(block, vehicle);
+		this.IsTrackNumberProvider = false;
+	}
+
+	BC8020(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle, boolean isOldVersion) throws ClassNotFoundException, IOException {
+		super(block, vehicle, isOldVersion);
 		this.IsTrackNumberProvider = false;
 	}
 

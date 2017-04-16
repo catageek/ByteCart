@@ -122,6 +122,8 @@ final public class TriggeredSignFactory {
 
 			case 8020:
 				return (new BC8020(block, vehicle));
+			case 8021:
+				return (new BC8021(block, vehicle));
 
 			case 9000:
 				return (new BC9000(block, vehicle));
