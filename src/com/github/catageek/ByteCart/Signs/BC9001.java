@@ -164,7 +164,7 @@ public final class BC9001 extends AbstractBC9000 implements Station, Powerable, 
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		
 		if (event.getSide().equals(Side.LEVER_ON)  && this.getInput(6).getAmount() == 0) {
-			this.getOutput(0).setAmount(3); // power levers if matching
+			this.getOutput(0).setAmount(Side.LEVER_ON.Value()); // power levers if matching
 			event1 = new SignPostStationEvent(this, Side.LEVER_ON);
 		}
 		else
