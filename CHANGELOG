@@ -1,3 +1,9 @@
+v3.1.2 - June, 19 2017
+- Switch to binary format for routing table if JSON use more than 50 pages in the book
+
+v3.1.1 - April, 25 2017
+- Fix a bug that prevents left lever of station signs to work
+
 v3.1.0 - April, 16 2017
 - Add a new router with no visible redstone dust. Use BC8011 (or BC8021 for backbone) signs
 - for all BC9XXXX signs, detect a lever on the downface just behind the sign, remove the need of a side lever with visible redstone dust

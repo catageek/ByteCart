@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.FileStorage.BookInputStream;;
 
 
 
@@ -23,7 +24,7 @@ public final class BookFile implements BCFile {
 
 	// log2 of length of a page in bytes
 	static final int PAGESIZE = 155;
-	static final int MAXPAGE = 20;
+	static final int MAXPAGE = 50;
 	static final int MAXSIZE = MAXPAGE * PAGESIZE;
 	private static final String prefix = ByteCart.myPlugin.getConfig().getString("author");
 	private BookMeta book;

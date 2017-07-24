@@ -49,7 +49,8 @@ public interface RoutingTableWritable extends RoutingTable {
 	/**
 	 * Serialize the routing table
 	 * 
+	 * @param allowconversion if set to false, non conversion to another format
 	 * @throws IOException
 	 */
-	void serialize() throws IOException;
+	void serialize(boolean allowconversion) throws IOException;
 }

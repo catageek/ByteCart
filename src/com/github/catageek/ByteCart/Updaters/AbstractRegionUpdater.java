@@ -83,7 +83,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 			this.getRoutes().setLastrouterid(this.getCenter().hashCode());
 
 			try {
-				getRoutingTable().serialize();
+				getRoutingTable().serialize(true);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -175,7 +175,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		// clear routes except route to ring 0
 		getRoutingTable().clear(fullreset);
 		try {
-			getRoutingTable().serialize();
+			getRoutingTable().serialize(true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

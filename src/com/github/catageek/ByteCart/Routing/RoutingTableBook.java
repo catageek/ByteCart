@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -16,6 +17,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
+import com.github.catageek.ByteCart.FileStorage.BookFile;
 import com.github.catageek.ByteCart.Storage.ExternalizableTreeMap;
 import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
@@ -26,21 +28,22 @@ import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 final class RoutingTableBook extends AbstractRoutingTable implements
 RoutingTableWritable, Externalizable {
 
-	@SuppressWarnings("unused")
 	private boolean wasModified = false;
 
 	private ExternalizableTreeMap<RouteNumber, RouteProperty> map = new ExternalizableTreeMap<RouteNumber,RouteProperty>();
 
 	private static final long serialVersionUID = -7013741680310224056L;
 	private Inventory inventory;
+	private int slot;
 
 	/**
 	 * Set the inventory
 	 * 
 	 * @param inventory the inventory
 	 */
-	final void setInventory(Inventory inventory) {
+	final void setInventory(Inventory inventory, int slot) {
 		this.inventory = inventory;
+		this.slot = slot;
 	}
 
 	public RoutingTableBook() {
@@ -290,8 +293,32 @@ RoutingTableWritable, Externalizable {
 	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#serialize()
 	 */
 	@Override
-	public void serialize() throws IOException {
-		this.convertToJSON().serialize();
+	public void serialize(boolean allowconversion) throws IOException {
+		if (! wasModified)
+			return;
+		try {
+			// we try to convert to JSON
+			if (allowconversion) { 
+				this.convertToJSON().serialize(false);
+				return;
+			}
+		} catch(IOException e) {
+		}
+		// if not possible, try with binary format
+		if (ByteCart.debug)
+			ByteCart.log.info("ByteCart: JSON conversion failed, trying binary format");
+		BookFile file = BookFile.getFrom(inventory, slot, true, "RoutingTableBinary");
+		if (file == null) {
+			file = BookFile.create(inventory, slot, true, "RoutingTableBinary");
+			file.setDescription("Bytecart Routing Table");
+		} else {
+			file.clear();
+		}
+		ObjectOutputStream oos = new ObjectOutputStream(file.getOutputStream());
+		oos.writeObject(this);
+		if(ByteCart.debug)
+			ByteCart.log.info("ByteCart: binary object written, now closing");
+		oos.flush();
 		wasModified = false;	
 	}
 

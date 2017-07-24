@@ -26,11 +26,14 @@ public final class RoutingTableFactory {
 	 */
 	static public RoutingTableWritable getRoutingTable(Inventory inv, int slot) throws ClassNotFoundException, IOException, JsonSyntaxException {
 		BookFile file = BookFile.getFrom(inv, slot, true, ".BookFile");
+		if (file == null) {
+			file = BookFile.getFrom(inv, slot, true, "RoutingTableBinary");
+		}
 		RoutingTableBook rt = null;
 		if (file != null && ! file.isEmpty()) {
 			ObjectInputStream ois = new ObjectInputStream(file.getInputStream());
 			rt = (RoutingTableBook) ois.readObject();
-			rt.setInventory(inv);
+			rt.setInventory(inv, slot);
 			return rt;
 		}
 	

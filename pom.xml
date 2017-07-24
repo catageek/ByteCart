@@ -178,5 +178,5 @@
 		      <version>2.5</version>
 		    </dependency>
 	</dependencies>
-	<version>3.1.1</version>
+	<version>3.1.2-SNAPSHOT</version>
 </project>

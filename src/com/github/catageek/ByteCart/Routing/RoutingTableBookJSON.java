@@ -14,6 +14,8 @@ import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.FileStorage.BookFile;
+import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
+import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -307,13 +309,28 @@ RoutingTableWritable {
 		}
 	}
 
+	private RoutingTableBook convertToBinary() {
+		final RoutingTableBook btable = new RoutingTableBook();
+		btable.setInventory(this.inventory, 0);
+		for (Entry<Integer, RouteEntry> entry : table.entrySet()) {
+			for (Entry<Integer, Set<BlockFace>> routemap : entry.getValue().routes.entrySet()) {
+				for (BlockFace route : routemap.getValue()) {
+					btable.setEntry(entry.getKey().intValue(), route, routemap.getKey().intValue());
+				}
+			}
+		}
+		return btable;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#serialize()
 	 */
 	@Override
-	public void serialize() throws IOException {
+	public void serialize(boolean allowconversion) throws IOException {
 		if (! this.wasModified || this.readonly)
 			return;
+		if (ByteCart.debug)
+			ByteCart.log.info("ByteCart: Trying to store in JSON format");
 		Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 		String json = gson.toJson(this);
 		BookFile file = BookFile.getFrom(inventory, slot, false, "RoutingTable");
@@ -323,9 +340,21 @@ RoutingTableWritable {
 		}
 		file.clear();
 		file.getOutputStream().write(json.getBytes());
-		file.flush();
+		try {
+			file.flush();
+		} 
+		catch (IOException e) {
+			if (allowconversion) {
+				this.convertToBinary().serialize(false);
+			}
+			else
+				throw e;
+		}
+/*
 		wasModified = false;
-	}
+		if (ByteCart.debug)
+			ByteCart.log.info("Storing in JSON format successful");
+*/	}
 
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#size()

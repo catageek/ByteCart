@@ -3,6 +3,8 @@ package com.github.catageek.ByteCart.FileStorage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import javax.naming.SizeLimitExceededException;
+
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.ByteCart;
@@ -70,9 +72,15 @@ class BookOutputStream extends ByteArrayOutputStream {
 		int len= sb.length();
 		int i, j = 1;
 
-
 		// number of pages to write less 1
 		int count = len / BookFile.PAGESIZE;
+
+		// Throw if too many pages are needed
+		if (count >= BookFile.MAXPAGE) {
+			if (ByteCart.debug)
+				ByteCart.log.info(count + " pages are needed, maximum is " + BookFile.MAXPAGE);
+			throw new IOException();
+		}
 
 		String[] strings = new String[count+1];
 

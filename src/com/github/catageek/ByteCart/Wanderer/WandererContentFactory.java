@@ -127,7 +127,13 @@ abstract public class WandererContentFactory {
 		file.clear();
 		ObjectOutputStream oos = new ObjectOutputStream(file.getOutputStream());
 		oos.writeObject(rte);
-		oos.flush();	
+		try {
+			oos.flush();
+		}
+		catch (IOException e) {
+			deleteContent(inv);
+			ByteCart.log.info("Bytecart: I/O error (maximum capacity reached), updater deleted");
+		}
 	}
 
 	public static void deleteContent(Inventory inv) {

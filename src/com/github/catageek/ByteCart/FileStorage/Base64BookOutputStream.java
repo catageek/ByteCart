@@ -4,6 +4,7 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.Util.Base64;
 
+
 /**
  * Base64 encoder/decoder for BookOutPutStream
  */
