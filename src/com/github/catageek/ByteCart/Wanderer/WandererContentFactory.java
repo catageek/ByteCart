@@ -11,8 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.FileStorage.BCFile;
-import com.github.catageek.ByteCart.FileStorage.BookFile;
+import com.github.catageek.ByteCart.FileStorage.InventoryFile;
 import com.github.catageek.ByteCartAPI.Wanderer.InventoryContent;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Level;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
@@ -22,9 +21,12 @@ abstract public class WandererContentFactory {
 	public static WandererContent getWandererContent(Inventory inv)
 			throws IOException, ClassNotFoundException {
 		WandererContent rte = null;
-		BookFile file = BookFile.getFrom(inv, 0, true, null);
+		InventoryFile file = null;
+		if (InventoryFile.isInventoryFile(inv, null)) {
+			file = new InventoryFile(inv, true, null);
+		}
 		if (file == null) {
-			throw new IOException("Book not found");
+			throw new IOException("No book found");
 		}
 		if (! file.isEmpty()) {
 			ObjectInputStream ois = new ObjectInputStream(file.getInputStream());
@@ -96,7 +98,7 @@ abstract public class WandererContentFactory {
 				match.append(suffix).append(dot);
 
 			match.append(".*");
-			if (BookFile.isBookFile(inv, 0, type) 
+			if (InventoryFile.isInventoryFile(inv, type) 
 					&& booktitle.matches(match.toString())) {
 					return true;
 			}
@@ -104,27 +106,23 @@ abstract public class WandererContentFactory {
 		return false;
 	}
 
-	public static void createWanderer(Inventory inv, int region, Level level, Player player
-			, String name, String type) throws IOException {
-		BCFile file = BookFile.create(inv, 0, true, name);
+	private static InventoryFile createWanderer(Inventory inv, int region, Level level, Player player
+			, String name, Level type) throws IOException {
+		InventoryFile file = new InventoryFile(inv, true, name);
 		String dot = ".";
 		StringBuilder match = new StringBuilder();
 		match.append(name).append(dot).append(level.scope.name);
-		match.append(dot).append(type).append(dot);
+		match.append(dot).append(type.type).append(dot);
 		file.setDescription(match.toString());
-		file.flush();
+		return file;
 		
 	}
 
-	public static <T extends InventoryContent> void saveContent(T rte)
+	public static <T extends InventoryContent> void saveContent(T rte, String name, Level type)
 			throws IOException, ClassNotFoundException {
 		Inventory inv = rte.getInventory();
 
-		BCFile file = BookFile.getFrom(inv, 0, true, null);
-		if (file == null) {
-			throw new IOException("No book found");
-		}
-		file.clear();
+		InventoryFile file = createWanderer(inv, rte.getRegion(), rte.getLevel(), rte.getPlayer(), name, type);
 		ObjectOutputStream oos = new ObjectOutputStream(file.getOutputStream());
 		oos.writeObject(rte);
 		try {

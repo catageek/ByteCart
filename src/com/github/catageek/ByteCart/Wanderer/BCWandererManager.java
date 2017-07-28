@@ -7,6 +7,7 @@ import java.util.Map;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCartAPI.Wanderer.InventoryContent;
+import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Level;
 import com.github.catageek.ByteCartAPI.Wanderer.WandererFactory;
 import com.github.catageek.ByteCartAPI.Wanderer.WandererManager;
 
@@ -25,31 +26,6 @@ public class BCWandererManager implements WandererManager {
 		if (map.containsKey(type))
 			return false;
 		map.put(type, factory);
-		return true;
-	}
-
-	/**
-	 * Turn a cart into a wanderer
-	 * 
-	 * @param ivc the content of the wanderer
-	 * @param type the name of the type of wanderer previously registered
-	 * @param suffix a suffix to add to book title
-	 */
-	@Override
-	public boolean create(InventoryContent ivc, String type, String suffix) {
-		if (! map.containsKey(type))
-			return false;
-		try {
-			WandererContentFactory.createWanderer(ivc.getInventory(), ivc.getRegion(), ivc.getLevel(),
-					ivc.getPlayer(), type, suffix);
-			WandererContentFactory.saveContent(ivc);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return true;
 	}
 
@@ -80,10 +56,16 @@ public class BCWandererManager implements WandererManager {
 		return map.containsKey(type);
 	}
 
+	/**
+	 * Turn a cart into a wanderer
+	 *
+	 * @param ivc the content of the wanderer
+	 * @param type the name of the type of wanderer previously registered
+	 * @param suffix a suffix to add to book title
+	 */
 	@Override
-	public void saveContent(InventoryContent rte) throws ClassNotFoundException, IOException {
-
-		WandererContentFactory.saveContent(rte);
+	public void saveContent(InventoryContent ivc, String suffix, Level level) throws ClassNotFoundException, IOException {
+		WandererContentFactory.saveContent(ivc, suffix, level);
 	}
 
 	@Override

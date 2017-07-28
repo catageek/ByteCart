@@ -27,6 +27,10 @@ class BookInputStream extends ByteArrayInputStream {
 		super(outputstream.getBuffer());
 	}
 
+	public String getBuffer() {
+		return new String(this.buf);
+	}
+
 	/**
 	 * Copy all pages of a book in a array of bytes
 	 *

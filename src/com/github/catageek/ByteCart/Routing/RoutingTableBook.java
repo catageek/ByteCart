@@ -17,7 +17,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.FileStorage.BookFile;
+import com.github.catageek.ByteCart.FileStorage.InventoryFile;
 import com.github.catageek.ByteCart.Storage.ExternalizableTreeMap;
 import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
 import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
@@ -34,16 +34,13 @@ RoutingTableWritable, Externalizable {
 
 	private static final long serialVersionUID = -7013741680310224056L;
 	private Inventory inventory;
-	private int slot;
-
 	/**
 	 * Set the inventory
 	 * 
 	 * @param inventory the inventory
 	 */
-	final void setInventory(Inventory inventory, int slot) {
+	final void setInventory(Inventory inventory) {
 		this.inventory = inventory;
-		this.slot = slot;
 	}
 
 	public RoutingTableBook() {
@@ -307,13 +304,9 @@ RoutingTableWritable, Externalizable {
 		// if not possible, try with binary format
 		if (ByteCart.debug)
 			ByteCart.log.info("ByteCart: JSON conversion failed, trying binary format");
-		BookFile file = BookFile.getFrom(inventory, slot, true, "RoutingTableBinary");
-		if (file == null) {
-			file = BookFile.create(inventory, slot, true, "RoutingTableBinary");
-			file.setDescription("Bytecart Routing Table");
-		} else {
-			file.clear();
-		}
+		InventoryFile file = new InventoryFile(inventory, true, "RoutingTableBinary");
+		file.setDescription("Bytecart Routing Table");
+		file.clear();
 		ObjectOutputStream oos = new ObjectOutputStream(file.getOutputStream());
 		oos.writeObject(this);
 		if(ByteCart.debug)

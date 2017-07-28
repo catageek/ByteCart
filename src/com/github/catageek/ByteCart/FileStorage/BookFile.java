@@ -23,7 +23,7 @@ import com.github.catageek.ByteCart.FileStorage.BookInputStream;;
 public final class BookFile implements BCFile {
 
 	// log2 of length of a page in bytes
-	static final int PAGESIZE = 155;
+	static final int PAGESIZE = 255;
 	static final int MAXPAGE = 50;
 	static final int MAXSIZE = MAXPAGE * PAGESIZE;
 	private static final String prefix = ByteCart.myPlugin.getConfig().getString("author");
@@ -83,6 +83,10 @@ public final class BookFile implements BCFile {
 	
 	static public BookFile create(Inventory inventory, int index, boolean binary, String name) {
 		ItemStack mystack = inventory.getItem(index);
+		return BookFile.create(inventory, mystack, index, binary, name);
+	}
+
+	static public BookFile create(Inventory inventory, ItemStack mystack, int index, boolean binary, String name) {
 		if (mystack == null || ! mystack.getType().equals(Material.WRITTEN_BOOK)) {
 			mystack = new ItemStack(Material.WRITTEN_BOOK);
 		}
@@ -223,7 +227,7 @@ public final class BookFile implements BCFile {
 	 */
 	public static boolean isBookFile(ItemStack stack, String suffix) {
 		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta())
-			return ((BookMeta) stack.getItemMeta()).getAuthor().equals(prefix + "." + suffix);
+			return ((BookMeta) stack.getItemMeta()).getAuthor().equals(prefix + "." + suffix) || suffix == null;
 		return false;		
 	}
 

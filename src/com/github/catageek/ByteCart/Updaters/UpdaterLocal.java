@@ -23,7 +23,7 @@ import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implements Wanderer {
 
 	protected UpdaterLocal(BCSign bc, UpdaterContent rte) {
-		super(bc, rte);
+		super(bc, rte, "Updater", Level.LOCAL);
 	}
 
 	@Override

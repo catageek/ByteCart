@@ -153,7 +153,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<bukkit.version>1.11.2-R0.1-SNAPSHOT</bukkit.version>
-		<bytecartapi.version>3.1.0</bytecartapi.version>
+		<bytecartapi.version>3.1.2-SNAPSHOT</bytecartapi.version>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -13,9 +13,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 
 import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.FileStorage.BookFile;
-import com.github.catageek.ByteCart.Storage.PartitionedHashSet;
-import com.github.catageek.ByteCartAPI.Util.DirectionRegistry;
+import com.github.catageek.ByteCart.FileStorage.InventoryFile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -311,7 +309,7 @@ RoutingTableWritable {
 
 	private RoutingTableBook convertToBinary() {
 		final RoutingTableBook btable = new RoutingTableBook();
-		btable.setInventory(this.inventory, 0);
+		btable.setInventory(this.inventory);
 		for (Entry<Integer, RouteEntry> entry : table.entrySet()) {
 			for (Entry<Integer, Set<BlockFace>> routemap : entry.getValue().routes.entrySet()) {
 				for (BlockFace route : routemap.getValue()) {
@@ -333,11 +331,8 @@ RoutingTableWritable {
 			ByteCart.log.info("ByteCart: Trying to store in JSON format");
 		Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 		String json = gson.toJson(this);
-		BookFile file = BookFile.getFrom(inventory, slot, false, "RoutingTable");
-		if (file == null) {
-			file = BookFile.create(inventory, slot, false, "RoutingTable");
-			file.setDescription("Bytecart Routing Table");
-		}
+		InventoryFile file = new InventoryFile(inventory, false, "RoutingTable");
+		file.setDescription("Bytecart Routing Table");
 		file.clear();
 		file.getOutputStream().write(json.getBytes());
 		try {

@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 
 import org.bukkit.inventory.Inventory;
 
-import com.github.catageek.ByteCart.FileStorage.BookFile;
+import com.github.catageek.ByteCart.FileStorage.InventoryFile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -25,19 +25,24 @@ public final class RoutingTableFactory {
 	 * @throws ClassNotFoundException
 	 */
 	static public RoutingTableWritable getRoutingTable(Inventory inv, int slot) throws ClassNotFoundException, IOException, JsonSyntaxException {
-		BookFile file = BookFile.getFrom(inv, slot, true, ".BookFile");
-		if (file == null) {
-			file = BookFile.getFrom(inv, slot, true, "RoutingTableBinary");
+		InventoryFile file = null;
+		if (InventoryFile.isInventoryFile(inv, ".BookFile")) {
+			file = new InventoryFile(inv, true, ".BookFile");
+		}
+		else if (InventoryFile.isInventoryFile(inv, "RoutingTableBinary")) {
+			file = new InventoryFile(inv, true, "RoutingTableBinary");
 		}
 		RoutingTableBook rt = null;
 		if (file != null && ! file.isEmpty()) {
 			ObjectInputStream ois = new ObjectInputStream(file.getInputStream());
 			rt = (RoutingTableBook) ois.readObject();
-			rt.setInventory(inv, slot);
+			rt.setInventory(inv);
 			return rt;
 		}
 	
-		file = BookFile.getFrom(inv, slot, false, "RoutingTable");
+		if (InventoryFile.isInventoryFile(inv, "RoutingTable")) {
+			file = new InventoryFile(inv, false, "RoutingTable");
+		}
 		if (file == null || file.isEmpty()) {
 			if (inv.getItem(slot) == null) {
 				return new RoutingTableBookJSON(inv, slot);
@@ -51,6 +56,6 @@ public final class RoutingTableFactory {
 	}
 	
 	static public Boolean isRoutingTable(Inventory inv, int slot) {
-		return BookFile.isBookFile(inv, slot, "RoutingTable");
+		return InventoryFile.isInventoryFile(inv, "RoutingTable");
 	}
 }
