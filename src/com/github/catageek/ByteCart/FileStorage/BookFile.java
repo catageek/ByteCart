@@ -156,7 +156,7 @@ public final class BookFile implements BCFile {
 	 * @see com.github.catageek.ByteCart.FileStorage.BCFile#getInputStream()
 	 */
 	@Override
-	public InputStream getInputStream() throws IOException {
+	public BookInputStream getInputStream() throws IOException {
 		if (isClosed)
 			throw new IOException("Book File has already been closed");
 
