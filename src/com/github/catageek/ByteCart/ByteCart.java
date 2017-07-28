@@ -3,13 +3,17 @@ package com.github.catageek.ByteCart;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.catageek.ByteCart.CollisionManagement.CollisionAvoiderManager;
 import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
 import com.github.catageek.ByteCart.EventManagement.ConstantSpeedListener;
 import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
+import com.github.catageek.ByteCart.FileStorage.FileStorageTest;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.Updaters.UpdaterFactory;
 import com.github.catageek.ByteCart.Wanderer.BCWandererManager;
@@ -81,6 +85,12 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 			getServer().getPluginManager().registerEvents(hostnamePlugin, this);
 			getCommand("host").setExecutor(hostnamePlugin);
 		}
+
+		/* Uncomment to launch storage test
+		Block block = this.getServer().getWorld("plat").getBlockAt(0, 61, 0);
+		Inventory inventory = ((Chest)block.getState()).getInventory();
+		(new FileStorageTest(inventory)).runTest();
+		*/
 
 		log.info("[ByteCart] plugin has been enabled.");
 	}
