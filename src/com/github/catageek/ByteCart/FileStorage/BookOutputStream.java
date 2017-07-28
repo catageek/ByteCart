@@ -72,19 +72,20 @@ class BookOutputStream extends ByteArrayOutputStream {
 		int len= sb.length();
 		int i, j = 1;
 
-		// number of pages to write less 1
-		int count = len / BookFile.PAGESIZE;
+		// number of pages to write
+		int count = 1 + (len - 1) / BookFile.PAGESIZE;
 
 		// Throw if too many pages are needed
-		if (count >= BookFile.MAXPAGE) {
+		if (count > BookFile.MAXPAGE) {
 			if (ByteCart.debug)
 				ByteCart.log.info(count + " pages are needed, maximum is " + BookFile.MAXPAGE);
 			throw new IOException();
 		}
 
-		String[] strings = new String[count+1];
+		String[] strings = new String[count];
 
 		// loop for full pages
+		count -= 1;
 		for (i = 0; i < count; i++) {
 			strings[i] = sb.substring(i * BookFile.PAGESIZE, j * BookFile.PAGESIZE);
 			j++;
