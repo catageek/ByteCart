@@ -59,7 +59,7 @@ public interface RoutingTableWritable extends RoutingTable {
 				if(ByteCart.debug) {
 					ByteCart.log.info("ByteCart : Update : ring = " + ring + ", metric = " + computedmetric + ", direction " + from);
 				}
-				neighbour.updateTimestamp();
+				ByteCart.myPlugin.getWandererManager().getFactory("Updater").updateTimestamp(neighbour);
 			}
 		}
 		// search for routes that are no more announced and not directly connected
@@ -72,7 +72,7 @@ public interface RoutingTableWritable extends RoutingTable {
 				if(ByteCart.debug) {
 					ByteCart.log.info("ByteCart : Remove : ring = " + route + " from " + from);
 				}
-				neighbour.updateTimestamp();
+				ByteCart.myPlugin.getWandererManager().getFactory("Updater").updateTimestamp(neighbour);
 			}
 		}
 	}

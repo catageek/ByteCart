@@ -5,9 +5,10 @@ import java.io.IOException;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
-import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
+import com.github.catageek.ByteCart.Wanderer.BCWandererManager;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Signs.BCRouter;
 import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
@@ -37,8 +38,9 @@ class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTable {
 	 */
 	@Override
 	protected boolean selectWanderer() {
-		return (! WandererContentFactory.isWanderer(this.getInventory()))
-				|| WandererContentFactory.isWanderer(this.getInventory(), Scope.LOCAL);
+		final BCWandererManager wm = ByteCart.myPlugin.getWandererManager();
+		return (! wm.isWanderer(this.getInventory()))
+				|| wm.isWanderer(this.getInventory(), Scope.LOCAL);
 	}
 
 	/* (non-Javadoc)

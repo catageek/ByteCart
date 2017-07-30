@@ -10,7 +10,6 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.AddressLayer.TicketFactory;
 import com.github.catageek.ByteCart.IO.ComponentSign;
-import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 
 
@@ -41,7 +40,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	@Override
 	public final void trigger() {
 
-		if (! this.isHolderAllowed() || WandererContentFactory.isWanderer(getInventory()))
+		if (! this.isHolderAllowed() || ByteCart.myPlugin.getWandererManager().isWanderer(getInventory()))
 			return;
 
 		// if this is a cart in a train

@@ -215,19 +215,6 @@ public class WandererContent  implements InventoryContent {
 	private void setEnd(Stack<Integer> end) {
 		End = end;
 	}
-	/**
-	 * Update the expiration time to have twice the spent time left
-	 */
-	public void updateTimestamp() {
-		long initial;
-		long expiration;
-		if ((initial = this.getCreationtime()) == (expiration = this.getExpirationTime()))
-			return;
-		long last = Calendar.getInstance().getTimeInMillis();
-		long update = last + ((last - initial) << 1);
-		if (update > expiration)
-			setExpirationTime(update);
-	}
 
 	public long getExpirationTime() {
 		return expirationtime;
@@ -237,7 +224,8 @@ public class WandererContent  implements InventoryContent {
 	 * 
 	 * @param lastupdate the lastupdate to set
 	 */
-	protected void setExpirationTime(long lastupdate) {
+	@Override
+	public void setExpirationTime(long lastupdate) {
 		this.expirationtime = lastupdate;
 	}
 	/**

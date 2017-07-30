@@ -8,7 +8,6 @@ import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.CollisionManagement.SimpleCollisionAvoider;
 import com.github.catageek.ByteCart.HAL.SubRegistry;
-import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
 import com.github.catageek.ByteCartAPI.Event.SignPostSubnetEvent;
@@ -45,7 +44,7 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 
 			SimpleCollisionAvoider intersection = ByteCart.myPlugin.getCollisionAvoiderManager().<SimpleCollisionAvoider>getCollisionAvoider(builder);
 
-			if (! WandererContentFactory.isWanderer(getInventory())) {
+			if (! ByteCart.myPlugin.getWandererManager().isWanderer(getInventory())) {
 
 				boolean isTrain = AbstractTriggeredSign.isTrain(getDestinationAddress());
 

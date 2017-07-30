@@ -1,8 +1,5 @@
 package com.github.catageek.ByteCart.EventManagement;
 
-import java.io.IOException;
-import java.util.Calendar;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Vehicle;
@@ -14,8 +11,7 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-import com.github.catageek.ByteCart.Updaters.UpdaterContentFactory;
-import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
+import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.Event.UpdaterMoveEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterRemoveEvent;
 
@@ -28,11 +24,7 @@ public class ByteCartUpdaterMoveListener implements Listener {
 	// flag for singleton
 	private static boolean exist = false;
 
-	// A map with ephemeral elements and timers
-	private static UpdaterSet updaterset = new UpdaterSet();
-
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onVehicleMoveEvent(VehicleMoveEvent event) {
 
 		Location loc = event.getFrom();
@@ -42,7 +34,6 @@ public class ByteCartUpdaterMoveListener implements Listener {
 		int to_x = loc.getBlockX();
 		int to_z = loc.getBlockZ();
 
-
 		// Check if the vehicle crosses a cube boundary
 		if(from_x == to_x && from_z == to_z)
 			return;	// no boundary crossed, resumed
@@ -51,27 +42,13 @@ public class ByteCartUpdaterMoveListener implements Listener {
 		// reset the timer
 		if (v instanceof InventoryHolder) {
 			Inventory inv = ((InventoryHolder) v).getInventory();
-			if (WandererContentFactory.isWanderer(inv, "Updater")) {
+			if (ByteCart.myPlugin.getWandererManager().isWanderer(inv, "Updater")) {
 				Bukkit.getServer().getPluginManager().callEvent(new UpdaterMoveEvent(event));
-				try {
-					long duration = UpdaterContentFactory.getUpdaterContent(inv).getExpirationTime()
-							- Calendar.getInstance().getTimeInMillis();
-					if (duration < 1000) {
-						updaterset.getMap().reset(duration/50, v.getEntityId());
-						Bukkit.getServer().getPluginManager().callEvent(new UpdaterRemoveEvent(v.getEntityId()));
-					}
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			return;
+				return;
 			}
 		}
 
-		if (updaterset.getMap().isEmpty()) {
+		if (ByteCart.myPlugin.getWandererManager().getFactory("Updater").areAllRemoved()) {
 			removeListener();
 		}
 	}
@@ -82,12 +59,12 @@ public class ByteCartUpdaterMoveListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
 		Vehicle v = event.getVehicle();
 		if (v instanceof InventoryHolder) {
 			Inventory inv = ((InventoryHolder) v).getInventory();
-			if (WandererContentFactory.isWanderer(inv, "Updater")) {
+			if (ByteCart.myPlugin.getWandererManager().isWanderer(inv, "Updater")) {
+				ByteCart.myPlugin.getWandererManager().getFactory("Updater").destroyWanderer(inv);
 				Bukkit.getServer().getPluginManager().callEvent(new UpdaterRemoveEvent(v.getEntityId()));
 			}
 		}
@@ -95,7 +72,6 @@ public class ByteCartUpdaterMoveListener implements Listener {
 	
 	private void removeListener() {
 		HandlerList.unregisterAll(this);
-		updaterset = null;
 		setExist(false);
 	}
 
@@ -110,22 +86,6 @@ public class ByteCartUpdaterMoveListener implements Listener {
 	 * @param exist the exist to set
 	 */
 	public static void setExist(boolean exist) {
-		if (! isExist() && exist)
-			updaterset = new UpdaterSet();
 		ByteCartUpdaterMoveListener.exist = exist;
-	}
-
-	/**
-	 * Add a vehicle id in the updater map
-	 *
-	 * @param id the vehicle id
-	 */
-	public static final void addUpdater(int id) {
-		updaterset.getMap().add(id);
-	}
-
-	public static final void clearUpdaters() {
-		if (updaterset != null)
-			updaterset.clear();
 	}
 }

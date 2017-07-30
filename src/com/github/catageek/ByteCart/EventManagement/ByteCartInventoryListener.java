@@ -35,7 +35,6 @@ public class ByteCartInventoryListener implements Listener {
 	}
 
 	@EventHandler (ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Entity entity;
 		Inventory inv;

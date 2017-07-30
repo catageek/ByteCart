@@ -24,7 +24,7 @@ public final class BookFile implements BCFile {
 	static final int MAXSIZE = BookOutputStream.MAXSIZE;
 	private static final String prefix = ByteCart.myPlugin.getConfig().getString("author");
 	private BookMeta book;
-	private ItemStack stack;
+	private final ItemStack stack;
 	private ItemStackMetaOutputStream outputstream;
 	private boolean isClosed = false;
 	private final Inventory container;
@@ -75,6 +75,10 @@ public final class BookFile implements BCFile {
 			bookfile = create(inventory, index, binary, name);
 		}
 		return bookfile;		
+	}
+
+	private static boolean isBookFile(String name, BookMeta mybook) {
+		return mybook.getAuthor().equals(prefix + "." + name);
 	}
 	
 	static public BookFile create(Inventory inventory, int index, boolean binary, String name) {
@@ -223,7 +227,7 @@ public final class BookFile implements BCFile {
 	 */
 	public static boolean isBookFile(ItemStack stack, String suffix) {
 		if (stack != null && stack.getType().equals(Material.WRITTEN_BOOK) && stack.hasItemMeta())
-			return ((BookMeta) stack.getItemMeta()).getAuthor().equals(prefix + "." + suffix) || suffix == null;
+			return isBookFile(suffix, (BookMeta) stack.getItemMeta()) || suffix == null;
 		return false;		
 	}
 

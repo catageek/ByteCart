@@ -18,7 +18,6 @@ import com.github.catageek.ByteCart.CollisionManagement.Router;
 import com.github.catageek.ByteCart.CollisionManagement.RouterCollisionAvoiderBuilder;
 import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
 import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
-import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.Event.SignPostRouteEvent;
 import com.github.catageek.ByteCartAPI.Event.SignPreRouteEvent;
@@ -164,7 +163,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			// routing normally
 			to = router.WishToGo(From, wanderer.giveRouterDirection(), isTrain);
 
-			if (WandererContentFactory.isWanderer(getInventory(), "Updater")) {
+			if (ByteCart.myPlugin.getWandererManager().isWanderer(getInventory(), "Updater")) {
 				int nextring = this.getRoutingTable().getDirectlyConnected(to);
 				UpdaterPassRouterEvent event = new UpdaterPassRouterEvent(wanderer, to, nextring);
 				Bukkit.getServer().getPluginManager().callEvent(event);
@@ -203,7 +202,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 */
 	protected boolean selectWanderer() {
 		// everything that is not an wanderer must be routed
-		return ! WandererContentFactory.isWanderer(getInventory());
+		return ! ByteCart.myPlugin.getWandererManager().isWanderer(getInventory());
 	}
 
 	/**

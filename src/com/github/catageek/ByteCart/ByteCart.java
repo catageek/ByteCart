@@ -11,7 +11,6 @@ import com.github.catageek.ByteCart.EventManagement.ByteCartListener;
 import com.github.catageek.ByteCart.EventManagement.ConstantSpeedListener;
 import com.github.catageek.ByteCart.EventManagement.PreloadChunkListener;
 import com.github.catageek.ByteCart.Storage.IsTrainManager;
-import com.github.catageek.ByteCart.Updaters.UpdaterFactory;
 import com.github.catageek.ByteCart.Wanderer.BCWandererManager;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 import com.github.catageek.ByteCart.plugins.BCHostnameResolutionPlugin;
@@ -56,10 +55,6 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 		this.setIt(new IsTrainManager());
 
 		getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
-
-		// register updater factory
-		if (! this.getWandererManager().isWandererType("Updater"))
-			this.getWandererManager().register(new UpdaterFactory(), "Updater");
 
 		getCommand("mego").setExecutor(new BytecartCommandExecutor());
 		getCommand("sendto").setExecutor(new BytecartCommandExecutor());

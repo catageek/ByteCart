@@ -52,7 +52,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 			if (this.isExactSubnet((start = this.getFirstStationNumber()), this.getNetmask())) {
 				this.getSignAddress().setAddress(buildAddress(start));
 				this.getSignAddress().finalizeAddress();
-				this.getContent().updateTimestamp();
+				ByteCart.myPlugin.getWandererManager().getFactory("Updater").updateTimestamp(this.getContent());
 				this.leaveSubnet();
 				this.save();
 			}
@@ -72,7 +72,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 				Address reloadAddress = AddressFactory.getAddress(address);
 				this.setSignAddress(reloadAddress);
 
-				this.getContent().updateTimestamp();
+				ByteCart.myPlugin.getWandererManager().getFactory("Updater").updateTimestamp(this.getContent());
 
 				// launch event
 				if (length > 1) {

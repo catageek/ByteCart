@@ -1,7 +1,5 @@
 package com.github.catageek.ByteCart;
 
-import java.io.IOException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -20,9 +18,9 @@ import com.github.catageek.ByteCart.EventManagement.ByteCartUpdaterMoveListener;
 import com.github.catageek.ByteCart.Signs.BC7010;
 import com.github.catageek.ByteCart.Signs.BC7011;
 import com.github.catageek.ByteCart.Signs.BC7017;
-import com.github.catageek.ByteCart.Updaters.UpdaterContentFactory;
 import com.github.catageek.ByteCart.Updaters.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.LogUtil;
+import com.github.catageek.ByteCart.Wanderer.BCWandererManager;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 
@@ -175,8 +173,9 @@ class BytecartCommandExecutor implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("bcupdater")) {
 
 			if (args.length == 1 && args[0].equalsIgnoreCase("remove")) {
-				ByteCart.myPlugin.getWandererManager().unregister("Updater");
-				ByteCartUpdaterMoveListener.clearUpdaters();
+				BCWandererManager wm = ByteCart.myPlugin.getWandererManager();
+				wm.getFactory("Updater").removeAllWanderers();
+				wm.unregister("Updater");
 				return true;
 			}
 
@@ -198,7 +197,7 @@ class BytecartCommandExecutor implements CommandExecutor {
 				boolean full_reset = false;
 				boolean isnew = false;
 				
-				if (! ByteCart.myPlugin.getWandererManager().isWandererType("Updater"))
+				if (! ByteCart.myPlugin.getWandererManager().isRegistered("Updater"))
 					ByteCart.myPlugin.getWandererManager().register(new UpdaterFactory(), "Updater");
 
 				if (args.length >= 2){
@@ -251,19 +250,16 @@ class BytecartCommandExecutor implements CommandExecutor {
 					@Override
 					public void run() {
 						int id = ((StorageMinecart) inventory.getHolder()).getEntityId();
-						try {
-							UpdaterContentFactory.createRoutingTableExchange(inventory, region, level, player, isfullreset, isnew);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						// register updater factory
+						final BCWandererManager wm = ByteCart.myPlugin.getWandererManager();
+						if (! wm.isRegistered("Updater"))
+							wm.register(new UpdaterFactory(), "Updater");
+						wm.getFactory("Updater").createWanderer(id, inventory, region, level, player, isfullreset, isnew);
 						if (! ByteCartUpdaterMoveListener.isExist()) {
 							Listener updatermove = new ByteCartUpdaterMoveListener();
 							ByteCart.myPlugin.getServer().getPluginManager().registerEvents(updatermove, ByteCart.myPlugin);
 							ByteCartUpdaterMoveListener.setExist(true);
 						}
-						ByteCartUpdaterMoveListener.addUpdater(id);
-						LogUtil.sendError(player, ByteCart.myPlugin.getConfig().getString("Info.SetUpdater") );
 					}
 
 

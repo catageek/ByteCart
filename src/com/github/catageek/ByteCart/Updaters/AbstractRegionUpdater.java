@@ -63,7 +63,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 					ByteCart.log.info("ByteCart : Wanderer : storing ring " + current + " direction " + getFrom().ToString());
 
 				getRoutingTable().setEntry(current, getFrom().getBlockFace(), 0);
-				Routes.updateTimestamp();
+				ByteCart.myPlugin.getWandererManager().getFactory("Updater").updateTimestamp(Routes);
 
 			}
 
@@ -111,7 +111,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 		this.getRoutes().seenTimestamp();
 
 		try {
-			UpdaterContentFactory.saveContent(Routes, "Updater", this.getLevel());
+			ByteCart.myPlugin.getWandererManager().saveContent(Routes, "Updater", this.getLevel());
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

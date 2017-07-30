@@ -13,7 +13,6 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
-import com.github.catageek.ByteCart.Wanderer.WandererContentFactory;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
@@ -59,7 +58,7 @@ public final class BC9001 extends AbstractBC9000 implements Station, Powerable, 
 
 			triggerBC7003();
 
-			if (! WandererContentFactory.isWanderer(getInventory())) {
+			if (! ByteCart.myPlugin.getWandererManager().isWanderer(getInventory())) {
 
 				// if this is a cart in a train
 				if (this.wasTrain(this.getLocation())) {
