@@ -19,13 +19,13 @@ import com.github.catageek.ByteCartAPI.AddressLayer.Address;
  */
 public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickable {
 
-	protected boolean PlayerAllowed = true;
+	private boolean PlayerAllowed = true;
 	protected boolean StorageCartAllowed = false;
 
 	/**
 	 * Constructor : !! vehicle can be null !!
 	 */
-	public BC7010(org.bukkit.block.Block block,
+	BC7010(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 	}
@@ -90,7 +90,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	 *
 	 * @return the name
 	 */
-	protected String getNameToWrite() {
+	private String getNameToWrite() {
 		return (new ComponentSign(this.getBlock())).getLine(2);
 	}
 
@@ -159,7 +159,7 @@ public class BC7010 extends AbstractTriggeredSign implements Triggable, Clickabl
 	 *
 	 * @return true if the requestor is allowed
 	 */
-	protected final boolean isHolderAllowed() {
+	private final boolean isHolderAllowed() {
 		InventoryHolder holder = this.getInventory().getHolder();
 		if (holder instanceof Player)
 			return PlayerAllowed;

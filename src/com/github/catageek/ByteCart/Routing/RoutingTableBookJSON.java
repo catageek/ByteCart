@@ -26,8 +26,8 @@ RoutingTableWritable {
 
 	private boolean wasModified = false;
 	
-	static class RouteEntry {
-		@Expose
+	private static class RouteEntry {
+		private @Expose
 		TreeMap<Integer,Set<BlockFace>> routes;
 		
 		RouteEntry() {
@@ -254,7 +254,7 @@ RoutingTableWritable {
 	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getNotDirectlyConnectedList(com.github.catageek.ByteCart.Util.DirectionRegistry)
 	 */
 	@Override
-	protected Set<Integer> getNotDirectlyConnectedList(BlockFace direction) {
+	public Set<Integer> getNotDirectlyConnectedList(BlockFace direction) {
 		SortedMap<Integer, Integer> list = new TreeMap<Integer, Integer>();
 		Iterator<Entry<Integer, RouteEntry>> it = table.entrySet().iterator();
 		Entry<Integer, RouteEntry> entry;

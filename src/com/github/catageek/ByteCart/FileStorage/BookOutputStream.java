@@ -3,8 +3,6 @@ package com.github.catageek.ByteCart.FileStorage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.naming.SizeLimitExceededException;
-
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.catageek.ByteCart.ByteCart;
@@ -15,12 +13,16 @@ import com.github.catageek.ByteCart.ByteCart;
  */
 class BookOutputStream extends ByteArrayOutputStream {
 	
+	static final int PAGESIZE = 255;
+	private static final int MAXPAGE = 50;
+	static final int MAXSIZE = MAXPAGE * PAGESIZE;
+
 	private final BookMeta book;
 
 	private boolean isClosed = false;
 
 	BookOutputStream(BookMeta book) {
-		super(book.getPageCount() * BookFile.PAGESIZE);
+		super(book.getPageCount() * PAGESIZE);
 		this.book = book;
 	}
 
@@ -73,12 +75,12 @@ class BookOutputStream extends ByteArrayOutputStream {
 		int i, j = 1;
 
 		// number of pages to write
-		int count = 1 + (len - 1) / BookFile.PAGESIZE;
+		int count = 1 + (len - 1) / PAGESIZE;
 
 		// Throw if too many pages are needed
-		if (count > BookFile.MAXPAGE) {
+		if (count > MAXPAGE) {
 			if (ByteCart.debug)
-				ByteCart.log.info(count + " pages are needed, maximum is " + BookFile.MAXPAGE);
+				ByteCart.log.info(count + " pages are needed, maximum is " + MAXPAGE);
 			throw new IOException();
 		}
 
@@ -87,12 +89,12 @@ class BookOutputStream extends ByteArrayOutputStream {
 		// loop for full pages
 		count -= 1;
 		for (i = 0; i < count; i++) {
-			strings[i] = sb.substring(i * BookFile.PAGESIZE, j * BookFile.PAGESIZE);
+			strings[i] = sb.substring(i * PAGESIZE, j * PAGESIZE);
 			j++;
 		}
 
 		// last page
-		strings[count] = sb.substring(i * BookFile.PAGESIZE);
+		strings[count] = sb.substring(i * PAGESIZE);
 
 		this.book.setPages(strings);
 		

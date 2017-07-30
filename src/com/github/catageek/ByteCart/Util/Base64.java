@@ -14,7 +14,7 @@ public class Base64
 		IA['='] = 0;
 	}
 
-	public final static char[] encodeToChar(byte[] sArr, boolean lineSep)
+	private final static char[] encodeToChar(byte[] sArr, boolean lineSep)
 	{
 		// Check special case
 		int sLen = sArr != null ? sArr.length : 0;

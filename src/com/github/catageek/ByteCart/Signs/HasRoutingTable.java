@@ -5,7 +5,7 @@ import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 /**
  * An IC that have a routing table should implement this
  */
-public interface HasRoutingTable {
+interface HasRoutingTable {
 	/**
 	 * Get the routing table
 	 *

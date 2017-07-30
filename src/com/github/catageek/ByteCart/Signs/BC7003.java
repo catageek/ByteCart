@@ -25,9 +25,6 @@ final class BC7003 extends AbstractIC implements Triggable, Powerable {
 		super(block);
 	}
 
-	
-
-
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
 	 */

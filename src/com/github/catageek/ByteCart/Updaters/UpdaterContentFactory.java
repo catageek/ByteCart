@@ -49,7 +49,7 @@ public abstract class UpdaterContentFactory {
 		}
 	}
 
-	public static void saveContent(UpdaterContent rte, String name, Level type)
+	static void saveContent(UpdaterContent rte, String name, Level type)
 			throws IOException, ClassNotFoundException {
 
 		// delete content if expired

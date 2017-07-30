@@ -10,10 +10,10 @@ import com.github.catageek.ByteCartAPI.Util.MathUtil;
 /**
  * A router where a cart turns left
  */
-public final class LeftRouter extends AbstractRouter implements
+final class LeftRouter extends AbstractRouter implements
 		Router {
 
-	public LeftRouter(BlockFace from, org.bukkit.Location loc, boolean b) {
+	LeftRouter(BlockFace from, org.bukkit.Location loc, boolean b) {
 		super(from, loc, b);
 		FromTo.put(Side.BACK, Side.LEFT);
 		

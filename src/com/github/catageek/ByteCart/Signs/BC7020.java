@@ -50,7 +50,7 @@ class BC7020 extends AbstractTriggeredSign implements Triggable {
 	 * Register the output levers
 	 *
 	 */
-	protected void addIO() {
+	private void addIO() {
 		// Output[0] = 2 bits registry representing levers on the left and on the right of the sign
 		OutputPin[] lever2 = new OutputPin[2];
 

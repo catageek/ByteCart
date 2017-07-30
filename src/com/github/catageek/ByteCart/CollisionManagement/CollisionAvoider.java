@@ -5,7 +5,7 @@ import com.github.catageek.ByteCart.Signs.Triggable;
 /**
  * A state machine depending of 2 elements
  */
-public interface CollisionAvoider {
+interface CollisionAvoider {
 	/**
 	 * Get the value stored as second pos
 	 *

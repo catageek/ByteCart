@@ -11,12 +11,12 @@ import com.github.catageek.ByteCartAPI.Util.MathUtil;
 /**
  * A lever
  */
-public class ComponentLever extends AbstractComponent implements OutputPin, InputPin, RegistryInput {
+class ComponentLever extends AbstractComponent implements OutputPin, InputPin, RegistryInput {
 
 	/**
 	 * @param block the block containing the component
 	 */
-	public ComponentLever(Block block) {
+	ComponentLever(Block block) {
 		super(block);
 	}
 

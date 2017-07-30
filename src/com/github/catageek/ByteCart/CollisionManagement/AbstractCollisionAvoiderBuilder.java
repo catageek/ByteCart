@@ -7,7 +7,7 @@ import com.github.catageek.ByteCart.Signs.Triggable;
 /**
  * Abstract class for colllision avoider builders
  */
-public abstract class AbstractCollisionAvoiderBuilder {
+abstract class AbstractCollisionAvoiderBuilder {
 
 	/**
 	 * The first IC attached to the collision avoiders created
@@ -19,7 +19,7 @@ public abstract class AbstractCollisionAvoiderBuilder {
 	 */
 	protected final Location loc;
 
-	public AbstractCollisionAvoiderBuilder(Triggable ic, Location loc) {
+	AbstractCollisionAvoiderBuilder(Triggable ic, Location loc) {
 		this.ic = ic;
 		this.loc = loc;
 	}

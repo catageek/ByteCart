@@ -41,8 +41,6 @@ abstract public class AbstractIC implements IC {
 		return ((Sign) this.getBlock().getState()).getLine(2);
 	}
 	
-	protected int Triggertax = 0;
-	
 	private RegistryInput[] input = new RegistryInput[9];
 	private int input_args = 0;
 	
@@ -135,7 +133,7 @@ abstract public class AbstractIC implements IC {
 	}
 
 
-	static public final boolean checkLooseEligibility(String s){
+	static private final boolean checkLooseEligibility(String s){
 		
 		if(! (s.matches("^BC[0-9]{4,4}$"))) {
 			return false;

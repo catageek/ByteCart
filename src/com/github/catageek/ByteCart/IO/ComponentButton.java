@@ -15,7 +15,7 @@ import com.github.catageek.ByteCartAPI.Util.MathUtil;
 /**
  * A button
  */
-public class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
+class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 	
 	final static private Map<Location, Integer> ActivatedButtonMap = new ConcurrentHashMap<Location, Integer>();
 

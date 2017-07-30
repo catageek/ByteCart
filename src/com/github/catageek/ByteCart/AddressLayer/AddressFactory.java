@@ -90,7 +90,7 @@ public class AddressFactory {
 	 * @param s the address in the form aa.bb.cc
 	 * @return the address
 	 */
-	public final static Address getUnresolvedAddress(String s){
+	final static Address getUnresolvedAddress(String s){
 		return new AddressString(s, false);
 	}
 }

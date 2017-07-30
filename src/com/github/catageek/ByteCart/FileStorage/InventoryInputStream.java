@@ -2,12 +2,9 @@ package com.github.catageek.ByteCart.FileStorage;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
-import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Util.Base64;
 
 final class InventoryInputStream extends ByteArrayInputStream {

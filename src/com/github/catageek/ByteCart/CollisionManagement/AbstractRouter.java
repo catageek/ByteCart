@@ -16,7 +16,7 @@ import com.github.catageek.ByteCart.Storage.ExpirableMap;
 import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
-public abstract class AbstractRouter extends AbstractCollisionAvoider implements Router {
+abstract class AbstractRouter extends AbstractCollisionAvoider implements Router {
 
 	private static final ExpirableMap<Location, Boolean> recentlyUsedMap = new ExpirableMap<Location, Boolean>(40, false, "recentlyUsedRouter");
 	private static final ExpirableMap<Location, Boolean> hasTrainMap = new ExpirableMap<Location, Boolean>(14, false, "hasTrainRouter");
@@ -30,7 +30,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 
 	private boolean IsOldVersion;
 
-	public AbstractRouter(BlockFace from, org.bukkit.Location loc, boolean isOldVersion) {
+	AbstractRouter(BlockFace from, org.bukkit.Location loc, boolean isOldVersion) {
 		super(loc);
 		this.setFrom(from);
 		this.IsOldVersion = isOldVersion;
@@ -48,7 +48,7 @@ public abstract class AbstractRouter extends AbstractCollisionAvoider implements
 	/**
 	 * @return the isOldVersion
 	 */
-	protected boolean isIsOldVersion() {
+	private boolean isIsOldVersion() {
 		return IsOldVersion;
 	}
 

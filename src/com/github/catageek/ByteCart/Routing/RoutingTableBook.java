@@ -46,9 +46,7 @@ RoutingTableWritable, Externalizable {
 	public RoutingTableBook() {
 	}
 
-	
-
-	/* (non-Javadoc)
+		/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Routing.RoutingTableWritable#clear(boolean)
 	 */
 	@Override
@@ -233,7 +231,7 @@ RoutingTableWritable, Externalizable {
 	 * @see com.github.catageek.ByteCart.Routing.AbstractRoutingTable#getNotDirectlyConnectedList(com.github.catageek.ByteCart.Util.DirectionRegistry)
 	 */
 	@Override
-	protected Set<Integer> getNotDirectlyConnectedList(
+	public Set<Integer> getNotDirectlyConnectedList(
 			BlockFace direction) {
 		SortedMap<Integer, Metric> list = new TreeMap<Integer, Metric>();
 		Iterator<Entry<RouteNumber, RouteProperty>> it = map.entrySet().iterator();

@@ -37,10 +37,10 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 	private String sql = ByteCart.myPlugin.getConfig().getString("sql", "sqllite");
 	private String host,port,user,password;
 
-	Database mysql;
-	Connection con;
-	Statement s;
-	boolean err=false;
+	private Database mysql;
+	private Connection con;
+	private Statement s;
+	
 
 	public void onLoad()
 	{
@@ -70,7 +70,7 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 		return onCommand(a,b,c,d,0);
 	}
 
-	public boolean onCommand(CommandSender a, Command b , String c, String[] d,int n)
+	private boolean onCommand(CommandSender a, Command b , String c, String[] d,int n)
 	{
 		if(b.getName().equalsIgnoreCase("host"))
 		{

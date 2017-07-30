@@ -10,9 +10,9 @@ import com.github.catageek.ByteCart.Util.Base64;
 
 class InventoryOutputStream extends ByteArrayOutputStream {
 
-	protected final Inventory inventory;
+	private final Inventory inventory;
 	private final boolean binary;
-	protected final String name;
+	private final String name;
 	private final String title;
 	
 	InventoryOutputStream(Inventory inventory, boolean binary, String title, String name) {

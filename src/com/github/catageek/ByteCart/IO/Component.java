@@ -5,7 +5,7 @@ import org.bukkit.block.Block;
 /**
  * Represents a component, i.e a lever, a button, etc.
  */
-public interface Component {
+interface Component {
 	/**
 	 * Get the block containing the component
 	 *

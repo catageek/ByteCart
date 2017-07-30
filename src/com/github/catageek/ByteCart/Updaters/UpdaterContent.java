@@ -30,12 +30,12 @@ public class UpdaterContent extends WandererContent implements Serializable {
 	private boolean fullreset = false;
 	private boolean isnew = false;
 	private long lastrouterseen;
-	public UpdaterContent(Inventory inv, Wanderer.Level level, int region, Player player
+	UpdaterContent(Inventory inv, Wanderer.Level level, int region, Player player
 			, boolean isfullreset) {
 		this(inv, level, region, player, isfullreset, false);
 	}
 	
-	public UpdaterContent(Inventory inv, Wanderer.Level level, int region, Player player
+	UpdaterContent(Inventory inv, Wanderer.Level level, int region, Player player
 			, boolean isfullreset, boolean isnew) {
 		super(inv, level, region, player);
 		this.fullreset = isfullreset;

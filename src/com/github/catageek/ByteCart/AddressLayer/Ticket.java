@@ -82,7 +82,7 @@ final class Ticket {
 	 * @param inv The inventory to search in
 	 * @return a slot number, or -1
 	 */
-	static int getEmptyOrBookAndQuillSlot(Inventory inv) {
+	private static int getEmptyOrBookAndQuillSlot(Inventory inv) {
 
 		ItemStack stack;
 

@@ -24,7 +24,7 @@ public class SimpleCollisionAvoider extends AbstractCollisionAvoider implements 
 	private boolean reversed;
 
 
-	public SimpleCollisionAvoider(Triggable ic, org.bukkit.Location loc) {
+	SimpleCollisionAvoider(Triggable ic, org.bukkit.Location loc) {
 		super(loc);
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart: new IntersectionSide() at " + loc);

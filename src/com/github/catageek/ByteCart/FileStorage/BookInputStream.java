@@ -60,7 +60,7 @@ class BookInputStream extends ByteArrayInputStream {
 	}
 
 	private static String getRawPages(BookMeta book) {
-		int len =  book.getPageCount() * BookFile.PAGESIZE;
+		int len =  book.getPageCount() * BookOutputStream.PAGESIZE;
 		StringBuilder sb = new StringBuilder(len);
 
 		for (int i = 1; i <= book.getPageCount(); ++i) {

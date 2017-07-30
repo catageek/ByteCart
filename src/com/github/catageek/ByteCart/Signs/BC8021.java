@@ -10,7 +10,7 @@ import com.github.catageek.ByteCart.Routing.RoutingTableFactory;
 import com.github.catageek.ByteCart.Routing.RoutingTableWritable;
 import com.github.catageek.ByteCartAPI.Signs.BCRouter;
 
-public class BC8021 extends BC8020 implements BCRouter, Triggable, HasRoutingTable {
+class BC8021 extends BC8020 implements BCRouter, Triggable, HasRoutingTable {
 
 	BC8021(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) throws ClassNotFoundException, IOException {
 		super(block, vehicle, false);

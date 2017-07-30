@@ -11,7 +11,7 @@ import com.github.catageek.ByteCartAPI.Util.MathUtil;
 /**
  * this call represents a thread that powers off a button
  */
-public class SetButtonOff implements Runnable {
+class SetButtonOff implements Runnable {
 
 	final private Component component;
 	final private Map<Location, Integer> ActivatedButtonMap;
@@ -20,7 +20,7 @@ public class SetButtonOff implements Runnable {
 	 * @param component the component to power off
 	 * @param ActivatedButtonMap a map containing the task id of current task
 	 */
-	public SetButtonOff(Component component, Map<Location, Integer> ActivatedButtonMap){
+	SetButtonOff(Component component, Map<Location, Integer> ActivatedButtonMap){
 		this.component = component;
 		this.ActivatedButtonMap = ActivatedButtonMap;
 	}

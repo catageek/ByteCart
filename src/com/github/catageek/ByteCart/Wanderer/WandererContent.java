@@ -204,7 +204,7 @@ public class WandererContent  implements InventoryContent {
 	/**
 	 * @param start the start to set
 	 */
-	void setStart(Stack<Integer> start) {
+	private void setStart(Stack<Integer> start) {
 		Start = start;
 	}
 
@@ -212,7 +212,7 @@ public class WandererContent  implements InventoryContent {
 	/**
 	 * @param end the end to set
 	 */
-	void setEnd(Stack<Integer> end) {
+	private void setEnd(Stack<Integer> end) {
 		End = end;
 	}
 	/**

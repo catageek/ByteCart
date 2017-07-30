@@ -32,7 +32,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 	abstract protected void Update(BlockFace to);
 	abstract protected int getTrackNumber();
 
-	protected UpdaterContent Routes;
+	private UpdaterContent Routes;
 	private final boolean IsTrackNumberProvider;
 	private BCCounter counter;
 	abstract protected BlockFace selectDirection();
@@ -161,7 +161,7 @@ abstract class AbstractRegionUpdater extends DefaultRouterWanderer {
 	/**
 	 * @return true if the IC can receive routes
 	 */
-	protected final boolean isRouteConsumer() {
+	private boolean isRouteConsumer() {
 		return getRoutes().getLevel().equals(this.getSignLevel());
 	}
 

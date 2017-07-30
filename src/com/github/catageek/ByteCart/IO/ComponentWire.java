@@ -9,12 +9,12 @@ import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 /**
  * A Redstone wire
  */
-public class ComponentWire extends AbstractComponent implements InputPin, RegistryInput {
+class ComponentWire extends AbstractComponent implements InputPin, RegistryInput {
 
 	/**
 	 * @param block the block containing the wire
 	 */
-	public ComponentWire(Block block) {
+	ComponentWire(Block block) {
 		super(block);
 /*		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : adding Redstone wire at " + block.getLocation().toString());

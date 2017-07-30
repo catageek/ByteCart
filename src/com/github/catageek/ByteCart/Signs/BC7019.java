@@ -66,8 +66,7 @@ final class BC7019 extends BC7010 implements Triggable {
 		return new AddressString(sb.toString(), false);
 	}
 
-
-	protected void addIO() {
+	private void addIO() {
 		// add input [0], [1] and [2] from 4th line
 		this.addAddressAsInputs(AddressFactory.getAddress(getBlock(), 3));
 

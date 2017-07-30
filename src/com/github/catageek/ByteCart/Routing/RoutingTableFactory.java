@@ -54,8 +54,5 @@ public final class RoutingTableFactory {
 		rtj.setInventory(inv, slot);
 		return rtj;
 	}
-	
-	static public Boolean isRoutingTable(Inventory inv, int slot) {
-		return InventoryFile.isInventoryFile(inv, "RoutingTable");
-	}
+
 }

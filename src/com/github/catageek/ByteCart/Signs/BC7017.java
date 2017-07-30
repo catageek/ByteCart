@@ -14,7 +14,7 @@ import com.github.catageek.ByteCartAPI.AddressLayer.Address;
  */
 public final class BC7017 extends AbstractTriggeredSign implements Triggable {
 
-	public BC7017(org.bukkit.block.Block block,
+	BC7017(org.bukkit.block.Block block,
 			org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 	}

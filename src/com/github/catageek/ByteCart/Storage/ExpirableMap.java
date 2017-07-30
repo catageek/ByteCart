@@ -40,7 +40,7 @@ public final class ExpirableMap<K, T> extends Expirable<K> {
 	 * @param reset must be set to true to reset the timeout to initial value, false otherwise
 	 * @return true if the element was added
 	 */
-	public boolean put(K key, T value, boolean reset) {
+	private boolean put(K key, T value, boolean reset) {
 //		if(ByteCart.debug)
 //			ByteCart.log.info("ByteCart: create ephemeral key (" + key +") in " + this.getName() + " for " + this.getDuration() + " ticks");
 		if (reset)

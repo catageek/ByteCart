@@ -136,7 +136,7 @@ public final class BC9001 extends AbstractBC9000 implements Station, Powerable, 
 	 * Manage the red light signal when triggered
 	 *
 	 */
-	protected void triggerBC7003() {
+	private void triggerBC7003() {
 		(new BC7003(this.getBlock())).trigger();
 	}
 
@@ -144,7 +144,7 @@ public final class BC9001 extends AbstractBC9000 implements Station, Powerable, 
 	 * Manage the red light signal when powered
 	 *
 	 */
-	protected void powerBC7003() {
+	private void powerBC7003() {
 		(new BC7003(this.getBlock())).power();
 	}
 

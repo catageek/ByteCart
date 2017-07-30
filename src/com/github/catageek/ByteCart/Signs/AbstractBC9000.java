@@ -139,7 +139,7 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 	 * @param station a station number in the subnet
 	 * @return the first station number
 	 */
-	protected final RegistryBoth applyNetmask(RegistryBoth station) {
+	private RegistryBoth applyNetmask(RegistryBoth station) {
 		if (this.netmask < station.length())
 			return new SubRegistry<RegistryBoth>(station, this.netmask, 0);
 		return station;
@@ -232,7 +232,7 @@ abstract class AbstractBC9000 extends AbstractSimpleCrossroad implements Subnet,
 	 *
 	 * @param addr the address to register
 	 */
-	protected void addAddressAsInputs(Address addr) {
+	private void addAddressAsInputs(Address addr) {
 		if(addr.isValid()) {
 			RegistryInput region = addr.getRegion();
 			this.addInputRegistry(region);

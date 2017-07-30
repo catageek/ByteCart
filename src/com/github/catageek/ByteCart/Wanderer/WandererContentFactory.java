@@ -18,7 +18,7 @@ import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 
 abstract public class WandererContentFactory {
 
-	public static WandererContent getWandererContent(Inventory inv)
+	static WandererContent getWandererContent(Inventory inv)
 			throws IOException, ClassNotFoundException {
 		WandererContent rte = null;
 		InventoryFile file = null;

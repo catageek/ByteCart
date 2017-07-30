@@ -12,7 +12,7 @@ import com.github.catageek.ByteCart.HAL.AbstractIC;
 /**
  * Synchronous task to remove markers
  */
-public final class searchObsoleteMarkers implements Runnable {
+final class searchObsoleteMarkers implements Runnable {
 
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()

@@ -11,7 +11,7 @@ import com.github.catageek.ByteCartAPI.HAL.VirtualRegistry;
 /**
  * A time metric
  */
-public class Delay implements Externalizable {
+class Delay implements Externalizable {
 	
 	/**
 	 * 

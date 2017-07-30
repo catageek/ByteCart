@@ -1,94 +1,40 @@
 package com.github.catageek.ByteCart.Routing;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.block.BlockFace;
 
-import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.Updaters.UpdaterContent;
+import com.github.catageek.ByteCartAPI.Wanderer.RoutingTable;
 
 /**
  * An abstract class for routing tables 
  */
-public abstract class AbstractRoutingTable {
+abstract class AbstractRoutingTable implements RoutingTable {
 
-
-	/**
-	 * Performs the IGP protocol to update the routing table
-	 * 
-	 * @param neighbour the IGP packet received
-	 * @param from the direction from where we received it
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#isDirectlyConnected(int, org.bukkit.block.BlockFace)
 	 */
-	public void Update(UpdaterContent neighbour, BlockFace from) {
-		// Djikstra algorithm
-		// search for better routes in the received ones
-		int interfacedelay = neighbour.getInterfaceDelay();
-		
-		for (Map.Entry<Integer, Metric> entry : neighbour.getEntrySet()) {
-
-			int ring = entry.getKey();
-			Metric metric = entry.getValue();
-			int computedmetric = metric.value();
-			if (interfacedelay > 0)
-				computedmetric += interfacedelay;			
-			int routermetric = this.getMetric(ring, from);
-			boolean directlyconnected = (this.getMinMetric(ring) == 0);
-			
-			if ( ! directlyconnected && (routermetric > computedmetric || routermetric < 0)) {
-				this.setEntry(ring, from, computedmetric);
-				if(ByteCart.debug) {
-					ByteCart.log.info("ByteCart : Update : ring = " + ring + ", metric = " + computedmetric + ", direction " + from);
-				}
-				neighbour.updateTimestamp();
-			}
-		}
-		// search for routes that are no more announced and not directly connected
-		// to remove them
-		Iterator<Integer> it = this.getNotDirectlyConnectedList(from).iterator();
-		while (it.hasNext()) {
-			Integer route;
-			if(!neighbour.hasRouteTo(route = it.next())) {
-				this.removeEntry(route, from);
-				if(ByteCart.debug) {
-					ByteCart.log.info("ByteCart : Remove : ring = " + route + " from " + from);
-				}
-				neighbour.updateTimestamp();
-			}
-		}
-	}
-
-	/**
-	 * Tells if a track is directly connected to a router at a specific direction
-	 * 
-	 * @param ring the track number
-	 * @param direction the direction
-	 * @return true if the track is directly connected at this direction
-	 */
+	@Override
 	public final boolean isDirectlyConnected(int ring, BlockFace direction) {
 		if (this.getDirection(ring) != null)
 			return this.getMetric(ring, direction) == 0;
 		return false;
 	}
 
-
-	/**
-	 * Get the track number at the specific direction
-	 * 
-	 * @param direction the direction
-	 * @return the track number
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#getDirectlyConnected(org.bukkit.block.BlockFace)
 	 */
+	@Override
 	public final int getDirectlyConnected(BlockFace direction) {
 		Set<Integer> rings = getDirectlyConnectedList(direction);
 		return rings.size() == 1 ? rings.iterator().next() : -1 ;
 	}
 
-	/**
-	 * Get a direction that has not been configured, or null if all directions are configured
-	 * 
-	 * @return the direction
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#getFirstUnknown()
 	 */
+	@Override
 	public final BlockFace getFirstUnknown() {
 		for (BlockFace face : BlockFace.values()) {
 			switch(face) {
@@ -106,29 +52,22 @@ public abstract class AbstractRoutingTable {
 		return null;
 	}
 
-	/**
-	 * Get a list of tracks that have records with a metric 0 and at the specific direction
-	 * 
-	 * @param direction the direction
-	 * @return a list of track numbers
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#getDirectlyConnectedList(org.bukkit.block.BlockFace)
 	 */
+	@Override
 	abstract public Set<Integer> getDirectlyConnectedList(BlockFace direction);
 
-	/**
-	 * Get the metric associated with this entry and this direction
-	 * 
-	 * @param entry the track number
-	 * @param direction the direction
-	 * @return the metric
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#getMetric(int, org.bukkit.block.BlockFace)
 	 */
+	@Override
 	abstract public int getMetric(int entry, BlockFace direction);
 	
-	/**
-	 * Get the minimum metric for a specific entry
-	 * 
-	 * @param entry the track number
-	 * @return the minimum metric recorded, or -1
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#getMinMetric(int)
 	 */
+	@Override
 	abstract public int getMinMetric(int entry);
 
 	/**
@@ -140,28 +79,23 @@ public abstract class AbstractRoutingTable {
 	 */
 	abstract public void setEntry(int entry, BlockFace direction, int metric);
 
-	/**
-	 * Tells if there is no record for an entry
-	 * 
-	 * @param entry the track number
-	 * @return true if there is no record
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#isEmpty(int)
 	 */
+	@Override
 	abstract public boolean isEmpty(int entry);
 
-	/**
-	 * Get an iterator on the entries
-	 * 
-	 * @return an iterator
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#getOrderedRouteNumbers()
 	 */
-	abstract protected Iterator<Integer> getOrderedRouteNumbers();
+	@Override
+	public abstract Iterator<Integer> getOrderedRouteNumbers();
 
-	/**
-	 * Get a set of track numbers that are seen in a direction, but not directly connected
-	 * 
-	 * @param direction the direction
-	 * @return a set of track numbers
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#getNotDirectlyConnectedList(org.bukkit.block.BlockFace)
 	 */
-	abstract protected Set<Integer> getNotDirectlyConnectedList(BlockFace direction);
+	@Override
+	public abstract Set<Integer> getNotDirectlyConnectedList(BlockFace direction);
 
 	/**
 	 * Remove a line from the routing table
@@ -171,11 +105,9 @@ public abstract class AbstractRoutingTable {
 	 */
 	abstract public void removeEntry(int entry, BlockFace from);
 
-	/**
-	 * Return the best direction matching the entry
-	 * 
-	 * @param entry the track number
-	 * @return the direction
+	/* (non-Javadoc)
+	 * @see com.github.catageek.ByteCartAPI.Wanderer.RoutingTable#getDirection(int)
 	 */
+	@Override
 	abstract public BlockFace getDirection(int entry);
 }

@@ -29,7 +29,7 @@ import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 /**
  * The command executor
  */
-public class BytecartCommandExecutor implements CommandExecutor {
+class BytecartCommandExecutor implements CommandExecutor {
 
 	/* (non-Javadoc)
 	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
@@ -96,7 +96,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 					private boolean istrain;
 
 
-					public Execute(Player player, String host_or_address, boolean isTrain) {
+					private Execute(Player player, String host_or_address, boolean isTrain) {
 						this.player = player;
 						this.address = host_or_address;
 						this.istrain = isTrain;
@@ -240,7 +240,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 					private boolean isnew;
 
 
-					public Execute(Player player, Wanderer.Level level, int region, boolean isfullreset, boolean isnew) {
+					private Execute(Player player, Wanderer.Level level, int region, boolean isfullreset, boolean isnew) {
 						this.player = player;
 						this.level = level;
 						this.region = region;
@@ -309,7 +309,7 @@ public class BytecartCommandExecutor implements CommandExecutor {
 	 * @param args
 	 * @return True on success of the command.
 	 */
-	protected boolean bcticket(CommandSender sender, Command cmd, String label, String[] args) {
+	private boolean bcticket(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player;
 		String addressString;
 		boolean isTrain = false;

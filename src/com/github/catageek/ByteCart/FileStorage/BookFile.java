@@ -1,7 +1,6 @@
 package com.github.catageek.ByteCart.FileStorage;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +21,7 @@ import com.github.catageek.ByteCart.FileStorage.BookInputStream;;
  */
 public final class BookFile implements BCFile {
 
-	// log2 of length of a page in bytes
-	static final int PAGESIZE = 255;
-	static final int MAXPAGE = 50;
-	static final int MAXSIZE = MAXPAGE * PAGESIZE;
+	static final int MAXSIZE = BookOutputStream.MAXSIZE;
 	private static final String prefix = ByteCart.myPlugin.getConfig().getString("author");
 	private BookMeta book;
 	private ItemStack stack;
@@ -86,7 +82,7 @@ public final class BookFile implements BCFile {
 		return BookFile.create(inventory, mystack, index, binary, name);
 	}
 
-	static public BookFile create(Inventory inventory, ItemStack mystack, int index, boolean binary, String name) {
+	static private BookFile create(Inventory inventory, ItemStack mystack, int index, boolean binary, String name) {
 		if (mystack == null || ! mystack.getType().equals(Material.WRITTEN_BOOK)) {
 			mystack = new ItemStack(Material.WRITTEN_BOOK);
 		}
@@ -214,7 +210,7 @@ public final class BookFile implements BCFile {
 	 * @param suffix suffix of the author name
 	 * @return true if the slot contains a file and the author field begins with author configuration parameter
 	 */
-	public static boolean isBookFile(Inventory inventory, int index, String suffix) {
+	static boolean isBookFile(Inventory inventory, int index, String suffix) {
 		return isBookFile(inventory.getItem(index), suffix);
 	}
 

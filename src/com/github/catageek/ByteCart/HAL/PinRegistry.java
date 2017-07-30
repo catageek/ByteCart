@@ -17,7 +17,7 @@ import com.github.catageek.ByteCartAPI.HAL.RegistryOutput;
  */
 public class PinRegistry<T> implements RegistryInput, RegistryOutput, Registry {
 
-	final protected List<T> PinArray;
+	final private List<T> PinArray;
 	
 	/**
 	 * @param pins an array of pins

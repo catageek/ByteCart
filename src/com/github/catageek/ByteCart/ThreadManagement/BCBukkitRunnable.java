@@ -85,7 +85,7 @@ final class BCBukkitRunnable<K> {
 	 * @param objects the arguments to pass to Expirable.expire() method
 	 * @return the task scheduled
 	 */
-	BukkitTask runTaskLater(Object...objects) {
+	private BukkitTask runTaskLater(Object...objects) {
 		BukkitRunnable runnable = new Expire(Expirable, Key, objects);
 		org.bukkit.scheduler.BukkitTask task = runnable.runTaskLater(ByteCart.myPlugin, Expirable.getDuration());
 		return task;
@@ -97,7 +97,7 @@ final class BCBukkitRunnable<K> {
 	 * @param objects the arguments to pass to Expirable.expire() method
 	 * @return the task scheduled
 	 */
-	BukkitTask runTaskLaterAsynchronously(Object...objects) {
+	private BukkitTask runTaskLaterAsynchronously(Object...objects) {
 		BukkitRunnable runnable = new Expire(Expirable, Key, objects);
 		org.bukkit.scheduler.BukkitTask task = runnable.runTaskLaterAsynchronously(ByteCart.myPlugin, Expirable.getDuration());
 		return task;

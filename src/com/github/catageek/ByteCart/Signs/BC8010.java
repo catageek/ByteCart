@@ -83,7 +83,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		}
 	}
 
-	public BC8010(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle, boolean isOldVersion) throws ClassNotFoundException, IOException {
+	BC8010(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle, boolean isOldVersion) throws ClassNotFoundException, IOException {
 		this(block, vehicle);
 		this.IsOldVersion = isOldVersion;
 	}
@@ -258,7 +258,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	protected final Wanderer getWanderer() throws ClassNotFoundException, IOException {
+	private final Wanderer getWanderer() throws ClassNotFoundException, IOException {
 		return ByteCart.myPlugin.getWandererManager().getFactory(this.getInventory()).getWanderer(this, this.getInventory());
 	}
 

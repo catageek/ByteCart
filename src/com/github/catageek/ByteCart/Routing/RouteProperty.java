@@ -39,7 +39,7 @@ final class RouteProperty implements Externalizable {
 	 * @param value the value to decompose
 	 * @return the set
 	 */
-	public final PartitionedHashSet<DirectionRegistry> getPartitionedHashSet(int value) {
+	private final PartitionedHashSet<DirectionRegistry> getPartitionedHashSet(int value) {
 		int reg = value;
 		int cur = 1;
 		PartitionedHashSet<DirectionRegistry> set = new PartitionedHashSet<DirectionRegistry>();

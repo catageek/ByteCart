@@ -8,7 +8,7 @@ import com.github.catageek.ByteCart.Storage.ExpirableMap;
 /**
  * Abstract class for collision avoiders
  */
-public abstract class AbstractCollisionAvoider extends AbstractIC {
+abstract class AbstractCollisionAvoider extends AbstractIC {
 
 	/**
 	 * Get a map of locations that have been recently used
@@ -27,7 +27,7 @@ public abstract class AbstractCollisionAvoider extends AbstractIC {
 	/**
 	 * Relative direction for the router. BACK is the direction from where the cart is arriving
 	 */
-	public enum Side {
+	enum Side {
 		BACK (0),
 		LEFT (2),
 		STRAIGHT (4),
@@ -39,7 +39,7 @@ public abstract class AbstractCollisionAvoider extends AbstractIC {
 			Value = b;
 		}
 
-		public int Value() {
+		int Value() {
 			return Value;
 		}
 	}
@@ -47,7 +47,7 @@ public abstract class AbstractCollisionAvoider extends AbstractIC {
 	/**
 	 * @param loc the location where the collision avoider will be attached
 	 */
-	public AbstractCollisionAvoider(org.bukkit.Location loc) {
+	AbstractCollisionAvoider(org.bukkit.Location loc) {
 		super(loc.getBlock());
 	}
 
