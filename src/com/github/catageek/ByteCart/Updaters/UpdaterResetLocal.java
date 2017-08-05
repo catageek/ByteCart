@@ -7,6 +7,7 @@ import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.Signs.BC9001;
+import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
@@ -69,7 +70,7 @@ final class UpdaterResetLocal extends UpdaterLocal implements Wanderer {
 					Bukkit.getServer().getPluginManager().callEvent(event);
 				}
 				else {
-					UpdaterClearSubnetEvent event = new UpdaterClearSubnetEvent(this, address, 256 >> this.getNetmask());
+					UpdaterClearSubnetEvent event = new UpdaterClearSubnetEvent(this, address, ByteCartAPI.MAXSTATION >> this.getNetmask());
 					Bukkit.getServer().getPluginManager().callEvent(event);
 				}
 				address.remove();

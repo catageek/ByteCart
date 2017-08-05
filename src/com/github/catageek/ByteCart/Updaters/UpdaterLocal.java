@@ -9,6 +9,7 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.IO.ComponentSign;
 import com.github.catageek.ByteCart.Signs.BC9001;
 import com.github.catageek.ByteCart.Util.LogUtil;
+import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
 import com.github.catageek.ByteCartAPI.Event.UpdaterEnterSubnetEvent;
@@ -29,7 +30,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 	@Override
 	public void doAction(Side to) {
 
-		if (this.getNetmask() == 8) {
+		if (this.getNetmask() == ByteCartAPI.MAXSTATIONLOG) {
 			// Erase default name "Station"
 			// TODO : added 04/2015, to be removed
 			if (((BC9001)this.getBcSign()).getStationName().equals("Station")) {
@@ -47,7 +48,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 
 		// we did not enter the subnet
 		int start;
-		if(to.Value() != Side.LEVER_ON.Value() && this.getNetmask() < 8) {
+		if(to.Value() != Side.LEVER_ON.Value() && this.getNetmask() < ByteCartAPI.MAXSTATIONLOG) {
 			// if we have the same sign as when entering the subnet, close the subnet
 			if (this.isExactSubnet((start = this.getFirstStationNumber()), this.getNetmask())) {
 				this.getSignAddress().setAddress(buildAddress(start));
@@ -59,7 +60,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 			return;
 		}
 
-		int length = (256 >> this.getNetmask());
+		int length = (ByteCartAPI.MAXSTATION >> this.getNetmask());
 		// if sign is not consistent, rewrite it
 		if (! getSignAddress().isValid() || this.needUpdate()) {
 			Address old = this.getSignAddress();
@@ -142,7 +143,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 		boolean free;
 		int start = getFirstStationNumber();
 		int end = getLastStationNumber();
-		int step = 256 >> netmask;
+		int step = ByteCartAPI.MAXSTATION >> netmask;
 		if(ByteCart.debug)
 			ByteCart.log.info("ByteCart : getFreeSubnet() : start = "
 					+ start + " end " + end + " step = " + step + "\n" + this.getCounter().toString());
@@ -174,7 +175,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 
 
 	private final boolean isInSubnet(int address, int netmask) {
-		return (address >= this.getFirstStationNumber() && (address | (255 >> netmask))  < this.getLastStationNumber());
+		return (address >= this.getFirstStationNumber() && (address | ((ByteCartAPI.MAXSTATION - 1) >> netmask))  < this.getLastStationNumber());
 	}
 
 	private final boolean needUpdate() {

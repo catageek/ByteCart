@@ -1,5 +1,6 @@
 package com.github.catageek.ByteCart.AddressLayer;
 
+import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 
 
@@ -28,12 +29,9 @@ abstract class AbstractAddress implements Address {
 	 */
 	protected enum Offsets {
 		// length (default : 6), pos (default : 0)
-		REGION(11, 0),
-		TRACK(11, 0),
-		STATION(8, 0),
-		ISTRAIN(1, 0),
-		ISRETURNABLE(1, 1),
-		TTL(7, 0);
+		REGION(ByteCartAPI.MAXRINGLOG, 0),
+		TRACK(ByteCartAPI.MAXRINGLOG, 0),
+		STATION(ByteCartAPI.MAXSTATIONLOG, 0);
 
 		private final int Length, Offset;
 

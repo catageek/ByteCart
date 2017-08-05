@@ -57,12 +57,12 @@ public final class UpdaterFactory implements WandererFactory {
 			return new UpdaterLocal(bc, rte);
 		return null;
 	}
-	
+
 	@Override
 	public final void removeAllWanderers() {
 		updaterset.clear();
 	}
-	
+
 	@Override
 	public boolean areAllRemoved() {
 		return updaterset.getMap().isEmpty();

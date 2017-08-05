@@ -13,6 +13,7 @@ import com.github.catageek.ByteCart.AddressLayer.AddressFactory;
 import com.github.catageek.ByteCart.HAL.PinRegistry;
 import com.github.catageek.ByteCart.IO.InputFactory;
 import com.github.catageek.ByteCart.IO.InputPin;
+import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide;
 import com.github.catageek.ByteCartAPI.CollisionManagement.IntersectionSide.Side;
@@ -31,7 +32,7 @@ public final class BC9001 extends AbstractBC9000 implements Station, Powerable, 
 
 	BC9001(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
-		this.netmask = 8;
+		this.netmask = ByteCartAPI.MAXSTATIONLOG;
 	}
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Signs.AbstractBC9000#trigger()
