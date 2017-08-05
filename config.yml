@@ -47,6 +47,9 @@ author: ByteCart
 # Title of ticket book
 title: Ticket to
 
+# Enable dynmap support
+dynmap: true
+
 # Name of Dynmap layer
 dynmap.layer: ByteCart
 

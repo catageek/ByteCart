@@ -14,6 +14,7 @@ import com.github.catageek.ByteCart.Storage.IsTrainManager;
 import com.github.catageek.ByteCart.Wanderer.BCWandererManager;
 import com.github.catageek.ByteCart.plugins.BCDynmapPlugin;
 import com.github.catageek.ByteCart.plugins.BCHostnameResolutionPlugin;
+import com.github.catageek.ByteCart.plugins.BCWandererTracker;
 import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.ByteCartPlugin;
 import com.github.catageek.ByteCartAPI.AddressLayer.Resolver;
@@ -64,7 +65,7 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 		getCommand("bcback").setExecutor(new BytecartCommandExecutor());
 		getCommand("bcdmapsync").setExecutor(new BytecartCommandExecutor());
 
-		if (Bukkit.getPluginManager().isPluginEnabled("dynmap")) {
+		if (Bukkit.getPluginManager().isPluginEnabled("dynmap")  && this.getConfig().getBoolean("dynmap", true)) {
 			log.info("[ByteCart] loading dynmap plugin.");
 			getServer().getPluginManager().registerEvents(new BCDynmapPlugin(), this);
 		}
@@ -76,6 +77,10 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 			getServer().getPluginManager().registerEvents(hostnamePlugin, this);
 			getCommand("host").setExecutor(hostnamePlugin);
 		}
+
+		BCWandererTracker updatertrackerplugin = new BCWandererTracker();
+		getServer().getPluginManager().registerEvents(updatertrackerplugin, this);
+		getCommand("bctracker").setExecutor(updatertrackerplugin);
 
 		/* Uncomment to launch storage test
 		Block block = this.getServer().getWorld("plat").getBlockAt(0, 61, 0);

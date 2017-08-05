@@ -19,6 +19,6 @@ public final class LogUtil {
 		if (sender != null && (sender instanceof Player) && ((Player) sender).isOnline())
 			sender.sendMessage(message);
 		else
-			ByteCart.log.info(message);
+			ByteCart.log.info(ChatColor.stripColor(message));
 	}
 }

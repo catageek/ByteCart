@@ -53,6 +53,7 @@ permissions:
             bytecart.bcticket: true
             bytecart.bcback: true
             bytecart.bcdmapsync: true
+            bytecart.bctracker: true
             bytecart.host.list: true
             bytecart.host.manager: true
 
@@ -217,7 +218,7 @@ permissions:
         default: true
     bytecart.bcdmapsync:
         default: false
-    bytecart.bcedit:
+    bytecart.bctracker:
         default: false
     bytecart.bcsign:
         default: false
@@ -273,6 +274,11 @@ commands:
         description: remove obsolete stations in dynmap
         usage: "Usage : /<command>"
         permission: bytecart.bcdmapsync
+        permission-message: You don't have permission <permission>
+    bctracker:
+        description: list wanderers positions
+        usage: "Usage : /<command>"
+        permission: bytecart.bctracker
         permission-message: You don't have permission <permission>
     host:
         description: manage hostname records
