@@ -152,8 +152,8 @@
 	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkit.version>1.11.2-R0.1-SNAPSHOT</bukkit.version>
-		<bytecartapi.version>3.1.2-SNAPSHOT</bytecartapi.version>
+		<bukkit.version>1.12.1-R0.1-SNAPSHOT</bukkit.version>
+		<bytecartapi.version>3.1.2</bytecartapi.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -178,5 +178,5 @@
 		      <version>2.5</version>
 		    </dependency>
 	</dependencies>
-	<version>3.1.2-SNAPSHOT</version>
+	<version>3.1.2</version>
 </project>

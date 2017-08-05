@@ -1,5 +1,8 @@
 v3.1.2 - June, 19 2017
 - Switch to binary format for routing table if JSON use more than 50 pages in the book
+- Expand storage to all the slots in chest inventory to allow huge networks
+- Fix a bug in local updater algorithm
+- Add 'bctracker' command to give position of updaters
 
 v3.1.1 - April, 25 2017
 - Fix a bug that prevents left lever of station signs to work
