@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +28,7 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterClearStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterPassStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSetStationEvent;
 import com.github.catageek.ByteCartAPI.Signs.Station;
+import com.google.common.collect.Lists;
 
 import code.husky.Database;
 import code.husky.mysql.MySQL;
@@ -361,6 +363,46 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 			ByteCart.log.info("SQL error state: "+e.getSQLState());
 		}
 		return "";
+	}
+
+	@Override
+	public List<String> getNames() {
+		List<String> result = Lists.newArrayList();
+
+		try {
+			ResultSet set = s.executeQuery("SELECT name FROM `cart_dns`");
+			while (set.next()) {
+				result.add(set.getString("name"));
+			}
+		} catch (SQLException e) {
+			ByteCart.log.info("SQL error code: "+e.getErrorCode());
+			ByteCart.log.info("SQL error msg: "+e.getMessage());
+			ByteCart.log.info("SQL error state: "+e.getSQLState());
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<String> getMatchingNames(String prefix) {
+		List<String> result = Lists.newArrayList();
+
+		if (!safeName(prefix)) {
+			return result;
+		}
+
+		try {
+			ResultSet set = s.executeQuery("SELECT name FROM `cart_dns` WHERE LOWER(`name`) LIKE '" + prefix.toLowerCase() + "%'");
+			while (set.next()) {
+				result.add(set.getString("name"));
+			}
+		} catch (SQLException e) {
+			ByteCart.log.info("SQL error code: "+e.getErrorCode());
+			ByteCart.log.info("SQL error msg: "+e.getMessage());
+			ByteCart.log.info("SQL error state: "+e.getSQLState());
+		}
+
+		return result;
 	}
 
 	private boolean removeEntry(String name) throws SQLException {

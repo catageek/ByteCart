@@ -1,12 +1,23 @@
 package com.github.catageek.ByteCart.Commands;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import com.github.catageek.ByteCart.AddressLayer.AddressString;
+import com.github.catageek.ByteCartAPI.ByteCartPlugin;
+import com.google.common.collect.Lists;
 
 public abstract class AbstractTicketCommand {
+	protected final ByteCartPlugin plugin;
+	protected AbstractTicketCommand(ByteCartPlugin plugin) {
+		this.plugin = plugin;
+	}
+
 	/**
 	 * Parses command arguments and then calls {@link #run}
 	 *
@@ -37,6 +48,35 @@ public abstract class AbstractTicketCommand {
 		}
 
 		return run(sender, player, addressString, isTrain);
+	}
+
+	/**
+	 * Gets a list of possible tab completion options.
+	 */
+	protected final List<String> tabComplete(int startIndex, String[] args) {
+		if (args.length <= startIndex) {
+			return Collections.emptyList();
+		}
+
+		String written = concat(args, startIndex, 1);
+		List<String> options = Lists.newArrayList();
+		if (plugin.getResolver() != null) {
+			String prefix = concat(args, startIndex, 0);
+			List<String> names = plugin.getResolver().getMatchingNames(prefix);
+			for (String name : names) {
+				name = name.substring(prefix.length());
+				if (name.contains(" ")) {
+					name = name.substring(0, name.indexOf(' '));
+				}
+				options.add(name);
+			}
+		}
+		if (StringUtil.startsWithIgnoreCase("train", args[args.length - 1])) {
+			if (AddressString.isResolvableAddressOrName(written)) {
+				options.add("train");
+			}
+		}
+		return options;
 	}
 
 	/**

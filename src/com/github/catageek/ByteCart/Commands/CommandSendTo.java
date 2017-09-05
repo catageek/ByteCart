@@ -1,9 +1,12 @@
 package com.github.catageek.ByteCart.Commands;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -14,8 +17,13 @@ import com.github.catageek.ByteCart.AddressLayer.AddressRouted;
 import com.github.catageek.ByteCart.EventManagement.ByteCartInventoryListener;
 import com.github.catageek.ByteCart.Signs.BC7011;
 import com.github.catageek.ByteCart.Util.LogUtil;
+import com.github.catageek.ByteCartAPI.ByteCartPlugin;
 
-public class CommandSendTo extends AbstractTicketCommand implements CommandExecutor {
+public class CommandSendTo extends AbstractTicketCommand implements CommandExecutor, TabCompleter {
+
+	public CommandSendTo(ByteCartPlugin plugin) {
+		super(plugin);
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -70,5 +78,10 @@ public class CommandSendTo extends AbstractTicketCommand implements CommandExecu
 		player.sendMessage(ChatColor.DARK_GREEN + "[Bytecart] " + ChatColor.YELLOW + ByteCart.myPlugin.getConfig().getString("Info.RightClickCart") );
 		new ByteCartInventoryListener(ByteCart.myPlugin, player, new Execute(player, addressString, isTrain), false);
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		return tabComplete(0, args);
 	}
 }

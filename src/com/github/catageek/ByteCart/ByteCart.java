@@ -65,11 +65,11 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 
 		getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
 
-		getCommand("mego").setExecutor(new CommandMeGo());
-		getCommand("sendto").setExecutor(new CommandSendTo());
+		getCommand("mego").setExecutor(new CommandMeGo(this));
+		getCommand("sendto").setExecutor(new CommandSendTo(this));
 		getCommand("bcreload").setExecutor(new CommandBCReload());
 		getCommand("bcupdater").setExecutor(new CommandBCUpdater());
-		getCommand("bcticket").setExecutor(new CommandBCTicket());
+		getCommand("bcticket").setExecutor(new CommandBCTicket(this));
 		getCommand("bcback").setExecutor(new CommandBCBack());
 		getCommand("bcdmapsync").setExecutor(new CommandBCDMapSync());
 
