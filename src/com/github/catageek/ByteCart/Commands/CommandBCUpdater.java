@@ -1,12 +1,17 @@
 package com.github.catageek.ByteCart.Commands;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.util.StringUtil;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.ModifiableRunnable;
@@ -16,8 +21,9 @@ import com.github.catageek.ByteCart.Updaters.UpdaterFactory;
 import com.github.catageek.ByteCart.Util.LogUtil;
 import com.github.catageek.ByteCart.Wanderer.BCWandererManager;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
+import com.google.common.collect.Lists;
 
-public class CommandBCUpdater implements CommandExecutor {
+public class CommandBCUpdater implements CommandExecutor, TabCompleter {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -132,5 +138,40 @@ public class CommandBCUpdater implements CommandExecutor {
 			,true);
 		}
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if (!(sender instanceof Player)) {
+			if (args.length == 1 && StringUtil.startsWithIgnoreCase("remove", args[0])) {
+				return Lists.newArrayList("remove");
+			} else {
+				return Collections.emptyList();
+			}
+		}
+		if (args.length == 1) {
+			List<String> options = Lists.newArrayList("remove");
+			for (Wanderer.Level level : Wanderer.Level.values()) {
+				options.add(level.name);
+			}
+			return StringUtil.copyPartialMatches(args[0], options, Lists.newArrayList());
+		} else if (args.length == 2) {
+			if (args[0].equalsIgnoreCase("reset_backbone")) {
+				if (StringUtil.startsWithIgnoreCase("full", args[1])) {
+					return Lists.newArrayList("full");
+				}
+			}
+		} else if (args.length == 3) {
+			if (args[0].equalsIgnoreCase("region") || args[0].equalsIgnoreCase("local")) {
+				if (StringUtil.startsWithIgnoreCase("new", args[2])) {
+					return Lists.newArrayList("new");
+				}
+			} else if (args[0].equalsIgnoreCase("reset_region") || args[0].equalsIgnoreCase("reset_local")) {
+				if (StringUtil.startsWithIgnoreCase("full", args[2])) {
+					return Lists.newArrayList("full");
+				}
+			}
+		}
+		return Collections.emptyList();
 	}
 }
