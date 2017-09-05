@@ -19,6 +19,14 @@ import com.github.catageek.ByteCartAPI.ByteCartAPI;
 import com.github.catageek.ByteCartAPI.ByteCartPlugin;
 import com.github.catageek.ByteCartAPI.AddressLayer.Resolver;
 
+import com.github.catageek.ByteCart.Commands.CommandBCBack;
+import com.github.catageek.ByteCart.Commands.CommandBCDMapSync;
+import com.github.catageek.ByteCart.Commands.CommandBCReload;
+import com.github.catageek.ByteCart.Commands.CommandBCTicket;
+import com.github.catageek.ByteCart.Commands.CommandBCUpdater;
+import com.github.catageek.ByteCart.Commands.CommandMeGo;
+import com.github.catageek.ByteCart.Commands.CommandSendTo;
+
 /**
  * Main class
  */
@@ -57,13 +65,13 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 
 		getServer().getPluginManager().registerEvents(new ByteCartListener(), this);
 
-		getCommand("mego").setExecutor(new BytecartCommandExecutor());
-		getCommand("sendto").setExecutor(new BytecartCommandExecutor());
-		getCommand("bcreload").setExecutor(new BytecartCommandExecutor());
-		getCommand("bcupdater").setExecutor(new BytecartCommandExecutor());
-		getCommand("bcticket").setExecutor(new BytecartCommandExecutor());
-		getCommand("bcback").setExecutor(new BytecartCommandExecutor());
-		getCommand("bcdmapsync").setExecutor(new BytecartCommandExecutor());
+		getCommand("mego").setExecutor(new CommandMeGo());
+		getCommand("sendto").setExecutor(new CommandSendTo());
+		getCommand("bcreload").setExecutor(new CommandBCReload());
+		getCommand("bcupdater").setExecutor(new CommandBCUpdater());
+		getCommand("bcticket").setExecutor(new CommandBCTicket());
+		getCommand("bcback").setExecutor(new CommandBCBack());
+		getCommand("bcdmapsync").setExecutor(new CommandBCDMapSync());
 
 		if (Bukkit.getPluginManager().isPluginEnabled("dynmap")  && this.getConfig().getBoolean("dynmap", true)) {
 			log.info("[ByteCart] loading dynmap plugin.");
@@ -108,7 +116,7 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 	 * Load the configuration file
 	 *
 	 */
-	protected final void loadConfig() {
+	public final void loadConfig() {
 		debug = this.getConfig().getBoolean("debug", false);
 		keepitems = this.getConfig().getBoolean("keepitems", true);
 
