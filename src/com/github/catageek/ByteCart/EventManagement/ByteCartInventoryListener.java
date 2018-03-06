@@ -34,7 +34,7 @@ public class ByteCartInventoryListener implements Listener {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler (ignoreCancelled = false)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Entity entity;
 		Inventory inv;
