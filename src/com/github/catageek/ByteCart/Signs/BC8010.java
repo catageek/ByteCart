@@ -102,6 +102,11 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			boolean isTrain = AbstractTriggeredSign.isTrain(destination);
 
 			// Here begins the triggered action
+			if(ByteCart.debug) {
+				ByteCart.log.info("Router world: " + center.getWorld().getName());
+				ByteCart.log.info("Router location: X: " + center.getX() + " Y: " + center.getY() + " Z: " + center.getZ());
+			}
+
 
 			// is this an wanderer who needs special routing ? no then routing normally
 			if(selectWanderer()) {
@@ -133,8 +138,9 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 					if (ttl == 1 && tryReturnCart())
 						destination = AddressFactory.getAddress(this.getInventory());
 
-					if(ByteCart.debug)
+					if(ByteCart.debug) {
 						ByteCart.log.info("ByteCart : TTL is " + destination.getTTL());
+					}
 
 
 					// if this is the first car of a train
