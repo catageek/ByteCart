@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
+import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.dynmap.markers.MarkerAPI;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
@@ -60,7 +62,7 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 			s = con.createStatement();
 			s.execute("create table if not exists cart_dns (ip varchar(11) not null primary key,username varchar(20) not null,uuid varchar(128) not null,name varchar(20) not null unique)");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new MissingResourceException("Could not create SQL table", "BCHostname", "BCHostname");
 		}
 	}
 

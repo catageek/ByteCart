@@ -1,5 +1,6 @@
 package com.github.catageek.ByteCart;
 
+import java.util.MissingResourceException;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -67,15 +68,26 @@ public final class ByteCart extends JavaPlugin implements ByteCartPlugin {
 
 		if (Bukkit.getPluginManager().isPluginEnabled("dynmap")  && this.getConfig().getBoolean("dynmap", true)) {
 			log.info("[ByteCart] loading dynmap plugin.");
-			getServer().getPluginManager().registerEvents(new BCDynmapPlugin(), this);
+			try {
+				getServer().getPluginManager().registerEvents(new BCDynmapPlugin(), this);
+			}
+			catch (MissingResourceException e) {
+				log.info("[ByteCart] Failed to load dynmap plugin.");
+			}
 		}
 
 		if (this.getConfig().getBoolean("hostname_resolution", true)) {
+			log.info("[ByteCart] loading BCHostname plugin.");
 			hostnamePlugin = new BCHostnameResolutionPlugin();
-			hostnamePlugin.onLoad();
-			ByteCartAPI.setResolver(hostnamePlugin);
-			getServer().getPluginManager().registerEvents(hostnamePlugin, this);
-			getCommand("host").setExecutor(hostnamePlugin);
+			try {
+				hostnamePlugin.onLoad();
+				ByteCartAPI.setResolver(hostnamePlugin);
+				getServer().getPluginManager().registerEvents(hostnamePlugin, this);
+				getCommand("host").setExecutor(hostnamePlugin);
+			}
+			catch (MissingResourceException e) {
+				log.info("[ByteCart] Failed to load BCHostname plugin.");
+			}
 		}
 
 		BCWandererTracker updatertrackerplugin = new BCWandererTracker();
