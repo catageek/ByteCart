@@ -260,12 +260,11 @@ public class ByteCartListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	@SuppressWarnings("ucd")
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-
-		if (event.getChangedType() != Material.REDSTONE_WIRE || ! AbstractIC.checkEligibility(event.getBlock().getRelative(BlockFace.DOWN)))
+		if (event.getChangedType() != Material.SIGN || ! event.getBlock().isBlockIndirectlyPowered()) {
 			return;
+		}
 
-		Powerable myIC = this.MyPoweredICFactory.getIC(event.getBlock().getRelative(BlockFace.DOWN));
-
+		Powerable myIC = this.MyPoweredICFactory.getIC(event.getBlock());
 
 		if (myIC != null) {
 			try {
