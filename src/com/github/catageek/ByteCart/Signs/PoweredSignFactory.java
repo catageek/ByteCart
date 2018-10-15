@@ -1,10 +1,12 @@
 package com.github.catageek.ByteCart.Signs;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
+import com.github.catageek.ByteCart.Storage.ExpirableSet;
 
 
 /**
@@ -12,6 +14,10 @@ import com.github.catageek.ByteCart.HAL.AbstractIC;
  */
 public class PoweredSignFactory {
 	
+	// Singleton set, keeps records 40 ticks to prevent duplicate
+	private final ExpirableSet<Location> poweredsignsset = new ExpirableSet<Location>(40, false, "PoweredSign");
+	private Location loc = null;
+
 	/**
 	 * Get an IC at the powered sign
 	 *
@@ -21,14 +27,17 @@ public class PoweredSignFactory {
 	public Powerable getIC(Block block) {
 		
 			
-		if(AbstractIC.checkEligibility(block)) {
+		if(AbstractIC.checkEligibility(block) && ! this.poweredsignsset.contains(block.getLocation(loc))) {
 			
 			// if there is really a BC sign post
 			// we extract its #
 			
-			return PoweredSignFactory.getPoweredIC(block, ((Sign) block.getState()).getLine(1));
-
-		
+			final Powerable ps = PoweredSignFactory.getPoweredIC(block, ((Sign) block.getState()).getLine(1));
+			// register it as singleton for this location
+			if (ps != null) {
+				this.poweredsignsset.add(block.getLocation(loc));
+			}
+			return ps;
 		}
 		// no BC sign post
 		
@@ -49,10 +58,6 @@ public class PoweredSignFactory {
 			return null;
 
 		int ICnumber = Integer.parseInt(signString.substring(3, 7));
-/*		
-		if(ByteCart.debug)
-			ByteCart.log.info("ByteCart: Powered #IC " + ICnumber + " detected");
-*/		
 		
 		try {
 
