@@ -174,7 +174,10 @@ public class BCWandererManager implements WandererManager {
 		long expiration = rte.getExpirationTime();
 		if (creation != expiration && Calendar.getInstance().getTimeInMillis() > expiration) {
 			LogUtil.sendSuccess(rte.getPlayer(), "ByteCart : " + suffix + " created " + (new Date(rte.getCreationtime())).toString() + " expired");
-			getFactory(inv).destroyWanderer(inv);
+			WandererFactory factory = getFactory(inv);
+			if (factory != null) {
+				factory.destroyWanderer(inv);
+			}
 			return;
 		}
 
@@ -185,7 +188,10 @@ public class BCWandererManager implements WandererManager {
 			oos.flush();
 		}
 		catch (IOException e) {
-			getFactory(inv).destroyWanderer(inv);
+			WandererFactory factory = getFactory(inv);
+			if (factory != null) {
+				factory.destroyWanderer(inv);
+			}
 			ByteCart.log.info("Bytecart: I/O error (maximum capacity reached), updater deleted");
 		}
 	}
