@@ -21,7 +21,7 @@ import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
 final class UpdaterResetLocal extends UpdaterLocal implements Wanderer {
 
 	UpdaterResetLocal(BCSign bc, UpdaterContent rte) {
-		super(bc, rte);
+		super(bc, rte, Level.RESET_LOCAL);
 	}
 
 	@Override
