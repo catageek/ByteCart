@@ -14,6 +14,6 @@ public interface Powerable extends IC {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public void power() throws ClassNotFoundException, IOException;
+	public void power();
 
 }

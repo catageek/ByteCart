@@ -1,13 +1,11 @@
 package com.github.catageek.ByteCart.Signs;
 
-import java.io.IOException;
-
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Rail;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
-import org.bukkit.material.MaterialData;
-import org.bukkit.material.Rails;
 import org.bukkit.util.Vector;
 
 import com.github.catageek.ByteCart.ByteCart;
@@ -73,9 +71,7 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 			if(this.getInput(0).getAmount() > 0) {
 				if (this.wasTrain(this.getLocation()))
 					ByteCart.myPlugin.getIsTrainManager().getMap().reset(this.getLocation());
-				/*				if(ByteCart.debug)
-					ByteCart.log.info("ByteCart: "+ this.getName() + " at " + this.getLocation() + " : " + this.getVehicle() + " : isTrain() = " + this.isTrain());
-				 */
+
 				if (this.isTrain()) {
 					this.setWasTrain(this.getLocation(), true);
 				}
@@ -90,13 +86,9 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 
 						// we set busy
 						myBC7001.getOutput(0).setAmount(1);
-
-						/*						if(ByteCart.debug)
-							ByteCart.log.info("ByteCart: BC7001 : running delayed thread (set switch ON)");
-						 */
 					}
 				}
-				, 6);
+				, 5);
 
 
 				// if the cart is stopped, start it
@@ -142,25 +134,31 @@ final class BC7001 extends AbstractTriggeredSign implements Triggable, Powerable
 	 * @see com.github.catageek.ByteCart.Signs.Powerable#power()
 	 */
 	@Override
-	public void power() throws ClassNotFoundException, IOException {
+	public void power() {
 		// power update
-
-		Triggable bc = this;
 
 		// We need to find if a cart is stopped and set the member variable Vehicle
 		org.bukkit.block.Block block = this.getBlock().getRelative(BlockFace.UP, 2);
 		Location loc = block.getLocation();
-		MaterialData rail;
+		BlockData rail;
 
 		// if the rail is in slope, the cart is 1 block up
-		if ((rail = block.getState().getData()) instanceof Rails
-				&& ((Rails) rail).isOnSlope())
-			loc.add(0, 1, 0);
+		if ((rail = block.getState().getBlockData()) instanceof Rail
+				&& MathUtil.isOnSlope((Rail) rail)) {
+					loc.add(0, 1, 0);
+		}
 
-		bc = TriggeredSignFactory.getTriggeredIC(this.getBlock(),MathUtil.getVehicleByLocation(loc));
+		final Triggable bc = TriggeredSignFactory.getTriggeredIC(this.getBlock(),MathUtil.getVehicleByLocation(loc));
 
-		if (bc != null)
-			bc.trigger();
+		if (bc != null) {
+			ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new Runnable() {
+				@Override
+				public void run() {
+					bc.trigger();
+				}
+			}
+			, 1);
+		}
 		else
 			this.trigger();
 	}

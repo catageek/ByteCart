@@ -1,7 +1,5 @@
 package com.github.catageek.ByteCart.Signs;
 
-import java.io.IOException;
-
 import org.bukkit.block.BlockFace;
 
 import com.github.catageek.ByteCart.HAL.PinRegistry;
@@ -22,7 +20,7 @@ final class BC7009 extends AbstractTriggeredSign implements Triggable {
 	}
 
 	@Override
-	public void trigger() throws ClassNotFoundException, IOException {
+	public void trigger() {
 		this.addIO();
 		RoundRobin();
 	}

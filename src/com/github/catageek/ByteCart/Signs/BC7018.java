@@ -1,7 +1,5 @@
 package com.github.catageek.ByteCart.Signs;
 
-import java.io.IOException;
-
 import org.bukkit.entity.Player;
 
 import com.github.catageek.ByteCart.AddressLayer.TicketFactory;
@@ -26,22 +24,14 @@ class BC7018 extends AbstractTriggeredSign implements Triggable,Clickable {
 	 */
 	@Override
 	public void click() {
-		try {
-			this.trigger();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.trigger();
 	}
 
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
 	 */
 	@Override
-	public void trigger() throws ClassNotFoundException, IOException {
+	public void trigger() {
 		TicketFactory.removeTickets(this.getInventory());
 	}
 

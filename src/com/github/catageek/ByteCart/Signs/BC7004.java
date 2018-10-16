@@ -3,10 +3,8 @@
  */
 package com.github.catageek.ByteCart.Signs;
 
-import java.io.IOException;
-
-import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Rail;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
@@ -40,7 +38,7 @@ final class BC7004 extends AbstractIC implements Powerable {
 	 * @see com.github.catageek.ByteCart.Signs.Powerable#power()
 	 */
 	@Override
-	public void power() throws ClassNotFoundException, IOException {
+	public void power() {
 		org.bukkit.block.Block block = this.getBlock();
 		// check if we are really powered
 		if (! block.getRelative(MathUtil.clockwise(getCardinal())).isBlockPowered() && ! block.getRelative(MathUtil.anticlockwise(getCardinal())).isBlockPowered()) {
@@ -64,7 +62,7 @@ final class BC7004 extends AbstractIC implements Powerable {
 			org.bukkit.block.Block rail = block.getRelative(BlockFace.UP, 2);
 			org.bukkit.Location loc = rail.getLocation();
 			// check that it is a track, and no cart is there
-			if (rail.getType().equals(Material.RAILS) && MathUtil.getVehicleByLocation(loc) == null) {
+			if ((rail.getBlockData() instanceof Rail) && MathUtil.getVehicleByLocation(loc) == null) {
 				Entity entity = block.getWorld().spawnEntity(loc, getType());
 				// put a ticket in the inventory if necessary
 				if (entity instanceof InventoryHolder && AddressString.isResolvableAddressOrName(address)) {

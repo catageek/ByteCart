@@ -26,6 +26,7 @@ import com.github.catageek.ByteCartAPI.Signs.BCRouter;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 import com.github.catageek.ByteCartAPI.Wanderer.AbstractWanderer;
 import com.github.catageek.ByteCartAPI.Wanderer.Wanderer;
+import com.google.gson.JsonSyntaxException;
 
 
 
@@ -42,7 +43,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	protected boolean IsTrackNumberProvider;
 	private boolean IsOldVersion = true;
 
-	BC8010(Block block, org.bukkit.entity.Vehicle vehicle) throws ClassNotFoundException, IOException {
+	BC8010(Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 		this.IsTrackNumberProvider = true;
 		From = this.getCardinal().getOppositeFace();
@@ -61,28 +62,38 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 		this.RoutingTable = loadChest();
 	}
 
-	protected RoutingTableWritable loadChest() throws ClassNotFoundException, IOException {
+	protected RoutingTableWritable loadChest() {
 		BlockState blockstate;
 		if ((blockstate = center.getRelative(BlockFace.UP, 5).getState()) instanceof InventoryHolder) {
 			// Loading inventory of chest above router
 			Inventory ChestInventory = ((InventoryHolder) blockstate).getInventory();
 
 			// Converting inventory in routing table
-			return RoutingTableFactory.getRoutingTable(ChestInventory, 0);
+			try {
+				return RoutingTableFactory.getRoutingTable(ChestInventory, 0);
+			} catch (JsonSyntaxException | ClassNotFoundException | IOException e) {
+				ByteCart.log.info("ByteCart: Error while loading chest at position " + this.center.getLocation() + ". Please clean its content and run bcupdater region command.");
+				return null;
+			}
 		}
 		else if ((blockstate = center.getRelative(BlockFace.DOWN, 2).getState()) instanceof InventoryHolder) {
 			// Loading inventory of chest above router
 			Inventory ChestInventory = ((InventoryHolder) blockstate).getInventory();
 
 			// Converting inventory in routing table
-			return RoutingTableFactory.getRoutingTable(ChestInventory, 0);
+			try {
+				return RoutingTableFactory.getRoutingTable(ChestInventory, 0);
+			} catch (JsonSyntaxException | ClassNotFoundException | IOException e) {
+				ByteCart.log.info("ByteCart: Error while loading chest at position " + this.center.getLocation() + ". Please clean its content and run bcupdater region command.");
+				return null;
+			}
 		}
 		else {
 			return null;
 		}
 	}
 
-	BC8010(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle, boolean isOldVersion) throws ClassNotFoundException, IOException {
+	BC8010(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle, boolean isOldVersion) {
 		this(block, vehicle);
 		this.IsOldVersion = isOldVersion;
 	}
@@ -91,7 +102,7 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
 	 */
 	@Override
-	public void trigger() throws ClassNotFoundException, IOException {
+	public void trigger() {
 
 		CollisionAvoiderBuilder builder = new RouterCollisionAvoiderBuilder(this, center.getLocation(), this.IsOldVersion);
 
@@ -164,7 +175,13 @@ public class BC8010 extends AbstractTriggeredSign implements BCRouter, Triggable
 			}
 
 			// it's a wanderer, so let it choosing direction
-			Wanderer wanderer = getWanderer();
+			Wanderer wanderer = null;
+			try {
+				wanderer = getWanderer();
+			} catch (ClassNotFoundException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			// routing normally
 			to = router.WishToGo(From, wanderer.giveRouterDirection(), isTrain);

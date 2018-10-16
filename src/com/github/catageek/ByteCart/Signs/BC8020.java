@@ -1,7 +1,5 @@
 package com.github.catageek.ByteCart.Signs;
 
-import java.io.IOException;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
@@ -23,12 +21,12 @@ import com.github.catageek.ByteCartAPI.Wanderer.Wanderer.Scope;
 class BC8020 extends BC8010 implements BCRouter, Triggable, HasRoutingTable {
 
 
-	BC8020(Block block, org.bukkit.entity.Vehicle vehicle) throws ClassNotFoundException, IOException {
+	BC8020(Block block, org.bukkit.entity.Vehicle vehicle) {
 		super(block, vehicle);
 		this.IsTrackNumberProvider = false;
 	}
 
-	BC8020(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle, boolean isOldVersion) throws ClassNotFoundException, IOException {
+	BC8020(org.bukkit.block.Block block, org.bukkit.entity.Vehicle vehicle, boolean isOldVersion) {
 		super(block, vehicle, isOldVersion);
 		this.IsTrackNumberProvider = false;
 	}

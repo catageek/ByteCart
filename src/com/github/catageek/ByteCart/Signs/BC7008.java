@@ -3,7 +3,6 @@
  */
 package com.github.catageek.ByteCart.Signs;
 
-import java.io.IOException;
 import java.util.ListIterator;
 
 import org.bukkit.World;
@@ -46,7 +45,7 @@ final class BC7008 extends AbstractTriggeredSign implements Triggable {
 	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
 	 */
 	@Override
-	public void trigger() throws ClassNotFoundException, IOException {
+	public void trigger() {
 		org.bukkit.entity.Vehicle vehicle = this.getVehicle();
 
 		// we eject the passenger

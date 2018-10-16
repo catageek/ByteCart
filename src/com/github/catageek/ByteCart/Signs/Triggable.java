@@ -17,7 +17,7 @@ public interface Triggable extends IC {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public void trigger() throws ClassNotFoundException, IOException;
+	public void trigger();
 	
 	/**
 	 * Tell if the cart that triggers this IC has the train bit set, i.e is the head of a train

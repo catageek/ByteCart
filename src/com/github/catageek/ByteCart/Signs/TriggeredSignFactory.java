@@ -5,11 +5,12 @@ import java.io.IOException;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Rail;
 import org.bukkit.entity.Vehicle;
-import org.bukkit.material.MaterialData;
-import org.bukkit.material.Rails;
 
 import com.github.catageek.ByteCart.HAL.AbstractIC;
+import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 
 /**
@@ -27,7 +28,7 @@ final public class TriggeredSignFactory {
 	 * @throws IndexOutOfBoundsException
 	 * @throws IOException
 	 */
-	static final public Triggable getTriggeredIC(Block block, Vehicle vehicle) throws ClassNotFoundException, IndexOutOfBoundsException, IOException {
+	static final public Triggable getTriggeredIC(Block block, Vehicle vehicle) {
 
 		if(AbstractIC.checkEligibility(block)) {
 
@@ -40,8 +41,8 @@ final public class TriggeredSignFactory {
 		// Maybe the rail is in slope
 		Block block2 = block.getRelative(BlockFace.DOWN);
 		if (AbstractIC.checkEligibility(block2)) {
-			MaterialData rail = block.getRelative(BlockFace.UP).getState().getData();
-			if (rail instanceof Rails && ((Rails) rail).isOnSlope())
+			BlockData rail = block.getRelative(BlockFace.UP).getState().getBlockData();
+			if (rail instanceof Rail && MathUtil.isOnSlope((Rail) rail))
 				return TriggeredSignFactory.getTriggeredIC(block2, ((Sign) block2.getState()).getLine(1), vehicle);
 		}
 		// no BC sign post
@@ -61,8 +62,7 @@ final public class TriggeredSignFactory {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	static final public Triggable getTriggeredIC(Block block, String signString, Vehicle vehicle) throws ClassNotFoundException, IOException {
-
+	static final public Triggable getTriggeredIC(Block block, String signString, Vehicle vehicle) {
 		if (signString.length() < 7)
 			return null;
 

@@ -3,8 +3,6 @@
  */
 package com.github.catageek.ByteCart.Signs;
 
-import java.io.IOException;
-
 import org.bukkit.entity.Minecart;
 
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
@@ -27,7 +25,7 @@ final class BC7006 extends AbstractTriggeredSign implements Triggable {
 	 * @see com.github.catageek.ByteCart.Signs.Triggable#trigger()
 	 */
 	@Override
-	public void trigger() throws ClassNotFoundException, IOException {
+	public void trigger() {
 		org.bukkit.entity.Vehicle vehicle = this.getVehicle();
 		Minecart cart = (Minecart) vehicle;
 		if (cart.getMaxSpeed() <= 0.4D)

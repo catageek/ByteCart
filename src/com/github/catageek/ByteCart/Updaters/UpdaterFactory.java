@@ -3,8 +3,6 @@ package com.github.catageek.ByteCart.Updaters;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Calendar;
-import java.util.Date;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -27,7 +25,7 @@ public final class UpdaterFactory implements WandererFactory {
 	private UpdaterSet updaterset = new UpdaterSet();
 
 	@Override
-	public Wanderer getWanderer(BCSign bc, Inventory inv) throws ClassNotFoundException, IOException {
+	public Wanderer getWanderer(BCSign bc, Inventory inv) {
 		UpdaterContent rte;
 		final BCWandererManager wm = ByteCart.myPlugin.getWandererManager();
 		if (wm.isWanderer(inv, "Updater"))

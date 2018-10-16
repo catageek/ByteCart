@@ -1,6 +1,5 @@
 package com.github.catageek.ByteCart.EventManagement;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.bukkit.Bukkit;
@@ -81,44 +80,29 @@ public class ByteCartListener implements Listener {
 			// XXXX is read from the sign
 
 			Triggable myIC;
-			try {
-				myIC = TriggeredSignFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
+			myIC = TriggeredSignFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
 
-				Player player;
-				int tax;
+			Player player;
+			int tax;
 
-				if (myIC != null) {
+			if (myIC != null) {
 
-					if(ByteCart.debug)
-						ByteCart.log.info("ByteCart: " + myIC.getName() + ".trigger()");
+				if(ByteCart.debug)
+					ByteCart.log.info("ByteCart: " + myIC.getName() + ".trigger()");
 
-					myIC.trigger();
+				myIC.trigger();
 
-					if ((! vehicle.isEmpty())
-							&& vehicle.getPassenger() instanceof Player) {
+				if ((! vehicle.isEmpty())
+						&& vehicle.getPassenger() instanceof Player) {
 
-						player = (Player) vehicle.getPassenger();
-						tax = myIC.getTriggertax();
+					player = (Player) vehicle.getPassenger();
+					tax = myIC.getTriggertax();
 
-						if (tax != 0)
-							player.sendMessage(ChatColor.DARK_GRAY+"[Bytecart] " + "Echangeur (tarif: " + myIC.getTriggertax() + " eur0x)");	
-					}
-
+					if (tax != 0)
+						player.sendMessage(ChatColor.DARK_GRAY+"[Bytecart] " + "Echangeur (tarif: " + myIC.getTriggertax() + " eur0x)");	
 				}
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IndexOutOfBoundsException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
-
 		}
-
-
 	}
 
 	/**
@@ -141,33 +125,21 @@ public class ByteCartListener implements Listener {
 			// XXXX is read from the sign
 
 			Triggable myIC;
-			try {
-				myIC = TriggeredSignFactory.getTriggeredIC(vehicle.getLocation().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
+			myIC = TriggeredSignFactory.getTriggeredIC(vehicle.getLocation().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
 
-				if (myIC != null) {
-					myIC.trigger();
-					if ((! vehicle.isEmpty())
-							&& vehicle.getPassenger() instanceof Player) {
+			if (myIC != null) {
+				myIC.trigger();
+				if ((! vehicle.isEmpty())
+						&& vehicle.getPassenger() instanceof Player) {
 
-						player = (Player) vehicle.getPassenger();
-						tax = myIC.getTriggertax();
+					player = (Player) vehicle.getPassenger();
+					tax = myIC.getTriggertax();
 
-						if (tax != 0)
-							player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "1 aiguillage traversé (tarif: " + myIC.getTriggertax() + " eur0x");	
-					}
-
+					if (tax != 0)
+						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "1 aiguillage traversé (tarif: " + myIC.getTriggertax() + " eur0x");	
 				}
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IndexOutOfBoundsException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 
+			}
 		}
 
 
@@ -187,37 +159,33 @@ public class ByteCartListener implements Listener {
 
 		AbstractIC.removeFromCache(event.getBlock());
 
-		try {
-			IC myIC = TriggeredSignFactory.getTriggeredIC(event.getBlock(), event.getLine(1), null);
-			
-			if (myIC == null) {
-				myIC = ClickedSignFactory.getClickedIC(event.getBlock(), event.getLine(1), event.getPlayer());
-			}
-			
-			if (myIC == null) {
-				myIC = PoweredSignFactory.getPoweredIC(event.getBlock(), event.getLine(1));
-			}
+		IC myIC = TriggeredSignFactory.getTriggeredIC(event.getBlock(), event.getLine(1), null);
 
-			if (myIC != null) {
-				Player player = event.getPlayer();
-				if (! player.hasPermission(myIC.getBuildPermission())) {
-					player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED +"You are not authorized to place " + myIC.getFriendlyName() + " block.");
-					player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED +"You must have " + myIC.getBuildPermission());
-					event.setLine(1, "");
-				}
-				else
-				{
-					player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + myIC.getFriendlyName() + " block created.");
-					int tax = myIC.getBuildtax();
-					if (tax > 0)
-						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Tarif : " +myIC.getBuildtax() + " eur0x.");	
-					if (event.getLine(2).compareTo("") == 0)
-						event.setLine(2, myIC.getFriendlyName());
-					Bukkit.getPluginManager().callEvent(new SignCreateEvent(myIC, player, event.getLines()));
-				}
+		if (myIC == null) {
+			myIC = ClickedSignFactory.getClickedIC(event.getBlock(), event.getLine(1), event.getPlayer());
+		}
+
+		if (myIC == null) {
+			myIC = PoweredSignFactory.getPoweredIC(event.getBlock(), event.getLine(1));
+		}
+
+		if (myIC != null) {
+			Player player = event.getPlayer();
+			if (! player.hasPermission(myIC.getBuildPermission())) {
+				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED +"You are not authorized to place " + myIC.getFriendlyName() + " block.");
+				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED +"You must have " + myIC.getBuildPermission());
+				event.setLine(1, "");
 			}
-		} catch(Exception e) {
-			e.printStackTrace();
+			else
+			{
+				player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + myIC.getFriendlyName() + " block created.");
+				int tax = myIC.getBuildtax();
+				if (tax > 0)
+					player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "Tarif : " +myIC.getBuildtax() + " eur0x.");
+				if (event.getLine(2).compareTo("") == 0)
+					event.setLine(2, myIC.getFriendlyName());
+				Bukkit.getPluginManager().callEvent(new SignCreateEvent(myIC, player, event.getLines()));
+			}
 		}
 	}
 
@@ -264,18 +232,10 @@ public class ByteCartListener implements Listener {
 			return;
 		}
 
-		Powerable myIC = this.MyPoweredICFactory.getIC(event.getBlock());
+		final Powerable myIC = this.MyPoweredICFactory.getIC(event.getBlock());
 
 		if (myIC != null) {
-			try {
-				myIC.power();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			myIC.power();
 		}
 
 	}
@@ -352,23 +312,14 @@ public class ByteCartListener implements Listener {
 			return;
 
 		IC myIC;
-		try {
-			myIC = TriggeredSignFactory.getTriggeredIC(block, null);
+		myIC = TriggeredSignFactory.getTriggeredIC(block, null);
 
-			if (myIC == null)
-				myIC = ClickedSignFactory.getClickedIC(block, null);
+		if (myIC == null)
+			myIC = ClickedSignFactory.getClickedIC(block, null);
 
-			if (myIC != null) {
-				Bukkit.getPluginManager().callEvent(new SignRemoveEvent(myIC, entity));
-				AbstractIC.removeFromCache(block);
-			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (myIC != null) {
+			Bukkit.getPluginManager().callEvent(new SignRemoveEvent(myIC, entity));
+			AbstractIC.removeFromCache(block);
 		}
-
 	}
 }
