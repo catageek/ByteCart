@@ -24,7 +24,7 @@ public final class ComponentSign extends AbstractComponent {
 	 * @param s the text to write
 	 */
 	public void setLine(int line, String s) {
-		BlockState blockstate = this.getBlock().getState();
+		final BlockState blockstate = this.getBlock().getState();
 
 		if (blockstate instanceof org.bukkit.block.Sign) {
 			((org.bukkit.block.Sign) blockstate).setLine(line, s);
@@ -39,7 +39,7 @@ public final class ComponentSign extends AbstractComponent {
 	 * @return the text
 	 */
 	public String getLine(int line) {
-		BlockState blockstate = this.getBlock().getState();
+		final BlockState blockstate = this.getBlock().getState();
 		if (blockstate instanceof org.bukkit.block.Sign)
 			return ((org.bukkit.block.Sign) blockstate).getLine(line);
 		else {

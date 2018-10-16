@@ -2,6 +2,7 @@ package com.github.catageek.ByteCart.IO;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Switch;
 
 
 /**
@@ -16,11 +17,15 @@ final public class OutputPinFactory {
 	 */
 	static public OutputPin getOutput(Block block) {
 		
-		if(block.getType().equals(Material.LEVER))
-			return new ComponentLever(block);
-
-		if(block.getType().equals(Material.STONE_BUTTON) || block.getType().equals(Material.WOOD_BUTTON))
-			return new ComponentButton(block);
+		if(block.getBlockData() instanceof Switch) {
+			final Switch myswitch = (Switch) block.getBlockData();
+			if(myswitch.getMaterial().equals(Material.LEVER)) {
+				return new ComponentLever(block);
+			}
+			else {
+				return new ComponentButton(block);
+			}
+		}
 
 		return null;
 

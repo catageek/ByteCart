@@ -5,10 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.material.Button;
-import org.bukkit.material.MaterialData;
-
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Powerable;
+import org.bukkit.block.data.type.Switch;
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
@@ -35,12 +34,12 @@ class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 	@Override
 	public void write(boolean bit) {
 		final Block block = this.getBlock();
-		final BlockState blockstate = block.getState();
-		if(blockstate.getData() instanceof Button) {
+		final BlockData blockdata = block.getBlockData();
+		if(blockdata instanceof Switch) {
 			final ComponentButton component = this;
 			int id;
 			
-			final Button button = (Button) blockstate.getData();
+			final Switch button = (Switch) block.getBlockData();
 			
 			if (bit) {
 				if (ActivatedButtonMap.containsKey(block)) {
@@ -60,15 +59,8 @@ class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 				else {
 					// if button is off, we power the button
 					button.setPowered(true);
-					blockstate.setData(button);
-					blockstate.update(false, true);
-					MathUtil.forceUpdate(this.getBlock().getRelative(button.getAttachedFace()));
-			
-			
-/*			if(ByteCart.debug)
-				ByteCart.log.info("Button at (" + this.getLocation().toString() + ") : " + bit);
-*/
-			
+					block.setBlockData(button);
+					MathUtil.forceUpdate(block.getRelative(button.getFacing().getOppositeFace()));
 			
 					// delayed action to unpower the button after 2 s.
 				
@@ -88,9 +80,9 @@ class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 	 */
 	@Override
 	public boolean read() {
-		MaterialData md = this.getBlock().getState().getData();
-		if(md instanceof Button) {
-			return ((Button) md).isPowered();
+		final BlockData md = this.getBlock().getBlockData();
+		if(md instanceof Powerable) {
+			return ((Powerable) md).isPowered();
 		}
 		return false;
 	}

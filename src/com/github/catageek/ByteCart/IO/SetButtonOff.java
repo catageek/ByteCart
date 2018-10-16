@@ -3,9 +3,8 @@ package com.github.catageek.ByteCart.IO;
 import java.util.Map;
 
 import org.bukkit.Location;
-import org.bukkit.block.BlockState;
-import org.bukkit.material.Button;
-
+import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Switch;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
 /**
@@ -31,16 +30,15 @@ class SetButtonOff implements Runnable {
 	@Override
 	public void run() {
 
-		BlockState block = component.getBlock().getState();
+		final Block block = component.getBlock();
 
-		if (block.getData() instanceof Button) {
-			Button button = (Button) block.getData();
+		if (block.getBlockData() instanceof Switch) {
+			final Switch button = (Switch) block.getBlockData();
 
 			button.setPowered(false);
-			block.setData(button);
+			block.setBlockData(button);
 
-			block.update(false, true);
-			MathUtil.forceUpdate(component.getBlock().getRelative(button.getAttachedFace()));
+			MathUtil.forceUpdate(block.getRelative(button.getFacing().getOppositeFace()));
 		}
 
 		ActivatedButtonMap.remove(block.getLocation());

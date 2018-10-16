@@ -1,9 +1,11 @@
 package com.github.catageek.ByteCart.IO;
 
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.material.Lever;
-import org.bukkit.material.MaterialData;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Powerable;
+import org.bukkit.block.data.type.Switch;
+import org.bukkit.block.data.type.Switch.Face;
 
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
@@ -25,13 +27,23 @@ class ComponentLever extends AbstractComponent implements OutputPin, InputPin, R
 	 */
 	@Override
 	public void write(boolean bit) {
-		BlockState block = this.getBlock().getState();
-		Lever lever = (Lever) block.getData();
-		if(lever.isPowered()^bit) {
-			lever.setPowered(bit);
-			block.setData(lever);
-			block.update(false, true);
-			MathUtil.forceUpdate(this.getBlock().getRelative(lever.getAttachedFace()));
+		final Block block = this.getBlock();
+		final BlockData md = block.getBlockData();
+		if(md instanceof Switch) {
+			Switch pw = (Switch) md;
+			pw.setPowered(bit);
+			block.setBlockData(pw);
+			Face face = pw.getFace();
+			switch (face) {
+				case CEILING:
+					MathUtil.forceUpdate(block.getRelative(BlockFace.UP,2));
+					break;
+				case WALL:
+					MathUtil.forceUpdate(block.getRelative(pw.getFacing().getOppositeFace()));
+					break;
+				default:
+					MathUtil.forceUpdate(block.getRelative(BlockFace.DOWN));
+			}
 		}
 	}
 
@@ -40,9 +52,9 @@ class ComponentLever extends AbstractComponent implements OutputPin, InputPin, R
 	 */
 	@Override
 	public boolean read() {
-		MaterialData md = this.getBlock().getState().getData();
-		if(md instanceof Lever) {
-			return ((Lever) md).isPowered();
+		BlockData md = this.getBlock().getBlockData();
+		if(md instanceof Powerable) {
+			return ((Powerable) md).isPowered();
 		}
 		return false;
 	}

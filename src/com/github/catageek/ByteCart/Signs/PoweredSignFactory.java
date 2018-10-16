@@ -15,7 +15,7 @@ import com.github.catageek.ByteCart.Storage.ExpirableSet;
 public class PoweredSignFactory {
 	
 	// Singleton set, keeps records 40 ticks to prevent duplicate
-	private final ExpirableSet<Location> poweredsignsset = new ExpirableSet<Location>(40, false, "PoweredSign");
+	private final ExpirableSet<Location> poweredsignsset = new ExpirableSet<Location>(2, false, "PoweredSign");
 	private Location loc = null;
 
 	/**

@@ -188,10 +188,7 @@ public class BCWandererManager implements WandererManager {
 			oos.flush();
 		}
 		catch (IOException e) {
-			WandererFactory factory = getFactory(inv);
-			if (factory != null) {
-				factory.destroyWanderer(inv);
-			}
+			getFactory(inv).destroyWanderer(inv);
 			ByteCart.log.info("Bytecart: I/O error (maximum capacity reached), updater deleted");
 		}
 	}

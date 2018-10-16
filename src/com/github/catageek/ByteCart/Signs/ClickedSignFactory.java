@@ -1,9 +1,11 @@
 package com.github.catageek.ByteCart.Signs;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.entity.Player;
 
 import com.github.catageek.ByteCart.HAL.AbstractIC;
@@ -49,15 +51,21 @@ final public class ClickedSignFactory {
 	 * @return a Clickable IC, or null
 	 */
 	static final public Clickable getBackwardClickedIC(Block block, Player player) {
-		Material type = block.getState().getType();
-		if (type.equals(Material.SIGN_POST) || type.equals(Material.WALL_SIGN)) {
-			BlockFace f = ((org.bukkit.material.Sign) block.getState().getData()).getFacing().getOppositeFace();
+		final BlockData type = block.getState().getBlockData();
+		BlockFace f = null;
+		if (type instanceof Directional) {
+			f = ((Directional) type).getFacing().getOppositeFace();
+		}
+		else if(type instanceof Rotatable) {
+			f = ((Rotatable) type).getRotation().getOppositeFace();
 			f = MathUtil.straightUp(f);
-
-			final Block relative = block.getRelative(f, 2);
-			if (AbstractIC.checkEligibility(relative)) {
-				return ClickedSignFactory.getClickedIC(relative, ((Sign) relative.getState()).getLine(1), player);
-			}
+		}
+		else {
+			return null;
+		}
+		final Block relative = block.getRelative(f, 2);
+		if (AbstractIC.checkEligibility(relative)) {
+			return ClickedSignFactory.getClickedIC(relative, ((Sign) relative.getState()).getLine(1), player);
 		}
 		return null;
 	}

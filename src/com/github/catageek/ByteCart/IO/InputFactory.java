@@ -1,7 +1,8 @@
 package com.github.catageek.ByteCart.IO;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.AnaloguePowerable;
+import org.bukkit.block.data.Powerable;
 
 
 /**
@@ -18,12 +19,13 @@ final public class InputFactory {
 	@SuppressWarnings("unchecked")
 	static public <T> T getInput(Block block) {
 		
-		if(block.getType().equals(Material.REDSTONE_WIRE)) {
+		if(block.getBlockData() instanceof AnaloguePowerable) {
 			return (T) new ComponentWire(block);
 		}
-		if(block.getType().equals(Material.LEVER)) {
+		if(block.getBlockData() instanceof Powerable) {
 			return (T) new ComponentLever(block);
 		}
+
 		return null;
 		
 	}

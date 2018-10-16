@@ -1,7 +1,7 @@
 package com.github.catageek.ByteCart.IO;
 
 import org.bukkit.block.Block;
-import org.bukkit.material.RedstoneWire;
+import org.bukkit.block.data.AnaloguePowerable;
 
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 
@@ -25,14 +25,14 @@ class ComponentWire extends AbstractComponent implements InputPin, RegistryInput
 	 */
 	@Override
 	public boolean read() {
-			if(((RedstoneWire) this.getBlock().getState().getData()).isPowered()) {
-/*				if(ByteCart.debug)
-					ByteCart.log.info("Redstone wire on at (" + this.getLocation().toString() + ")");
-*/				return true;
-			}
-/*			if(ByteCart.debug)
-				ByteCart.log.info("Redstone wire off at (" + this.getLocation().toString() + ")");
-*/
+		if(((AnaloguePowerable) this.getBlock().getBlockData()).getPower() != 0) {
+//			if(ByteCart.debug)
+//				ByteCart.log.info("Redstone wire on at (" + this.getBlock().getLocation().toString() + ")");
+			return true;
+		}
+//		if(ByteCart.debug)
+//			ByteCart.log.info("Redstone wire off at (" + this.getBlock().getLocation().toString() + ")");
+
 		return false;
 	}
 
@@ -41,8 +41,8 @@ class ComponentWire extends AbstractComponent implements InputPin, RegistryInput
 	 */
 	@Override
 	public boolean getBit(int index) {
-			RedstoneWire wire = ((RedstoneWire) this.getBlock().getState().getData());
-			return (wire.getData() & 1 << (length() - index)) != 0;
+		final AnaloguePowerable wire = ((AnaloguePowerable) this.getBlock().getBlockData());
+		return (wire.getPower() & 1 << (length() - index)) != 0;
 	}
 
 	/* (non-Javadoc)
@@ -50,7 +50,7 @@ class ComponentWire extends AbstractComponent implements InputPin, RegistryInput
 	 */
 	@Override
 	public int getAmount() {
-			return ((RedstoneWire) this.getBlock().getState().getData()).getData();
+		return ((AnaloguePowerable) this.getBlock().getBlockData()).getPower();
 	}
 
 	/* (non-Javadoc)

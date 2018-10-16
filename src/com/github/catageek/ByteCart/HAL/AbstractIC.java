@@ -3,10 +3,12 @@ package com.github.catageek.ByteCart.HAL;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.IO.ComponentSign;
@@ -96,7 +98,7 @@ abstract public class AbstractIC implements IC {
 	// This function checks if we have a ByteCart sign at this location
 	static public final boolean checkEligibility(Block b){
 		
-		if(b.getType() != Material.SIGN_POST && b.getType() != Material.WALL_SIGN) {
+		if(!(b.getState() instanceof Sign)) {
 			return false;
 		}
 
@@ -148,18 +150,20 @@ abstract public class AbstractIC implements IC {
 	 */
 	@Override
 	public final BlockFace getCardinal() {
-		try {
-			BlockFace f = ((org.bukkit.material.Sign) this.getBlock().getState().getData()).getFacing().getOppositeFace();
+		final BlockData blockdata = this.getBlock().getState().getBlockData();
+		if(blockdata instanceof Directional) {
+			return ((Directional) blockdata).getFacing().getOppositeFace();
+		}
+		if(blockdata instanceof Rotatable) {
+			BlockFace f = ((Rotatable) blockdata).getRotation().getOppositeFace();
 			f = MathUtil.straightUp(f);
 			if (f == BlockFace.UP) {
 				ByteCart.log.severe("ByteCart: Tilted sign found at " + this.getLocation() + ". Please straight it up in the axis of the track");
+				return null;
 			}
 			return f;
 		}
-		catch (ClassCastException e) {
-			// this is not a sign
-			return null;
-		}
+		return null;
 	}
 
 	/* (non-Javadoc)

@@ -38,7 +38,7 @@ public class UpdaterLocal extends DefaultLocalWanderer<UpdaterContent> implement
 			// Erase default name "Station"
 			// TODO : added 04/2015, to be removed
 			if (((BC9001)this.getBcSign()).getStationName().equals("Station")) {
-				(new ComponentSign(this.getCenter().getState())).setLine(2, "");
+				(new ComponentSign(this.getCenter())).setLine(2, "");
 			}
 
 			//it's a station, launch event

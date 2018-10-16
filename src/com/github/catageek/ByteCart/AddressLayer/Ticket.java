@@ -87,7 +87,7 @@ final class Ticket {
 		ItemStack stack;
 
 		if (ByteCart.myPlugin.getConfig().getBoolean("mustProvideBooks")
-				&& inv.contains(Material.BOOK_AND_QUILL)) {
+				&& inv.contains(Material.WRITABLE_BOOK)) {
 
 			// priority given to book in hand
 			if (inv instanceof PlayerInventory) {
@@ -196,7 +196,7 @@ final class Ticket {
 	private static boolean isEmptyBook(ItemStack stack) {
 		BookMeta book;
 
-		if (stack != null && stack.getType().equals(Material.BOOK_AND_QUILL)) {
+		if (stack != null && stack.getType().equals(Material.WRITABLE_BOOK)) {
 
 			if (stack.hasItemMeta()) {
 

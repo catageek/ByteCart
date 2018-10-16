@@ -246,7 +246,7 @@ public final class BookFile implements BCFile {
 	}
 	
 	public static ItemStack sign(ItemStack mystack, String name) {
-		if (mystack  == null || mystack.getType() != Material.BOOK_AND_QUILL) {
+		if (mystack  == null || mystack.getType() != Material.WRITABLE_BOOK) {
 			return null;
 		}
 		mystack.setType(Material.WRITTEN_BOOK);
