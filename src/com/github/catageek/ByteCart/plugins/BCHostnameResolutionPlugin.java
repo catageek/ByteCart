@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,10 +17,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.util.StringUtil;
+
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.AddressLayer.Resolver;
@@ -27,12 +33,13 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterClearStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterPassStationEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterSetStationEvent;
 import com.github.catageek.ByteCartAPI.Signs.Station;
+import com.google.common.collect.Lists;
 
 import code.husky.Database;
 import code.husky.mysql.MySQL;
 import code.husky.sqlite.SQLite;
 
-public final class BCHostnameResolutionPlugin implements Resolver,Listener,CommandExecutor {
+public final class BCHostnameResolutionPlugin implements Resolver, Listener, CommandExecutor, TabCompleter {
 	private String database = ByteCart.myPlugin.getConfig().getString("database","BCHostnames");
 	private String sql = ByteCart.myPlugin.getConfig().getString("sql", "sqllite");
 	private String host,port,user,password;
@@ -252,6 +259,27 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 		return true;
 	}
 
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if (args.length <= 1) {
+			return StringUtil.copyPartialMatches(args[0], Arrays.asList("create", "remove", "lookup", "list"), Lists.newArrayList());
+		} else if (args[0].equalsIgnoreCase("lookup")) {
+			List<String> options = Lists.newArrayList();
+			String prefix = getName(args, 1, 0);
+			List<String> names = getMatchingNames(prefix);
+			for (String name : names) {
+				name = name.substring(prefix.length());
+				if (name.contains(" ")) {
+					name = name.substring(0, name.indexOf(' '));
+				}
+				options.add(name);
+			}
+			return options;
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
 	@EventHandler
 	@SuppressWarnings("ucd")
 	public void onSignCreate(SignCreateEvent event) {
@@ -361,6 +389,46 @@ public final class BCHostnameResolutionPlugin implements Resolver,Listener,Comma
 			ByteCart.log.info("SQL error state: "+e.getSQLState());
 		}
 		return "";
+	}
+
+	@Override
+	public List<String> getNames() {
+		List<String> result = Lists.newArrayList();
+
+		try {
+			ResultSet set = s.executeQuery("SELECT name FROM `cart_dns`");
+			while (set.next()) {
+				result.add(set.getString("name"));
+			}
+		} catch (SQLException e) {
+			ByteCart.log.info("SQL error code: "+e.getErrorCode());
+			ByteCart.log.info("SQL error msg: "+e.getMessage());
+			ByteCart.log.info("SQL error state: "+e.getSQLState());
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<String> getMatchingNames(String prefix) {
+		List<String> result = Lists.newArrayList();
+
+		if (!safeName(prefix)) {
+			return result;
+		}
+
+		try {
+			ResultSet set = s.executeQuery("SELECT name FROM `cart_dns` WHERE LOWER(`name`) LIKE '" + prefix.toLowerCase() + "%'");
+			while (set.next()) {
+				result.add(set.getString("name"));
+			}
+		} catch (SQLException e) {
+			ByteCart.log.info("SQL error code: "+e.getErrorCode());
+			ByteCart.log.info("SQL error msg: "+e.getMessage());
+			ByteCart.log.info("SQL error state: "+e.getSQLState());
+		}
+
+		return result;
 	}
 
 	private boolean removeEntry(String name) throws SQLException {

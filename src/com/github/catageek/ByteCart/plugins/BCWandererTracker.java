@@ -1,12 +1,15 @@
 package com.github.catageek.ByteCart.plugins;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
@@ -16,7 +19,7 @@ import com.github.catageek.ByteCartAPI.Event.UpdaterCreateEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterMoveEvent;
 import com.github.catageek.ByteCartAPI.Event.UpdaterRemoveEvent;
 
-public final class BCWandererTracker implements Listener,CommandExecutor {
+public final class BCWandererTracker implements Listener, CommandExecutor, TabCompleter {
 	private Map<Integer,Location> locations = new HashMap<>();
 	
 	@EventHandler
@@ -36,7 +39,7 @@ public final class BCWandererTracker implements Listener,CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] arg3) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (locations.isEmpty()) {
 			LogUtil.sendSuccess(sender, "No updaters found");
 			return true;
@@ -51,5 +54,10 @@ public final class BCWandererTracker implements Listener,CommandExecutor {
 			LogUtil.sendSuccess(sender, s.toString());
 		}
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		return Collections.emptyList();
 	}
 }
