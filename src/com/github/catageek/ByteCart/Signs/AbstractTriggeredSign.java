@@ -1,7 +1,10 @@
 package com.github.catageek.ByteCart.Signs;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
@@ -55,13 +58,14 @@ abstract class AbstractTriggeredSign extends AbstractIC implements Triggable {
 				return ((InventoryHolder) this.getVehicle()).getInventory();
 
 			else if (this.getVehicle() instanceof Minecart) {
-				if (! this.getVehicle().isEmpty()) {
-					if (((Minecart) this.getVehicle()).getPassenger() instanceof Player) {
-
-						if(ByteCart.debug)
-							ByteCart.log.info("ByteCart: loading player inventory :" + ((Player) this.getVehicle().getPassenger()).getDisplayName());
-
-						return ((Player) this.getVehicle().getPassenger()).getInventory();
+				final List<Entity> passengers = this.getVehicle().getPassengers();
+				for (Entity passenger : passengers) {
+					if (passenger instanceof InventoryHolder) {
+						if (passenger instanceof Player) {
+							if(ByteCart.debug)
+								ByteCart.log.info("ByteCart: loading player inventory :" + ((Player) passenger).getDisplayName());
+						}
+						return ((InventoryHolder) passenger).getInventory();
 					}
 				}
 			}

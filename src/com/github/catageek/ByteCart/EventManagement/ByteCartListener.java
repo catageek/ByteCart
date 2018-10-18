@@ -82,25 +82,12 @@ public class ByteCartListener implements Listener {
 			Triggable myIC;
 			myIC = TriggeredSignFactory.getTriggeredIC(event.getTo().getBlock().getRelative(BlockFace.DOWN, 2),vehicle);
 
-			Player player;
-			int tax;
-
 			if (myIC != null) {
 
 				if(ByteCart.debug)
 					ByteCart.log.info("ByteCart: " + myIC.getName() + ".trigger()");
 
 				myIC.trigger();
-
-				if ((! vehicle.isEmpty())
-						&& vehicle.getPassenger() instanceof Player) {
-
-					player = (Player) vehicle.getPassenger();
-					tax = myIC.getTriggertax();
-
-					if (tax != 0)
-						player.sendMessage(ChatColor.DARK_GRAY+"[Bytecart] " + "Echangeur (tarif: " + myIC.getTriggertax() + " eur0x)");	
-				}
 			}
 		}
 	}
@@ -113,10 +100,6 @@ public class ByteCartListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	@SuppressWarnings("ucd")
 	public void onVehicleCreate(VehicleCreateEvent event) {
-
-		Player player;
-		int tax;
-
 		if(event.getVehicle() instanceof Minecart) // we care only of minecart
 		{
 
@@ -129,20 +112,8 @@ public class ByteCartListener implements Listener {
 
 			if (myIC != null) {
 				myIC.trigger();
-				if ((! vehicle.isEmpty())
-						&& vehicle.getPassenger() instanceof Player) {
-
-					player = (Player) vehicle.getPassenger();
-					tax = myIC.getTriggertax();
-
-					if (tax != 0)
-						player.sendMessage(ChatColor.DARK_GREEN+"[Bytecart] " + ChatColor.RED + "1 aiguillage traversé (tarif: " + myIC.getTriggertax() + " eur0x");	
-				}
-
 			}
 		}
-
-
 	}
 
 	/**

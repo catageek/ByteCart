@@ -1,6 +1,7 @@
 package com.github.catageek.ByteCart.EventManagement;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -66,10 +67,13 @@ public final class ConstantSpeedListener implements Listener {
 	@EventHandler (ignoreCancelled = false, priority = EventPriority.MONITOR)
 	@SuppressWarnings("ucd")
 	public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
-		final Entity passenger = event.getVehicle().getPassenger();
-		if (passenger == null || passenger.getEntityId() != event.getEntity().getEntityId()) {
-			speedmap.remove(event.getVehicle().getEntityId());
+		final List<Entity> passengers = event.getVehicle().getPassengers();
+		for(Entity passenger : passengers) {
+			if(passenger.getEntityId() == event.getEntity().getEntityId()) {
+				return;
+			}
 		}
+		speedmap.remove(event.getVehicle().getEntityId());
 	}
 
 	@EventHandler (ignoreCancelled = false, priority = EventPriority.MONITOR)

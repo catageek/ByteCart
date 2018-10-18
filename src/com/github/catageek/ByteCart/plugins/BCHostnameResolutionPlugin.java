@@ -18,8 +18,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.dynmap.markers.MarkerAPI;
-
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.AddressLayer.Resolver;

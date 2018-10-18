@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class WandererContent  implements InventoryContent {
 	private static final long serialVersionUID = -9068486630910859194L;
 	
 	private transient Inventory inventory = null;
-	private String player;
+	private UUID player;
 
 	private BCCounter counter;
 
@@ -47,7 +48,7 @@ public class WandererContent  implements InventoryContent {
 		this.Region = region;
 		this.Level = level;
 		this.inventory = inv;
-		this.player = player.getName();
+		this.player = player.getUniqueId();
 		counter = new BCCounter();
 		setStart(new Stack<Integer>());
 		setEnd(new Stack<Integer>());

@@ -49,8 +49,7 @@ final class BC7008 extends AbstractTriggeredSign implements Triggable {
 		org.bukkit.entity.Vehicle vehicle = this.getVehicle();
 
 		// we eject the passenger
-		if (vehicle.getPassenger() != null)
-			vehicle.eject();
+		vehicle.eject();
 
 		// we drop items
 		if (ByteCart.myPlugin.keepItems()) {
