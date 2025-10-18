@@ -22,7 +22,7 @@
 		</repository>
 		<repository>
 			<id>dynmap-repo</id>
-			<url>http://repo.mikeprimm.com/</url>
+			<url>https://repo.mikeprimm.com/</url>
 		</repository>
 	</repositories>
 
@@ -160,12 +160,19 @@
 			<artifactId>ByteCartAPI</artifactId>
 			<version>${bytecartapi.version}</version>
 		</dependency>
-		    <!--  Gson: Java to Json conversion -->
-		    <dependency>
-		      <groupId>com.google.code.gson</groupId>
-		      <artifactId>gson</artifactId>
-		      <version>2.13.2</version>
-		    </dependency>
+	    <!--  Gson: Java to Json conversion -->
+	    <dependency>
+	      <groupId>com.google.code.gson</groupId>
+	      <artifactId>gson</artifactId>
+	      <version>2.13.2</version>
+	    </dependency>
+	    <dependency>
+			<groupId>us.dynmap</groupId>
+			<artifactId>DynmapCoreAPI</artifactId>
+			<version>3.7-beta-6</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 	<version>4.0.0</version>
 </project>
