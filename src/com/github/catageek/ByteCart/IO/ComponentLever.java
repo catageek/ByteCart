@@ -3,10 +3,9 @@ package com.github.catageek.ByteCart.IO;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.FaceAttachable.AttachedFace;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.type.Switch;
-import org.bukkit.block.data.type.Switch.Face;
-
 import com.github.catageek.ByteCartAPI.HAL.RegistryInput;
 import com.github.catageek.ByteCartAPI.Util.MathUtil;
 
@@ -33,7 +32,7 @@ class ComponentLever extends AbstractComponent implements OutputPin, InputPin, R
 			Switch pw = (Switch) md;
 			pw.setPowered(bit);
 			block.setBlockData(pw);
-			Face face = pw.getFace();
+			AttachedFace face = pw.getAttachedFace();
 			switch (face) {
 				case CEILING:
 					MathUtil.forceUpdate(block.getRelative(BlockFace.UP,2));

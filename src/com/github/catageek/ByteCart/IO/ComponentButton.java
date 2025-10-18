@@ -42,10 +42,13 @@ class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 			final Switch button = (Switch) block.getBlockData();
 			
 			if (bit) {
-				if (ActivatedButtonMap.containsKey(block)) {
+				
+				Location loc = block.getLocation();
+				
+				if (ActivatedButtonMap.containsKey(loc)) {
 					
 					// if button is already on, we cancel the scheduled thread
-					ByteCart.myPlugin.getServer().getScheduler().cancelTask(ActivatedButtonMap.get(block));
+					ByteCart.myPlugin.getServer().getScheduler().cancelTask(ActivatedButtonMap.get(loc));
 					
 					// and we reschedule one
 					id = ByteCart.myPlugin.getServer().getScheduler().scheduleSyncDelayedTask(ByteCart.myPlugin, new SetButtonOff(component, ActivatedButtonMap)
@@ -68,7 +71,7 @@ class ComponentButton extends AbstractComponent implements OutputPin, InputPin {
 					, 40);
 					
 					// We update the HashMap
-					ActivatedButtonMap.put(block.getLocation(), id);
+					ActivatedButtonMap.put(loc, id);
 				}
 			}
 				

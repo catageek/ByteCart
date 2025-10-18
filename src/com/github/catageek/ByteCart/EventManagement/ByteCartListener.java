@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -57,7 +56,6 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onVehicleMove(VehicleMoveEvent event) {
 
 		Location loc = event.getFrom();
@@ -98,7 +96,6 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onVehicleCreate(VehicleCreateEvent event) {
 		if(event.getVehicle() instanceof Minecart) // we care only of minecart
 		{
@@ -122,7 +119,6 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onSignChange(SignChangeEvent event) {
 
 		if (! AbstractIC.checkEligibility(event.getLine(1)))
@@ -166,13 +162,11 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	@SuppressWarnings("ucd")
 	public void onBlockBreak(BlockBreakEvent event) {
 		removeSignIfNeeded(event.getBlock(), event.getPlayer());
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	@SuppressWarnings("ucd")
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		removeSignIfNeeded(event.getBlock(), event.getEntity());
 	}
@@ -183,7 +177,6 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	@SuppressWarnings("ucd")
 	public void onEntityExplode(EntityExplodeEvent event) {
 		Entity entity = event.getEntity();
 		Iterator<Block> it = event.blockList().iterator();
@@ -197,9 +190,8 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onBlockPhysics(BlockPhysicsEvent event) {
-		if (event.getChangedType() != Material.SIGN || ! event.getBlock().isBlockIndirectlyPowered()) {
+		if ( ! (event.getBlock().getState() instanceof Sign) || ! event.getBlock().isBlockIndirectlyPowered()) {
 			return;
 		}
 
@@ -252,7 +244,6 @@ public class ByteCartListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
 		if (event.getAction().compareTo(Action.RIGHT_CLICK_BLOCK) != 0)

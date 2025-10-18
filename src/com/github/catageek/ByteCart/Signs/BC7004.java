@@ -99,13 +99,19 @@ final class BC7004 extends AbstractIC implements Powerable {
 	 */
 	private EntityType getType() {
 		if(type.equalsIgnoreCase("storage")) {
-			return EntityType.MINECART_CHEST;
+			return EntityType.CHEST_MINECART;
 		}
 		if(type.equalsIgnoreCase("furnace")) {
-			return EntityType.MINECART_FURNACE;
+			return EntityType.FURNACE_MINECART;
 		}
 		if(type.equalsIgnoreCase("hopper")) {
-			return EntityType.MINECART_HOPPER;
+			return EntityType.HOPPER_MINECART;
+		}
+		if(type.equalsIgnoreCase("tnt")) {
+			return EntityType.TNT_MINECART;
+		}
+		if(type.equalsIgnoreCase("spawner")) {
+			return EntityType.SPAWNER_MINECART;
 		}
 		
 		return EntityType.MINECART;

@@ -9,10 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.BookMeta;
 
-import com.github.catageek.ByteCart.ByteCart;
-import com.github.catageek.ByteCart.FileStorage.BookInputStream;;
+import com.github.catageek.ByteCart.ByteCart;;
 
 
 
@@ -90,7 +90,7 @@ public final class BookFile implements BCFile {
 		if (mystack == null || ! mystack.getType().equals(Material.WRITTEN_BOOK)) {
 			mystack = new ItemStack(Material.WRITTEN_BOOK);
 		}
-		final BookMeta mybook = (BookMeta) Bukkit.getServer().getItemFactory().getItemMeta(Material.WRITTEN_BOOK);
+		final BookMeta mybook = (BookMeta) mystack.getItemMeta();
 		if (name != null) {
 			final String myauthor = prefix + "." + name;
 			mybook.setAuthor(myauthor);
@@ -98,6 +98,8 @@ public final class BookFile implements BCFile {
 		else {
 			mybook.setAuthor(prefix);
 		}
+		String[] strings = new String[] { " " };
+		mybook.setPages(strings);
 		mystack.setItemMeta(mybook);
 		inventory.setItem(index, mystack);
 		return new BookFile(inventory, index, binary);

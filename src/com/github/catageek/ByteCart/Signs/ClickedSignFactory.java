@@ -6,6 +6,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 
 import com.github.catageek.ByteCart.HAL.AbstractIC;
@@ -33,7 +34,7 @@ final public class ClickedSignFactory {
 			// if there is really a BC sign post
 			// we extract its #
 
-			return ClickedSignFactory.getClickedIC(block, ((Sign) block.getState()).getLine(1), player);
+			return ClickedSignFactory.getClickedIC(block, ((Sign) block.getState()).getSide(Side.FRONT).getLine(1), player);
 
 
 		}
@@ -65,7 +66,7 @@ final public class ClickedSignFactory {
 		}
 		final Block relative = block.getRelative(f, 2);
 		if (AbstractIC.checkEligibility(relative)) {
-			return ClickedSignFactory.getClickedIC(relative, ((Sign) relative.getState()).getLine(1), player);
+			return ClickedSignFactory.getClickedIC(relative, ((Sign) relative.getState()).getSide(Side.FRONT).getLine(1), player);
 		}
 		return null;
 	}

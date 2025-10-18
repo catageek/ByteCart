@@ -29,7 +29,7 @@
 	<distributionManagement>
 		<site>
 			<id>website</id>
-			<url>ftp://catageek.free.fr/bytecart/maven/</url>
+			<url>http://catageek.free.fr/bytecart/maven/</url>
 		</site>
 		<repository>
 			<id>repobc-rel</id>
@@ -46,72 +46,65 @@
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.0</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.2</version>
-					<dependencies>
-						<dependency><!-- add support for ssh/scp -->
-							<groupId>org.apache.maven.wagon</groupId>
-							<artifactId>wagon-ftp</artifactId>
-							<version>2.4</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-shade-plugin</artifactId>
-					<version>2.1</version>
-					<configuration>
-						<artifactSet>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.14.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.21.0</version>
+				<dependencies>
+					<dependency><!-- add support for ssh/scp -->
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ftp</artifactId>
+						<version>3.5.3</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<artifactSet>
+						<includes>
+							<include>com.github.catageek:ByteCartAPI:jar:*</include>
+							<include>org.mcstats.bukkit:metrics-lite:jar:*</include>
+							<include>com.google.code.gson:gson:jar:*</include>
+						</includes>
+					</artifactSet>
+					<filters>
+						<filter>
+							<artifact>com.github.catageek:ByteCartAPI:jar:*</artifact>
 							<includes>
-								<include>com.github.catageek:ByteCartAPI:jar:*</include>
-								<include>org.mcstats.bukkit:metrics-lite:jar:*</include>
-								<include>com.google.code.gson:gson:jar:*</include>
+								<include>**</include>
 							</includes>
-						</artifactSet>
-						<filters>
-							<filter>
-								<artifact>com.github.catageek:ByteCartAPI:jar:*</artifact>
-								<includes>
-									<include>**</include>
-								</includes>
-							</filter>
-							<filter>
-								<artifact>com.google.code.gson:gson:jar:*</artifact>
-								<includes>
-									<include>**</include>
-								</includes>
-							</filter>
-						</filters>
-					</configuration>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<goals>
-								<goal>shade</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+						</filter>
+						<filter>
+							<artifact>com.google.code.gson:gson:jar:*</artifact>
+							<includes>
+								<include>**</include>
+							</includes>
+						</filter>
+					</filters>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ftp</artifactId>
-				<version>2.4</version>
+				<version>3.5.3</version>
 			</extension>
 		</extensions>
 		<resources>
@@ -152,20 +145,16 @@
 	</issueManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkit.version>1.13.1-R0.1-SNAPSHOT</bukkit.version>
-		<bytecartapi.version>3.2.1</bytecartapi.version>
+		<bytecartapi.version>4.0.0</bytecartapi.version>
+		<spigot.version>1.21.10-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>${bukkit.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>us.dynmap</groupId>
-			<artifactId>dynmap-api</artifactId>
-			<version>2.5</version>
-		</dependency>
+    	<dependency>
+           <groupId>org.spigotmc</groupId>
+           <artifactId>spigot-api</artifactId>
+           <version>${spigot.version}</version>
+           <scope>provided</scope>
+    	</dependency>
 		<dependency>
 			<groupId>com.github.catageek</groupId>
 			<artifactId>ByteCartAPI</artifactId>
@@ -178,5 +167,5 @@
 		      <version>2.5</version>
 		    </dependency>
 	</dependencies>
-	<version>3.2.1</version>
+	<version>4.0.0</version>
 </project>

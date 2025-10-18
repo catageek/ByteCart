@@ -194,6 +194,6 @@ public final class BC9001 extends AbstractBC9000 implements Station, Powerable, 
 
 	@Override
 	public final String getStationName() {
-		return ((Sign)this.getBlock().getState()).getLine(2);
+		return ((Sign)this.getBlock().getState()).getSide(org.bukkit.block.sign.Side.FRONT).getLine(2);
 	}
 }

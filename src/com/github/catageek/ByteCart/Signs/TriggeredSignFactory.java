@@ -7,6 +7,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rail;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Vehicle;
 
 import com.github.catageek.ByteCart.HAL.AbstractIC;
@@ -35,7 +36,7 @@ final public class TriggeredSignFactory {
 			// if there is really a BC sign post
 			// we extract its #
 
-			return TriggeredSignFactory.getTriggeredIC(block, ((Sign) block.getState()).getLine(1), vehicle);
+			return TriggeredSignFactory.getTriggeredIC(block, ((Sign) block.getState()).getSide(Side.FRONT).getLine(1), vehicle);
 		}
 
 		// Maybe the rail is in slope
@@ -43,7 +44,7 @@ final public class TriggeredSignFactory {
 		if (AbstractIC.checkEligibility(block2)) {
 			BlockData rail = block.getRelative(BlockFace.UP).getState().getBlockData();
 			if (rail instanceof Rail && MathUtil.isOnSlope((Rail) rail))
-				return TriggeredSignFactory.getTriggeredIC(block2, ((Sign) block2.getState()).getLine(1), vehicle);
+				return TriggeredSignFactory.getTriggeredIC(block2, ((Sign) block2.getState()).getSide(Side.FRONT).getLine(1), vehicle);
 		}
 		// no BC sign post
 

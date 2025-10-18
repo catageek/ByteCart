@@ -3,6 +3,7 @@ package com.github.catageek.ByteCart.Signs;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.HAL.AbstractIC;
@@ -32,7 +33,7 @@ public class PoweredSignFactory {
 			// if there is really a BC sign post
 			// we extract its #
 			
-			final Powerable ps = PoweredSignFactory.getPoweredIC(block, ((Sign) block.getState()).getLine(1));
+			final Powerable ps = PoweredSignFactory.getPoweredIC(block, ((Sign) block.getState()).getSide(Side.FRONT).getLine(1));
 			// register it as singleton for this location
 			if (ps != null) {
 				this.poweredsignsset.add(block.getLocation(loc));
@@ -70,8 +71,8 @@ public class PoweredSignFactory {
 				case 7003:
 					return (new BC7003(block));
 				case 7004:
-					return (new BC7004(block, ((Sign) block.getState()).getLine(3),
-							((Sign) block.getState()).getLine(2)));
+					return (new BC7004(block, ((Sign) block.getState()).getSide(Side.FRONT).getLine(3),
+							((Sign) block.getState()).getSide(Side.FRONT).getLine(2)));
 				case 9001:
 					return (new BC9001(block, null));
 				

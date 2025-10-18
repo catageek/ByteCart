@@ -40,7 +40,6 @@ public final class PreloadChunkListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	@SuppressWarnings("ucd")
 	public void onChunkUnload(ChunkUnloadEvent event) {
 
 
@@ -58,9 +57,7 @@ public final class PreloadChunkListener implements Listener {
 
 					for (n = entities.length -1; n >=0; --n) {
 						if (entities[n] instanceof Minecart && !((Minecart)entities[n]).getVelocity().equals(NullVector)) {
-
-							event.setCancelled(true);
-
+							world.setChunkForceLoaded(i, j, true);
 							return;
 						}
 					}

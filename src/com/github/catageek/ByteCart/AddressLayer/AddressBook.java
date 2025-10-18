@@ -190,14 +190,8 @@ final class AddressBook implements AddressRouted {
 	/* (non-Javadoc)
 	 * @see com.github.catageek.ByteCart.AddressLayer.Address#finalizeAddress()
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public void finalizeAddress() {
 		ticket.close();
-		if (ticket.getTicketHolder() instanceof Player) {
-			if(ByteCart.debug)
-				ByteCart.log.info("ByteCart : update player inventory");
-			((Player) ticket.getTicketHolder()).updateInventory();
-		}
 	}
 }

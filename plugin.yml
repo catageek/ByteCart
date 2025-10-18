@@ -3,8 +3,8 @@ author: catageek
 website: https://www.spigotmc.org/resources/bytecart.39493/
 description: An automatic transit system
 main: com.github.catageek.ByteCart.ByteCart
-version: 3.2.1
-api-version: 1.13
+version: 4.0.0
+api-version: 1.21.5
 database: false
 softdepend: [dynmap]
 permissions:

@@ -9,6 +9,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.sign.Side;
 
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCart.IO.ComponentSign;
@@ -40,7 +41,7 @@ abstract public class AbstractIC implements IC {
 	 */
 	@Override
 	public String getFriendlyName() {
-		return ((Sign) this.getBlock().getState()).getLine(2);
+		return ((Sign) this.getBlock().getState()).getSide(Side.FRONT).getLine(2);
 	}
 	
 	private RegistryInput[] input = new RegistryInput[9];
@@ -107,7 +108,7 @@ abstract public class AbstractIC implements IC {
 		if ((ret = icCache.get(s = b.getLocation(emptyLocation).toString())) != null)
 			return ret;
 		
-		String line_content = ((Sign) b.getState()).getLine(1);
+		String line_content = ((Sign) b.getState()).getSide(Side.FRONT).getLine(1);
 
 		if (ByteCart.myPlugin.getConfig().getBoolean("FixBroken18", false)) {
 			if (ret = AbstractIC.checkLooseEligibility(line_content)) {
