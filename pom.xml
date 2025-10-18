@@ -164,7 +164,7 @@
 		    <dependency>
 		      <groupId>com.google.code.gson</groupId>
 		      <artifactId>gson</artifactId>
-		      <version>2.5</version>
+		      <version>2.13.2</version>
 		    </dependency>
 	</dependencies>
 	<version>4.0.0</version>
