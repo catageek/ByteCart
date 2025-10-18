@@ -1,7 +1,5 @@
 package com.github.catageek.ByteCart.AddressLayer;
 
-import org.bukkit.entity.Player;
-
 import com.github.catageek.ByteCart.ByteCart;
 import com.github.catageek.ByteCartAPI.AddressLayer.Address;
 import com.github.catageek.ByteCartAPI.HAL.RegistryBoth;
