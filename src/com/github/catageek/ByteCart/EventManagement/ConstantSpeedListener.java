@@ -31,7 +31,6 @@ public final class ConstantSpeedListener implements Listener {
 	private Location location = new Location(null, 0, 0, 0);
 
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ucd")
 	public void onVehicleMove(VehicleMoveEvent event) {
 		final Vehicle v = event.getVehicle();
 
@@ -59,13 +58,11 @@ public final class ConstantSpeedListener implements Listener {
 	}
 
 	@EventHandler (ignoreCancelled = false, priority = EventPriority.MONITOR)
-	@SuppressWarnings("ucd")
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
 		speedmap.remove(event.getVehicle().getEntityId());
 	}
 
 	@EventHandler (ignoreCancelled = false, priority = EventPriority.MONITOR)
-	@SuppressWarnings("ucd")
 	public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
 		final List<Entity> passengers = event.getVehicle().getPassengers();
 		for(Entity passenger : passengers) {
@@ -77,7 +74,6 @@ public final class ConstantSpeedListener implements Listener {
 	}
 
 	@EventHandler (ignoreCancelled = false, priority = EventPriority.MONITOR)
-	@SuppressWarnings("ucd")
 	public void onVehicleBlockCollision(VehicleBlockCollisionEvent event) {
 		speedmap.remove(event.getVehicle().getEntityId());
 	}

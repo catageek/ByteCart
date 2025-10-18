@@ -281,7 +281,6 @@ public final class BCHostnameResolutionPlugin implements Resolver, Listener, Com
 	}
 
 	@EventHandler
-	@SuppressWarnings("ucd")
 	public void onSignCreate(SignCreateEvent event) {
 		if (event.getIc() instanceof Station) {
 			try {
@@ -302,7 +301,6 @@ public final class BCHostnameResolutionPlugin implements Resolver, Listener, Com
 	}
 
 	@EventHandler
-	@SuppressWarnings("ucd")
 	public void onSignRemove(SignRemoveEvent event) {
 		if (event.getIc() instanceof Station) {
 			try {
@@ -319,7 +317,6 @@ public final class BCHostnameResolutionPlugin implements Resolver, Listener, Com
 	}
 
 	@EventHandler
-	@SuppressWarnings("ucd")
 	public void onUpdaterSetStation(UpdaterSetStationEvent event) {
 		try {
 			String ip = event.getNewAddress().toString();
@@ -339,7 +336,6 @@ public final class BCHostnameResolutionPlugin implements Resolver, Listener, Com
 	}
 
 	@EventHandler
-	@SuppressWarnings("ucd")
 	public void onUpdaterClearStation(UpdaterClearStationEvent event) {
 		try {
 			String name = event.getName();
@@ -357,7 +353,6 @@ public final class BCHostnameResolutionPlugin implements Resolver, Listener, Com
 	}
 
 	@EventHandler
-	@SuppressWarnings("ucd")
 	public void onUpdaterPassStation(UpdaterPassStationEvent event) {
 		try {
 			String name = event.getName();

@@ -24,7 +24,6 @@ public class CommandBCTicket extends AbstractTicketCommand implements CommandExe
 		if (!(sender instanceof Player)) {
 			if (args.length < 2)
 				return false;
-			@SuppressWarnings("deprecation")
 			Player player = Bukkit.getServer().getPlayer(args[0]);
 
 			if(player == null) {

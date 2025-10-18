@@ -18,7 +18,6 @@ public final class TicketFactory {
 	 * @param player the player
 	 * @param forcereuse must be true to force the reuse of existing ticket
 	 */
-	@SuppressWarnings("deprecation")
 	public static final void getOrCreateTicket(Player player, boolean forcereuse) {
 		int slot;
 		Inventory inv = player.getInventory();
@@ -71,7 +70,6 @@ public final class TicketFactory {
 	 *
 	 * @param inv
 	 */
-	@SuppressWarnings("deprecation")
 	public static final void removeTickets(Inventory inv) {
 		int slot;
 		while ((slot = Ticket.getTicketslot(inv)) != -1) {

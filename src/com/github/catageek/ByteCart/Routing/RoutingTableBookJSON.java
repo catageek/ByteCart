@@ -46,8 +46,6 @@ RoutingTableWritable {
 
 	private Inventory inventory;
 
-	private int slot;
-
 	/**
 	 * Set the inventory
 	 * 
@@ -55,7 +53,6 @@ RoutingTableWritable {
 	 */
 	final void setInventory(Inventory inventory, int slot) {
 		this.inventory = inventory;
-		this.slot = slot;
 	}
 
 	public RoutingTableBookJSON() {
@@ -63,7 +60,6 @@ RoutingTableWritable {
 
 	RoutingTableBookJSON(Inventory inv, int slot) {
 		this.inventory = inv;
-		this.slot = slot;
 	}
 
 	/* (non-Javadoc)
